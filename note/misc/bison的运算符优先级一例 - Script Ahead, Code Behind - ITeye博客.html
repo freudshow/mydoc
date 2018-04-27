@@ -1,0 +1,919 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0040)http://rednaxelafx.iteye.com/blog/472113 -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客</title>
+    <meta name="description" content="看到phyeas同学在试写JavaScript语法，顺便参一腿 =v= 本文里的代码放在附件里了，有需要的拿。 关于语法中左递归/右递归与规则的左结合/右结合的关系， ...">
+    <meta name="keywords" content="C, C++, C#, Go, JavaScript bison的运算符优先级一例">
+    <link rel="shortcut icon" href="http://rednaxelafx.iteye.com/images/favicon.ico" type="image/x-icon">
+    <link rel="search" type="application/opensearchdescription+xml" href="http://rednaxelafx.iteye.com/open_search.xml" title="ITeye">
+    <link href="http://rednaxelafx.iteye.com/rss" rel="alternate" title="Script Ahead, Code Behind" type="application/rss+xml">
+    <link href="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/blog.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/black.css" media="screen" rel="stylesheet" type="text/css">
+    <script type="text/javascript" async="" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/pr.js"></script><script type="text/javascript" async="" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/bvzdlc.js"></script><script charset="utf-8" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/b.js"></script><script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/push.js"></script><script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/hm.js"></script><script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/application.js" type="text/javascript"></script>    
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?e19a8b00cf63f716d774540875007664";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+
+
+        //自动推送工具代码
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+
+      <link href="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/SyntaxHighlighter.css" media="screen" rel="stylesheet" type="text/css">
+  <script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/shCoreCommon.js" type="text/javascript"></script>
+<script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/hotkey.js" type="text/javascript"></script>
+  <script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/code_favorites.js" type="text/javascript"></script>
+<script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/weiboshare.js" type="text/javascript"></script>
+
+    <!-- 请置于所有广告位代码之前 -->
+    <script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/ds.js"></script>
+    <link ref="canonical" href="http://rednaxelafx.iteye.com/blog/472113">
+    <script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/c.js"></script><style type="text/css">.cambrian-toast-container{box-sizing:border-box}.cambrian-toast-container ._1aN93p{box-sizing:border-box;position:fixed;top:50%;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);margin-top:-25px;height:50px;width:100%;text-align:center;z-index:200;transition:opacity .3s;opacity:0}.cambrian-toast-container .gFtqqq{box-sizing:border-box;display:inline-block;width:auto;margin:0 auto;height:45px;min-width:100px;padding:0 17px;font-size:18px;line-height:45px;color:#fff;font-size:14px;font-family:HanHei SC,PingHei,PingFang SC,STHeitiSC-Light,Helvetica Neue,Helvetica,Arial;background-color:rgba(0,0,0,.8);border-radius:4px}.cambrian-toast-container ._2EC2G_{opacity:1}@media screen and (max-width:320px){.cambrian-toast-container .gFtqqq{font-size:16px}}</style><style type="text/css">#cambrian0,#cambrian1,#cambrian2,#cambrian3,#cambrian4{color:#000;font-style:normal;font-weight:400;letter-spacing:normal;word-spacing:normal;white-space:normal}#cambrian0,#cambrian0 div,#cambrian0 img,#cambrian1,#cambrian1 div,#cambrian1 img,#cambrian2,#cambrian2 div,#cambrian2 img,#cambrian3,#cambrian3 div,#cambrian3 img,#cambrian4,#cambrian4 div,#cambrian4 img{width:auto;height:auto;margin:0;padding:0;background-color:transparent;background-position:0 0;background-size:auto;background-repeat:repeat;background-origin:padding-box;background-clip:border-box;background-attachment:scroll;background-image:none;border:none;outline:medium none invert;color:inherit;direction:ltr;letter-spacing:inherit;line-height:normal;text-align:left;text-decoration:none;text-indent:0;text-transform:none;white-space:inherit;word-spacing:normal;font-size:12px;font-family:HanHei SC,PingHei,PingFang SC,STHeitiSC-Light,Helvetica Neue,Helvetica,Arial,sans-serif;font-size-adjust:none;font-stretch:normal;font-style:inherit;font-variant:normal;font-weight:inherit;visibility:visible;overflow:visible;list-style:none;float:none;clear:none;display:block;position:static;top:auto;left:auto;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box}#cambrian0 a,#cambrian0 b,#cambrian0 em,#cambrian0 img,#cambrian0 span,#cambrian0 strong,#cambrian1 a,#cambrian1 b,#cambrian1 em,#cambrian1 img,#cambrian1 span,#cambrian1 strong,#cambrian2 a,#cambrian2 b,#cambrian2 em,#cambrian2 img,#cambrian2 span,#cambrian2 strong,#cambrian3 a,#cambrian3 b,#cambrian3 em,#cambrian3 img,#cambrian3 span,#cambrian3 strong,#cambrian4 a,#cambrian4 b,#cambrian4 em,#cambrian4 img,#cambrian4 span,#cambrian4 strong{display:inline}</style><style type="text/css">#cambrian0 .R2CNzl,#cambrian1 .R2CNzl,#cambrian2 .R2CNzl,#cambrian3 .R2CNzl,#cambrian4 .R2CNzl{width:57px;padding:8px 0;text-align:center;font-weight:300;font-size:12px;line-height:12px;vertical-align:middle;display:inline-block;color:#fff;background:#3897f0;border-radius:3px;-webkit-tap-highlight-color:transparent}#cambrian0 .R2CNzl:active,#cambrian1 .R2CNzl:active,#cambrian2 .R2CNzl:active,#cambrian3 .R2CNzl:active,#cambrian4 .R2CNzl:active{background-color:rgba(56,151,240,.2)}#cambrian0 .j4z1dH,#cambrian1 .j4z1dH,#cambrian2 .j4z1dH,#cambrian3 .j4z1dH,#cambrian4 .j4z1dH{color:#666;background-color:#fff;position:relative;z-index:0;border-radius:2px}#cambrian0 .j4z1dH:after,#cambrian1 .j4z1dH:after,#cambrian2 .j4z1dH:after,#cambrian3 .j4z1dH:after,#cambrian4 .j4z1dH:after{content:"";position:absolute;box-sizing:border-box;top:0;left:0;border:1px solid #ccc;border-radius:4px;width:200%;height:200%;z-index:-1;transform:scale(.5);-webkit-transform:scale(.5);transform-origin:left top;-webkit-transform-origin:left top}#cambrian0 .j4z1dH:active,#cambrian1 .j4z1dH:active,#cambrian2 .j4z1dH:active,#cambrian3 .j4z1dH:active,#cambrian4 .j4z1dH:active{background-color:#fff}#cambrian0 ._1hqmP7,#cambrian1 ._1hqmP7,#cambrian2 ._1hqmP7,#cambrian3 ._1hqmP7,#cambrian4 ._1hqmP7{width:120px}#cambrian0 ._1hqmP7:active,#cambrian1 ._1hqmP7:active,#cambrian2 ._1hqmP7:active,#cambrian3 ._1hqmP7:active,#cambrian4 ._1hqmP7:active{background-color:rgba(56,151,240,.2)}#cambrian0 ._3VoMI3,#cambrian1 ._3VoMI3,#cambrian2 ._3VoMI3,#cambrian3 ._3VoMI3,#cambrian4 ._3VoMI3{padding:8px 0;width:120px;background-color:#fff;color:#666;position:relative;z-index:0;border-radius:3px}#cambrian0 ._3VoMI3:after,#cambrian1 ._3VoMI3:after,#cambrian2 ._3VoMI3:after,#cambrian3 ._3VoMI3:after,#cambrian4 ._3VoMI3:after{content:"";position:absolute;box-sizing:border-box;top:0;left:0;border:1px solid #eee;border-radius:6px;width:200%;height:200%;z-index:-1;transform:scale(.5);-webkit-transform:scale(.5);transform-origin:left top;-webkit-transform-origin:left top}#cambrian0 ._3VoMI3:active,#cambrian1 ._3VoMI3:active,#cambrian2 ._3VoMI3:active,#cambrian3 ._3VoMI3:active,#cambrian4 ._3VoMI3:active{background-color:#fff}</style><style type="text/css">#cambrian0 .tH6Qv7,#cambrian1 .tH6Qv7,#cambrian2 .tH6Qv7,#cambrian3 .tH6Qv7,#cambrian4 .tH6Qv7{background-color:#fff;overflow:hidden;-webkit-tap-highlight-color:transparent}#cambrian0 .tH6Qv7 ._1NMJVn,#cambrian1 .tH6Qv7 ._1NMJVn,#cambrian2 .tH6Qv7 ._1NMJVn,#cambrian3 .tH6Qv7 ._1NMJVn,#cambrian4 .tH6Qv7 ._1NMJVn{padding-top:2px;float:right}#cambrian0 .tH6Qv7 ._26Hteq,#cambrian1 .tH6Qv7 ._26Hteq,#cambrian2 .tH6Qv7 ._26Hteq,#cambrian3 .tH6Qv7 ._26Hteq,#cambrian4 .tH6Qv7 ._26Hteq{margin-right:60px;overflow:hidden}#cambrian0 .tH6Qv7 ._26Hteq ._1UhIYm,#cambrian1 .tH6Qv7 ._26Hteq ._1UhIYm,#cambrian2 .tH6Qv7 ._26Hteq ._1UhIYm,#cambrian3 .tH6Qv7 ._26Hteq ._1UhIYm,#cambrian4 .tH6Qv7 ._26Hteq ._1UhIYm{float:left;font-size:0;position:relative}#cambrian0 .tH6Qv7 ._26Hteq ._1UhIYm ._3FeqpQ,#cambrian1 .tH6Qv7 ._26Hteq ._1UhIYm ._3FeqpQ,#cambrian2 .tH6Qv7 ._26Hteq ._1UhIYm ._3FeqpQ,#cambrian3 .tH6Qv7 ._26Hteq ._1UhIYm ._3FeqpQ,#cambrian4 .tH6Qv7 ._26Hteq ._1UhIYm ._3FeqpQ{margin:0 8px 0 0;width:35px;height:35px;border-radius:50%;border:1px solid #eee;box-sizing:border-box}#cambrian0 .tH6Qv7 ._26Hteq ._2htEKn ._3oOvK-,#cambrian1 .tH6Qv7 ._26Hteq ._2htEKn ._3oOvK-,#cambrian2 .tH6Qv7 ._26Hteq ._2htEKn ._3oOvK-,#cambrian3 .tH6Qv7 ._26Hteq ._2htEKn ._3oOvK-,#cambrian4 .tH6Qv7 ._26Hteq ._2htEKn ._3oOvK-{white-space:nowrap;overflow:hidden;position:relative;font-size:0}#cambrian0 .tH6Qv7 ._26Hteq ._2htEKn .DUXzra,#cambrian1 .tH6Qv7 ._26Hteq ._2htEKn .DUXzra,#cambrian2 .tH6Qv7 ._26Hteq ._2htEKn .DUXzra,#cambrian3 .tH6Qv7 ._26Hteq ._2htEKn .DUXzra,#cambrian4 .tH6Qv7 ._26Hteq ._2htEKn .DUXzra{display:inline-block;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-size:16px;color:#000;font-weight:300;line-height:16px;max-width:60%}#cambrian0 .tH6Qv7 ._26Hteq ._2htEKn .ocg5pY,#cambrian1 .tH6Qv7 ._26Hteq ._2htEKn .ocg5pY,#cambrian2 .tH6Qv7 ._26Hteq ._2htEKn .ocg5pY,#cambrian3 .tH6Qv7 ._26Hteq ._2htEKn .ocg5pY,#cambrian4 .tH6Qv7 ._26Hteq ._2htEKn .ocg5pY{font-size:12px;color:#999;margin-top:5px;font-weight:300;line-height:14px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}#cambrian0 .tH6Qv7 ._26Hteq ._2htEKn ._2c3HBO,#cambrian1 .tH6Qv7 ._26Hteq ._2htEKn ._2c3HBO,#cambrian2 .tH6Qv7 ._26Hteq ._2htEKn ._2c3HBO,#cambrian3 .tH6Qv7 ._26Hteq ._2htEKn ._2c3HBO,#cambrian4 .tH6Qv7 ._26Hteq ._2htEKn ._2c3HBO{display:inline-block;overflow:hidden;box-sizing:content-box;height:10px;padding:1px 2px;font-size:10px;font-weight:400;font-style:normal;line-height:11px;vertical-align:middle;text-decoration:none;border-radius:3px;border:1px solid #e3e3e3;color:#999;position:absolute;top:1px;margin-left:5px}</style><style type="text/css">#cambrian0 ._2OGhYs,#cambrian1 ._2OGhYs,#cambrian2 ._2OGhYs,#cambrian3 ._2OGhYs,#cambrian4 ._2OGhYs{position:relative;background-color:#fff}#cambrian0 ._2RPsC2,#cambrian1 ._2RPsC2,#cambrian2 ._2RPsC2,#cambrian3 ._2RPsC2,#cambrian4 ._2RPsC2{padding:15px 0;background-color:#fff}#cambrian0 ._3YzkLk,#cambrian1 ._3YzkLk,#cambrian2 ._3YzkLk,#cambrian3 ._3YzkLk,#cambrian4 ._3YzkLk{position:relative;z-index:0;position:absolute;top:0;left:0;right:0;z-index:-1}#cambrian0 ._3YzkLk:after,#cambrian1 ._3YzkLk:after,#cambrian2 ._3YzkLk:after,#cambrian3 ._3YzkLk:after,#cambrian4 ._3YzkLk:after{content:"";position:absolute;box-sizing:border-box;top:0;left:0;border-bottom:1px solid #ddd;width:200%;height:200%;z-index:-1;transform:scale(.5);-webkit-transform:scale(.5);transform-origin:left top;-webkit-transform-origin:left top}#cambrian0 ._3YzkLk ._1ZN5uE,#cambrian1 ._3YzkLk ._1ZN5uE,#cambrian2 ._3YzkLk ._1ZN5uE,#cambrian3 ._3YzkLk ._1ZN5uE,#cambrian4 ._3YzkLk ._1ZN5uE{padding:15px 17px;background-color:#fff}</style><style type="text/css">#cambrian0 ._1PnZXZ,#cambrian1 ._1PnZXZ,#cambrian2 ._1PnZXZ,#cambrian3 ._1PnZXZ,#cambrian4 ._1PnZXZ{display:block;position:fixed;z-index:2147483646;top:0;left:0;right:0;background:#fff}</style><style type="text/css">#cambrian0 ._1zbmp3,#cambrian1 ._1zbmp3,#cambrian2 ._1zbmp3,#cambrian3 ._1zbmp3,#cambrian4 ._1zbmp3{margin:0}</style><style type="text/css">#cambrian0 ._12SnTy,#cambrian1 ._12SnTy,#cambrian2 ._12SnTy,#cambrian3 ._12SnTy,#cambrian4 ._12SnTy{padding:15px 0;background-color:#fff}</style><style type="text/css">#cambrian0 .PypvUY,#cambrian1 .PypvUY,#cambrian2 .PypvUY,#cambrian3 .PypvUY,#cambrian4 .PypvUY{background-color:#fff;margin:20px 0;position:relative;z-index:0;border-radius:4px;overflow:hidden;-webkit-tap-highlight-color:transparent}#cambrian0 .PypvUY:after,#cambrian1 .PypvUY:after,#cambrian2 .PypvUY:after,#cambrian3 .PypvUY:after,#cambrian4 .PypvUY:after{content:"";position:absolute;box-sizing:border-box;top:0;left:0;border:1px solid #ddd;border-radius:8px;width:200%;height:200%;z-index:-1;transform:scale(.5);-webkit-transform:scale(.5);transform-origin:left top;-webkit-transform-origin:left top}#cambrian0 .PypvUY ._2SJWnA,#cambrian1 .PypvUY ._2SJWnA,#cambrian2 .PypvUY ._2SJWnA,#cambrian3 .PypvUY ._2SJWnA,#cambrian4 .PypvUY ._2SJWnA{text-align:center}#cambrian0 .PypvUY ._2SJWnA ._2UyMHm,#cambrian1 .PypvUY ._2SJWnA ._2UyMHm,#cambrian2 .PypvUY ._2SJWnA ._2UyMHm,#cambrian3 .PypvUY ._2SJWnA ._2UyMHm,#cambrian4 .PypvUY ._2SJWnA ._2UyMHm{width:67px;height:67px;border:1px solid transparent;border-radius:50%;margin-top:26px}#cambrian0 .PypvUY ._2jUmr0,#cambrian1 .PypvUY ._2jUmr0,#cambrian2 .PypvUY ._2jUmr0,#cambrian3 .PypvUY ._2jUmr0,#cambrian4 .PypvUY ._2jUmr0{margin-top:10px;text-align:center;line-height:16px;font-size:16px;color:#333;font-weight:600}#cambrian0 .PypvUY ._1ag27m,#cambrian1 .PypvUY ._1ag27m,#cambrian2 .PypvUY ._1ag27m,#cambrian3 .PypvUY ._1ag27m,#cambrian4 .PypvUY ._1ag27m{width:78%;margin:auto;margin-top:10px;text-align:center;font-size:13px;color:#999;line-height:17px;font-weight:300}#cambrian0 .PypvUY .py4pLD,#cambrian1 .PypvUY .py4pLD,#cambrian2 .PypvUY .py4pLD,#cambrian3 .PypvUY .py4pLD,#cambrian4 .PypvUY .py4pLD{text-align:center;margin:13px 0 25px}</style><style type="text/css">._3hy-Ff{position:fixed;z-index:2147483647;top:50%;transform:translateY(-50%);-webkit-transform:translateY(-50%);left:10%;right:10%;border-radius:4px}._3hy-Ff,._3sMHvW{background-color:#fff}._3sMHvW{width:100%;height:100%;min-height:260px;border:none;outline:none;border-radius:4px}._3wCh1i{position:fixed;z-index:2147483647;top:0;bottom:0;left:0;right:0;background-color:#000;opacity:.65}</style><script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/openBox.js" async=""></script><script type="text/javascript" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/cuid"></script><style type="text/css">.dp-default .number { color: #C00000; }</style><style type="text/css">.dp-default .number { color: #C00000; }</style></head><body><script onload="window[&#39;cambrian_sync_loader_success1524642773079204&#39;]()" onerror="window[&#39;cambrian_sync_loader_fail_1524642773079204&#39;]()" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/main.7ac4fbf5.js"></script>
+  
+  
+    <div id="header">
+	      <div id="blog_site_nav">
+  <a href="http://www.iteye.com/" class="homepage">首页</a>
+  <a href="http://www.iteye.com/news">资讯</a>
+  <a href="http://www.iteye.com/magazines">精华</a>
+  <a href="http://www.iteye.com/forums">论坛</a>
+  <a href="http://www.iteye.com/ask">问答</a>
+  <a href="http://www.iteye.com/blogs">博客</a>
+  <a href="http://www.iteye.com/blogs/subjects">专栏</a>
+  <a href="http://www.iteye.com/groups">群组</a>
+  <a href="http://rednaxelafx.iteye.com/blog/472113#" onclick="return false;" id="msna"><u>更多</u> <small>▼</small></a>
+  <div class="quick_menu" style="display:none;">
+    <a target="_blank" href="http://job.iteye.com/iteye">知识库</a>
+    <a href="http://www.iteye.com/search">搜索</a>
+  </div>
+</div>
+
+	      <div id="user_nav">
+
+      <a href="http://rednaxelafx.iteye.com/login" class="welcome" title="登录">您还未登录 !</a>
+    <a href="http://rednaxelafx.iteye.com/login">登录</a>
+    <!--<a href="/signup" class="nobg">注册</a>-->
+    <!--<a href="http://passport.csdn.net/account/mobileregister?from=http://www.iteye.com">注册</a>-->
+  </div>
+
+	    
+    </div>
+
+    <div id="page">
+        <div id="branding" class="clearfix" style="overflow: hidden;background: none;padding:0 0 2px;">
+          <!-- 广告位：PC端-iteye博客详情页顶部banner-960*90 -->
+          <script>
+              (function() {
+                  var s = "_" + Math.random().toString(36).slice(2);
+                  document.write('<div id="' + s + '"></div>');
+                  (window.slotbydup=window.slotbydup || []).push({
+                      id: '4773198',
+                      container: s,
+                      size: '960,60',
+                      display: 'inlay-fix'
+                  });
+              })();
+          </script><div id="_z3nt16htjwo"></div><script charset="utf-8" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/qcdm"></script><div style=""><iframe width="960" frameborder="0" height="90" scrolling="no" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/vgpf.html"></iframe></div><script type="text/javascript" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/todpduxgx.js"></script>
+        </div>
+      <div id="branding" class="clearfix">
+        <div id="blog_name">
+          <h1><a href="http://rednaxelafx.iteye.com/">Script Ahead, Code Behind</a></h1>
+        </div>
+        <div id="fd"></div>
+        <div id="blog_navbar">
+          <ul>
+            <li class="blog_navbar_for"><a href="http://rednaxelafx.iteye.com/"><strong>博客</strong></a></li>
+            <li><a href="http://rednaxelafx.iteye.com/weibo">微博</a></li>
+            <li><a href="http://rednaxelafx.iteye.com/album">相册</a></li>
+            <li><a href="http://rednaxelafx.iteye.com/link">收藏</a></li>
+            <li><a href="http://rednaxelafx.iteye.com/blog/guest_book">留言</a></li>
+            <li><a href="http://rednaxelafx.iteye.com/blog/profile">关于我</a></li>
+          </ul>
+    
+          <div class="search">
+            <form action="http://rednaxelafx.iteye.com/blog/search" method="get">
+              <input class="search_text" id="query" name="query" style="margin-left: 10px;width: 110px;" type="text" value="">
+              <input class="submit_search" type="submit" value="">
+            </form>
+          </div> 
+          <div id="fd"></div>         
+        </div>
+      </div>
+      
+      <div id="content" class="clearfix">
+        <div id="main">
+          
+
+
+
+          
+
+
+<div class="h-entry" style="display:none">
+  <a href="http://rednaxelafx.iteye.com/" class="p-author" target="_blank">RednaxelaFX</a>
+</div>
+
+
+<div class="blog_main">
+  <script type="application/ld+json">
+    {
+        "@context": "https://zhanzhang.baidu.com/contexts/cambrian.jsonld",
+        "@id": "http://rednaxelafx.iteye.com/blog/472113",
+        "title": "bison的运算符优先级一例",
+        "images": [],
+        "description": "",
+        "pubDate": "2009-09-19T17:08:14"
+    }
+  </script>
+  <div class="blog_title">
+    <h3>
+      <a href="http://rednaxelafx.iteye.com/blog/472113">bison的运算符优先级一例</a>
+      <em class="actions">      </em>
+    </h3>
+    <ul class="blog_categories"><strong>博客分类：</strong> <li><a href="http://rednaxelafx.iteye.com/category/29010">Compiler</a></li> </ul>
+        <div class="news_tag"><a href="http://www.iteye.com/blogs/tag/C">C</a><a href="http://www.iteye.com/blogs/tag/C++">C++</a><a href="http://www.iteye.com/blogs/tag/C%23">C#</a><a href="http://www.iteye.com/blogs/tag/Go">Go</a><a href="http://www.iteye.com/blogs/tag/JavaScript">JavaScript</a>&nbsp;</div>
+  </div>
+
+  <div id="blog_content" class="blog_content">
+    看到<a href="http://phyeas.iteye.com/" target="_blank">phyeas</a>同学在<a href="http://phyeas.iteye.com/blog/471861" target="_blank">试写JavaScript语法</a>，顺便参一腿 =v=
+<br>本文里的代码放在附件里了，有需要的拿。
+<br>
+<br>关于语法中左递归/右递归与规则的左结合/右结合的关系，我觉得就照着简单的表达式语法把推导过程画出来，找找感觉就能行。要注意的是推导结束后，把每步推导过程画成树（也就是解析树或者叫语法树），离根越远的节点在就越先被求值，也就是“优先级高”的表现了。写这帖的时候懒得画例子了……有必要再补充。
+<br>
+<br>自顶向下的解析方法，如递归下降式或者LL式，一般无法支持左递归的语法，无聊是直接左递归还是间接左递归。这是因为它总是从推导规则中的第一个符号开始推，如果第一个符号就是自己或者间接回回到自己，那么解析过程就无法前进，就无限递归而出错了。（近年来有人提出过一些改进方案使自顶向下解析可以支持左递归，这帖里就不讨论了。有兴趣的同学可以阅读这篇论文：<a href="http://www.vpri.org/pdf/tr2007002_packrat.pdf" target="_blank">Packrat parsers can support left recursion</a>）。
+<br>
+<br>传统上，为了解决无法左递归的问题，可以改写语法规则，通过引入一个ε转换来把左递归变为右递归。但是这样得到的语法树的结合性就不对了，要得到正确的语法树需要做额外的工作来把树的形状转换回来。
+<br>
+<br>LR系的解析方式则既支持左递归也支持右递归，写起语法来就轻松很多。结合性直接靠语法的递归位置就可以表达。
+<br>
+<br>结合性有两个经典的应用场景，一是表达式的解析，二是if-else问题的解决。这帖主要着眼于前者。
+<br>表达式的形式比较固定，但传统上运算符有不同优先级，写语法的时候为了照顾优先级可以选择把相似的结构重复写在多个规则里，让这些规则的层次表达优先级的差别。但规则多了，状态图也就变复杂了。
+<br>通过显式指定运算符的优先级，语法中结构相似的规则可以写在同一条规则里，既简化了语法，对应的解析器的效率也更高。
+<br>
+<br>GNU Bison是主要采用LALR(1)的解析器生成器。它支持显式指定规则的优先级以及结合性。
+<br>那么优先级能否跨规则而存在呢？先看个例子：
+<br>calc1.y
+<br><div class="dp-highlighter" id=""><div class="bar"><div class="tools">Bison代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%25%7B%0A%23include%20%3Cstdio.h%3E%0A%23include%20%3Cctype.h%3E%0A%23include%20%3Cmath.h%3E%0A%25%7D%0A%0A%25union%20%7B%0A%20%20%20%20double%20dval%3B%0A%7D%0A%0A%25token%20%3Cdval%3E%20NUMBER%0A%25token%20POW%0A%0A%25left%20&#39;%2B&#39;%20&#39;-&#39;%0A%25left%20&#39;*&#39;%20&#39;%2F&#39;%0A%25nonassoc%20UMINUS%0A%25right%20POW%0A%0A%25type%20%3Cdval%3E%20expr%0A%0A%25%25%0A%0Aline%0A%20%20%20%20%3A%20expr%20&#39;%5Cn&#39;%20%20%20%20%20%20%20%20%20%20%20%20%20%7B%20printf(%22%25lf%5Cn%22%2C%20%241)%3B%20%7D%0A%20%20%20%20%3B%0A%0Aexpr%0A%20%20%20%20%3A%20NUMBER%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7B%20%24%24%20%3D%20%241%3B%20%7D%0A%20%20%20%20%7C%20expr%20&#39;%2B&#39;%20expr%20%20%20%20%20%20%20%20%20%7B%20%24%24%20%3D%20%241%20%2B%20%243%3B%20%7D%0A%20%20%20%20%7C%20expr%20&#39;-&#39;%20expr%20%20%20%20%20%20%20%20%20%7B%20%24%24%20%3D%20%241%20-%20%243%3B%20%7D%0A%20%20%20%20%7C%20expr%20&#39;*&#39;%20expr%20%20%20%20%20%20%20%20%20%7B%20%24%24%20%3D%20%241%20*%20%243%3B%20%7D%0A%20%20%20%20%7C%20expr%20&#39;%2F&#39;%20expr%20%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20if%20(0%20%3D%3D%20%243)%20yyerror(%22divided%20by%20zero%22)%3B%0A%20%20%20%20%20%20%20%20else%20%24%24%20%3D%20%241%20%2F%20%243%3B%0A%20%20%20%20%7D%0A%20%20%20%20%7C%20&#39;-&#39;%20expr%20%25prec%20UMINUS%20%7B%20%24%24%20%3D%20-%242%3B%20%7D%0A%20%20%20%20%7C%20expr%20POW%20expr%20%20%20%20%20%20%20%20%20%7B%20%24%24%20%3D%20pow(%241%2C%20%243)%3B%20%7D%0A%20%20%20%20%7C%20&#39;(&#39;%20expr%20&#39;)&#39;%20%20%20%20%20%20%20%20%20%20%7B%20%24%24%20%3D%20%242%3B%20%7D%0A%20%20%20%20%3B%0A%0A%25%25%0A%0Aint%20main()%20%7B%0A%20%20%20%20return%20yyparse()%3B%0A%7D%0A%0Aint%20yyerror(char*%20s)%20%7B%0A%20%20%20%20fprintf(stderr%2C%20%22%25s%5Cn%22%2C%20s)%3B%0A%20%20%20%20return%201%3B%0A%7D%0A%0Aint%20end%20%3D%200%3B%0A%0Aint%20yylex()%20%7B%0A%20%20%20%20if%20(end)%20return%200%3B%0A%20%20%20%20int%20c%3B%0A%20%20%20%20%0A%20%20%20%20%2F*%20skip%20space%20*%2F%0A%20%20%20%20while%20(&#39;%20&#39;%20%3D%3D%20(c%20%3D%20getchar()))%20%7B%20%7D%0A%20%20%20%20%0A%20%20%20%20if%20(isdigit(c))%20%7B%0A%20%20%20%20%20%20%20%20ungetc(c%2C%20stdin)%3B%0A%20%20%20%20%20%20%20%20scanf(%22%25lf%22%2C%20%26yylval)%3B%0A%20%20%20%20%20%20%20%20return%20NUMBER%3B%0A%20%20%20%20%7D%0A%20%20%20%20%0A%20%20%20%20if%20(&#39;*&#39;%20%3D%3D%20c)%20%7B%0A%20%20%20%20%20%20%20%20c%20%3D%20getchar()%3B%0A%20%20%20%20%20%20%20%20if%20(&#39;*&#39;%20%3D%3D%20c)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20POW%3B%0A%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20ungetc(c%2C%20stdin)%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20&#39;*&#39;%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%20%20%0A%20%20%20%20if%20(&#39;%5Cn&#39;%20%3D%3D%20c)%20%7B%0A%20%20%20%20%20%20%20%20end%20%3D%201%3B%0A%20%20%20%20%7D%0A%20%20%20%20%0A%20%20%20%20return%20c%3B%0A%7D" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/icon_star.png" alt="收藏代码"><img class="spinner" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-default"><li><span><span>%{&nbsp;&nbsp;</span></span></li><li><span>#include&nbsp;&lt;stdio.h&gt;&nbsp;&nbsp;</span></li><li><span>#include&nbsp;&lt;ctype.h&gt;&nbsp;&nbsp;</span></li><li><span>#include&nbsp;&lt;math.h&gt;&nbsp;&nbsp;</span></li><li><span>%}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>%union&nbsp;{&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;dval;&nbsp;&nbsp;</span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>%token&nbsp;&lt;dval&gt;&nbsp;NUMBER&nbsp;&nbsp;</span></li><li><span>%token&nbsp;POW&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>%left&nbsp;<span class="string">'+'</span><span>&nbsp;</span><span class="string">'-'</span><span>&nbsp;&nbsp;</span></span></li><li><span>%left&nbsp;<span class="string">'*'</span><span>&nbsp;</span><span class="string">'/'</span><span>&nbsp;&nbsp;</span></span></li><li><span>%nonassoc&nbsp;UMINUS&nbsp;&nbsp;</span></li><li><span>%right&nbsp;POW&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>%type&nbsp;&lt;dval&gt;&nbsp;expr&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>%%&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>line&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;expr&nbsp;<span class="string">'\n'</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;printf(</span><span class="string">"%lf\n"</span><span>,&nbsp;$</span><span class="number">1</span><span>);&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>expr&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;NUMBER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;$$&nbsp;=&nbsp;$<span class="number">1</span><span>;&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;expr&nbsp;<span class="string">'+'</span><span>&nbsp;expr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;$$&nbsp;=&nbsp;$</span><span class="number">1</span><span>&nbsp;+&nbsp;$</span><span class="number">3</span><span>;&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;expr&nbsp;<span class="string">'-'</span><span>&nbsp;expr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;$$&nbsp;=&nbsp;$</span><span class="number">1</span><span>&nbsp;-&nbsp;$</span><span class="number">3</span><span>;&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;expr&nbsp;<span class="string">'*'</span><span>&nbsp;expr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;$$&nbsp;=&nbsp;$</span><span class="number">1</span><span>&nbsp;*&nbsp;$</span><span class="number">3</span><span>;&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;expr&nbsp;<span class="string">'/'</span><span>&nbsp;expr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(<span class="number">0</span><span>&nbsp;==&nbsp;$</span><span class="number">3</span><span>)&nbsp;yyerror(</span><span class="string">"divided&nbsp;by&nbsp;zero"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;$$&nbsp;=&nbsp;$<span class="number">1</span><span>&nbsp;/&nbsp;$</span><span class="number">3</span><span>;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;<span class="string">'-'</span><span>&nbsp;expr&nbsp;%prec&nbsp;UMINUS&nbsp;{&nbsp;$$&nbsp;=&nbsp;-$</span><span class="number">2</span><span>;&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;expr&nbsp;POW&nbsp;expr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;$$&nbsp;=&nbsp;pow($<span class="number">1</span><span>,&nbsp;$</span><span class="number">3</span><span>);&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;<span class="string">'('</span><span>&nbsp;expr&nbsp;</span><span class="string">')'</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;$$&nbsp;=&nbsp;$</span><span class="number">2</span><span>;&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>%%&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>int&nbsp;main()&nbsp;{&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;yyparse();&nbsp;&nbsp;</span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>int&nbsp;yyerror(char*&nbsp;s)&nbsp;{&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&nbsp;<span class="string">"%s\n"</span><span>,&nbsp;s);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;<span class="number">1</span><span>;&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>int&nbsp;end&nbsp;=&nbsp;<span class="number">0</span><span>;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span>int&nbsp;yylex()&nbsp;{&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(end)&nbsp;return&nbsp;<span class="number">0</span><span>;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;c;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;skip&nbsp;space&nbsp;*/&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;while&nbsp;(<span class="string">'&nbsp;'</span><span>&nbsp;==&nbsp;(c&nbsp;=&nbsp;getchar()))&nbsp;{&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(isdigit(c))&nbsp;{&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ungetc(c,&nbsp;stdin);&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scanf(<span class="string">"%lf"</span><span>,&nbsp;&amp;yylval);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;NUMBER;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(<span class="string">'*'</span><span>&nbsp;==&nbsp;c)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c&nbsp;=&nbsp;getchar();&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(<span class="string">'*'</span><span>&nbsp;==&nbsp;c)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;POW;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ungetc(c,&nbsp;stdin);&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;<span class="string">'*'</span><span>;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(<span class="string">'\n'</span><span>&nbsp;==&nbsp;c)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;=&nbsp;<span class="number">1</span><span>;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;c;&nbsp;&nbsp;</span></li><li><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="bison" codeable_id="472113" codeable_type="Blog" source_url="http://rednaxelafx.iteye.com/blog/472113" pre_index="0" title="bison的运算符优先级一例" style="display: none;">%{
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;math.h&gt;
+%}
+
+%union {
+    double dval;
+}
+
+%token &lt;dval&gt; NUMBER
+%token POW
+
+%left '+' '-'
+%left '*' '/'
+%nonassoc UMINUS
+%right POW
+
+%type &lt;dval&gt; expr
+
+%%
+
+line
+    : expr '\n'             { printf("%lf\n", $1); }
+    ;
+
+expr
+    : NUMBER                { $$ = $1; }
+    | expr '+' expr         { $$ = $1 + $3; }
+    | expr '-' expr         { $$ = $1 - $3; }
+    | expr '*' expr         { $$ = $1 * $3; }
+    | expr '/' expr         {
+        if (0 == $3) yyerror("divided by zero");
+        else $$ = $1 / $3;
+    }
+    | '-' expr %prec UMINUS { $$ = -$2; }
+    | expr POW expr         { $$ = pow($1, $3); }
+    | '(' expr ')'          { $$ = $2; }
+    ;
+
+%%
+
+int main() {
+    return yyparse();
+}
+
+int yyerror(char* s) {
+    fprintf(stderr, "%s\n", s);
+    return 1;
+}
+
+int end = 0;
+
+int yylex() {
+    if (end) return 0;
+    int c;
+    
+    /* skip space */
+    while (' ' == (c = getchar())) { }
+    
+    if (isdigit(c)) {
+        ungetc(c, stdin);
+        scanf("%lf", &amp;yylval);
+        return NUMBER;
+    }
+    
+    if ('*' == c) {
+        c = getchar();
+        if ('*' == c) {
+            return POW;
+        } else {
+            ungetc(c, stdin);
+            return '*';
+        }
+    }
+    
+    if ('\n' == c) {
+        end = 1;
+    }
+    
+    return c;
+}</pre>
+<br>这是个简单的计算器，支持加、减、乘、除、负、幂等运算，并且可以通过括号改变表达式的结合性。注意到，所有表示“表达式”的规则都在同一个大规则expr里，它们的结合性和优先级则在语法文件的头部声明。
+<br>
+<br>如果把expr改为下面的样子呢？
+<br>calc2.y
+<br><div class="dp-highlighter" id=""><div class="bar"><div class="tools">Bison代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=expr%0A%20%20%20%20%3A%20NUMBER%20%20%20%20%20%20%20%20%20%20%7B%20%24%24%20%3D%20%241%3B%20%7D%0A%20%20%20%20%7C%20expr%20binop%20expr%20%7B%0A%20%20%20%20%20%20%20%20switch%20(%242)%20%7B%0A%20%20%20%20%20%20%20%20case%20&#39;%2B&#39;%3A%20%24%24%20%3D%20%241%20%2B%20%243%3B%20break%3B%0A%20%20%20%20%20%20%20%20case%20&#39;-&#39;%3A%20%24%24%20%3D%20%241%20-%20%243%3B%20break%3B%0A%20%20%20%20%20%20%20%20case%20&#39;*&#39;%3A%20%24%24%20%3D%20%241%20*%20%243%3B%20break%3B%0A%20%20%20%20%20%20%20%20case%20&#39;%2F&#39;%3A%20%24%24%20%3D%20%241%20%2F%20%243%3B%20break%3B%0A%20%20%20%20%20%20%20%20case%20POW%3A%20%24%24%20%3D%20pow(%241%2C%20%243)%3B%20break%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%20%20%7C%20&#39;-&#39;%20expr%20%20%20%20%20%20%20%20%7B%20%24%24%20%3D%20-%242%3B%20%7D%0A%20%20%20%20%7C%20&#39;(&#39;%20expr%20&#39;)&#39;%20%20%20%20%7B%20%24%24%20%3D%20%242%3B%20%7D%0A%20%20%20%20%3B%0A%0Abinop%0A%20%20%20%20%3A%20&#39;%2B&#39;%7C%20&#39;-&#39;%20%7C%20&#39;*&#39;%20%7C%20&#39;%2F&#39;%20%7C%20POW%0A%20%20%20%20%3B" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/icon_star.png" alt="收藏代码"><img class="spinner" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-default"><li><span><span>expr&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;NUMBER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;$$&nbsp;=&nbsp;$<span class="number">1</span><span>;&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;expr&nbsp;binop&nbsp;expr&nbsp;{&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch&nbsp;($<span class="number">2</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;<span class="string">'+'</span><span>:&nbsp;$$&nbsp;=&nbsp;$</span><span class="number">1</span><span>&nbsp;+&nbsp;$</span><span class="number">3</span><span>;&nbsp;break;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;<span class="string">'-'</span><span>:&nbsp;$$&nbsp;=&nbsp;$</span><span class="number">1</span><span>&nbsp;-&nbsp;$</span><span class="number">3</span><span>;&nbsp;break;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;<span class="string">'*'</span><span>:&nbsp;$$&nbsp;=&nbsp;$</span><span class="number">1</span><span>&nbsp;*&nbsp;$</span><span class="number">3</span><span>;&nbsp;break;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;<span class="string">'/'</span><span>:&nbsp;$$&nbsp;=&nbsp;$</span><span class="number">1</span><span>&nbsp;/&nbsp;$</span><span class="number">3</span><span>;&nbsp;break;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;POW:&nbsp;$$&nbsp;=&nbsp;pow($<span class="number">1</span><span>,&nbsp;$</span><span class="number">3</span><span>);&nbsp;break;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;<span class="string">'-'</span><span>&nbsp;expr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;$$&nbsp;=&nbsp;-$</span><span class="number">2</span><span>;&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;<span class="string">'('</span><span>&nbsp;expr&nbsp;</span><span class="string">')'</span><span>&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;$$&nbsp;=&nbsp;$</span><span class="number">2</span><span>;&nbsp;}&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>binop&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<span class="string">'+'</span><span>|&nbsp;</span><span class="string">'-'</span><span>&nbsp;|&nbsp;</span><span class="string">'*'</span><span>&nbsp;|&nbsp;</span><span class="string">'/'</span><span>&nbsp;|&nbsp;POW&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="bison" codeable_id="472113" codeable_type="Blog" source_url="http://rednaxelafx.iteye.com/blog/472113" pre_index="1" title="bison的运算符优先级一例" style="display: none;">expr
+    : NUMBER          { $$ = $1; }
+    | expr binop expr {
+        switch ($2) {
+        case '+': $$ = $1 + $3; break;
+        case '-': $$ = $1 - $3; break;
+        case '*': $$ = $1 * $3; break;
+        case '/': $$ = $1 / $3; break;
+        case POW: $$ = pow($1, $3); break;
+        }
+    }
+    | '-' expr        { $$ = -$2; }
+    | '(' expr ')'    { $$ = $2; }
+    ;
+
+binop
+    : '+'| '-' | '*' | '/' | POW
+    ;</pre>
+<br>bison会抱怨说出现了5个递进/规约冲突。用bison -v calc2.y命令，查看calc2.output，可以看到冲突出现在状态17：
+<br id=""><pre name="code" class="" codeable_id="472113" codeable_type="Blog" source_url="http://rednaxelafx.iteye.com/blog/472113" pre_index="2" title="bison的运算符优先级一例">state 17
+
+    3 expr: expr . binop expr
+    3     | expr binop expr .
+
+    POW  shift, and go to state 9
+    '+'  shift, and go to state 10
+    '-'  shift, and go to state 11
+    '*'  shift, and go to state 12
+    '/'  shift, and go to state 13
+
+    POW       [reduce using rule 3 (expr)]
+    '+'       [reduce using rule 3 (expr)]
+    '-'       [reduce using rule 3 (expr)]
+    '*'       [reduce using rule 3 (expr)]
+    '/'       [reduce using rule 3 (expr)]
+    $default  reduce using rule 3 (expr)
+
+    binop  go to state 15</pre>
+<br>在这个状态时，下一个字符假如是+，那么既可以递进并转到状态10，也可以规约，于是就冲突了。
+<br>
+<br>问题的关键就在于，这个“优先级”到底是干嘛用的。以calc1.y为例，如果没有指定运算符优先级，匹配到这样一个状态：
+<br><pre name="code" class="" codeable_id="472113" codeable_type="Blog" source_url="http://rednaxelafx.iteye.com/blog/472113" pre_index="3" title="bison的运算符优先级一例">expr '+' expr .</pre>
+<br>（“.”表示当前匹配的位置）
+<br>假如下一个符号是*，那么到底应该选择递进，变为：
+<br><pre name="code" class="" codeable_id="472113" codeable_type="Blog" source_url="http://rednaxelafx.iteye.com/blog/472113" pre_index="4" title="bison的运算符优先级一例">expr '+' expr '*' .</pre>
+<br>还是规约，变为：
+<br><pre name="code" class="" codeable_id="472113" codeable_type="Blog" source_url="http://rednaxelafx.iteye.com/blog/472113" pre_index="5" title="bison的运算符优先级一例">expr .</pre>
+<br>呢？
+<br>有了优先级，bison就可以比较递进与规约的选择间涉及的优先级；看到*的优先级比+高，于是选择递进。
+<br>
+<br>而在calc2.y中，加减乘除幂这几个带优先级的运算符堆在了binop规则中。匹配该规则其实不需要优先级，单靠lookahead就足够了；在遇到加减乘数幂这几个运算符时，bison肯定会选择规约为binop；规约后，binop本身就不带有任何优先级信息了。而在expr规则中，需要优先级去区分递进或规约的expr binop expr子规则却得不到任何优先级信息，于是递进/规约冲突又冒出来了。
+<br>
+<br>phyeas的问题：
+<br><div class="quote_title">phyeas 写道</div><div class="quote_div">另外，想问下如果我在声明处定义如下：
+<br>%left PLUS
+<br>然后在规则处：
+<br>expression:
+<br>&nbsp;&nbsp;&nbsp; expression op expression
+<br>;
+<br>op:
+<br>&nbsp;&nbsp;&nbsp; PLUS
+<br>;
+<br>
+<br>这样的华expression是否会应用上面定义的优先级？</div>
+<br>答案是：不会。
+<br>
+<br>进一步阅读：
+<br>首推自然是<a href="http://www.gnu.org/software/bison/manual/" target="_blank">bison的手册</a>。
+<br><a href="http://nitsan.org/~maratb/cs164/bison.html" target="_blank">这个帖子</a>也可以读读，也是用表达式计算器为例子来讲解的。现在好困，不想码那么多字，既然有现成的解释我也就不用码了 =v=
+  </div>
+
+  
+  <div class="attachments">
+    
+      
+        <ul>
+          <li><a href="http://dl.iteye.com/topics/download/573c0287-2ac6-314f-b40c-288a2fb73200">test_bison.zip</a> (26.9 KB)</li>
+          
+          <li>下载次数: 16</li>
+        </ul>
+      
+    
+    
+  </div>
+
+
+  <div>
+    <!-- 广告位：PC端-iteye博客详情页底部banner2-728*90 -->
+    <script>
+        (function() {
+            var s = "_" + Math.random().toString(36).slice(2);
+            document.write('<div id="' + s + '"></div>');
+            (window.slotbydup=window.slotbydup || []).push({
+                id: '4774193',
+                container: s,
+                size: '728,90',
+                display: 'inlay-fix'
+            });
+        })();
+    </script><div id="_o4gs9hzdch"></div><script charset="utf-8" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/qcdm(1)"></script><div id="_zipb3xi003n"><span style="width:0px;height:0px;margin-bottom:0px;"></span><iframe width="728" frameborder="0" height="90" scrolling="no" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/s.html"></iframe></div><script type="text/javascript" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/togxxxgpu.js"></script>
+  </div>
+
+
+
+  <div id="bottoms" class="clearfix">
+    
+    <div id="share_weibo">分享到：
+      <a data-type="sina" href="javascript:;" title="分享到新浪微博"><img src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/sina.jpg"></a>
+      <a data-type="qq" href="javascript:;" title="分享到腾讯微博"><img src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/tec.jpg"></a>
+    </div>
+  </div>
+
+  <div class="blog_nav">
+    <div class="pre_next">
+      <a href="http://rednaxelafx.iteye.com/blog/474269" class="next" title="订阅的feed……">订阅的feed……</a>
+      |
+      <a href="http://rednaxelafx.iteye.com/blog/471747" class="pre" title="在Windows上使用Wilson">在Windows上使用Wilson</a>
+    </div>
+  </div>
+  <div class="blog_bottom">
+    <ul>
+      <li>2009-09-19 17:08</li>
+      <li>浏览 6939</li>
+      <li><a href="http://rednaxelafx.iteye.com/blog/472113#comments">评论(1)</a></li>
+      
+      
+            
+      <li class="last"><a href="http://www.iteye.com/wiki/blog/472113" target="_blank" class="more">查看更多</a></li>
+    </ul>    
+  </div>
+
+	
+    
+    
+<div class="boutique-curr-box blog_comment">
+	  <div class="boutique-curr clearfix">
+	    <h5 class="h3titles">相关资源推荐</h5>
+			<ul style="margin-top: 15px">
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/Chinamming/article/details/16974621" target="_blank" title="Bison生成文件分析">Bison生成文件分析</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/Chinamming/article/details/16974305" target="_blank" title="最简单的flex &amp; bison例子">最简单的flex &amp; bison例子</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/ncepubdtb/article/details/42707131" target="_blank" title="flex和bison的用于加载和解析配置文件（参考freeDiameter用法）">flex和bison的用于加载和解析配置文件（参考freeDiameter用法）</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/bigbigtree911/article/details/47394847" target="_blank" title="flex bison 笔记">flex bison 笔记</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/forlong401/article/details/6313276" target="_blank" title="Yacc 和 Bison">Yacc 和 Bison</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://download.csdn.net/download/qianlongwydh/895648" target="_blank" title="flex与Bison小手册,包含一个编译器的实现源代码">flex与Bison小手册,包含一个编译器的实现源代码</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/sunmenggmail/article/details/50498962" target="_blank" title="mac os 安装 thrift">mac os 安装 thrift</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/notbaron/article/details/51100524" target="_blank" title="windows下bison安装使用">windows下bison安装使用</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/jay900323/article/details/52882830" target="_blank" title="Bison笔记">Bison笔记</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/Chinamming/article/details/16974601" target="_blank" title="语法分析——Bison介绍以及Flex、Bison联合编译">语法分析——Bison介绍以及Flex、Bison联合编译</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://download.csdn.net/download/owuyefeiying/8556385" target="_blank" title="window下bison和flex工具">window下bison和flex工具</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://download.csdn.net/download/limiteewaltwo/5163296" target="_blank" title="bison for linux">bison for linux</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/u011711997/article/details/52461802" target="_blank" title="如何开启bison调式方式">如何开启bison调式方式</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/lantianjialiang/article/details/7971327" target="_blank" title="bison和flex的例子">bison和flex的例子</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/xuzhezhaozhao/article/details/45009147" target="_blank" title="bison(yacc)学习笔记">bison(yacc)学习笔记</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/kongshuai19900505/article/details/75912060" target="_blank" title="centos安装bison">centos安装bison</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/Chinamming/article/details/16974435" target="_blank" title="windows 下 bison 命令行调用">windows 下 bison 命令行调用</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/Q1302182594/article/details/13290539" target="_blank" title="Linux工具大全_bison">Linux工具大全_bison</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/hexiaole1994/article/details/51166183" target="_blank" title="编译原理-用Bison构造语法分析程序-小小计算器">编译原理-用Bison构造语法分析程序-小小计算器</a>
+						</li>
+				
+						<li style="width: 50%;float: left;margin: 0;line-height: 25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+							<a href="https://blog.csdn.net/u013344915/article/details/52371205" target="_blank" title="C-运算符优先级一个小例子">C-运算符优先级一个小例子</a>
+						</li>
+				
+			</ul>
+	  </div>
+</div>
+
+      
+  <div class="blog_comment">
+    <h5>评论</h5>
+    <a id="comments" name="comments"></a>
+    <div id="bc1174066">
+  <div class="comment_title">
+    1 楼
+    <a href="http://phyeas.iteye.com/" target="_blank" title="phyeas">phyeas</a>
+    2009-09-19&nbsp;&nbsp;
+    
+    
+  </div>
+  <div class="comment_content">谢谢，明白了</div>
+</div>
+
+
+    
+    
+  </div>
+
+  <div class="blog_comment">
+    <h5>发表评论</h5>
+            <p style="text-align:center; margin-top:30px;margin-bottom:0px;"><a href="http://rednaxelafx.iteye.com/login" style="background-color:white;"> <img src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/login_icon.png" style="vertical-align:middle; margin-right: 10px;"></a><a href="http://rednaxelafx.iteye.com/login">  您还没有登录,请您登录后再发表评论 </a></p>
+      </div>
+</div>
+
+
+<script type="text/javascript">
+  dp.SyntaxHighlighter.HighlightAll('code', true, true);
+
+  $$('#main .blog_content pre[name=code]').each(function(pre, index){ // blog content
+    var post_id = 472113;
+    var location = window.location;
+    source_url = location.protocol + "//" + location.host + location.pathname + location.search;
+    pre.writeAttribute('codeable_id', post_id);
+    pre.writeAttribute('codeable_type', "Blog");
+    pre.writeAttribute('source_url', source_url);
+    pre.writeAttribute('pre_index', index);
+    pre.writeAttribute('title', 'bison的运算符优先级一例');
+  });
+
+  fix_image_size($$('div.blog_content img'), 700);
+
+  function processComment() {
+    $$('#main .blog_comment > div').each(function(comment){// comment
+      var post_id = comment.id.substr(2);
+      $$("#"+comment.id+" pre[name=code]").each(function(pre, index){
+        var location = window.location;
+        source_url = location.protocol + "//" + location.host + location.pathname + location.search;
+        source_url += "#" + comment.id;
+        pre.writeAttribute('codeable_id', post_id);
+        pre.writeAttribute('codeable_type', "BlogComment");
+        pre.writeAttribute('source_url', source_url);
+        pre.writeAttribute('pre_index', index);
+        pre.writeAttribute('title', 'bison的运算符优先级一例');
+      });
+    });
+  }
+
+  function quote_comment(id) {
+    new Ajax.Request('/editor/quote', {
+      parameters: {'id':id, 'type':'BlogComment'},
+      onSuccess:function(response){editor.bbcode_editor.textarea.insertAfterSelection(response.responseText);
+        Element.scrollTo(editor.bbcode_editor.textarea.element);}
+    });
+  }
+
+  code_favorites_init();
+  processComment();
+  new WeiboShare({share_buttons: $('share_weibo'), img_scope: $('blog_content')});
+</script>
+
+
+
+
+        </div>
+
+        <div id="local">
+          <div class="local_top"></div>
+          <div id="blog_owner">
+  <div id="blog_owner_logo"><a href="http://rednaxelafx.iteye.com/"><img alt="RednaxelaFX的博客" class="logo" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/e7f2a3da-4ed0-3627-ba26-c63a7a4f5f13.jpg" title="RednaxelaFX的博客: Script Ahead, Code Behind" width=""></a></div>
+  <div id="blog_owner_name">RednaxelaFX</div>
+</div>
+
+          <div id="blog_actions">
+            <ul>
+              <li>浏览: 2291915 次</li>
+              <li>性别: <img alt="Icon_minigender_1" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/icon_minigender_1.gif" title="男"></li>
+              <li>来自: 海外</li>
+              <li><img src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/offline.gif"></li>
+              
+            </ul>
+          </div>
+          <div id="user_visits" class="clearfix">
+            <h5>最近访客 <span style="font-weight:normal;font-size:12px;padding-left:30px;"><a href="http://rednaxelafx.iteye.com/blog/user_visits">更多访客&gt;&gt;</a></span></h5>
+            
+              <div class="user_visit">
+                <div class="logo"><a href="http://xnxylxh.iteye.com/" target="_blank"><img alt="xnxylxh的博客" class="logo" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/d69d12ad-00e6-313b-bc87-e3c04fcbcad8-thumb.jpg" title="xnxylxh的博客: " width="48px"></a></div>
+                <div class="left"><a href="http://xnxylxh.iteye.com/" target="_blank" title="xnxylxh">xnxylxh</a></div>
+              </div>
+            
+              <div class="user_visit">
+                <div class="logo"><a href="http://babby52561.iteye.com/" target="_blank"><img alt="babby52561的博客" class="logo" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/user-logo-thumb.gif" title="babby52561的博客: " width="48px"></a></div>
+                <div class="left"><a href="http://babby52561.iteye.com/" target="_blank" title="babby52561">babby52561</a></div>
+              </div>
+            
+              <div class="user_visit">
+                <div class="logo"><a href="http://conneyjoo.iteye.com/" target="_blank"><img alt="conneyjoo的博客" class="logo" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/user-logo-thumb.gif" title="conneyjoo的博客: " width="48px"></a></div>
+                <div class="left"><a href="http://conneyjoo.iteye.com/" target="_blank" title="conneyjoo">conneyjoo</a></div>
+              </div>
+            
+              <div class="user_visit">
+                <div class="logo"><a href="http://freezhan.iteye.com/" target="_blank"><img alt="free斩的博客" class="logo" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/user-logo-thumb.gif" title="free斩的博客: " width="48px"></a></div>
+                <div class="left"><a href="http://freezhan.iteye.com/" target="_blank" title="free斩">free斩</a></div>
+              </div>
+            
+          </div>
+
+          
+
+                      <div id="blog_menu">
+              <h5>文章分类</h5>
+              <ul>
+                <li><a href="http://rednaxelafx.iteye.com/">全部博客 (430)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/21342">Programming Languages (23)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/29010">Compiler (20)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/61298">Virtual Machine (57)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/162321">Garbage Collection (4)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/162318">HotSpot VM (26)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/78968">Mono (2)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/33627">SSCLI Rotor (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/60345">Harmony (0)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/31968">DLR (19)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/29044">Ruby (28)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/21339">C# (38)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/51666">F# (3)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/58920">Haskell (0)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/27795">Scheme (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/28215">Regular Expression (5)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/43041">Python (4)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/26952">ECMAScript (2)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/22618">JavaScript (18)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/22068">ActionScript (7)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/27153">Squirrel (2)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/36305">C (6)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/22307">C++ (10)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/21340">D (2)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/66462">.NET (13)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/22617">Java (86)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/146196">Scala (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/99374">Groovy (3)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/21352">Optimization (6)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/27144">Data Structure and Algorithm (3)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/34556">Books (4)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/52245">WPF (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/24366">Game Engines (7)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/22003">吉里吉里 (12)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/23065">UML (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/24338">Reverse Engineering (11)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/22696">NSIS (4)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/24088">Utilities (3)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/29744">Design Patterns (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/25057">Visual Studio (9)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/54389">Windows 7 (3)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/73928">x86 Assembler (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/22830">Android (2)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/25305">School Assignment / Test (6)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/24349">Anti-virus (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/27193">REST (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/28651">Profiling (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/23669">misc (39)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/23661">NetOA (12)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/27815">rant (6)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/65667">anime (5)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/28622">Links (12)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/165300">CLR (7)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/165301">GC (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/226933">OpenJDK (2)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/251929">JVM (4)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/275192">KVM (0)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/279009">Rhino (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/279045">LINQ (2)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/279221">JScript (0)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/280142">Nashorn (0)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/287977">Dalvik (1)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/293492">DTrace (0)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/302419">LLVM (0)</a></li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/category/329856">MSIL (0)</a></li>
+                
+              </ul>
+            </div>
+            <div id="month_blogs">
+              <h5>社区版块</h5>
+              <ul>
+                <li><a href="http://rednaxelafx.iteye.com/blog/news">我的资讯</a> (1)</li>
+                <li>
+                  <a href="http://rednaxelafx.iteye.com/blog/post">我的论坛</a> (576)
+                </li>
+                <li><a href="http://rednaxelafx.iteye.com/blog/answered_problems">我的问答</a> (364)</li>
+              </ul>
+            </div>
+            <div id="month_blogs">
+              <h5>存档分类</h5>
+              <ul>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/blog/monthblog/2014-12">2014-12</a> (1)</li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/blog/monthblog/2014-03">2014-03</a> (2)</li>
+                
+                  <li><a href="http://rednaxelafx.iteye.com/blog/monthblog/2013-11">2013-11</a> (2)</li>
+                
+                <li><a href="http://rednaxelafx.iteye.com/blog/monthblog_more">更多存档...</a></li>
+              </ul>
+            </div>
+            
+            
+
+            <div id="guest_books">
+              <h5>最新评论</h5>
+              <ul>
+                
+                <li>
+                  <a href="http://txm119161336.iteye.com/" target="_blank" title="txm119161336">txm119161336</a>： 
+                  allocatestlye1 顺序为&nbsp; // Fields o ...<br>
+                  <a href="http://rednaxelafx.iteye.com/blog/766282#bc2403002">最近做的两次Java/JVM分享的概要</a>
+                </li>
+                
+                <li>
+                  <a href="http://redmaper.iteye.com/" target="_blank" title="vileroze">vileroze</a>： 
+                  ph7.3 写道jdk8下 scanoops 时出现这个问题： ...<br>
+                  <a href="http://rednaxelafx.iteye.com/blog/1847971#bc2402976">借HSDB来探索HotSpot VM的运行时数据</a>
+                </li>
+                
+                <li>
+                  <a href="http://dovahyol.iteye.com/" target="_blank" title="DovahYol">DovahYol</a>： 
+                  RednaxelaFX 写道AnonymMan 写道http: ...<br>
+                  <a href="http://rednaxelafx.iteye.com/blog/774673#bc2402741">请别再拿“String s = new String("xyz");创建了多少个String实例”来面试了吧</a>
+                </li>
+                
+                <li>
+                  <a href="http://99138851.iteye.com/" target="_blank" title="99138851">99138851</a>： 
+                  对象的大小为什么不固定，还有域的个数与类型等信息不固定。是为啥 ...<br>
+                  <a href="http://rednaxelafx.iteye.com/blog/730461#bc2402435">借助HotSpot SA来一窥PermGen上的对象</a>
+                </li>
+                
+                <li>
+                  <a href="http://spyowen.iteye.com/" target="_blank" title="1927105">1927105</a>： 
+                  写的不错，赞一个<br>
+                  <a href="http://rednaxelafx.iteye.com/blog/1847971#bc2401541">借HSDB来探索HotSpot VM的运行时数据</a>
+                </li>
+                
+              </ul>
+            </div>
+
+            <div class="local_bottom"></div>
+          
+        </div>
+
+        <div id="nav_show_top_stop" style="height: 500px;z-index:1000;margin-top: 10px;float: left;clear: left;">
+          <div>
+            <!-- 广告位：PC端-iteye博客详情页左侧Button1-200*200 -->
+            <script>
+                (function() {
+                    var s = "_" + Math.random().toString(36).slice(2);
+                    document.write('<div id="' + s + '"></div>');
+                    (window.slotbydup=window.slotbydup || []).push({
+                        id: '4773203',
+                        container: s,
+                        size: '200,200',
+                        display: 'inlay-fix'
+                    });
+                })();
+            </script><div id="_kflmds5f78p"></div><script charset="utf-8" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/qcdm(2)"></script><div id="_f3w9gk9te2v" style=""><iframe width="200" frameborder="0" height="200" scrolling="no" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/bruiyort.html"></iframe></div><script type="text/javascript" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/sncoctctc.js"></script>
+          </div>
+          <div>
+            <!-- 广告位：PC端-iteye博客详情页左侧Button2-200*200 -->
+            <script>
+                (function() {
+                    var s = "_" + Math.random().toString(36).slice(2);
+                    document.write('<div id="' + s + '"></div>');
+                    (window.slotbydup=window.slotbydup || []).push({
+                        id: '4773205',
+                        container: s,
+                        size: '200,200',
+                        display: 'inlay-fix'
+                    });
+                })();
+            </script><div id="_t4rvfbglhxa"></div><script charset="utf-8" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/qcdm(3)"></script><div id="_vc116obo6y" style=""><iframe width="200" frameborder="0" height="200" scrolling="no" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/hyponun.html"></iframe></div><script type="text/javascript" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/dyqegnhxu.js"></script>
+          </div>
+        </div>
+        <script>
+
+            setTimeout(function () {
+                var naviga_offsetTop = 0;
+
+                function onload_function() {
+                    naviga_offsetTop = jQuery("#nav_show_top_stop").position().top;
+                    jQuery(window).bind("scroll", naviga_stay_top);
+                    jQuery(window).bind("mousewheel", naviga_stay_top);
+                    jQuery(document).bind("scroll", naviga_stay_top);
+                    jQuery(document).bind("mousewheel", naviga_stay_top);
+                }
+                function naviga_stay_top() {
+
+                    var scrollTop = jQuery(document).scrollTop();
+                    if (scrollTop > (naviga_offsetTop+250)) {
+                        jQuery("#nav_show_top_stop").css({ "position": "fixed" });
+                        jQuery("#nav_show_top_stop").css({ "top": "0px" });
+                    } else {
+                        jQuery("#nav_show_top_stop").css({ "position": "fixed" });
+                        jQuery("#nav_show_top_stop").css({ "top": naviga_offsetTop+250 - scrollTop + "px" }); }
+                }
+                jQuery(document).ready(onload_function());
+            }, 200);
+
+        </script>
+      </div>    
+
+      <div id="footer" class="clearfix">
+        <div id="copyright">
+          <hr>
+          声明：ITeye文章版权属于作者，受法律保护。没有作者书面许可不得转载。若作者同意转载，必须以超链接形式标明文章原始出处和作者。<br>
+          © 2003-2018 ITeye.com.   All rights reserved.  [ 京ICP证110151号  京公网安备110105010620 ]
+        </div>
+        <div id="ad_pop">
+          <div class="J_adv" data-view="true" data-mod="ad_popu_64" data-mtp="62" data-order="21" data-con="ad_content_2070">
+            <script id="popuLayer_js_q" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/popuLayer.js" defer="" type="text/javascript"></script>
+            <div id="layerd" style="position: fixed; bottom: 0px; right: 0px; line-height: 0px; z-index: 1000; width: 300px; height: 278px;">
+              <div onclick="jQuery(&#39;#ad_abc&#39;).hide();jQuery(&#39;.J_close&#39;).hide();" class="J_close layer_close" style="display:block;background-color:#efefef;padding:0px;color:#333;font:12px/24px Helvetica,Tahoma,Arial,sans-serif;text-align:right;">
+                关闭
+              </div>
+              <div id="ad_abc">
+                <!-- 广告位：PC端-iteye博客详情右侧弹窗-300*250 -->
+                <script>
+                    (function() {
+                        var s = "_" + Math.random().toString(36).slice(2);
+                        document.write('<div id="' + s + '"></div>');
+                        (window.slotbydup=window.slotbydup || []).push({
+                            id: '4756560',
+                            container: s,
+                            size: '300,250',
+                            display: 'inlay-fix'
+                        });
+                    })();
+                </script><div id="_go9wjndb9yh"></div><script charset="utf-8" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/qcdm(4)"></script><div id="_gy8yfa3ai2u" style=""><iframe width="300" frameborder="0" height="250" scrolling="no" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/dqfvysd.html"></iframe></div><script type="text/javascript" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/avnebexun.js"></script>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <script type="text/javascript">
+  document.write("<img src='http://stat.iteye.com/?url="+ encodeURIComponent(document.location.href) + "&referrer=" + encodeURIComponent(document.referrer) + "&user_id=' width='0' height='0' />");
+</script><img src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/saved_resource" width="0" height="0">
+
+
+
+    
+    
+    <script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/tracking-1.0.1.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/async-1.0.1.js"></script>
+<script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/tracking-1.0.3.js" type="text/javascript"></script>
+<script type="text/javascript">var $csdn_iteye_jq = jQuery.noConflict();// 解决jq与prototype.js命名空间冲突的问题</script>
+    
+	    
+	    <script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/web-storage-cache.min.js" type="text/javascript"></script>
+	    <script src="./bison的运算符优先级一例 - Script Ahead, Code Behind - ITeye博客_files/replace.min.js" type="text/javascript"></script>
+    
+    
+  
+
+</body></html>

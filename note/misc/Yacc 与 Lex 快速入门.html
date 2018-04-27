@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html -->
+<html lang="en" style="" class="applicationcache geolocation history postmessage svg websockets localstorage sessionstorage websqldatabase webworkers hashchange pointerevents canvas audio canvastext video webgl cssgradients multiplebgs opacity rgba inlinesvg hsla supports svgclippaths smil no-touchevents fontface generatedcontent textshadow cssanimations backgroundsize borderimage borderradius boxshadow csscolumns csscolumns-width csscolumns-span csscolumns-fill csscolumns-gap csscolumns-rule csscolumns-rulecolor csscolumns-rulestyle csscolumns-rulewidth csscolumns-breakbefore csscolumns-breakafter csscolumns-breakinside flexbox flexboxlegacy cssreflections csstransforms csstransforms3d csstransitions indexeddb indexeddb-deletedatabase js ibm-v18 ibm-cxtype-4g no-hires linux chrome chrome6 webkit webkit5 ibm-grid-xlarge greater-china-imt"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+<meta name="viewport" content="width=device-width, initial-scale=1">      
+<link rel="icon" href="https://www.ibm.com/favicon.ico">
+<link rel="canonical" href="http://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html">
+<meta name="geo.country" content="CN">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2000">
+<meta name="dcterms.date" content="2000-11-01">
+<meta name="description" content="Lex 和 Yacc 是 UNIX 两个非常重要的、功能强大的工具。事实上，如果你熟练掌握 Lex 和 Yacc 的话，它们的强大功能使创建 FORTRAN 和 C 的编译器如同儿戏。Ashish Bansal 为您详细的讨论了编写自己的语言和编译器所用到的这两种工具，包括常规表达式、声明、匹配模式、变量、Yacc 语法和解析器代码。最后，他解释了怎样把 Lex 和 Yacc 结合起来。">	
+<meta name="keywords" content="linux, linux tutorials, linux training, linux standards,linux code, linux resources, linux programming, open source standards, linux how to, IBM, linux tips, linux 教程, linux 培训,Linux 文章, Linux 论文, linux 标准, Linux 白皮书 linux 代码, linux 参考资料, linux 编程, 开放源码标准, linux 使用指南, 实用技巧,lex, yacc, lex 介绍, yacc 介绍, unix 工具, 编译器, FORTRAN 编译器, C 编译器, 编译工具，常规表达式, 声明, 匹配模式, 变量, yacc 语法, 解析器, 解析器代码, 词法分析器 ,, tttlca">
+<meta name="robots" content="index,follow">
+<title>Yacc 与 Lex 快速入门</title>
+    
+<script type="text/javascript" async="" charset="utf-8" id="utag_19" src="./Yacc 与 Lex 快速入门_files/hotjar-42920.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_98" src="./Yacc 与 Lex 快速入门_files/atrk.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_53" src="./Yacc 与 Lex 快速入门_files/js"></script><script type="text/javascript" async="" charset="utf-8" id="tealium_cormetrics2" src="./Yacc 与 Lex 快速入门_files/eluminate.js"></script><script type="text/javascript" async="" charset="utf-8" id="dle_api_88d1aa37f7668475f86dc383aed6be73302b5dca653bbc061b581ef8bbaa90d1" src="./Yacc 与 Lex 快速入门_files/p_88d1aa37f7668475f86dc383aed6be73302b5dca653bbc061b581ef8bbaa90d1.js"></script><script src="./Yacc 与 Lex 快速入门_files/p_devwrks.js" type="application/javascript" async=""></script><script src="./Yacc 与 Lex 快速入门_files/p_devwrks.js" type="application/javascript" async=""></script><script src="./Yacc 与 Lex 快速入门_files/callback=dl.fn.lotameApi.callback" type="application/javascript" async=""></script><script src="./Yacc 与 Lex 快速入门_files/utag.js" type="text/javascript" async=""></script><script> 
+    digitalData = {
+        "page":{
+            "category":{
+                "primaryCategory":"SOFDCLNXCN"
+            },
+            "pageInfo":{
+                "effectiveDate":"2000-11-01",
+                "language":"zh-CN",
+                "publishDate":"2000-11-01",
+                "publisher":"IBM Corporation",
+                "version":"v18",
+                "ibm":{ 
+                    "contentDelivery":"IBM developerWorks template",
+                    "contentProducer":"IBM developerWorks",
+                    "country":"CN",
+                    "owner":"developerWorks/China/IBM",
+                    "siteID":"DEVWRKS",
+                    "subject":"SWGC0",
+                    "type":"CT316",
+                    "topic":"应用开发",
+                    "topicId":"263",
+                    "contentArea":"linux",
+                    "contentAreaId":"2",
+                    "contentType":"article",
+                    "contentId":"22294",
+                },
+                "keywords":"linux, linux tutorials, linux training, linux standards,linux code, linux resources, linux programming, open source standards, linux how to, IBM, linux tips, linux 教程, linux 培训,Linux 文章, Linux 论文, linux 标准, Linux 白皮书 linux 代码, linux 参考资料, linux 编程, 开放源码标准, linux 使用指南, 实用技巧,lex, yacc, lex 介绍, yacc 介绍, unix 工具, 编译器, FORTRAN 编译器, C 编译器, 编译工具，常规表达式, 声明, 匹配模式, 变量, yacc 语法, 解析器, 解析器代码, 词法分析器 ,, tttlca",
+                "description":"Lex 和 Yacc 是 UNIX 两个非常重要的、功能强大的工具。事实上，如果你熟练掌握 Lex 和 Yacc 的话，它们的强大功能使创建 FORTRAN 和 C 的编译器如同儿戏。Ashish Bansal 为您详细的讨论了编写自己的语言和编译器所用到的这两种工具，包括常规表达式、声明、匹配模式、变量、Yacc 语法和解析器代码。最后，他解释了怎样把 Lex 和 Yacc 结合起来。"
+            }
+        }
+    };
+    window._analytics = {
+        "coremetrics": false,
+        "optimizely": false,
+        "googleAddServices": false,
+        "addRoll": false,
+        "intercom": false,
+        "fullStory": false,
+        "hotjar": false,
+        "tealeaf": false,
+        "nps": false,
+        "segment_key": 'HU3dbkAG5wE0F1IkRf9S1RexlAqo3jby'
+    };
+</script>
+	
+    <meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@developerworks">
+<meta property="og:title" content="Yacc 与 Lex 快速入门">
+<meta property="og:description" content="Lex 和 Yacc 是 UNIX 两个非常重要的、功能强大的工具。事实上，如果你熟练掌握 Lex 和 Yacc 的话，它们的强大功能使创建 FORTRAN 和 C 的编译器如同儿戏。Ashish Bansal 为您详细的讨论了编写自己的语言和编译器所用到的这两种工具，包括常规表达式、声明、匹配模式、变量、Yacc 语法和解析器代码。最后，他解释了怎样把 Lex 和 Yacc 结合起来。">
+    <meta property="og:image" content="http://www.ibm.com/developerworks/i/dw-social-201508.png">
+<!-- Segment meta tag -->
+<meta name="segment" property="developerWorks (developerWorks)" producttitle="developerWorks" value="Linux Chinese (developerWorks)">      
+<!-- SITE MON : START (DO NOT DELETE) -->
+<!-- developerWorks monitoring token -->
+<!-- SITE MON : END (DO NOT DELETE) -->
+
+<!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+<!-- <script src="//cdn.optimizely.com/js/5399420604.js"></script> -->
+<!-- BEGIN: Use this section to set page specific variables for the Page Tag -->
+<script language="JavaScript">var NTPT_PGEXTRA="ibmSkillLevel=1&ibmCmaId=22294&ibmContentAreas=linux";</script>
+<!--END -->
+<script src="./Yacc 与 Lex 快速入门_files/ida_stats.js"></script>
+<link href="./Yacc 与 Lex 快速入门_files/www.css" rel="stylesheet">
+<link href="./Yacc 与 Lex 快速入门_files/syntaxhighlighter.css" rel="stylesheet">
+<script src="./Yacc 与 Lex 快速入门_files/www.js"></script><style></style>
+<script src="./Yacc 与 Lex 快速入门_files/syntaxhighlighter.js"></script>    
+<link href="./Yacc 与 Lex 快速入门_files/tables.css" rel="stylesheet">
+<script src="./Yacc 与 Lex 快速入门_files/tables.js"></script>   
+<!--  Masthead/footer  -->
+<link href="./Yacc 与 Lex 快速入门_files/dw-mf-v18.css" rel="stylesheet">
+<!-- <link href="//dw1.s81c.com/developerworks/css/dw-mf/v18/alt-signedin-ux.css" rel="stylesheet" /> -->   
+<!--[if lt IE 9]>
+    <link href="//dw1.s81c.com/developerworks/css/dw-mf/v18/dw-mf-ie8fix.css?v=022216" rel="stylesheet" />
+<![endif]-->
+<link href="./Yacc 与 Lex 快速入门_files/dw-article.css" rel="stylesheet">
+<script src="./Yacc 与 Lex 快速入门_files/dw-auth-properties.js"></script>
+<script src="./Yacc 与 Lex 快速入门_files/dw-auth.js"></script>
+<script src="./Yacc 与 Lex 快速入门_files/dw-mf.js"></script>
+<script src="./Yacc 与 Lex 快速入门_files/dw-include.js"></script>     
+<script src="./Yacc 与 Lex 快速入门_files/dw-article.js"></script>
+<script src="./Yacc 与 Lex 快速入门_files/dw-auto-links.js"></script>     
+<script src="./Yacc 与 Lex 快速入门_files/tactic.js"></script>
+<script src="./Yacc 与 Lex 快速入门_files/tacticbindlinks.js"></script>
+
+<!-- 
+<PageMap>
+    <DataObject type="document">
+        <Attribute name="topic">应用开发</Attribute>
+        <Attribute name="topicId">263</Attribute>
+        <Attribute name="contentArea">linux</Attribute>
+        <Attribute name="contentAreaId">2</Attribute>
+        <Attribute name="abstract">Lex 和 Yacc 是 UNIX 两个非常重要的、功能强大的工具。事实上，如果你熟练掌握 Lex 和 Yacc 的话，它们的强大功能使创建 FORTRAN 和 C 的编译器如同儿戏。Ashish Bansal 为您详细的讨论了编写自己的语言和编译器所用到的这两种工具，包括常规表达式、声明、匹配模式、变量、Yacc 语法和解析器代码。最后，他解释了怎样把 Lex 和 Yacc 结合起来。</Attribute>
+        <Attribute name="pub.date">2000-11-01</Attribute>
+        <Attribute name="contentType">article</Attribute>
+    </DataObject>
+</PageMap>
+-->        
+
+<script type="text/javascript" async="" charset="utf-8" id="utag_ibm.web_53" src="./Yacc 与 Lex 快速入门_files/utag.53.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_ibm.web_94" src="./Yacc 与 Lex 快速入门_files/utag.94.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_ibm.web_98" src="./Yacc 与 Lex 快速入门_files/utag.98.js"></script><style id="ibm-masthead-hidelinks">@media screen and (max-width: 552px) { .ibm-masthead-categories,#ibm-megamenu-sections{display:none} }@media screen and (max-width: 552px) { .ibm-mh-marketplace-link{display:none} }</style><style id="ibm-sitenav-menu-hidelinks">@media screen and (max-width: 602px) { .ibm-sitenav-menu-list{display:none} } @media screen and (min-width: 603px) { .ibm-mobilemenu-sitenavmenu {display:none} }</style><script type="text/javascript" async="" charset="utf-8" id="tiqapp" src="./Yacc 与 Lex 快速入门_files/utag.v.js"></script><style type="text/css" class="jquery-comments-css">.jquery-comments ul.navigation li.active:after {background: #2793e6 !important;</style><style type="text/css" class="jquery-comments-css">.jquery-comments ul.navigation ul.dropdown li.active {background: #2793e6 !important;</style><style type="text/css" class="jquery-comments-css">.jquery-comments .highlight-background {background: #2793e6 !important;</style><style type="text/css" class="jquery-comments-css">.jquery-comments .highlight-font {color: #2793e6 !important;}</style><style type="text/css" class="jquery-comments-css">.jquery-comments .highlight-font-bold {color: #2793e6 !important;font-weight: bold;}</style><script type="text/javascript" async="" charset="utf-8" id="utag_ibm.web_19" src="./Yacc 与 Lex 快速入门_files/utag.19.js"></script><script type="text/javascript" async="" charset="utf-8" id="LOTCC_10026" src="https://tags.crwdcntrl.net/c/10026/cc.js?ns=_cc10026&amp;pre=cn"></script><script type="text/javascript" async="" charset="utf-8" id="utag_ibm.web_45" src="./Yacc 与 Lex 快速入门_files/utag.45.js"></script><script async="" src="./Yacc 与 Lex 快速入门_files/modules-b9d413cfd2f87f7f76ffb080ac50a079.js"></script><style type="text/css">iframe#_hjRemoteVarsFrame {display: none !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important;}</style><script language="javascript" type="text/javascript" src="./Yacc 与 Lex 快速入门_files/50200000.js"></script><script language="javascript" type="text/javascript" src="./Yacc 与 Lex 快速入门_files/rules_50200000.js"></script><script language="javascript" type="text/javascript" src="./Yacc 与 Lex 快速入门_files/dispatcher-v3.js"></script><script src="./Yacc 与 Lex 快速入门_files/yahoo-min.js" type="text/javascript"></script><script src="./Yacc 与 Lex 快速入门_files/cp-v3.js" type="text/javascript"></script><script src="./Yacc 与 Lex 快速入门_files/json-min.js" type="text/javascript"></script><script type="text/javascript" async="" charset="utf-8" id="tealium_visitor_service_45main" src="./Yacc 与 Lex 快速入门_files/015d3a025bef00558659ed1c245002087003c07f0086e"></script><script type="text/javascript" async="" charset="utf-8" id="tealium_visitor_service_45main" src="./Yacc 与 Lex 快速入门_files/015d3a025bef00558659ed1c245002087003c07f0086e(1)"></script></head>
+<body id="ibm-com" class="ibm-type ibm-sitenav-menu ibm-sitenav-menu-sticky ibm-masthead-sticky ibm-masthead-sticky-showing">
+	
+<div id="ibm-top" class="ibm-landing-page dw-sitenav">
+
+<!-- MASTHEAD_BEGIN -->
+<div id="ibm-masthead" role="banner" aria-label="IBM" class="ibm-mhtype-minimal hastransition">
+    <div id="ibm-universal-nav" class="">    
+  
+        <nav role="navigation" aria-label="IBM">
+            <div id="ibm-home"><a href="https://www.ibm.com/cn/zh/?lnk=m">IBM®</a></div>
+            <ul id="ibm-menu-links" role="toolbar" aria-label="Site map" class="ibm-hide">
+                <li><a href="https://www.ibm.com/sitemap/cn/zh/">站点地图</a></li>
+            </ul><div class="ibm-masthead-rightside"><p class="ibm-mh-marketplace-link ibm-button-link ibm-fleft ibm-padding-bottom-0"><a class="ibm-btn-small ibm-btn-sec ibm-btn-blue-50" href="https://www.ibm.com/marketplace/?lnk=mp">市场</a></p><div id="ibm-search-module" role="search" aria-labelledby="ibm-masthead" class="ibm-has-scope">
+            <div class="ibm-masthead-search-close"><p class="ibm-ind-link ibm-icononly ibm-padding-bottom-0"><a href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#" class="ibm-close-link ibm-nospacing">关闭</a></p></div><form id="ibm-search-form" action="https://www.ibm.com/Search/" method="get" aria-labelledby="ibm-masthead">
+                <p>
+                    <label for="q">IBM</label>
+                    <input type="text" maxlength="100" value="" placeholder="搜索" name="q" id="q" aria-label="搜索 developerWorks" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="ibm-search-typeahead-container"><input name="lnk" type="hidden" value="mhsrch">
+                    <input type="hidden" value="18" name="v">
+                    <input type="hidden" value="utf" name="en">
+                    <input type="hidden" value="zh" name="lang">
+                    <input type="hidden" value="cn" name="cc">
+                    <input type="hidden" name="sn" value="dw">
+                    <input type="hidden" name="dws" value="cndw">
+                    <input type="hidden" name="hpp" value="20">
+                    <span class="ibm-search-scope ibm-fadeout" aria-expanded="true"><input class="ibm-styled-checkbox" data-init="false" type="checkbox" name="sn" value="" id="ibm-mh-scopeoption"> <label for="ibm-mh-scopeoption">In Marketplace</label></span><button role="button" type="submit" id="ibm-search" class="ibm-search-link" value="提交"><span class="ibm-access">提交</span></button>
+                </p>
+            </form><form class="ibm-hide" id="ibm-default-scope-form" action="https://www.ibm.com/marketplace/search/cn/zh-cn" method="get"><input name="terms" type="text"><input name="lnk" type="hidden" value="mhmpsrch"></form>
+        </div><div id="ibm-search-typeahead-container" aria-expanded="true" class="ibm-search-typeahead-container ibm-fadeout"></div><ul aria-label="Tools" role="menubar" class="ibm-masthead-iconsonly"><li role="presentation" class="ibm-masthead-item-signin"><button role="button" aria-haspopup="true" aria-owns="ibm-signin-minimenu-container" class="ibm-profile-link">我的 IBM</button><ul id="ibm-signin-minimenu-container" role="menu" aria-label="Profile" class="ibm-dropdown-menu">    <li class="ibm-dropdown-menu-primary" role="presentation" data-linktype="notifications">       <a class="" href="https://myibm.ibm.com/dashboard/?lnk=mmi" tabindex="0">我的 IBM</a>     </li>    <li class="ibm-dropdown-menu-primary menu-heading" role="presentation">       <span tabindex="0">developerWorks</span>     </li>   <li class="ibm-dropdown-menu-primary ibm-signin-alt" role="presentation">     <a href="https://www.ibm.com/developerworks/dwwi/jsp/ssologin.jsp?d=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html&amp;lang=zh&amp;a=dwmav" role="menuitem">登录</a>   </li>   <li class="ibm-dropdown-menu-primary dw-register-alt" role="presentation">     <a href="https://www.ibm.com/developerworks/dwwi/jsp/ssoregister.jsp?d=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html&amp;lang=zh&amp;a=dwmav" role="menuitem">注册</a>   </li></ul></li><li role="presentation" class="ibm-masthead-item-menu"><button role="button" aria-haspopup="true" aria-owns="ibm-burger-menu-container" class="ibm-menu-link">站点导航</button></li></ul></div> 
+        </nav>
+  
+        
+       
+    </div>
+</div><div class="ibm-mobilemenu ibm-hide" id="ibm-burger-menu-container" aria-labelledby="ibm-burgermenu-a11y" role="dialog" tabindex="0"><p class="ibm-hide" id="ibm-burgermenu-a11y">站点导航</p><div class="ibm-mobilemenu-close"><p class="ibm-icononly ibm-fright ibm-ind-link ibm-nospacing"><a class="ibm-close-link" href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html?lnk=hm#">关闭</a></p></div><div class="ibm-mobilemenu-section ibm-mobilemenu-sitenavmenu"><ul role="menubar"><li class="ibm-mobile-section-heading ibm-mobile-sitename">
+        <a href="https://www.ibm.com/developerworks/cn/?lnk=hm">
+            <img width="186" height="24" alt="developerWorks®" src="./Yacc 与 Lex 快速入门_files/dw-mf-wordmark.svg">
+        </a>
+    </li>
+                            <li class="dw-navpage-learn" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/topics/?lnk=hm" role="menuitem" tabindex="0">学习</a>
+                </li>
+                    
+                <li class="dw-navpage-develop" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/downloads/?lnk=hm" role="menuitem" tabindex="-1">开发</a>
+                </li>                    
+
+                <li class="dw-navpage-connect" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/community/?lnk=hm" role="menuitem" tabindex="-1">社区</a>
+                </li>  
+        </ul></div><div class="ibm-mobilemenu-section"><ul class="ibm-mobilemenu-mhlinks" aria-label="发现 IBM"><li><a href="https://www.ibm.com/marketplace/?lnk=hmmp">市场</a></li><li><div data-widget="showhide" data-type="panel" class="ibm-show-hide ibm-widget-processed"><h2><a href="javascript:void();">产品</a></h2><div class="ibm-container-body" style="display: none;"><ul><li><a href="https://www.ibm.com/products/cn/zh/?lnk=hmhmpr_cnzh"><span>产品</span></a></li><li><a href="https://www.ibm.com/analytics/cn/zh/?lnk=hmmpr_bua_cnzh&amp;lnk2=learn"><span>大数据与分析</span></a></li><li><a href="https://www.ibm.com/cloud-computing/cn/zh?lnk=hmmpr_bucl_cnzh&amp;lnk2=learn"><span>云计算</span></a></li><li><a href="https://www.ibm.com/ibm/cn/cognitive/outthink/?lnk=hmmpr_buce_cnzh&amp;lnk2=learn"><span>认知</span></a></li><li><a href="https://www.ibm.com/watson/customer-engagement/cn-zh/?lnk=hm"><span>认知客户互动</span></a></li><li><a href="https://www.ibm.com/internet-of-things/cn-zh/?lnk=hmmpr_iot_cnzh&amp;lnk2=learn"><span>物联网</span></a></li><li><a href="https://www.ibm.com/solutions/cn/zh/index.html?lnk=hm"><span>行业解决方案</span></a></li><li><a href="https://www.ibm.com/it-infrastructure/cn-zh/?lnk=hmmpr_buit_cnzh&amp;lnk2=learn"><span>IT 基础架构</span></a></li><li><a href="https://www.ibm.com/mobilefirst/cn/zh/?lnk=hmmpr_bumf_cnzh&amp;lnk2=learn"><span>移动</span></a></li><li><a href="https://www.ibm.com/security/cn-zh/?lnk=hmmpr_buse_cnzh&amp;lnk2=learnquick"><span>IBM 安全</span></a></li><li><a href="https://www.ibm.com/social-business/cn-zh/?lnk=hm"><span>社交协作与人才管理</span></a></li><li><a href="https://www.ibm.com/services/cn/zh/watson/explorer.html?lnk=hm"><span>Watson</span></a></li></ul></div></div></li><li><div data-widget="showhide" data-type="panel" class="ibm-show-hide ibm-widget-processed"><h2><a href="javascript:void();">服务</a></h2><div class="ibm-container-body" style="display: none;"><ul><li><a href="https://www.ibm.com/services/cn-zh/digital-reinvention/case/index.html?lnk=hm"><span>业务咨询</span></a></li><li><a href="https://www.ibm.com/technologyservices/cn/zh/?lnk=hmmse_ts_cnzh&amp;lnk2=learn#technology-outsourcing"><span>技术服务</span></a></li><li><a href="https://www.ibm.com/financing/cn/zh/index.html?lnk=hmmse_fin_cnzh&amp;lnk2=learn"><span>融资</span></a></li><li><a href="https://www.ibm.com/solutions/cn/zh/index.html?lnk=hm"><span>行业解决方案</span></a></li><li><a href="https://www.ibm.com/training/?lnk=hm"><span>培训与技能 (US)</span></a></li></ul></div></div></li><li><a href="https://www.ibm.com/solutions/cn/zh/?lnk=hmmin">行业</a></li><li><div data-widget="showhide" data-type="panel" class="ibm-show-hide ibm-widget-processed"><h2><a href="javascript:void();">开发人员</a></h2><div class="ibm-container-body" style="display: none;"><ul><li><a href="https://www.ibm.com/developerworks/cn/?lnk=hmmdev_dw_cnzh&amp;lnk2=learn"><span>developerWorks</span></a></li><li><a href="https://www.ibm.com/partnerworld?lnk=hmmdev_pw_cnzh&amp;lnk2=learn"><span>PartnerWorld</span></a></li></ul></div></div></li><li><a href="https://www.ibm.com/support/cn/zh/?lnk=hmmsu_cnzh">支持</a></li><li><a href="https://www.ibm.com/employment/cn/?lnk=hmmca_cnzh">工作机会</a></li></ul></div></div><div class="ibm-mhplaceholder"></div><!-- MASTHEAD_END -->
+	    
+<!-- LAYOUT -->
+<div id="ibm-content-wrapper">
+    <!-- LEADSPACE_BEGIN -->
+    <header role="banner" aria-labelledby="ibm-pagetitle-h1">
+        
+        <!-- MASTHEAD_SITENAV_BEGIN -->
+        <div class="ibm-sitenav-menu-container" data-widgetprocessed="true">
+    <div class="ibm-sitenav-menu-name">
+        <a href="https://www.ibm.com/developerworks/cn/">
+            <img width="186" height="24" alt="developerWorks®" src="./Yacc 与 Lex 快速入门_files/dw-mf-wordmark.svg">
+        </a>
+    </div>
+    <div class="ibm-sitenav-menu-list" style="opacity: 1;">
+        <ul role="menubar">
+                            <li class="dw-navpage-learn" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/topics/" role="menuitem" tabindex="0">学习</a>
+                </li>
+                    
+                <li class="dw-navpage-develop" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/downloads/" role="menuitem" tabindex="-1">开发</a>
+                </li>                    
+
+                <li class="dw-navpage-connect" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/community/" role="menuitem" tabindex="-1">社区</a>
+                </li>  
+        </ul>
+    </div>
+</div>        <!-- MASTHEAD_SITENAV_END -->
+        
+        <!-- NAVIGATION_TRAIL_BEGIN -->
+        <div id="ibm-leadspace-head" class="ibm-alternate">
+            <div id="ibm-leadspace-body">
+                <nav aria-label="Breadcrumb" role="navigation">                     
+                            <ul id="dw-navigation-trail" itemscope="" itemtype="http://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://www.ibm.com/developerworks/cn/topics/"><span itemprop="name">学习</span></a><meta itemprop="position" content="1"></li><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://www.ibm.com/developerworks/cn/linux/"><span itemprop="name">Linux</span></a><meta itemprop="position" content="2"></li></ul>
+                </nav>
+            </div>
+        </div>
+        <!-- NAVIGATION_TRAIL_END -->
+        
+    </header>
+    <!-- LEADSPACE_END -->
+    
+    <!-- MAIN_CONTENT_BEGIN -->
+    <main role="main" aria-label=""> 
+        <div id="ibm-pcon">
+            <!-- BEGIN_IBM-CONTENT -->
+            <div id="ibm-content">
+                <!-- BEGIN_IBM-CONTENT-BODY -->
+                <div id="ibm-content-body">
+                    <!-- BEGIN_IBM-CONTENT-MAIN -->
+                    <div id="ibm-content-main" class="dw-article">                        
+                        <!-- BEGIN_INTERIOR-COLUMNS -->
+                                <div class="ibm-columns dw-article-toc">
+                                    <!-- LEFT_6_2_CONTENT_COLUMN_BEGIN -->  
+                                    <div id="dw-article-toc-container" class="ibm-col-6-2">
+                                        <div id="dw-article-toc-body" data-widget="scrollable" data-height="386" style="width: 380px; height: 386px;" class="nano has-scrollbar ibm-widget-processed"><div class="nano-content" tabindex="-1" style="right: -15px;">
+                                            <h2>内容</h2><div class="ibm-alternate-rule"><hr></div><ul role="directory" aria-label="内容" class="ibm-plain-list"><li class=""><a onclick="tocLink(&#39;#ibm-pagetitle-h1&#39;)" role="link" tabindex="0">概览</a></li><li class=""><a onclick="tocLink(&#39;#1&#39;)" role="link" tabindex="0">Lex</a></li><li class="dw-highlight"><a onclick="tocLink(&#39;#2&#39;)" role="link" tabindex="0">Lex 的常规表达式</a></li><li><a onclick="tocLink(&#39;#3&#39;)" role="link" tabindex="0">Lex 编程</a></li><li><a onclick="tocLink(&#39;#4&#39;)" role="link" tabindex="0">C 和 Lex 的全局声明</a></li><li><a onclick="tocLink(&#39;#5&#39;)" role="link" tabindex="0">Lex 的模式匹配规则</a></li><li><a onclick="tocLink(&#39;#6&#39;)" role="link" tabindex="0">C 代码</a></li><li><a onclick="tocLink(&#39;#7&#39;)" role="link" tabindex="0">将它们全部结合起来</a></li><li><a onclick="tocLink(&#39;#8&#39;)" role="link" tabindex="0">高级 Lex</a></li><li><a onclick="tocLink(&#39;#9&#39;)" role="link" tabindex="0">Yacc</a></li><li><a onclick="tocLink(&#39;#10&#39;)" role="link" tabindex="0">用 Yacc 编写语法</a></li><li><a onclick="tocLink(&#39;#11&#39;)" role="link" tabindex="0">C 与 Yacc 的声明</a></li><li><a onclick="tocLink(&#39;#12&#39;)" role="link" tabindex="0">Yacc 语法规则</a></li><li><a onclick="tocLink(&#39;#13&#39;)" role="link" tabindex="0">附加 C 代码</a></li><li><a onclick="tocLink(&#39;#14&#39;)" role="link" tabindex="0">命令行的其他常用选项</a></li><li><a onclick="tocLink(&#39;#15&#39;)" role="link" tabindex="0">将 Lex 与 Yacc 结合起来</a></li><li><a onclick="tocLink(&#39;#artrelatedtopics&#39;)" role="link" tabindex="0">相关主题</a></li><li><a onclick="tocLink(&#39;#icomments&#39;)" role="link" tabindex="0">评论</a></li></ul>
+                                        </div><div class="nano-pane" style="opacity: 1; visibility: visible;"><div class="nano-slider" style="height: 189px; transform: translate(0px, 0px);"></div></div></div>
+                                    </div>
+                                    <!-- LEFT_6_2_CONTENT_COLUMN_END -->
+                                    
+                                    <!-- CENTER_6_4_CONTENT_COLUMN_BEGIN -->
+                                    <div class="ibm-col-6-4">
+                                        <h1 id="ibm-pagetitle-h1" class="ibm-h1">Yacc 与 Lex 快速入门</h1><p class="dw-article-subhead">Lex 与 Yacc 介绍</p>
+                                        <!-- Article Top Bar -->
+                                                <div class="ibm-columns dw-article-topbar">
+                                                    <!-- Author and article info. -->
+                                                    <div class="ibm-col-6-2 ibm-col-medium-6-4 dw-article-metadata">
+                                                        <div class="dw-article-avatar"><img width="42" height="42" src="./Yacc 与 Lex 快速入门_files/dw-author.png" alt=""></div><div class="dw-article-authordate">Ashish Bansal<br><span class="dw-article-pubdate">2000 年 11 月 01 日发布</span></div>
+                                                    </div>
+                                                    <!-- Social -->
+                                                    <div class="ibm-col-6-2 ibm-col-medium-6-4 ibm-col-small-6-2 dw-article-social">
+                                                        <!-- Sharing links -->
+                                                        <div id="dw-article-share-inline">
+                                                            <div class="dw-article-sharelink-inline">
+                                                                <div class="ibm-sharethispage"><h4 class="ibm-bold">分享此页面</h4><p class="ibm-icononly"><a class="ibm-weibo-encircled-link" href="http://service.weibo.com/share/share.php?url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html%&amp;title=Yacc%20%E4%B8%8E%20Lex%20%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8&amp;language=zh_cn" data-id="weibo" onclick="return IBMCore.common.module.sharethispage.gotoUrl(window.open(), this);">Weibo</a><a class="ibm-googleplus-encircled-link" href="https://plus.google.com/share?url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html&amp;t=Yacc%20%E4%B8%8E%20Lex%20%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8" data-id="googleplus" onclick="return IBMCore.common.module.sharethispage.gotoUrl(window.open(), this);">Google+</a><a class="ibm-email-encircled-link" href="mailto:?subject=Yacc%20%E4%B8%8E%20Lex%20%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8&amp;body=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html" data-id="email" onclick="">用电子邮件发送本页面</a></p></div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Number of comments and link to comments -->
+                                                        <div id="dw-article-cmts">
+                                                            <div class="dw-article-cmtslink">
+                                                                <a onclick="tocLink(&#39;#icomments&#39;)" href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#icomments" role="link" tabindex="0" aria-label="Comments">
+                                                                    <img src="./Yacc 与 Lex 快速入门_files/dw-article-cmt-icon.png" width="29" height="29" alt="Comments">
+                                                                </a>
+                                                            </div>
+                                                            <div class="dw-article-cmtslink">
+                                                                <a onclick="tocLink(&#39;#icomments&#39;)" href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#icomments" role="link" tabindex="0">
+                                                                    <div id="nCmts">5</div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                        <!-- Article Body -->
+                                        
+                                        <p>Lex 代表 Lexical Analyzar。Yacc 代表 Yet Another Compiler
+Compiler。 让我们从 Lex 开始吧。</p><h2 id="1" class="ibm-h2">Lex</h2><p>
+Lex
+是一种生成扫描器的工具。扫描器是一种识别文本中的词汇模式的程序。
+这些词汇模式（或者常规表达式）在一种特殊的句子结构中定义，这个我们一会儿就要讨论。</p><p>
+一种匹配的常规表达式可能会包含相关的动作。这一动作可能还包括返回一个标记。
+当 Lex
+接收到文件或文本形式的输入时，它试图将文本与常规表达式进行匹配。
+它一次读入一个输入字符，直到找到一个匹配的模式。
+如果能够找到一个匹配的模式，Lex
+就执行相关的动作（可能包括返回一个标记）。
+另一方面，如果没有可以匹配的常规表达式，将会停止进一步的处理，Lex
+将显示一个错误消息。</p><p>Lex 和 C 是强耦合的。一个
+        <em>.lex</em> 文件（Lex 文件具有
+        <em>.lex</em> 的扩展名）通过 lex 公用程序来传递，并生成 C
+的输出文件。这些文件被编译为词法分析器的可执行版本。
+      </p><h2 id="2" class="ibm-h2">Lex 的常规表达式</h2><p>
+常规表达式是一种使用元语言的模式描述。表达式由符号组成。符号一般是字符和数字，但是
+Lex 中还有一些具有特殊含义的其他标记。 下面两个表格定义了 Lex
+中使用的一些标记并给出了几个典型的例子。</p><h5 id="N10058" class="ibm-h5">用 Lex 定义常规表达式</h5><div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer"><table border="1" cellpadding="3" cellspacing="0" class="ibm-data-table display dataTable no-footer dtr-inline ibm-widget-processed" data-widget="datatable" width="590" id="DataTables_Table_0" role="grid" style="width: 590px;"><thead xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row"><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="25%" rowspan="1" colspan="1" style="width: 153px;">字符</th><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="75%" rowspan="1" colspan="1" style="width: 541px;">含义</th></tr></thead><tbody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0"><strong>A-Z, 0-9, a-z</strong></td><td valign="top" width="75%">构成了部分模式的字符和数字。</td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0"><strong>.</strong></td><td valign="top" width="75%">匹配任意字符，除了 \n。</td></tr><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0"><strong>-</strong></td><td valign="top" width="75%">用来指定范围。例如：A-Z 指从 A 到 Z
+之间的所有字符。</td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0"><strong>[ ]</strong></td><td valign="top" width="75%">一个字符集合。匹配括号内的
+              <em>任意</em>
+字符。如果第一个字符是 
+              <strong>^</strong> 那么它表示否定模式。例如: [abC]
+匹配 a, b, 和 C中的任何一个。
+            </td></tr><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0"><strong>*</strong></td><td valign="top" width="75%">
+匹配 
+              <em>0个</em>或者多个上述的模式。
+            </td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0"><strong>+</strong></td><td valign="top" width="75%">匹配
+              <em>1个</em>或者多个上述模式。
+            </td></tr><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0"><strong>?</strong></td><td valign="top" width="75%">匹配
+              <em>0个或1个</em>上述模式。
+            </td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0"><strong>$</strong></td><td valign="top" width="75%">
+作为模式的最后一个字符匹配一行的结尾。</td></tr><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0"><strong>{ }</strong></td><td valign="top" width="75%">指出一个模式可能出现的次数。 例如:
+A{1,3} 表示 A 可能出现1次或3次。</td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0"><strong>\</strong></td><td valign="top" width="75%">
+用来转义元字符。同样用来覆盖字符在此表中定义的特殊意义，只取字符的本意。</td></tr><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0"><strong>^</strong></td><td valign="top" width="75%">否定。</td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0"><strong>|</strong></td><td valign="top" width="75%">表达式间的逻辑或。</td></tr><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0"><strong>"&lt;一些符号&gt;"</strong></td><td valign="top" width="75%">字符的字面含义。元字符具有。</td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0"><strong>/</strong></td><td valign="top" width="75%">
+向前匹配。如果在匹配的模版中的“/”后跟有后续表达式，只匹配模版中“/”前
+面的部分。如：如果输入 A01，那么在模版 A0/1 中的 A0 是匹配的。</td></tr><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0"><strong>( )</strong></td><td valign="top" width="75%">将一系列常规表达式分组。</td></tr></tbody></table></div><h5 id="N10115" class="ibm-h5">常规表达式举例</h5><div id="DataTables_Table_1_wrapper" class="dataTables_wrapper no-footer"><table border="1" cellpadding="3" cellspacing="0" class="ibm-data-table display dataTable no-footer dtr-inline ibm-widget-processed" data-widget="datatable" width="590" id="DataTables_Table_1" role="grid" style="width: 590px;"><thead xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row"><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="28%" rowspan="1" colspan="1" style="width: 176px;">常规表达式</th><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="72%" rowspan="1" colspan="1" style="width: 518px;">含义</th></tr></thead><tbody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row" class="odd"><td valign="top" width="28%" tabindex="0">
+joke[rs]
+</td><td valign="top" width="72%">匹配 jokes 或 joker。</td></tr><tr role="row" class="even"><td valign="top" width="28%" tabindex="0">
+A{1,2}shis+
+</td><td valign="top" width="72%">匹配 AAshis, Ashis, AAshi, Ashi。</td></tr><tr role="row" class="odd"><td valign="top" width="28%" tabindex="0">
+(A[b-e])+
+</td><td valign="top" width="72%">匹配在 A 出现位置后跟随的从 b 到 e
+的所有字符中的 0 个或 1个。</td></tr></tbody></table></div><p>Lex 中的标记声明类似 C
+中的变量名。每个标记都有一个相关的表达式。
+（下表中给出了标记和表达式的例子。）
+使用这个表中的例子，我们就可以编一个字数统计的程序了。
+我们的第一个任务就是说明如何声明标记。</p><h5 id="N1014A" class="ibm-h5">标记声明举例</h5><div id="DataTables_Table_2_wrapper" class="dataTables_wrapper no-footer"><table border="1" cellpadding="3" cellspacing="0" class="ibm-data-table display dataTable no-footer dtr-inline ibm-widget-processed" data-widget="datatable" width="590" id="DataTables_Table_2" role="grid" style="width: 590px;"><thead xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row"><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="13%" rowspan="1" colspan="1" style="width: 68px;">标记</th><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="51%" rowspan="1" colspan="1" style="width: 349px;">相关表达式</th><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="36%" rowspan="1" colspan="1" style="width: 235px;">含义</th></tr></thead><tbody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row" class="odd"><td valign="top" width="13%" tabindex="0">数字(number)</td><td valign="top" width="51%">([0-9])+</td><td valign="top" width="36%">1个或多个数字</td></tr><tr role="row" class="even"><td valign="top" width="13%" tabindex="0">字符(chars)</td><td valign="top" width="51%">[A-Za-z]</td><td valign="top" width="36%">任意字符</td></tr><tr role="row" class="odd"><td valign="top" width="13%" tabindex="0">空格(blank)</td><td valign="top" width="51%">" "</td><td valign="top" width="36%">一个空格</td></tr><tr role="row" class="even"><td valign="top" width="13%" tabindex="0">字(word)</td><td valign="top" width="51%">(chars)+</td><td valign="top" width="36%">1个或多个
+              <em>chars</em></td></tr><tr role="row" class="odd"><td valign="top" width="13%" tabindex="0">变量(variable)</td><td valign="top" width="51%">(字符)+(数字)*(字符)*(数字)*</td><td valign="top" width="36%"></td></tr></tbody></table></div><h2 id="3" class="ibm-h2">Lex 编程</h2><p>
+Lex 编程可以分为三步：</p><ol><li>以 Lex 可以理解的格式指定模式相关的动作。</li><li>在这一文件上运行 Lex，生成扫描器的 C 代码。</li><li>编译和链接 C 代码，生成可执行的扫描器。</li></ol><p>注意: 如果扫描器是用 Yacc
+开发的解析器的一部分，只需要进行第一步和第二步。
+关于这一特殊问题的帮助请阅读 
+        <a href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#9">Yacc</a>和
+        <a href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#15">将 Lex 和 Yacc 结合起来</a>部分。
+      </p><p>现在让我们来看一看 Lex 可以理解的程序格式。一个 Lex
+程序分为三个段：第一段是 C 和 Lex 的全局声明，第二段包括模式（C
+代码），第三段是补充的 C 函数。 例如, 第三段中一般都有 main()
+函数。这些段以%%来分界。 那么，回到字数统计的 Lex
+程序，让我们看一下程序不同段的构成。</p><h2 id="4" class="ibm-h2">C 和 Lex 的全局声明</h2><p>
+这一段中我们可以增加 C
+变量声明。这里我们将为字数统计程序声明一个整型变量，来保存程序统计出来的字数。
+我们还将进行 Lex 的标记声明。</p><h5 id="N101C5" class="ibm-h5">字数统计程序的声明</h5><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_978416" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">%{</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">int wordCount = 0;</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%}</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">chars [A-za-z\_\'\.\"]</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">numbers ([0-9])+</code></div><div class="line number6 index5 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">delim [" "\n\t]</code></div><div class="line number7 index6 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">whitespace {delim}+</code></div><div class="line number8 index7 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">words {chars}+</code></div><div class="line number9 index8 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%%</code></div></div></td></tr></tbody></table></div></div></div></span><p>两个百分号标记指出了 Lex
+程序中这一段的结束和三段中第二段的开始。</p><h2 id="5" class="ibm-h2">Lex 的模式匹配规则</h2><p>
+让我们看一下 Lex 描述我们所要匹配的标记的规则。（我们将使用 C
+来定义标记匹配后的动作。）
+继续看我们的字数统计程序，下面是标记匹配的规则。</p><h5 id="N101D6" class="ibm-h5">字数统计程序中的 Lex 规则</h5><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_208195" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">{words} { wordCount++; /*</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">increase the word count by one*/ }</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{whitespace} { /* do</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">nothing*/ }</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{numbers} { /* one may</code></div><div class="line number6 index5 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">want to add some processing here*/ }</code></div><div class="line number7 index6 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%%</code></div></div></td></tr></tbody></table></div></div></div></span><h2 id="6" class="ibm-h2">C 代码</h2><p>
+Lex 编程的第三段，也就是最后一段覆盖了 C
+的函数声明（有时是主函数）。注意这一段必须包括 yywrap() 函数。 Lex
+有一套可供使用的函数和变量。 其中之一就是 yywrap。
+一般来说，yywrap() 的定义如下例。我们将在 
+        <a href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#8">高级 Lex</a>
+中探讨这一问题。
+      </p><h5 id="N101E9" class="ibm-h5">字数统计程序的 C 代码段</h5><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_292895" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">void main()</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">yylex(); /* start the</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">analysis*/</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">printf(" No of words:</code></div><div class="line number6 index5 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%d\n", wordCount);</code></div><div class="line number7 index6 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">}</code></div><div class="line number8 index7 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">int yywrap()</code></div><div class="line number9 index8 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{</code></div><div class="line number10 index9 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">return 1;</code></div><div class="line number11 index10 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">}</code></div></div></td></tr></tbody></table></div></div></div></span><p>上一节我们讨论了 Lex
+编程的基本元素，它将帮助你编写简单的词法分析程序。 在 
+        <a href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#8">高级 Lex</a> 这一节中我们将讨论 Lex
+提供的函数，这样你就能编写更加复杂的程序了。
+      </p><h2 id="7" class="ibm-h2">将它们全部结合起来</h2><p><em>.lex</em>文件是 Lex 的扫描器。它在 Lex 程序中如下表示：
+      </p><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_664699" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">$ lex &lt;</code><code class="htmlscript plain">file</code> <code class="htmlscript plain">name.lex&gt;</code></div></div></td></tr></tbody></table></div></div></div></span><p>这生成了 lex.yy.c 文件，它可以用 C
+编译器来进行编译。它还可以用解析器来生成可执行程序，或者在链接步骤中通过选项
+�ll 包含 Lex 库。</p><p>这里是一些 Lex 的标志：
+</p><ul class="ibm-bullet-list"><li><em>-c</em>表示 C 动作，它是缺省的。
+        </li><li><em>-t</em>写入 lex.yy.c 程序来代替标准输出。
+        </li><li><em>-v</em>提供一个两行的统计汇总。
+        </li><li><em>-n</em>不打印 -v 的汇总。
+        </li></ul><h2 id="8" class="ibm-h2">高级 Lex</h2><p>
+Lex
+有几个函数和变量提供了不同的信息，可以用来编译实现复杂函数的程序。
+下表中列出了一些变量和函数，以及它们的使用。 详尽的列表请参考 Lex
+或 Flex 手册（见后文的 
+        <a href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#artrelatedtopics">资源</a>）。
+      </p><h5 id="N10229" class="ibm-h5">Lex 变量</h5><div id="DataTables_Table_3_wrapper" class="dataTables_wrapper no-footer"><table border="1" cellpadding="3" cellspacing="0" class="ibm-data-table display dataTable no-footer dtr-inline ibm-widget-processed" data-widget="datatable" width="590" id="DataTables_Table_3" role="grid" style="width: 590px;"><thead xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row"><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="25%" rowspan="1" colspan="1" style="width: 153px;">yyin</th><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="75%" rowspan="1" colspan="1" style="width: 541px;">FILE* 类型。 它指向 lexer
+正在解析的当前文件。</th></tr></thead><tbody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0">yyout</td><td valign="top" width="75%">FILE* 类型。 它指向记录 lexer
+输出的位置。 缺省情况下，yyin 和 yyout 都指向标准输入和输出。</td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0">yytext</td><td valign="top" width="75%">
+匹配模式的文本存储在这一变量中（char*）。</td></tr><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0">yyleng</td><td valign="top" width="75%">给出匹配模式的长度。</td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0">yylineno</td><td valign="top" width="75%">提供当前的行数信息。
+（lexer不一定支持。）</td></tr></tbody></table></div><h5 id="N10265" class="ibm-h5">Lex 函数</h5><div id="DataTables_Table_4_wrapper" class="dataTables_wrapper no-footer"><table border="1" cellpadding="3" cellspacing="0" class="ibm-data-table display dataTable no-footer dtr-inline ibm-widget-processed" data-widget="datatable" width="590" id="DataTables_Table_4" role="grid" style="width: 590px;"><thead xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row"><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="25%" rowspan="1" colspan="1" style="width: 153px;">yylex()</th><th class="ibm-background-neutral-white-30 sorting_disabled" valign="top" width="75%" rowspan="1" colspan="1" style="width: 541px;">这一函数开始分析。 它由 Lex
+自动生成。</th></tr></thead><tbody xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0">yywrap()</td><td valign="top" width="75%">这一函数在文件（或输入）的末尾调用。
+如果函数的返回值是1，就停止解析。 因此它可以用来解析多个文件。
+代码可以写在第三段，这就能够解析多个文件。 方法是使用 yyin
+文件指针（见上表）指向不同的文件，直到所有的文件都被解析。
+最后，yywrap() 可以返回 1 来表示解析的结束。</td></tr><tr role="row" class="even"><td valign="top" width="25%" tabindex="0">yyless(int n)</td><td valign="top" width="75%">这一函数可以用来送回除了前�n?
+个字符外的所有读出标记。</td></tr><tr role="row" class="odd"><td valign="top" width="25%" tabindex="0">yymore()</td><td valign="top" width="75%">这一函数告诉 Lexer
+将下一个标记附加到当前标记后。</td></tr></tbody></table></div><p>对 Lex 的讨论就到这里。下面我们来讨论 Yacc...</p><h2 id="9" class="ibm-h2">Yacc</h2><p>
+Yacc 代表 Yet Another Compiler Compiler。 Yacc 的 GNU 版叫做
+Bison。它是一种工具，将任何一种编程语言的所有语法翻译成针对此种语言的
+Yacc 语 法解析器。它用巴科斯范式(BNF, Backus Naur
+Form)来书写。按照惯例，Yacc 文件有 .y 后缀。编译行如下调用 Yacc
+编译器：</p><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_231733" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">$ yacc &lt;</code><code class="htmlscript plain">options</code><code class="htmlscript plain">&gt;</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">&lt;</code><code class="htmlscript plain">filename</code> <code class="htmlscript plain">ending with .y&gt;</code></div></div></td></tr></tbody></table></div></div></div></span><p>在进一步阐述以前，让我们复习一下什么是语法。在上一节中，我们看到
+Lex 从输入序列中识别标记。
+如果你在查看标记序列，你可能想在这一序列出现时执行某一动作。
+这种情况下有效序列的规范称为语法。Yacc 语法文件包括这一语法规范。
+它还包含了序列匹配时你想要做的事。</p><p>为了更加说清这一概念，让我们以英语为例。 这一套标记可能是：名词,
+动词,
+形容词等等。为了使用这些标记造一个语法正确的句子，你的结构必须符合一定的规则。
+一个简单的句子可能是名词+动词或者名词+动词+名词。(如 I care. See
+spot run.)</p><p>所以在我们这里，标记本身来自语言（Lex），并且标记序列允许用 Yacc
+来指定这些标记(标记序列也叫语法)。</p><div class="dw-article-sidebar ibm-background-cool-white-20"><h5>终端和非终端符号</h5><p><strong>终端符号</strong> : 代表一类在语法结构上等效的标记。
+终端符号有三种类型：
+        </p><p><em>命名标记</em>: 这些由
+          <em>%token</em> 标识符来定义。
+按照惯例，它们都是大写。
+        </p><p><em>字符标记</em> : 字符常量的写法与 C 相同。例如, --
+就是一个字符标记。
+        </p><p><em>字符串标记</em> : 写法与 C 的字符串常量相同。例如，"&lt;&lt;"
+就是一个字符串标记。
+        </p><p>lexer 返回命名标记。</p><p><strong>非终端符号</strong> : 是一组非终端符号和终端符号组成的符号。
+按照惯例，它们都是小写。 在例子中，file 是一个非终端标记而 NAME
+是一个终端标记。
+        </p></div><p>用 Yacc 来创建一个编译器包括四个步骤：</p><ol><li>通过在语法文件上运行 Yacc 生成一个解析器。</li><li>说明语法：
+          <ul class="ibm-bullet-list"><li>编写一个 .y 的语法文件（同时说明 C 在这里要进行的动作）。</li><li>编写一个词法分析器来处理输入并将标记传递给解析器。 这可以使用
+Lex 来完成。</li><li>编写一个函数，通过调用 yyparse() 来开始解析。</li><li>编写错误处理例程（如 yyerror()）。</li></ul></li><li>编译 Yacc 生成的代码以及其他相关的源文件。</li><li>将目标文件链接到适当的可执行解析器库。</li></ol><h2 id="10" class="ibm-h2">用 Yacc 编写语法</h2><p>
+如同 Lex 一样, 一个 Yacc 程序也用双百分号分为三段。
+它们是：声明、语法规则和 C 代码。 我们将解析一个格式为 姓名 = 年龄
+的文件作为例子，来说明语法规则。
+我们假设文件有多个姓名和年龄，它们以空格分隔。 在看 Yacc
+程序的每一段时，我们将为我们的例子编写一个语法文件。</p><h2 id="11" class="ibm-h2">C 与 Yacc 的声明</h2><p>
+C 声明可能会定义动作中使用的类型和变量，以及宏。
+还可以包含头文件。每个 Yacc
+声明段声明了终端符号和非终端符号（标记）的名称，还可能描述操作符优先级和针对不同符号的数据类型。
+lexer (Lex) 一般返回这些标记。所有这些标记都必须在 Yacc
+声明中进行说明。</p><p>在文件解析的例子中我们感兴趣的是这些标记：name, equal sign, 和
+age。Name 是一个完全由字符组成的值。 Age
+是数字。于是声明段就会像这样：</p><h5 id="N102E8" class="ibm-h5">文件解析例子的声明</h5><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_951832" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">%</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">#typedef char* string; /*</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">to specify token types as char* */</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">#define YYSTYPE string /*</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">a Yacc variable which has the value of returned token */</code></div><div class="line number6 index5 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%}</code></div><div class="line number7 index6 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%token NAME EQ AGE</code></div><div class="line number8 index7 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%%</code></div></div></td></tr></tbody></table></div></div></div></span><p>你可能会觉得 YYSTYPE 有点奇怪。但是类似 Lex, Yacc
+也有一套变量和函数可供用户来进行功能扩展。 YYSTYPE 定义了用来将值从
+lexer 拷贝到解析器或者 Yacc 的 yylval （另一个 Yacc 变量）的类型。
+默认的类型是 int。 由于字符串可以从 lexer 拷贝，类型被重定义为
+char*。 关于 Yacc 变量的详细讨论，请参考 Yacc 手册（见 
+        <a href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#artrelatedtopics">资源</a>）。
+      </p><h2 id="12" class="ibm-h2">Yacc 语法规则</h2><p>
+Yacc 语法规则具有以下一般格式：</p><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_6739" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">result: components { /*</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">action to be taken in C */ }</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">;</code></div></div></td></tr></tbody></table></div></div></div></span><p>在这个例子中，result 是规则描述的非终端符号。Components
+是根据规则放在一起的不同的终端和非终端符号。 如果匹配特定序列的话
+Components 后面可以跟随要执行的动作。 考虑如下的例子：</p><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_956387" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">param : NAME EQ NAME {</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">printf("\tName:%s\tValue(name):%s\n", $1,$3);}</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="htmlscript plain">| NAME EQ VALUE{</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="htmlscript plain">printf("\tName:%s\tValue(value):%s\n",$1,$3);}</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">;</code></div></div></td></tr></tbody></table></div></div></div></span><p>如果上例中序列 NAME EQ NAME 被匹配，将执行相应的 { }
+括号中的动作。 这里另一个有用的就是 $1 和 $3 的使用, 它们引用了标记
+NAME 和 NAME（或者第二行的 VALUE）的值。 lexer 通过 Yacc 的变量
+yylval 返回这些值。标记 NAME 的 Lex 代码是这样的：</p><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_698213" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">char [A-Za-z]</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">name {char}+</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%%</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{name} { yylval = strdup(yytext);</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">return NAME; }</code></div></div></td></tr></tbody></table></div></div></div></span><p>文件解析例子的规则段是这样的：</p><h5 id="N1030F" class="ibm-h5">文件解析的语法</h5><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_3016" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">file : record file</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">| record</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">;</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">record: NAME EQ AGE {</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">printf("%s is now %s years old!!!", $1, $3);}</code></div><div class="line number6 index5 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">;</code></div><div class="line number7 index6 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%%</code></div></div></td></tr></tbody></table></div></div></div></span><h2 id="13" class="ibm-h2">附加 C 代码</h2><p>
+现在让我们看一下语法文件的最后一段，附加 C 代码。
+（这一段是可选的，如果有人想要略过它的话：）一个函数如 main() 调用
+yyparse() 函数（Yacc 中 Lex 的 yylex() 等效函数）。 一般来说，Yacc
+最好提供 yyerror(char msg) 函数的代码。 当解析器遇到错误时调用
+yyerror(char msg)。错误消息作为参数来传递。 一个简单的 yyerror(
+char* ) 可能是这样的：</p><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_740459" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">int yyerror(char* msg)</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">printf("Error: %s</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">encountered at line number:%d\n", msg, yylineno);</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">}</code></div></div></td></tr></tbody></table></div></div></div></span><p>yylineno 提供了行数信息。</p><p>这一段还包括文件解析例子的主函数：</p><h5 id="N10326" class="ibm-h5">附加 C 代码</h5><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_334024" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">void main()</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="htmlscript plain">yyparse();</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">}</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">int yyerror(char* msg)</code></div><div class="line number6 index5 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{</code></div><div class="line number7 index6 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">printf("Error: %s</code></div><div class="line number8 index7 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">encountered \n", msg);</code></div></div></td></tr></tbody></table></div></div></div></span><p>要生成代码，可能用到以下命令：</p><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_446949" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">$ yacc _d &lt;</code><code class="htmlscript plain">filename.y</code><code class="htmlscript plain">&gt;</code></div></div></td></tr></tbody></table></div></div></div></span><p>这生成了输出文件 y.tab.h 和 y.tab.c，它们可以用 UNIX
+上的任何标准 C 编译器来编译（如 gcc）。</p><h2 id="14" class="ibm-h2">命令行的其他常用选项</h2><ul class="ibm-bullet-list"><li><em>'-d' ,'--defines'</em> :
+编写额外的输出文件，它们包含这些宏定义：语法中定义的标记类型名称，语义的取值类型
+          <em>YYSTYPE</em>, 以及一些外部变量声明。如果解析器输出文件名叫
+'name.c', 那么 '-d' 文件就叫做 'name.h'。 如果你想将 
+          <em>yylex</em>
+定义放到独立的源文件中，你需要 'name.h', 因为 
+          <em>yylex</em>
+必须能够引用标记类型代码和 
+          <em>yylval</em>变量。
+        </li><li><em>'-b file-prefix' ,'--file-prefix=prefix'</em> :
+指定一个所有Yacc输出文件名都可以使用的前缀。选择一个名字，就如输入文件名叫
+'prefix.c'.
+        </li><li><em>'-o outfile' ,'--output-file=outfile'</em> :
+指定解析器文件的输出文件名。其他输出文件根据 '-d'
+选项描述的输出文件来命名。
+        </li></ul><p>Yacc
+库通常在编译步骤中自动被包括。但是它也能被显式的包括，以便在编译步骤中指定
+        <em>�ly</em>选项。这种情况下的编译命令行是：
+      </p><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_931803" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">$ cc &lt;</code><code class="htmlscript plain">source</code> <code class="htmlscript plain">file</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">names&gt; -ly</code></div></div></td></tr></tbody></table></div></div></div></span><h2 id="15" class="ibm-h2">将 Lex 与 Yacc 结合起来</h2><p>
+到目前为止我们已经分别讨论了 Lex 和
+Yacc。现在让我们来看一下他们是怎样结合使用的。</p><p>一个程序通常在每次返回一个标记时都要调用
+        <em>yylex()</em>
+函数。只有在文件结束或者出现错误标记时才会终止。
+      </p><p>一个由 Yacc 生成的解析器调用
+        <em>yylex()</em>
+函数来获得标记。 
+        <em>yylex()</em> 可以由 Lex
+来生成或完全由自己来编写。 对于由 Lex 生成的 lexer 来说，要和 Yacc
+结合使用，每当 Lex 中匹配一个模式时都必须返回一个标记。 因此 Lex
+中匹配模式时的动作一般格式为：
+      </p><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_520798" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">{pattern} { /* do smthg*/</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">return TOKEN_NAME; }</code></div></div></td></tr></tbody></table></div></div></div></span><p>于是 Yacc 就会获得返回的标记。当 Yacc 编译一个带有 _d 标记的
+        <em>.y</em>文件时，会生成一个头文件，它对每个标记都有
+        <em>#define</em>
+的定义。 如果 Lex 和 Yacc 一起使用的话，头文件必须在相应的 Lex 文件
+        <em>.lex</em>中的 C 声明段中包括。
+      </p><p>让我们回到名字和年龄的文件解析例子中，看一看 Lex 和 Yacc
+文件的代码。</p><h5 id="N10382" class="ibm-h5">Name.y - 语法文件</h5><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_691455" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">%</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">typedef char* string;</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">#define YYSTYPE string</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%}</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%token NAME EQ AGE</code></div><div class="line number6 index5 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%%</code></div><div class="line number7 index6 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">file : record file</code></div><div class="line number8 index7 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">| record</code></div><div class="line number9 index8 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">;</code></div><div class="line number10 index9 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">record : NAME EQ AGE {</code></div><div class="line number11 index10 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">printf("%s is %s years old!!!\n", $1, $3); }</code></div><div class="line number12 index11 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">;</code></div><div class="line number13 index12 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%%</code></div><div class="line number14 index13 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">int main()</code></div><div class="line number15 index14 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{</code></div><div class="line number16 index15 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">yyparse();</code></div><div class="line number17 index16 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">return 0;</code></div><div class="line number18 index17 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">}</code></div><div class="line number19 index18 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">int yyerror(char *msg)</code></div><div class="line number20 index19 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{</code></div><div class="line number21 index20 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">printf("Error</code></div><div class="line number22 index21 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">encountered: %s \n", msg);</code></div><div class="line number23 index22 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">}</code></div></div></td></tr></tbody></table></div></div></div></span><h5 id="N1038A" class="ibm-h5">Name.lex - Lex 的解析器文件</h5><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_628531" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">%{</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">#include "y.tab.h"</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code>&nbsp;</div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">#include &lt;</code><code class="htmlscript plain">stdio.h</code><code class="htmlscript plain">&gt;</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">#include &lt;</code><code class="htmlscript plain">string.h</code><code class="htmlscript plain">&gt;</code></div><div class="line number6 index5 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">extern char* yylval;</code></div><div class="line number7 index6 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%}</code></div><div class="line number8 index7 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">char [A-Za-z]</code></div><div class="line number9 index8 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">num [0-9]</code></div><div class="line number10 index9 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">eq [=]</code></div><div class="line number11 index10 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">name {char}+</code></div><div class="line number12 index11 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">age {num}+</code></div><div class="line number13 index12 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%%</code></div><div class="line number14 index13 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{name} { yylval = strdup(yytext);</code></div><div class="line number15 index14 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">return NAME; }</code></div><div class="line number16 index15 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{eq} { return EQ; }</code></div><div class="line number17 index16 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{age} { yylval = strdup(yytext);</code></div><div class="line number18 index17 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">return AGE; }</code></div><div class="line number19 index18 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">%%</code></div><div class="line number20 index19 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">int yywrap()</code></div><div class="line number21 index20 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">{</code></div><div class="line number22 index21 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">return 1;</code></div><div class="line number23 index22 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">}</code></div></div></td></tr></tbody></table></div></div></div></span><p>作为一个参考，我们列出了
+        <em>y.tab.h</em>, Yacc 生成的头文件。
+      </p><h5 id="N10397" class="ibm-h5">y.tab.h - Yacc 生成的头文件</h5><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_404679" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain"># define NAME 257</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain"># define EQ 258</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain"># define AGE 259</code></div></div></td></tr></tbody></table></div></div></div></span><p>我们对于 Lex 和
+Yacc的讨论到此为止。今天你想要编译什么语言呢？</p><!--CMA ID: 22294--><!--Site ID: 10--><!--XSLT stylesheet used to transform this file: dw-document-html-8.0.xsl-->
+                                        <!-- Article Quiz -->
+                                        
+                                        <!-- Article Resources -->
+                                        <div class="ibm-alternate-rule"><hr></div><h4 id="artrelatedtopics" class="ibm-h4">相关主题</h4><ul><li>您可以参阅本文在 developerWorks 全球站点上的
+          <a href="http://www.ibm.com/developerworks/library/l-lex.html?S_TACT=105AGX52&amp;S_CMP=cn-a-l">英文原文</a>.
+        </li><li><a href="http://www.amazon.com/exec/obidos/ASIN/1565920007/qid=966761542/sr=1-1/102-9713829-1677713">Lex and Yacc</a>, Levine, Mason 和 Branson, O�Reilly
+及其合作公司，2nd Ed。
+        </li><li><a href="http://www.amazon.com/exec/obidos/ASIN/0132373971/qid=966761701/sr=1-2/102-9713829-1677713">Program Development in UNIX</a>, J. T. Shen, Prentice-Hall
+India。
+        </li><li><a href="http://www.amazon.com/exec/obidos/ASIN/0201100886/o/qid=966761739/sr=2-1/102-9713829-1677713">Compilers: Principles, Techniques and Tools</a>, Ahoo, Sethi 和
+Ullman, Addison-Wesley Pub. Co., 1985，11。
+        </li><li><a href="http://tinf2.vub.ac.be/~dvermeir/courses/compilers/">Lex and
+Yacc and compiler writing</a>指导。
+        </li><li>Java 版的 Lex 指导, 叫做
+          <a href="http://bmrc.berkeley.edu/courseware/cs164/fall99/assignment/a1/tutorial.html">Jlex</a>。
+        </li><li>使用 Lex 和 Yacc 的
+          <a href="http://www.cs.man.ac.uk/~pjj/cs2111/ex5_hint.html">formalizing
+a grammar</a>实例。
+        </li></ul>
+                                        <!-- Commenting -->
+<!-- INLINE_COMMENTS_BEGIN: -->
+<div class="ibm-alternate-rule"><hr></div>
+<div id="dw-article-cmts-top" class="ibm-columns">
+    <div class="ibm-col-6-2">
+        <h4 id="icomments" class="ibm-h4">评论</h4>
+        <div id="dw-article-cmts-login">
+            <p>添加或订阅评论，请先<a onclick="window.location=userLinks[0].url;" tabindex="0" role="link">登录</a>或<a onclick="window.location=userLinks[1].url;" tabindex="0" role="link">注册</a>。</p>
+        </div>
+    </div>    
+    <div class="ibm-col-6-2" id="dw-notify"> 
+        <input type="checkbox" value="1" name="comment_notification" id="comment_notification" disabled="">
+        <label for="comment_notification" style="color: rgb(204, 204, 204);">有新评论时提醒我</label>	   
+    </div>
+</div>
+
+<div class="dw-article-cmts-container">       
+    <div class="ibm-no-print jquery-comments read-only" id="dw-icomments-container"><div class="commenting-field main"><img src="./Yacc 与 Lex 快速入门_files/user-icon.png" alt="" class="profile-picture round by-current-user"><div class="textarea-wrapper"><span class="close" style="display: none;"><span class="left"></span><span class="right"></span></span><div class="textarea" data-placeholder="添加评论" contenteditable="true" style="height: 3.65em;"></div><div class="control-row" style="display: none;"><span class="send save highlight-background">提交</span></div></div></div><ul class="navigation"><div class="navigation-wrapper"><li data-sort-key="newest" data-container-name="comments" class="active">最新的</li><li data-sort-key="oldest" data-container-name="comments">历史</li><li data-sort-key="popularity" data-container-name="comments">热门</li></div><div class="navigation-wrapper responsive"><li class="title active"><header>最新的</header></li><ul class="dropdown"><li data-sort-key="newest" data-container-name="comments" class="active">最新的</li><li data-sort-key="oldest" data-container-name="comments">历史</li><li data-sort-key="popularity" data-container-name="comments">热门</li></ul></div></ul><div class="data-container" data-container="comments"><ul id="comment-list" class="main"><li data-id="21128" class="comment"><div class="comment-wrapper"><img src="./Yacc 与 Lex 快速入门_files/user-icon.png" alt="" class="profile-picture round"><time data-original="1405088700584">2014 年 07 月 11 日</time><div class="name"><a href="https://www.ibm.com/developerworks/community/profiles/user/%E5%96%9C%E6%AC%A2%E5%B1%B1%E4%B8%98">喜欢山丘</a></div><div class="wrapper"><div class="content">chars [A-za-z\_\'\.\"]这个正则表达式,好像作者又笔误了一下.A-Za-z....</div><span class="actions"><button class="action reply" type="button">回复</button><span class="separator">·</span><button class="action upvote"><span class="upvote-count">0</span><i class="fa fa-thumbs-up"></i></button><span class="separator">·</span><a class="action reply" href="https://www.ibm.com/developerworks/community/report?lang=cn&amp;referingURL=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html&amp;mymessage=%E8%AF%84%E8%AE%BA%3A%20chars%20%5BA-za-z%5C_%5C%27%5C.%5C%22%5D%E8%BF%99%E4%B8%AA%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%2C%E5%A5%BD%E5%83%8F%E4%BD%9C%E8%80%85%E5%8F%88%E7%AC%94%E8%AF%AF%E4%BA%86%E4%B8%80%E4%B8%8B.A-Za-z....%0D%E7%94%B1%20%E5%96%9C%E6%AC%A2%E5%B1%B1%E4%B8%98%20%20%E4%BA%8E%202014%20%E5%B9%B4%2007%20%E6%9C%88%2011%20%E6%97%A5%20%0D%0D---%20%E5%9C%A8%E4%B8%8B%E6%96%B9%E6%B7%BB%E5%8A%A0%E8%AF%84%E8%AE%BA%20---" target="_blank">报告滥用<i class="fa image" style="background-image: url(&quot;/developerworks/maverick/image/report-abuse.png&quot;);"></i></a></span></div></div><ul class="child-comments"></ul></li><li data-id="21126" class="comment"><div class="comment-wrapper"><img src="./Yacc 与 Lex 快速入门_files/user-icon.png" alt="" class="profile-picture round"><time data-original="1405087458705">2014 年 07 月 11 日</time><div class="name"><a href="https://www.ibm.com/developerworks/community/profiles/user/%E5%96%9C%E6%AC%A2%E5%B1%B1%E4%B8%98">喜欢山丘</a></div><div class="wrapper"><div class="content">(A[b-e])+  匹配在 A 出现位置后跟随的从 b 到 e 的所有字符中的 0 个或 1个。 
+上面的解释也不对吧,
+匹配在 A 出现位置后跟随的从 b 到 e 的所有字符中的 1个组成的整体的重复至少1次吧</div><span class="actions"><button class="action reply" type="button">回复</button><span class="separator">·</span><button class="action upvote"><span class="upvote-count">0</span><i class="fa fa-thumbs-up"></i></button><span class="separator">·</span><a class="action reply" href="https://www.ibm.com/developerworks/community/report?lang=cn&amp;referingURL=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html&amp;mymessage=%E8%AF%84%E8%AE%BA%3A%20(A%5Bb-e%5D)%2B%20%20%E5%8C%B9%E9%85%8D%E5%9C%A8%20A%20%E5%87%BA%E7%8E%B0%E4%BD%8D%E7%BD%AE%E5%90%8E%E8%B7%9F%E9%9A%8F%E7%9A%84%E4%BB%8E%20b%20%E5%88%B0%20e%20%E7%9A%84%E6%89%80%E6%9C%89%E5%AD%97%E7%AC%A6%E4%B8%AD%E7%9A%84%200%20%E4%B8%AA%E6%88%96%201%E4%B8%AA%E3%80%82%20%0D%0A%E4%B8%8A%E9%9D%A2%E7%9A%84%E8%A7%A3%E9%87%8A%E4%B9%9F%E4%B8%8D%E5%AF%B9%E5%90%A7%2C%0D%0A%E5%8C%B9%E9%85%8D%E5%9C%A8%20A%20%E5%87%BA%E7%8E%B0%E4%BD%8D%E7%BD%AE%E5%90%8E%E8%B7%9F%E9%9A%8F%E7%9A%84%E4%BB%8E%20b%20%E5%88%B0%20e%20%E7%9A%84%E6%89%80%E6%9C%89%E5%AD%97%E7%AC%A6%E4%B8%AD%E7%9A%84%201%E4%B8%AA%E7%BB%84%E6%88%90%E7%9A%84%E6%95%B4%E4%BD%93%E7%9A%84%E9%87%8D%E5%A4%8D%E8%87%B3%E5%B0%911%E6%AC%A1%E5%90%A7%0D%E7%94%B1%20%E5%96%9C%E6%AC%A2%E5%B1%B1%E4%B8%98%20%20%E4%BA%8E%202014%20%E5%B9%B4%2007%20%E6%9C%88%2011%20%E6%97%A5%20%0D%0D---%20%E5%9C%A8%E4%B8%8B%E6%96%B9%E6%B7%BB%E5%8A%A0%E8%AF%84%E8%AE%BA%20---" target="_blank">报告滥用<i class="fa image" style="background-image: url(&quot;/developerworks/maverick/image/report-abuse.png&quot;);"></i></a></span></div></div><ul class="child-comments"></ul></li><li data-id="21125" class="comment"><div class="comment-wrapper"><img src="./Yacc 与 Lex 快速入门_files/user-icon.png" alt="" class="profile-picture round"><time data-original="1405087053758">2014 年 07 月 11 日</time><div class="name"><a href="https://www.ibm.com/developerworks/community/profiles/user/%E5%96%9C%E6%AC%A2%E5%B1%B1%E4%B8%98">喜欢山丘</a></div><div class="wrapper"><div class="content">哥们,你那常规正则表达式举例有点问题吧
+A{1,2}shis+  匹配 AAshis, Ashis, AAshi, Ashi。 
+上面是s+,肯定结尾有s或多个s,不可能出现Ashi,AAshi吧</div><span class="actions"><button class="action reply" type="button">回复</button><span class="separator">·</span><button class="action upvote"><span class="upvote-count">0</span><i class="fa fa-thumbs-up"></i></button><span class="separator">·</span><a class="action reply" href="https://www.ibm.com/developerworks/community/report?lang=cn&amp;referingURL=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html&amp;mymessage=%E8%AF%84%E8%AE%BA%3A%20%E5%93%A5%E4%BB%AC%2C%E4%BD%A0%E9%82%A3%E5%B8%B8%E8%A7%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%BE%E4%BE%8B%E6%9C%89%E7%82%B9%E9%97%AE%E9%A2%98%E5%90%A7%0D%0AA%7B1%2C2%7Dshis%2B%20%20%E5%8C%B9%E9%85%8D%20AAshis%2C%20Ashis%2C%20AAshi%2C%20Ashi%E3%80%82%20%0D%0A%E4%B8%8A%E9%9D%A2%E6%98%AFs%2B%2C%E8%82%AF%E5%AE%9A%E7%BB%93%E5%B0%BE%E6%9C%89s%E6%88%96%E5%A4%9A%E4%B8%AAs%2C%E4%B8%8D%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0Ashi%2CAAshi%E5%90%A7%0D%E7%94%B1%20%E5%96%9C%E6%AC%A2%E5%B1%B1%E4%B8%98%20%20%E4%BA%8E%202014%20%E5%B9%B4%2007%20%E6%9C%88%2011%20%E6%97%A5%20%0D%0D---%20%E5%9C%A8%E4%B8%8B%E6%96%B9%E6%B7%BB%E5%8A%A0%E8%AF%84%E8%AE%BA%20---" target="_blank">报告滥用<i class="fa image" style="background-image: url(&quot;/developerworks/maverick/image/report-abuse.png&quot;);"></i></a></span></div></div><ul class="child-comments"></ul></li><li data-id="7680" class="comment"><div class="comment-wrapper"><img src="./Yacc 与 Lex 快速入门_files/user-icon.png" alt="" class="profile-picture round"><time data-original="1376378365590">2013 年 08 月 13 日</time><div class="name"><a href="https://www.ibm.com/developerworks/community/profiles/user/qinxinjianpo">qinxinjianpo</a></div><div class="wrapper"><div class="content">"Name.lex 和 Name.y 在 Ubuntu12.10 下没通过，需要在Name.lex第一段中添加#include &amp;lt;stdio.h&amp;gt; 和 #define YYSTYPE char* 才能通过。</div><span class="actions"><button class="action reply" type="button">回复</button><span class="separator">·</span><button class="action upvote"><span class="upvote-count">0</span><i class="fa fa-thumbs-up"></i></button><span class="separator">·</span><a class="action reply" href="https://www.ibm.com/developerworks/community/report?lang=cn&amp;referingURL=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html&amp;mymessage=%E8%AF%84%E8%AE%BA%3A%20%22Name.lex%20%E5%92%8C%20Name.y%20%E5%9C%A8%20Ubuntu12.10%20%E4%B8%8B%E6%B2%A1%E9%80%9A%E8%BF%87%EF%BC%8C%E9%9C%80%E8%A6%81%E5%9C%A8Name.lex%E7%AC%AC%E4%B8%80%E6%AE%B5%E4%B8%AD%E6%B7%BB%E5%8A%A0%23include%20%26lt%3Bstdio.h%26gt%3B%20%E5%92%8C%20%23define%20YYSTYPE%20char*%20%E6%89%8D%E8%83%BD%E9%80%9A%E8%BF%87%E3%80%82%0D%E7%94%B1%20qinxinjianpo%20%20%E4%BA%8E%202013%20%E5%B9%B4%2008%20%E6%9C%88%2013%20%E6%97%A5%20%0D%0D---%20%E5%9C%A8%E4%B8%8B%E6%96%B9%E6%B7%BB%E5%8A%A0%E8%AF%84%E8%AE%BA%20---" target="_blank">报告滥用<i class="fa image" style="background-image: url(&quot;/developerworks/maverick/image/report-abuse.png&quot;);"></i></a></span></div></div><ul class="child-comments"></ul></li><li data-id="7679" class="comment"><div class="comment-wrapper"><img src="./Yacc 与 Lex 快速入门_files/user-icon.png" alt="" class="profile-picture round"><time data-original="1350720000000">2012 年 10 月 20 日</time><div class="name"><a href="https://www.ibm.com/developerworks/community/profiles/user/liang456">liang456</a></div><div class="wrapper"><div class="content">Nice article!</div><span class="actions"><button class="action reply" type="button">回复</button><span class="separator">·</span><button class="action upvote"><span class="upvote-count">0</span><i class="fa fa-thumbs-up"></i></button><span class="separator">·</span><a class="action reply" href="https://www.ibm.com/developerworks/community/report?lang=cn&amp;referingURL=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fsdk%2Flex%2Findex.html&amp;mymessage=%E8%AF%84%E8%AE%BA%3A%20Nice%20article!%0D%E7%94%B1%20liang456%20%20%E4%BA%8E%202012%20%E5%B9%B4%2010%20%E6%9C%88%2020%20%E6%97%A5%20%0D%0D---%20%E5%9C%A8%E4%B8%8B%E6%96%B9%E6%B7%BB%E5%8A%A0%E8%AF%84%E8%AE%BA%20---" target="_blank">报告滥用<i class="fa image" style="background-image: url(&quot;/developerworks/maverick/image/report-abuse.png&quot;);"></i></a></span></div></div><ul class="child-comments"></ul></li></ul><div class="no-comments no-data"><i class="fa fa-comments fa-2x"></i><br>第一个评论</div></div></div>
+</div>
+<!-- INLINE_COMMENTS_END -->                                        <!-- CENTER_6_4_CONTENT_COLUMN_END -->
+                                    </div>   
+                                </div>
+                        <!--Rating_Meta_BEGIN--><div class="metavalue">static.content.url=http://www.ibm.com/developerworks/js/artrating/</div><div class="metavalue">SITE_ID=10</div><div class="metavalue">Zone=Linux</div><div class="metavalue">ArticleID=22294</div><div class="metavalue">ArticleTitle=Yacc 与 Lex 快速入门</div><div class="metavalue">publish-date=11012000</div><script language="javascript" type="text/javascript">document.write('<div class="metavalue">url='+location.href.replace(/</g,  '%3C')+'</div>');</script><div class="metavalue">url=https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html</div><!--Rating_Meta_END-->
+                    </div>
+                    <!-- END_IBM-CONTENT-MAIN -->
+                </div>
+                <!-- END_IBM-CONTENT-BODY -->
+            </div>
+            <!-- END_IBM-CONTENT -->
+        </div>
+        <!-- END_IBM-PCON -->
+    </main>
+    <!-- MAIN_CONTENT_END -->
+    
+    <!-- END_CONTENT-WRAPPER -->	
+</div>
+<!-- FOOTER_BEGIN -->
+<footer role="contentinfo" aria-label="IBM developerWorks">
+    <div id="dw-footer-module" class="dw-footer-home">
+        <section aria-label="参考资料" role="contentinfo">
+            <div class="ibm-columns">
+                <div class="ibm-col-6-1 dw-footer-col-1">
+                    <ul>
+                        <li class="dw-footer-heading" aria-label="developerWorks">developerWorks</li>
+                        <li><a href="https://www.ibm.com/developerworks/secure/feedback.jsp?domain=dwchina">站点反馈</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/secure/myideas2.jsp?domain=dwchina">我要投稿</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/cn/author/">投稿指南</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/community/report?lang=zh">报告滥用</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/cn/community/terms/thirdparty/">第三方提示</a></li>
+                    </ul>
+                    <ul>
+                        <li class="dw-footer-newline"><a href="https://weibo.com/ibmdw/">关注微博</a></li>
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-2">
+                    <ul>
+                        <li class="dw-footer-heading" aria-label="加入">加入</li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/partnerworld/isv/">ISV 资源 (英语)</a></li>
+                        <li class="dw-footer-newline"><a href="https://www-31.ibm.com/ibm/cn/ur/">大学合作</a></li>
+                    </ul>
+                    <ul class="dw-footer-lang" aria-label="选择语言">
+                        <li class="dw-footer-heading">选择语言</li>
+                        <li><a href="https://www.ibm.com/developerworks/">English</a></li>
+                        <li><a href="https://www.ibm.com/developerworks/cn/" lang="zh">中文</a></li>
+                        <li><a href="https://www.ibm.com/developerworks/jp/" lang="ja">日本語</a></li>
+                        <li><a href="https://www.ibm.com/developerworks/ru/" lang="ru">Русский</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/br/" lang="pt">Português (Brasil)</a></li>
+                        <li><a href="https://www.ibm.com/developerworks/ssa/" lang="es">Español</a></li>
+                        <li><a href="https://developer.ibm.com/kr/" lang="kr">한글</a></li>
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-3"> </div>
+                <div class="ibm-col-6-1 dw-footer-col-4">
+                    <ul class="dw-footer-categories">
+                        <li class="dw-footer-category">
+                            <a href="https://www.ibm.com/developerworks/cn/views/global/libraryview.jsp">技术文档库</a>
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="http://ibmdeveloperworks.mkt6741.com/developerWorksChina-NewsletterSubscriptionPage/">dW 中国时事通讯</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/dwblog/">博客</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/events/">活动</a>  
+                        </li>
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-5">
+                    <ul class="dw-footer-categories">
+                        <li class="dw-footer-category">
+                            <a href="https://www.ibm.com/developerworks/cn/community/">社区</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/">开发者中心</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/tv/">视频</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://www.ibm.com/developerworks/cn/rss/">订阅源</a>  
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-6">
+                    <ul class="dw-footer-categories">
+                        <li class="dw-footer-category">
+                            <a href="https://www.ibm.com/developerworks/cn/downloads/">软件下载</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/journey/">Code patterns</a>  
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div id="dw-footer" class="ibm-padding-normal ibm-alternate">
+        <div class="ibm-columns">
+            <div class="ibm-col-1-1">
+                <div class="dw-footer-corporate-links">
+                <ul>
+                    <li><a href="https://www.ibm.com/contact/cn/zh/">联系 IBM</a></li>
+                    <li><a href="https://www.ibm.com/privacy/cn/zh/">隐私条约</a></li>
+                    <li><a href="https://www.ibm.com/developerworks/community/terms?lang=zh">使用条款</a></li>
+                    <li><a href="https://www.ibm.com/accessibility/cn/zh/">信息无障碍选项</a></li>
+                    <li class="ibm-feedbacklink"><a href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#">反馈</a></li>
+                    <li id="ibm-truste-cp"><a onclick="truste.eu.clickListener();return false;" href="https://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html#">Cookie 首选项</a></li>
+                </ul>                 
+                </div>    
+            </div>
+        </div>
+    </div>        
+</footer> <!-- FOOTER_END -->
+
+<!-- END_IBM-TOP -->
+</div>
+
+<!-- SCRIPTS_INCLUDE_BEGIN -->
+<!-- Styles -->
+<link rel="stylesheet" type="text/css" href="./Yacc 与 Lex 快速入门_files/jquery-comments.css">
+<link rel="stylesheet" href="./Yacc 与 Lex 快速入门_files/font-awesome.min.css">
+
+<!-- Libraries -->
+<script type="text/javascript" src="./Yacc 与 Lex 快速入门_files/jquery-comments.min.js"></script>
+<script type="text/javascript" src="./Yacc 与 Lex 快速入门_files/moment-with-locales.js"></script>
+<script type="text/javascript" src="./Yacc 与 Lex 快速入门_files/ContentComments.js"></script>
+<script type="text/javascript" src="./Yacc 与 Lex 快速入门_files/ContentCommentsFormatter.js"></script>
+<script type="text/javascript" language="JavaScript">
+
+	IBMCore.common.module.masthead.subscribe("ready", "customjs", setupCommentsPlugin).runAsap(setupCommentsPlugin);
+
+	function setupCommentsPlugin(){
+		//debugger;
+			//alert(userLinks);
+			var commentsInitInfo = {
+				contentId : $("div[class=metavalue]:contains('ArticleID=')").text().split("=")[1],
+				siteId :  $("div[class=metavalue]:contains('SITE_ID=')").text().split("=")[1],
+				pluginDivId : '#dw-icomments-container',
+				notifyElementId : "#comment_notification",
+				loginMessageDivId : "#dw-article-cmts-login",
+				totalCommentsDivId : "#nCmts",
+						isIdea:false
+
+			};				
+								
+			ContentComments.Setup(commentsInitInfo);
+	}
+</script>
+
+<!-- Segment -->
+<script src="./Yacc 与 Lex 快速入门_files/bluemix-analytics.min.js"></script>    
+
+<!-- SCRIPTS_INCLUDE_END -->
+
+
+
+<div id="ibm-overlay-backdrop"></div><div id="ibm-mobilemenu-screen"></div><iframe name="_hjRemoteVarsFrame" title="_hjRemoteVarsFrame" id="_hjRemoteVarsFrame" src="./Yacc 与 Lex 快速入门_files/rcj-99d43ead6bdf30da8ed5ffcb4f17100c.html" style="display: none !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important;"></iframe><script src="./Yacc 与 Lex 快速入门_files/js(1)" id="mm_pp_background"></script><div id="ads"></div><iframe src="./Yacc 与 Lex 快速入门_files/iframe.html" id="mm_batch_supply_background" style="visibility: hidden; display: none;"></iframe><iframe src="./Yacc 与 Lex 快速入门_files/iframe(1).html" id="mm_sync_back_ground" style="visibility: hidden; display: none;"></iframe></body></html>
