@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)https://mirrors.ustc.edu.cn/repogen/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+
+    <meta name="description" content="Mirrors">
+    <title>LUG's repo file generator</title>
+
+    <link href="./LUG&#39;s repo file generator_files/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="./LUG&#39;s repo file generator_files/repo.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id="header">
+      <h1><a href="http://mirrors.ustc.edu.cn/">mirrors<span>.ustc.edu.cn</span></a></h1>
+    </div>
+    <div id="wrapper">
+      <div id="content">
+        <h1 id="title">repository file generator</h1>
+        <div>
+          <h4>Tips: 可通过 URL 的形式直接下载配置. 例如:</h4>
+          <pre>https://mirrors.ustc.edu.cn/repogen/conf/debian-http-6-sid
+https://mirrors.ustc.edu.cn/repogen/conf/archlinux-https-4</pre>
+        </div>
+        <div class="distribution" id="archlinux">
+          <h4>Archlinux (/etc/pacman.d/mirrorlist):
+            <select class="archlinux">
+              <option selected="selected" value="https">HTTPS</option>
+              <option value="http">HTTP</option>
+            </select>
+            <select class="archlinux">
+              <option selected="selected" value="4">IPv4</option>
+              <option value="6">IPv6</option>
+            </select>
+            <button name="mirrorlist" class="archlinux">Download</button>
+          </h4>
+          <div><p id="archlinux-warn"></p></div>
+          <div><pre class="archlinux">Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+</pre></div>
+        </div>
+
+        <div class="distribution" id="debian">
+          <h4>Debian (/etc/apt/sources.list):
+            <select class="debian">
+              <option selected="selected" value="https">HTTPS</option>
+              <option value="http">HTTP</option>
+            </select>
+            <select class="debian">
+              <option selected="selected" value="4">IPv4</option>
+              <option value="6">IPv6</option>
+            </select>
+            <select class="debian">
+              <option selected="selected" value="stretch">stretch (stable)</option>
+              <option value="jessie">jessie (oldstable)</option>
+              <option value="wheezy">wheezy (oldstable)</option>
+              <option value="buster">buster (testing)</option>
+              <option value="sid">sid (unstable)</option>
+            </select>
+            <button name="sources.list" class="debian">Download</button>
+          </h4>
+          <div><p id="debian-warn">Tips: Remember to install package &lt;apt-transport-https&gt;</p></div>
+          <div><pre class="debian">deb https://mirrors.ustc.edu.cn/debian/ stretch main contrib non-free
+deb-src https://mirrors.ustc.edu.cn/debian/ stretch main contrib non-free
+
+deb https://mirrors.ustc.edu.cn/debian/ stretch-updates main contrib non-free
+deb-src https://mirrors.ustc.edu.cn/debian/ stretch-updates main contrib non-free
+
+deb https://mirrors.ustc.edu.cn/debian/ stretch-backports main contrib non-free
+deb-src https://mirrors.ustc.edu.cn/debian/ stretch-backports main contrib non-free
+
+deb https://mirrors.ustc.edu.cn/debian-security/ stretch/updates main contrib non-free
+deb-src https://mirrors.ustc.edu.cn/debian-security/ stretch/updates main contrib non-free
+</pre></div>
+        </div>
+
+        <div class="distribution" id="ubuntu">
+          <h4>Ubuntu (/etc/apt/sources.list):
+            <select class="ubuntu">
+              <option selected="selected" value="https">HTTPS</option>
+              <option value="http">HTTP</option>
+            </select>
+            <select class="ubuntu">
+              <option selected="selected" value="4">IPv4</option>
+              <option value="6">IPv6</option>
+            </select>
+            <select class="ubuntu">
+              
+  <option selected="true" value="bionic">bionic (18.04)</option>
+  
+  <option value="artful">artful (17.10)</option>
+  
+  <option class="end-of-life" value="zesty">zesty (17.04)</option>
+  
+  <option class="end-of-life" value="yakkety">yakkety (16.10)</option>
+  
+  <option value="xenial">xenial (16.04)</option>
+  
+  <option class="end-of-life" value="wily">wily (15.10)</option>
+  
+  <option class="end-of-life" value="vivid">vivid (15.04)</option>
+  
+  <option class="end-of-life" value="utopic">utopic (14.10)</option>
+  
+  <option value="trusty">trusty (14.04)</option>
+  
+  <option class="end-of-life" value="saucy">saucy (13.10)</option>
+  
+  <option class="end-of-life" value="raring">raring (13.04)</option>
+  
+  <option class="end-of-life" value="quantal">quantal (12.10)</option>
+  
+  <option class="end-of-life" value="precise">precise (12.04)</option>
+  
+  <option class="end-of-life" value="oneiric">oneiric (11.10)</option>
+  
+  <option class="end-of-life" value="natty">natty (11.04)</option>
+  
+  <option class="end-of-life" value="maverick">maverick (10.10)</option>
+  
+  <option class="end-of-life" value="lucid">lucid (10.04)</option>
+  
+  <option class="end-of-life" value="karmic">karmic (9.10)</option>
+  
+  <option class="end-of-life" value="jaunty">jaunty (9.04)</option>
+  
+  <option class="end-of-life" value="intrepid">intrepid (8.10)</option>
+  
+  <option class="end-of-life" value="hardy">hardy (8.04)</option>
+  
+  <option class="end-of-life" value="gutsy">gutsy (7.10)</option>
+  
+  <option class="end-of-life" value="feisty">feisty (7.04)</option>
+  
+  <option class="end-of-life" value="edgy">edgy (6.10)</option>
+  
+  <option class="end-of-life" value="dapper">dapper (6.06)</option>
+  
+  <option class="end-of-life" value="breezy">breezy (5.10)</option>
+  
+  <option class="end-of-life" value="hoary">hoary (5.04)</option>
+  
+  <option class="end-of-life" value="warty">warty (4.10)</option>
+  
+            </select>
+            <button name="sources.list" class="ubuntu">Download</button>
+          </h4>
+          <div><p style="" id="ubuntu-warn"></p></div>
+          <div><pre class="ubuntu">deb https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse
+deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse
+
+deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse
+deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse
+
+deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse
+
+deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse
+
+## Not recommended
+# deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse
+</pre></div>
+        </div>
+      </div><!--content-->
+      <p>Made by <a href="http://home.ustc.edu.cn/~halgu/">sNullp</a>.
+        Collaborator: @ZhangCheng, <a href="https://github.com/knight42">@Knight</a></p>
+      <p>Source code hosted on <a href="https://git.ustclug.org/">LUG@USTC GitLab</a>.
+        <a href="https://git.ustclug.org/mirrors/repogen">Help us improve it!</a>
+      </p>
+      <p>Send mirror related questions to mirrors@ustc.edu.cn.</p>
+    </div> <!--wrapper-->
+  
+</body></html>

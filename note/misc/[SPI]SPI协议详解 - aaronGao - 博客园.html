@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://www.cnblogs.com/aaronLinux/p/6219146.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="same-origin">
+<title>[SPI]SPI协议详解 - aaronGao - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./[SPI]SPI协议详解 - aaronGao - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./[SPI]SPI协议详解 - aaronGao - 博客园_files/bundle-summerGarden.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./[SPI]SPI协议详解 - aaronGao - 博客园_files/bundle-summerGarden-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/aaronLinux/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/aaronLinux/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/aaronLinux/wlwmanifest.xml">
+<script async="" src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/analytics.js"></script><script type="text/javascript" src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/encoder.js"></script><script src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'aaronLinux', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/aaronLinux/"><img id="blogLogo" src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/aaronLinux/">aaronGao</a></h1>
+<h2>https://github.com/aaronRong</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+	<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+	<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/aaronLinux/">首页</a></li>
+	<li><a href="http://news.cnblogs.com/">新闻</a></li>
+	<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+	<li><a id="blog_nav_contact" accesskey="9" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/aaronGao">联系</a></li>
+	<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+	<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/aaronLinux/rss">订阅</a>
+	<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/aaronLinux/rss"><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/xml.gif" alt="订阅"></a></li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<!--done-->
+随笔- 253&nbsp;
+文章- 0&nbsp;
+评论- 4&nbsp;
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/aaronLinux/p/6219146.html">[SPI]SPI协议详解</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>转自：<a href="https://my.oschina.net/freeblues/blog/67400" target="_blank">https://my.oschina.net/freeblues/blog/67400</a></p>
+<div>
+<h2><strong><strong>1.SPI协议简介</strong></strong></h2>
+<h3><strong>1.1.SPI协议概括</strong></h3>
+<p>　　SPI，是英语Serial Peripheral interface的缩写，顾名思义就是串行外围设备接口。是Motorola首先在其MC68HCXX系列处理器上定义的。<span style="color: #0000ff">SPI接口主要应用在 EEPROM，FLASH，实时时钟，AD转换器，还有数字信号处理器和数字信号解码器之间</span>。SPI，是一种高速的，<span style="color: #0000ff">全双工</span>，<span style="color: #0000ff">同步</span>的通信<span style="color: #0000ff">总线</span>，并且在芯片的管脚上只占用四根线，节约了芯片的管脚，同时为PCB的布局上节省空间，提供方便，正是出于这种简单易用的特性，现在越来越多的芯片集成了这种通信协议，比如AT91RM9200.</p>
+<p>　　SPI的通信原理很简单，它以主从方式工作，这种模式通常有一个主设备和一个或<span style="color: #0000ff">多个从设备</span>，需要至少4根线，事实上3根也可以（单向传输时）。也是所有基于SPI的设备共有的，它们是SDI（数据输入），SDO（数据输出），SCK（时钟），CS（片选）。</p>
+<ul>
+<li>SDO&nbsp;&nbsp;&nbsp;&nbsp; – 主设备数据输出，从设备数据输入</li>
+<li>SDI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; – 主设备数据输入，从设备数据输出</li>
+<li>SCLK&nbsp;&nbsp; – 时钟信号，由主设备产生</li>
+<li>CS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; – 从设备使能信号，由主设备控制</li>
+</ul>
+<p>　　<strong>CS</strong>: 其中CS是控制芯片是否被选中的，也就是说只有片选信号为预先规定的使能信号时（高电位或低电位），对此芯片的操作才有效，<span style="color: #0000ff">这就允许在同一总线上连接多个SPI设备成为可能</span>。</p>
+<p>　　<strong>SDI/SDO/SCLK</strong>: 通讯是通过数据交换完成的，这里先要知道SPI是串行通讯协议，也就是说数据是一位一位的传输的。这就是SCK时钟线存在的原因，由SCK提供时钟脉冲，SDI，SDO则基于此脉冲完成数据传输。数据输出通过 SDO线，数据在时钟上升沿或下降沿时改变，在紧接着的下降沿或上升沿被读取。完成一位数据传输，输入也使用同样原理。这样，在至少8次时钟信号的改变（上沿和下沿为一次），就可以完成8位数据的传输。</p>
+<p>　　要注意的是，<span style="color: #0000ff">SCK信号线只由主设备控制</span>，从设备不能控制信号线。同样，在一个基于SPI的设备中，至少有一个主控设备。这样<span style="color: #0000ff">传输的特点</span>：这样的传输方式有一个优点，与普通的串行通讯不同，普通的串行通讯一次连续传送至少8位数据，而SPI允许数据一位一位的传送，甚至允许暂停，因为SCK时钟线由主控设备控制，当没有时钟跳变时，从设备不采集或传送数据，也就是说，<span style="color: #0000ff">主设备通过对SCK时钟线的控制可以完成对通讯的控制</span>。<span style="color: #0000ff">SPI还是一个数据交换协议</span>：因为SPI的数据输入和输出线独立，所以允许同时完成数据的输入和输出。不同的SPI设备的实现方式不尽相同，主要是数据改变和采集的时间不同，在时钟信号上沿或下沿采集有不同定义，具体请参考相关器件的文档。</p>
+<p>在点对点的通信中，<span style="color: #0000ff">SPI接口不需要进行寻址操作</span>，且为全双工通信，显得简单高效。在多个从设备的系统中，每个从设备需要独立的使能信号，硬件上比I2C系统要稍微复杂一些。</p>
+<p>最后，SPI接口的一个<span style="color: #0000ff">缺点</span>：<strong><span style="color: #0000ff">没有指定的流控制，没有应答机制确认是否接收到数据</span></strong>。</p>
+<p>AT91RM9200的SPI接口主要由4个引脚构成：SPICLK、MOSI、MISO及 /SS，其中SPICLK是整个SPI总线的公用时钟，MOSI、MISO作为主机，从机的输入输出的标志，MOSI是主机的输出，从机的输入，MISO 是主机的输入，从机的输出。/SS是从机的标志管脚，在互相通信的两个SPI总线的器件，/SS管脚的电平低的是从机，相反/SS管脚的电平高的是主机。在一个SPI通信系统中，必须有主机。SPI总线可以配置成单主单从，单主多从，互为主从。</p>
+<p>SPI的片选可以扩充选择16个外设,这时PCS输出=NPCS,说NPCS0~3接4-16<span style="color: #0000ff">译码器</span>,这个译码器是需要外接4-16译码器，译码器的输入为NPCS0~3，输出用于16个外设的选择。</p>
+<h3><strong>1.2.协议举例</strong></h3>
+<p>SPI是一个<span style="color: #0000ff">环形总线结构</span>，由ss（cs）、sck、sdi、sdo构成，其时序其实很简单，主要是在sck的控制下，两个<span style="color: #0000ff">双向移位寄存器</span>进行数据交换。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设下面的8位寄存器装的是待发送的数据10101010，上升沿发送、下降沿接收、高位先发送。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么第一个上升沿来的时候 数据将会是sdo=1；寄存器=0101010x。下降沿到来的时候，sdi上的电平将所存到寄存器中去，那么这时寄存器=0101010sdi，这样在&nbsp;8个时钟脉冲以后，两个寄存器的内容互相交换一次。这样就完成里一个spi时序。&nbsp;</p>
+<div>举例：&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设主机和从机初始化就绪：并且主机的sbuff=0xaa，从机的sbuff=0x55，下面将分步对spi的8个时钟周期的数据情况演示一遍:假设上升沿发送数据
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/814415990.jpg" alt="图片点击可在新窗口打开查看"></div>
+<div>这样就完成了两个寄存器8位的交换，上面的上表示上升沿、下表示下降沿，sdi、sdo相对于主机而言的。其中ss引脚作为主机的时候，从机可以把它拉底被动选为从机，作为从机的是时候，可以作为片选脚用。根据以上分析，一个完整的传送周期是16位，即两个字节，因为，首先主机要发送命令过去，然后从机根据主机的命令准备数据，主机在下一个8位时钟周期才把数据读回来。</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
+<div>　　SPI&nbsp;总线是Motorola公司推出的三线同步接口，同步串行3线方式进行通信:一条时钟线SCK，一条数据输入线MOSI，一条数据输出线MISO;用于CPU与各种外围器件进行全双工、同步串行通讯。SPI主要特点有:可以同时发出和接收串行数据;可以当作主机或从机工作;提供频率可编程时钟;发送结束 中断标志;写冲突保护;总线竞争保护等。下图示出SPI总线工作的四种方式，其中使用的最为广泛的是SPI0和SPI3方式&nbsp;(实线表示):&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</div>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/814578327.jpg" alt="图片点击可在新窗口打开查看"></p>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SPI总线四种工作方式
+<div>
+<p>SPI&nbsp;模块为了和外设进行数据交换，根据外设工作要求，其输出串行同步时钟极性和相位可以进行配置，时钟极性（CPOL）对传输协议没有重大的影响。</p>
+<ul>
+<li>如果&nbsp;CPOL=0，串行同步时钟的空闲状态为低电平；</li>
+<li>如果CPOL=1，串行同步时钟的空闲状态为高电平。时钟相位（CPHA）能够配置用于选择两种不同的传输协议之一进行数据传输。</li>
+<li>如果CPHA=0，在串行同步时钟的第一个跳变沿（上升或下降）数据被采样；</li>
+<li>如果CPHA=1，在串行同步时钟的第二个跳变沿（上升或下降）数据被采样。SPI主模块和与之通信的外设备时钟相位和极性应该一致。</li>
+
+
+</ul>
+
+
+<br><strong>补充</strong>：
+<p>上文中最后一句话：SPI主模块和与之通信的外设备时钟相位和极性应该一致。个人理解这句话有2层意思：其一，主设备SPI时钟和极性的配置应该由外设来决定；其二，二者的配置应该保持一致，即主设备的SDO同从设备的SDO配置一致，主设备的SDI同从设备的SDI配置一致。因为主从设备是在SCLK的控制下，同时发送和接收数据，并通过2个双向移位寄存器来交换数据。工作原理演示如下图：</p>
+<p><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/814577229.jpg" alt="图片点击可在新窗口打开查看"></p>
+<div>
+<p>上升沿主机SDO发送数据1，同时从设备SDO发送数据0；紧接着在SCLK的下降沿的时候从设备的SDI接收到了主机发送过来的数据1，同时主机也接收到了从设备发送过来的数据0.</p>
+<h3>1.3.协议心得</h3>
+<p>SPI接口<span style="color: #0000ff">时钟配置心得</span>：</p>
+<p>　　在主设备这边配置SPI接口时钟的时候一定要弄清楚从设备的时钟要求，<span style="color: #0000ff">因为主设备这边的时钟极性和相位都是以从设备为基准的</span>。因此在时钟极性的配置上<span style="color: #0000ff">一定要搞清楚从设备是在时钟的上升沿还是下降沿接收数据，是在时钟的下降沿还是上升沿输出数据</span>。但要注意的是，由于主设备的SDO连接从设备的SDI，从设备的SDO连接主设备的SDI，从设备SDI接收的数据是主设备的SDO发送过来的，主设备SDI接收的数据是从设备SDO发送过来的，<span style="color: #0000ff">所以主设备这边SPI时钟极性的配置（即SDO的配置）跟从设备的SDI接收数据的极性是相反的，跟从设备SDO发送数据的极性是相同的</span>。下面这段话是Sychip Wlan8100 Module Spec上说的，充分说明了时钟极性是如何配置的：</p>
+<p>The 81xx module will always input data bits at the rising edge of the clock, and the host will always output data bits on the falling edge of the clock.</p>
+<p>意思是：主设备在时钟的下降沿发送数据，从设备在时钟的上升沿接收数据。因此主设备这边SPI时钟极性应该配置为下降沿有效。</p>
+<p>又如，下面这段话是摘自LCD Driver IC SSD1289：</p>
+<p>SDI is shifted into 8-bit shift register on every rising edge of SCK in the order of data bit 7, data bit 6 …… data bit 0.</p>
+<p>意思是：从设备SSD1289在时钟的上升沿接收数据，而且是按照从高位到地位的顺序接收数据的。因此主设备的SPI时钟极性同样应该配置为下降沿有效。</p>
+<p>时钟极性和相位配置正确后，数据才能够被准确的发送和接收,&nbsp;<span style="color: #0000ff">因此应该对照从设备的SPI接口时序或者Spec文档说明来正确配置主设备的时钟</span>。</p>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+<h2>2.SPI协议软件模拟</h2>
+<div class="article_content">
+<h3 id="h1_0">2.1.单片机软件模拟SPI接口—加深理解SPI总线协议</h3>
+<div>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; SPI(Serial Peripheral Interfacer 串行外设接口)是摩托罗拉公司推出的一种同步串行通讯接口，用于微处理器臌控制器和外围扩展芯片之间的串行连接，现已发展成为一种工业标准，目前，各半导体公司推出了大量的带有SPI接口的具有各种各样功能的芯片，如RAM，EEPROM，FlashROM，A／D转换器、D／A转换器、LED／LED显示驱动器、I／O接口芯片、实时时钟、UART收发器等等，为用户的外围扩展提供了极其灵活而价廉的选择。由于SPI总线接口只占用微处理器四个I／O口线，采用SPI总线接口可以简化电路没计，节省很多常规电路中的接口器件和I／O口线，提高设计的可靠性。<br><br>&nbsp; &nbsp; &nbsp; &nbsp; 现以 AT89C205l单片机模拟SPI总线操作串行EEPROM 93CA6为例，如图1所示，介绍利用单片机的I／O口通过软件模拟SPI总线的实现方法。在这里，仅介绍读命令的时序和应用子程序。&nbsp;</div>
+<div><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/0_1319555489iu4D.gif" alt=""></div>
+<div>
+<h3 id="h1_1">2.2.93C46存储器SPI总线的工作原理</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 93CA6作为从设备，其SPI接口使用4条I／O口线：串行时钟线(SK)、输出数据线DO、输入数据线DI和高电平有效的从机选择线CS。其数据的传输格式是高位(MSB)在前，低位(LsB)在后。93C46的SPI总线接口读命令时序如图2所示。&nbsp;</div>
+<div><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/0_1319555631MeRm.gif" alt=""></div>
+<div>
+<h3 id="h1_2">2.3.软件模拟SPI接口的实现方法&nbsp;</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 对于不带SPI串行总线接口的AT89C2051单片 机来说，可以使用软件来模拟SPI的操作，图1所示 为AT89C2051单片机与串行EEPROM 93C46的硬件 连接图，其中，P1．0模拟SPI主设备的数据输出端 SDO，P1．2模拟SPI的时钟输出端SCK，P1．3模拟 SPI的从机选择端SCS，P1．1模拟SPI的数据输入 SDI。<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;上电复位后首先先将P1．2(SCK)的初始状态设置为0(空闲状态)。<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;读操作：AT89C2051首先通过P1．0口发送1位起始位(1)，2位操作码(10)，6位被读的数据地址(A5A4A3A2A1A0)，然后通过P1．1口读1位空位(0)，之后再读l6位数据(高位在前)。<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;写操作：AT89C2051首先通过P1．0口发送1位起始位(1)，2位操作码(01)，6位被写的数据地址(A5A4A3A2A1A0)，之后通过P1．0口发送被写的l6位数据(高位在前)，写操作之前要发送写允许命令，写之后要发送写禁止命令。<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;写允许操作(WEN))：写操作首先发送1位起始位(1)，2位操作码(00)，6位数据(11XXXX)。 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</div>
+<div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;写禁止操作(WDS))：写操作首先发送1位起始位(1)，2位操作码(00)，6位数据(00XXXX)。</div>
+<div>&nbsp; &nbsp; &nbsp; &nbsp; 下面介绍用C51模拟SPI的子程序。</div>
+<div>
+<div class="dp-highlighter bg_cpp">&nbsp;</div>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span> <span style="color: #008000">//</span><span style="color: #008000">首先定义好I/O口</span>
+<span style="color: #008080"> 2</span> sbit SDO=P1^<span style="color: #800080">0</span><span style="color: #000000">；
+</span><span style="color: #008080"> 3</span> sbit SDI=P1^<span style="color: #800080">1</span><span style="color: #000000">；
+</span><span style="color: #008080"> 4</span> sbit SCK=P1^ <span style="color: #800080">2</span><span style="color: #000000">；
+</span><span style="color: #008080"> 5</span> sbit SCS=P1^<span style="color: #800080">3</span><span style="color: #000000">；
+</span><span style="color: #008080"> 6</span> sbit ACC_7= ACC^<span style="color: #800080">7</span><span style="color: #000000">；
+</span><span style="color: #008080"> 7</span> unsigned <span style="color: #0000ff">int</span> SpiRead(unsigned <span style="color: #0000ff">char</span><span style="color: #000000"> add)
+</span><span style="color: #008080"> 8</span> <span style="color: #000000">{
+</span><span style="color: #008080"> 9</span>     unsigned <span style="color: #0000ff">char</span><span style="color: #000000"> i；
+</span><span style="color: #008080">10</span>     unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> datal6；
+</span><span style="color: #008080">11</span>     add&amp;=<span style="color: #800080">0x3f</span>；<span style="color: #008000">/*</span><span style="color: #008000">6位地址</span><span style="color: #008000">*/</span>
+<span style="color: #008080">12</span>     add |=<span style="color: #800080">0x80</span>；<span style="color: #008000">/*</span><span style="color: #008000">读操作码l0</span><span style="color: #008000">*/</span>
+<span style="color: #008080">13</span>     SDO=<span style="color: #800080">1</span>；<span style="color: #008000">/*</span><span style="color: #008000">发送1为起始位</span><span style="color: #008000">*/</span>
+<span style="color: #008080">14</span>     SCK=<span style="color: #800080">0</span><span style="color: #000000">；
+</span><span style="color: #008080">15</span>     SCK=<span style="color: #800080">1</span><span style="color: #000000">；
+</span><span style="color: #008080">16</span>     <span style="color: #0000ff">for</span>(i=<span style="color: #800080">0</span>；&lt;<span style="color: #800080">8</span>；i++)<span style="color: #008000">/*</span><span style="color: #008000">发送操作码和地址</span><span style="color: #008000">*/</span>
+<span style="color: #008080">17</span> <span style="color: #000000">    {
+</span><span style="color: #008080">18</span>         <span style="color: #0000ff">if</span>(add&amp;<span style="color: #800080">0x80</span>==<span style="color: #800080">1</span><span style="color: #000000">)
+</span><span style="color: #008080">19</span>             SDO=<span style="color: #800080">1</span><span style="color: #000000">；
+</span><span style="color: #008080">20</span>         <span style="color: #0000ff">else</span> 
+<span style="color: #008080">21</span>             SDO=<span style="color: #800080">0</span><span style="color: #000000">；
+</span><span style="color: #008080">22</span>         SCK=<span style="color: #800080">0</span>；<span style="color: #008000">/*</span><span style="color: #008000">从设备上升沿接收数据</span><span style="color: #008000">*/</span>
+<span style="color: #008080">23</span>         SCK=<span style="color: #800080">1</span><span style="color: #000000">；
+</span><span style="color: #008080">24</span>         add&lt;&lt;= <span style="color: #800080">1</span><span style="color: #000000">；
+</span><span style="color: #008080">25</span> <span style="color: #000000">    }
+</span><span style="color: #008080">26</span>     SCK=<span style="color: #800080">1</span>；<span style="color: #008000">/*</span><span style="color: #008000">从设备时钟线下降沿后发送数据，空读1位数据</span><span style="color: #008000">*/</span>
+<span style="color: #008080">27</span>     SCK=<span style="color: #800080">0</span><span style="color: #000000">；
+</span><span style="color: #008080">28</span>     datal6&lt;&lt;= <span style="color: #800080">1</span>;<span style="color: #008000">/*</span><span style="color: #008000">读16位数据</span><span style="color: #008000">*/</span>
+<span style="color: #008080">29</span>     <span style="color: #0000ff">for</span>(i=<span style="color: #800080">0</span>；&lt;<span style="color: #800080">16</span>；i++<span style="color: #000000">)
+</span><span style="color: #008080">30</span> <span style="color: #000000">    {
+</span><span style="color: #008080">31</span>         SCK= <span style="color: #800080">1</span><span style="color: #000000">；
+</span><span style="color: #008080">32</span> <span style="color: #000000">        _nop_()；
+</span><span style="color: #008080">33</span>         <span style="color: #0000ff">if</span>(SDI==<span style="color: #800080">1</span><span style="color: #000000">)
+</span><span style="color: #008080">34</span>             datal6|=<span style="color: #800080">0x01</span><span style="color: #000000">；
+</span><span style="color: #008080">35</span>         SCK =<span style="color: #800080">0</span><span style="color: #000000">；
+</span><span style="color: #008080">36</span>         datal6&lt; &lt; =<span style="color: #800080">1</span><span style="color: #000000">；
+</span><span style="color: #008080">37</span> <span style="color: #000000">    }
+</span><span style="color: #008080">38</span>     <span style="color: #0000ff">return</span><span style="color: #000000"> datal6；
+</span><span style="color: #008080">39</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;</p>
+　　对于不同的串行接口外围芯片，它们的时钟时序是不同的。上述子程序是针对在SCK的上升沿输入(接收)数据和在下降沿输出(发送)数据的器件。这些子程序也适用于在串行时钟)的上升沿输入和下降沿输出的其它各种串行外围接口芯片，只要在程序中改变P1．2(SCK)的输出电平顺序进行相应调整即可。</div>
+</div></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/aaronLinux/category/1002621.html" target="_blank">[1.5].Linux外设</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(6219146,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;f369a6b0-4bee-e511-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/aaronLinux/" target="_blank"><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/20160320135027.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/aaronLinux/">aaronGao</a><br>
+            <a href="http://home.cnblogs.com/u/aaronLinux/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/aaronLinux/followers">粉丝 - 18</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;f369a6b0-4bee-e511-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(6219146,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(6219146,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/aaronLinux/p/6218660.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/aaronLinux/p/6218660.html" title="发布于2016-12-24 22:35">[I2C]I2C总线协议图解</a><br><a href="http://www.cnblogs.com/aaronLinux/p/6266833.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/aaronLinux/p/6266833.html" title="发布于2017-01-09 22:42">[队列]简单的队列操作</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2016-12-25 10:51</span> <a href="http://www.cnblogs.com/aaronLinux/">aaronGao</a> 阅读(<span id="post_view_count">11223</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=6219146" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/aaronLinux/p/6219146.html#" onclick="AddToWz(6219146);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=274599,cb_entryId=6219146,cb_blogApp=currentBlogApp,cb_blogUserGuid='f369a6b0-4bee-e511-9fc1-ac853d9f53cc',cb_entryCreatedDate='2016/12/25 10:51:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/aaronLinux/p/6219146.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/aaronLinux/p/6219146.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="https://www.cnblogs.com/cmt/p/8525042.html" target="_blank">【活动】2050 大会 - 博客园程序员团聚 （5.25 杭州·云栖小镇）</a><br><a href="http://clickc.admaster.com.cn/c/a105960,b2436452,c1705,i0,m101,8a1,8b2,h" target="_blank">【推荐】0元免费体验华为云服务</a><br><a href="https://cloud.tencent.com/act/first_purchase?fromSource=gwzcw.919198.919198.919198" target="_blank">【活动】腾讯云云服务器新购特惠，5折上云</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);" href="https://cloud.tencent.com/act/event/cdbbasic.html?fromSource=gwzcw.919199.919199.919199" target="_blank"><img width="300" height="250" src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/24442-20180502205118653-1977595167.jpg" alt="腾讯云0502"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/595689/" target="_blank">马斯克粗暴打断分析师提问 特斯拉股价下挫5%</a><br> ·  <a href="https://news.cnblogs.com/n/595688/" target="_blank">优必选C轮融资8.2亿美元 刷新AI领域单轮融资记录</a><br> ·  <a href="https://news.cnblogs.com/n/595687/" target="_blank">三星停产OLED电视付出高昂代价 将高端市场拱手让给索尼LG</a><br> ·  <a href="https://news.cnblogs.com/n/595686/" target="_blank">小米正式递交IPO申请文件 将成2014年以来全球最大IPO</a><br> ·  <a href="https://news.cnblogs.com/n/595685/" target="_blank">美交通安全监管机构怼特斯拉：并未评估Autopilot功效</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/26880/" target="_blank"><img src="./[SPI]SPI协议详解 - aaronGao - 博客园_files/TB1WDRaXMoQMeJjy0FnXXb8gFXa-468-60.jpg" alt="" style="width: 468px; height: 60px;"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/594930/" target="_blank">菜鸟工程师的超神之路 -- 从校园到职场</a><br> ·  <a href="http://kb.cnblogs.com/page/593985/" target="_blank">如何识别人的技术能力和水平？</a><br> ·  <a href="http://kb.cnblogs.com/page/575255/" target="_blank">写给自学者的入门指南</a><br> ·  <a href="http://kb.cnblogs.com/page/578690/" target="_blank">和程序员谈恋爱</a><br> ·  <a href="http://kb.cnblogs.com/page/585734/" target="_blank">学会学习</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/aaronLinux/">aaronGao</a><br>园龄：<a href="https://home.cnblogs.com/u/aaronLinux/" title="入园时间：2016-03-20">2年1个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/aaronLinux/followers/">18</a><br>关注：<a href="https://home.cnblogs.com/u/aaronLinux/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;f369a6b0-4bee-e511-9fc1-ac853d9f53cc&#39;)">+加关注</a></div><script>getFollowStatus('f369a6b0-4bee-e511-9fc1-ac853d9f53cc')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="calendar"><div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/04/01&#39;);return false;">&lt;</a></td><td align="center">2018年5月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/06/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td align="center">1</td><td align="center">2</td><td class="CalTodayDay" align="center">3</td><td align="center">4</td><td class="CalWeekendDay" align="center">5</td></tr><tr><td class="CalWeekendDay" align="center">6</td><td align="center">7</td><td align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td class="CalWeekendDay" align="center">12</td></tr><tr><td class="CalWeekendDay" align="center">13</td><td align="center">14</td><td align="center">15</td><td align="center">16</td><td align="center">17</td><td align="center">18</td><td class="CalWeekendDay" align="center">19</td></tr><tr><td class="CalWeekendDay" align="center">20</td><td align="center">21</td><td align="center">22</td><td align="center">23</td><td align="center">24</td><td align="center">25</td><td class="CalWeekendDay" align="center">26</td></tr><tr><td class="CalWeekendDay" align="center">27</td><td align="center">28</td><td align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td></tr><tr><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/aaronLinux/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/aaronLinux/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/aaronLinux/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/aaronLinux/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/aaronLinux/tag/" title="我的博客的标签列表">我的标签</a></li>
+<li><a id="itemListLink" onclick="this.blur();WarpClass(&#39;itemListLink&#39;, &#39;itemListLin_con&#39;);return false;" href="https://www.cnblogs.com/aaronLinux/p/6219146.html#">更多链接</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/aaronLinux/tag/env%20configure/">env configure</a>(5)</li><li><a href="http://www.cnblogs.com/aaronLinux/tag/linux%20misc/">linux misc</a>(1)</li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div class="catListPostCategory">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/aaronLinux/category/1002604.html">[1.0].Linux 内核(14)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/aaronLinux/category/1002615.html">[1.1].Linux设备驱动(22)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/aaronLinux/category/1003253.html">[1.2].Linux应用(73)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/aaronLinux/category/1002620.html">[1.3].uboot(20)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/aaronLinux/category/1003271.html">[1.4].文件系统(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/aaronLinux/category/1002621.html">[1.5].Linux外设(25)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/aaronLinux/category/1002626.html">[1.6].Linux进程/中断(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/aaronLinux/category/1002625.html">[1.7].Linux同步机制(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/aaronLinux/category/1002627.html">[1.8].Linux-E9(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/aaronLinux/category/1003280.html">[1.9].IC(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="http://www.cnblogs.com/aaronLinux/category/802763.html">[2.1].Code Style(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="http://www.cnblogs.com/aaronLinux/category/837736.html">[3.0].Env configure(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="http://www.cnblogs.com/aaronLinux/category/837737.html">[3.1].Tools use(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="http://www.cnblogs.com/aaronLinux/category/839558.html">[4.1].Misc(27)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="http://www.cnblogs.com/aaronLinux/category/1141527.html">[4.2].Issue(3)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catListPostArchive">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="http://www.cnblogs.com/aaronLinux/archive/2018/04.html">2018年4月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="http://www.cnblogs.com/aaronLinux/archive/2018/03.html">2018年3月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="http://www.cnblogs.com/aaronLinux/archive/2018/02.html">2018年2月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="http://www.cnblogs.com/aaronLinux/archive/2018/01.html">2018年1月 (13)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="http://www.cnblogs.com/aaronLinux/archive/2017/12.html">2017年12月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="http://www.cnblogs.com/aaronLinux/archive/2017/11.html">2017年11月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="http://www.cnblogs.com/aaronLinux/archive/2017/10.html">2017年10月 (14)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="http://www.cnblogs.com/aaronLinux/archive/2017/09.html">2017年9月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="http://www.cnblogs.com/aaronLinux/archive/2017/08.html">2017年8月 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="http://www.cnblogs.com/aaronLinux/archive/2017/07.html">2017年7月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="http://www.cnblogs.com/aaronLinux/archive/2017/06.html">2017年6月 (20)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="http://www.cnblogs.com/aaronLinux/archive/2017/05.html">2017年5月 (23)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="http://www.cnblogs.com/aaronLinux/archive/2017/04.html">2017年4月 (22)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="http://www.cnblogs.com/aaronLinux/archive/2017/03.html">2017年3月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="http://www.cnblogs.com/aaronLinux/archive/2017/02.html">2017年2月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="http://www.cnblogs.com/aaronLinux/archive/2017/01.html">2017年1月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="http://www.cnblogs.com/aaronLinux/archive/2016/12.html">2016年12月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="http://www.cnblogs.com/aaronLinux/archive/2016/11.html">2016年11月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="http://www.cnblogs.com/aaronLinux/archive/2016/10.html">2016年10月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_19" href="http://www.cnblogs.com/aaronLinux/archive/2016/09.html">2016年9月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_20" href="http://www.cnblogs.com/aaronLinux/archive/2016/08.html">2016年8月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_21" href="http://www.cnblogs.com/aaronLinux/archive/2016/07.html">2016年7月 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_22" href="http://www.cnblogs.com/aaronLinux/archive/2016/06.html">2016年6月 (13)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_23" href="http://www.cnblogs.com/aaronLinux/archive/2016/05.html">2016年5月 (17)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_24" href="http://www.cnblogs.com/aaronLinux/archive/2016/04.html">2016年4月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_25" href="http://www.cnblogs.com/aaronLinux/archive/2016/03.html">2016年3月 (1)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/aaronLinux/p/5521844.html#3962037">1. Re:[svn]svn conflict 冲突解决</a></li>
+        <li class="recent_comment_body">非常感谢。真是感激不尽啊！</li>
+        <li class="recent_comment_author">--碌云</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/aaronLinux/p/7078215.html#3952333">2. Re:[posix]Posix多线程编程</a></li>
+        <li class="recent_comment_body">谢谢分享！</li>
+        <li class="recent_comment_author">--randal2333</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/aaronLinux/p/6885288.html#3910292">3. Re:[shell]Linux脚本开头#!/bin/bash和#!/bin/sh是什么意思以及区别</a></li>
+        <li class="recent_comment_body">感谢</li>
+        <li class="recent_comment_author">--mayixiongdi</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/aaronLinux/p/5679480.html#3613540">4. Re:ARM地址映射</a></li>
+        <li class="recent_comment_body">学习了！</li>
+        <li class="recent_comment_author">--Glemontree</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/aaronLinux/p/5837702.html">1. Linux下查看和添加环境变量(49234)</a></li><li><a href="http://www.cnblogs.com/aaronLinux/p/7074725.html">2. [shell]shell中if语句的使用(30447)</a></li><li><a href="http://www.cnblogs.com/aaronLinux/p/5521844.html">3. [svn]svn conflict 冲突解决(19491)</a></li><li><a href="http://www.cnblogs.com/aaronLinux/p/6219146.html">4. [SPI]SPI协议详解(11220)</a></li><li><a href="http://www.cnblogs.com/aaronLinux/p/5551441.html">5. [dts]DTS实例分析(8931)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="http://www.cnblogs.com/aaronLinux/p/5521844.html">1. [svn]svn conflict 冲突解决(1)</a></li><li><a href="http://www.cnblogs.com/aaronLinux/p/5679480.html">2. ARM地址映射(1)</a></li><li><a href="http://www.cnblogs.com/aaronLinux/p/7078215.html">3. [posix]Posix多线程编程(1)</a></li><li><a href="http://www.cnblogs.com/aaronLinux/p/6885288.html">4. [shell]Linux脚本开头#!/bin/bash和#!/bin/sh是什么意思以及区别(1)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="http://www.cnblogs.com/aaronLinux/p/5617070.html">1. Linux中文件描述符fd和文件指针flip的理解(1)</a></li><li><a href="http://www.cnblogs.com/aaronLinux/p/5890924.html">2. [内核同步]自旋锁spin_lock、spin_lock_irq 和 spin_lock_irqsave 分析(1)</a></li><li><a href="http://www.cnblogs.com/aaronLinux/p/8340281.html">3. [shell]shell 中| &amp;&amp; || () {} 用法以及shell的逻辑与或非(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 aaronGao
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>
