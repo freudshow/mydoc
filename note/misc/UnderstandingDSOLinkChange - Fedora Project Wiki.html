@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)http://fedoraproject.org/wiki/UnderstandingDSOLinkChange -->
+<html class="client-js" lang="en" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>UnderstandingDSOLinkChange - Fedora Project Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"UnderstandingDSOLinkChange","wgTitle":"UnderstandingDSOLinkChange","wgCurRevisionId":152837,"wgRevisionId":152837,"wgArticleId":30512,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"UnderstandingDSOLinkChange","wgRelevantArticleId":30512,"wgRequestId":"WvGsAtLEEat1s9PXUsnBdgAAAEE","wgIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"preview":true,"publish":true}});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","user.tokens":"loading","mediawiki.skinning.interface":"ready","mediawiki.skinning.content.externallinks":"ready","skins.fedora":"ready","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready"});mw.loader.implement("user.options@0j3lz3q",function($,jQuery,require,module){mw.user.options.set({"variant":"en"});});mw.loader.implement("user.tokens@1vf83y7",function ( $, jQuery, require, module ) {
+mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});/*@nomin*/;
+
+});mw.loader.load(["mediawiki.toc","mediawiki.action.view.postEdit","site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","skins.fedora.js"]);});</script>
+<link rel="stylesheet" href="./UnderstandingDSOLinkChange - Fedora Project Wiki_files/load.php">
+<script async="" src="./UnderstandingDSOLinkChange - Fedora Project Wiki_files/load(1).php"></script>
+<link rel="stylesheet" href="./UnderstandingDSOLinkChange - Fedora Project Wiki_files/fedora-bootstrap.css"><link rel="stylesheet" href="./UnderstandingDSOLinkChange - Fedora Project Wiki_files/open-sans.css"><link rel="stylesheet" href="./UnderstandingDSOLinkChange - Fedora Project Wiki_files/font-awesome.css"><link rel="stylesheet" href="./UnderstandingDSOLinkChange - Fedora Project Wiki_files/hack.css">
+<style>
+@media screen {
+	.tochidden,.toctoggle{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}.toctoggle{font-size:94%}}
+@media print {
+	#toc.tochidden,.toc.tochidden,.toctoggle{display:none}}
+.postedit-container{margin:0 auto;position:fixed;top:0;height:0;left:50%;z-index:1000;font-size:13px}.postedit-container:hover{cursor:pointer}.postedit{position:relative;top:0.6em;left:-50%;padding:0.6em 3.6em 0.6em 1.1em;line-height:1.5625em;color:#626465;background-color:#f4f4f4;border:1px solid #dcd9d9;text-shadow:0 0.0625em 0 rgba( 255,255,255,0.5 );border-radius:5px;box-shadow:0 2px 5px 0 #ccc;-webkit-transition:all 0.25s ease-in-out;-moz-transition:all 0.25s ease-in-out;-ms-transition:all 0.25s ease-in-out;-o-transition:all 0.25s ease-in-out;transition:all 0.25s ease-in-out}.skin-monobook .postedit{top:6em !important; }.postedit-faded{opacity:0}.postedit-icon{padding-left:41px;  line-height:25px;background-repeat:no-repeat;background-position:8px 50%}.postedit-icon-checkmark{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB9ElEQVR4AZWRA3AYURQArxrVHtW2bdu2bdu2zdi2bdu2bWxs7zeehZaw4f70kbs+zI3e/nWK+RWx3aOFlrL56Sy5SxrruG69hlv6OyK+mz+8KDSXdXembj0ispT7tjs4ZTIbpYBvxGSGKzZTeFrb7W/meN002swFs0U8ttpHTkF2BvCqWQrW35929bTsKm5Zb+SEwWwcY8wAngB9m7Z+d+rIPZ/npdy12M5p47n8dXsCYAf0qPy06eGMdktuDu9Qf+JmKl3SWM91qzVcN9tAbEYkwMaq0tyb1m/To5kP170el/BK8/qa6sJr70ydf+T/Uu5ab+Oo/lS0AkUBpIFWlZ9WPhxpse/PHO7YbOOczjL0vZV2lNxPPtG73dYXM+xvm2znrOl83tidoqCwMBgYXsPFB0on5S6pr+eK5TKuW67lgvaKvF8mL1dtfTL32FHxRdyx3cQpg7m4x9sCXKkTIzA4LDH44zWdzaUf71hv5rTG4uyzcusybxSX7aThbMQ8XgCYAp3rzTTQOiIh9PNlzY3FSuZxrzjme1Y7uGS6kjsWO4jPjM4FVjRZsvD4kO9XtTZzQn82NyzWc0B7AmZh6gA/hOYSGhfw9YbOVnarj+S7800AL2BIsxUAbWNToj7bhBuQmZcOsFdoKUC74rGheCwXmqAIQTc9jQcrADIAAAAASUVORK5CYII=);background-image:url(/w/resources/src/mediawiki.action/images/green-checkmark.png?d94f1)!ie;background-position:left}.postedit-close{position:absolute;padding:0 0.8em;right:0;top:0;font-size:1.25em;font-weight:bold;line-height:2.3em;color:#000;text-shadow:0 0.0625em 0 #fff;text-decoration:none;opacity:0.2;filter:alpha( opacity=20 )}.postedit-close:hover{color:#000;text-decoration:none;opacity:0.4;filter:alpha( opacity=40 )}
+.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:0;z-index:1099;padding:0;margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:#fff;cursor:pointer;border:solid 1px #aaa;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:#fff;cursor:pointer;border:solid 1px #aaa;padding:0;margin:0}.suggestions-result{color:#000;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left; overflow:hidden;-o-text-overflow:ellipsis; text-overflow:ellipsis;white-space:nowrap}.suggestions-result-current{background-color:#4c59a6;color:#fff}.suggestions-special .special-label{color:#808080;text-align:left}.suggestions-special .special-query{color:#000;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:#c0c0c0}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:#fff}.highlight{font-weight:bold}</style><style>
+.suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:hover,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSuggest-link:focus{color:#000;text-decoration:none}.suggestions-result-current a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-link:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.suggestions-result-current a.mw-searchSuggest-link:focus{color:#fff}.suggestions a.mw-searchSuggest-link .special-query{ overflow:hidden;-o-text-overflow:ellipsis; text-overflow:ellipsis;white-space:nowrap}</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="./UnderstandingDSOLinkChange - Fedora Project Wiki_files/load(2).php">
+<meta name="generator" content="MediaWiki 1.29.2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="http://fedoraproject.org/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="http://fedoraproject.org/w/opensearch_desc.php" title="Fedora Project Wiki (en)">
+<link rel="EditURI" type="application/rsd+xml" href="https://fedoraproject.org/w/api.php?action=rsd">
+<link rel="copyright" href="http://fedoraproject.org/wiki/Legal:Main">
+<link rel="alternate" type="application/atom+xml" title="Fedora Project Wiki Atom feed" href="http://fedoraproject.org/w/index.php?title=Special:RecentChanges&amp;feed=atom">
+<script src="./UnderstandingDSOLinkChange - Fedora Project Wiki_files/load(3).php"></script></head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-UnderstandingDSOLinkChange rootpage-UnderstandingDSOLinkChange skin-fedora action-view">		<div class="navbar navbar-full navbar-light masthead"><div class="container"><div class="row"><div class="col-md-4"><a href="http://fedoraproject.org/wiki/Fedora_Project_Wiki"><img src="./UnderstandingDSOLinkChange - Fedora Project Wiki_files/fedorawiki_logo.png" alt="Fedora Project Wiki" height="40px"></a></div><div class="col-md-4"><form action="http://fedoraproject.org/w/index.php" role="search" class="mw-portlet" id="p-search"><input type="hidden" value="Special:Search" name="title"><h3><label for="searchInput">Search</label></h3><div class="input-group"><input type="search" name="search" placeholder="Search Fedora Project Wiki" title="Search Fedora Project Wiki [alt-shift-f]" accesskey="f" id="searchInput" class="form-control" autocomplete="off"><span class="input-group-btn"><button id="searchGoButton" class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button></span></div></form></div><div class="col-md-4"><ul class="nav navbar-nav pull-xs-right"><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange#" role="button">Links</a><ul class="dropdown-menu dropdown-menu-right"><li id="n-Get-Fedora"><a href="https://getfedora.org/" class="dropdown-item">Get Fedora</a></li><li id="n-Fedora-Docs"><a href="https://docs.fedoraproject.org/" class="dropdown-item">Fedora Docs</a></li><li id="n-Fedora-Magazine"><a href="https://fedoramagazine.org/" class="dropdown-item">Fedora Magazine</a></li><li id="n-What-Can-I-Do.3F"><a href="https://whatcanidoforfedora.org/" class="dropdown-item">What Can I Do?</a></li></ul></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange#" role="button">Subprojects</a><ul class="dropdown-menu dropdown-menu-right"><li id="n-Ambassadors"><a href="http://fedoraproject.org/wiki/Ambassadors" class="dropdown-item">Ambassadors</a></li><li id="n-Community-Operations"><a href="http://fedoraproject.org/wiki/CommOps" class="dropdown-item">Community Operations</a></li><li id="n-Design"><a href="http://fedoraproject.org/wiki/Design" class="dropdown-item">Design</a></li><li id="n-Documentation"><a href="http://fedoraproject.org/wiki/DocsProject" class="dropdown-item">Documentation</a></li><li id="n-EPEL"><a href="http://fedoraproject.org/wiki/EPEL" class="dropdown-item">EPEL</a></li><li id="n-Infrastructure"><a href="http://fedoraproject.org/wiki/Infrastructure" class="dropdown-item">Infrastructure</a></li><li id="n-Internationalization"><a href="http://fedoraproject.org/wiki/I18N" class="dropdown-item">Internationalization</a></li><li id="n-Localization"><a href="http://fedoraproject.org/wiki/L10N" class="dropdown-item">Localization</a></li><li id="n-Marketing"><a href="http://fedoraproject.org/wiki/Marketing" class="dropdown-item">Marketing</a></li><li id="n-Magazine"><a href="http://fedoraproject.org/wiki/Magazine" class="dropdown-item">Magazine</a></li><li id="n-Package-Maintainers"><a href="http://fedoraproject.org/wiki/PackageMaintainers" class="dropdown-item">Package Maintainers</a></li><li id="n-Quality-Assurance"><a href="http://fedoraproject.org/wiki/QA" class="dropdown-item">Quality Assurance</a></li><li id="n-Websites"><a href="http://fedoraproject.org/wiki/Websites" class="dropdown-item">Websites</a></li><li id="n-All-projects"><a href="http://fedoraproject.org/wiki/Projects" class="dropdown-item">All projects</a></li></ul></li><a href="http://fedoraproject.org/w/index.php?title=Special:UserLogin&amp;returnto=UnderstandingDSOLinkChange" class="btn btn-primary m-l-2">Log In</a></ul></div></div></div></div>
+
+		<div class="bodycontent">
+			<div class="sub-header p-t-1">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-6">
+						<h1>UnderstandingDSOLinkChange</h1>					</div>
+					<div class="col-sm-6">
+						<div class="btn-group pull-xs-right">
+						<div class="mw-indicators mw-body-content">
+</div>
+					 </div>
+				</div>
+			</div>
+
+				<ul class="nav nav-tabs nav-small m-l-0">
+				<li class="nav-item" id="ca-nstab-main"><a href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange" title="View the content page [alt-shift-c]" accesskey="c" class="nav-link active">Page</a></li><li class="nav-item" id="ca-talk"><a href="http://fedoraproject.org/wiki/Talk:UnderstandingDSOLinkChange" rel="discussion" title="Discussion about the content page [alt-shift-t]" accesskey="t" class="nav-link">Discussion</a></li><li class="nav-item pull-xs-right" id="ca-view"><a href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange" redundant="1" class="nav-link active">View</a></li><li class="nav-item pull-xs-right" id="ca-viewsource"><a href="http://fedoraproject.org/w/index.php?title=UnderstandingDSOLinkChange&amp;action=edit" title="This page is protected.
+You can view its source [alt-shift-e]" accesskey="e" class="nav-link">View source</a></li><li class="nav-item pull-xs-right" id="ca-history"><a href="http://fedoraproject.org/w/index.php?title=UnderstandingDSOLinkChange&amp;action=history" title="Past revisions of this page [alt-shift-h]" accesskey="h" class="nav-link">History</a></li>
+			</ul>
+				</div>
+			</div>
+
+			<div class="mw-body container" role="main">
+				<div id="siteNotice"><div id="localNotice" lang="en" dir="ltr"></div></div><div id="siteSub">From Fedora Project Wiki</div>
+				<div class="mw-body-content">
+					<div id="contentSub"><p></p></div><div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div id="toc" class="toc"><div id="toctitle" class="toctitle"><h2>Contents</h2><span class="toctoggle">&nbsp;[<a role="button" tabindex="0" class="togglelink">hide</a>]&nbsp;</span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange#Understanding_the_.28Proposed.29_Change_to_DSO_Linking"><span class="tocnumber">1</span> <span class="toctext">Understanding the (Proposed) Change to DSO Linking</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange#Basics"><span class="tocnumber">1.1</span> <span class="toctext">Basics</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange#What.27s_the_difference.3F"><span class="tocnumber">1.2</span> <span class="toctext">What's the difference?</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange#Current"><span class="tocnumber">1.2.1</span> <span class="toctext">Current</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange#Proposed"><span class="tocnumber">1.2.2</span> <span class="toctext">Proposed</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-6"><a href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange#What_do_I_do.3F"><span class="tocnumber">1.3</span> <span class="toctext">What do I do?</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="http://fedoraproject.org/wiki/UnderstandingDSOLinkChange#Example_deltarpm"><span class="tocnumber">1.4</span> <span class="toctext">Example deltarpm</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Understanding_the_.28Proposed.29_Change_to_DSO_Linking">Understanding the (Proposed) Change to DSO Linking</span></h1>
+<p>A quick list of packages that were found to have DSO link issues in mock builds is at <a href="http://fedoraproject.org/wiki/DSOLinkBugs" title="DSOLinkBugs">DSOLinkBugs</a>
+</p><p><br>
+</p>
+<h2><span class="mw-headline" id="Basics">Basics</span></h2>
+<p>The default behaviour for ld allows users to 'indirectly' link to required objects/libraries through intermediate objects/libraries. While this is convenient, it can also be dangerous because it makes your program's dependencies tied to the dependencies of other objects. If those objects ever change their linkages, they can break your program without any changes to your own code!
+</p><p>For example&nbsp;:
+</p><p>libxml2.so has:
+</p>
+<pre> NEEDED            Shared library: [libdl.so.2]
+ NEEDED            Shared library: [libz.so.1]
+</pre>
+<p>Under the old system, a program that links with libxml2 and uses dlopen need not link with libdl, and a program that links with libxml2 and uses gzopen need not link with libz. While these programs will work, they will break if libxml2 is ever changed to omit the dependency on libdl/libz.
+</p>
+<h2><span class="mw-headline" id="What.27s_the_difference.3F">What's the difference?</span></h2>
+<p>For example (courtesy Roland McGrath):
+</p>
+<pre> ==&gt; foo1.c &lt;==
+ #include &lt;stdio.h&gt;
+ extern int foo ();
+ int
+ main ()
+ {
+   printf ("%d\n", foo ());
+ }
+</pre>
+<pre> ==&gt; foo2.c &lt;==
+ extern int foo ();
+ int bar () { return foo (); }
+</pre>
+<pre> ==&gt; foo3.c &lt;==
+ int foo () { return 0; }
+</pre>
+<p><br>
+Prepare position-independent code:
+</p><p><code>gcc -g -fPIC -c foo1.c foo2.c foo3.c</code>
+</p><p>Generate foo3.so:
+</p><p><code>gcc -shared -o foo3.so foo3.o</code>
+</p><p>Generate foo2.so, linking foo3.so:
+</p><p><code>gcc -shared -o foo2.so foo2.o foo3.so</code>
+</p><p>The proposed change will affect the next step: Creating foo1.
+</p>
+<h3><span class="mw-headline" id="Current">Current</span></h3>
+<p>A call to gcc will succeed quietly, even though the link to foo3.so is only implicit.
+</p>
+<pre> gcc -o foo1 foo1.o foo2.so -Wl,--rpath-link=.
+</pre>
+<h3><span class="mw-headline" id="Proposed">Proposed</span></h3>
+<p>The call to gcc will fail, prompting the user to explicitly link the required shared object.
+</p>
+<pre> gcc -o foo1 foo1.o foo2.so -Wl,--rpath-link=.
+/usr/bin/ld: foo1.o: undefined reference to symbol 'foo'
+/usr/bin/ld: note: 'foo' is defined in DSO ./foo3.so so try adding it to the linker command line
+</pre>
+<p><br>
+</p><p>So, the difference is whether you can refer to a symbol that's in a DSO
+that you didn't list explicitly in your link line, but that is a
+DT_NEEDED dependency of one of those (or recursively of those, I think).
+</p><p>The big difference is that with the proposed change in place, ld will no longer skip linking needed libraries by default. The current default behaviour will lead ld to skip linking with a library if it is listed as a needed by another library that the program uses. In abstract terms, if libA is needed by libB and your program requires both libA and libB, your program may only link to libB. Then if another version of libB comes out that does not list libA as a needed library, then a recompilation will mysteriously break.
+</p>
+<h2><span class="mw-headline" id="What_do_I_do.3F">What do I do?</span></h2>
+<p>If you encounter this error, the error message will prompt you to explicitly link to the DSO that you need. From the foo example, adding foo3.so will get rid of the error:
+</p><p><code>gcc -o foo1 foo1.o foo2.so foo3.so -Wl,--rpath-link=.</code>
+</p>
+<h2><span class="mw-headline" id="Example_deltarpm">Example deltarpm</span></h2>
+<p>Run fedora-cvs deltarpm or check out a 'devel' version of deltarpm from&nbsp;:
+</p><p><code>:pserver:anonymous@cvs.fedproject.org:/cvs/pkgs</code>
+</p><p>Go to the devel folder and run 'make srpm' to produce a source rpm.
+</p><p>In /etc/mock, copy the desired fedora-rawhide-*.cfg file to test.cfg. In the test.cfg file, change the root to 'test'. 
+</p><p>Add the following to test.cfg:
+</p>
+<pre> [ld-test]
+ name=ld-test
+ baseurl=<a class="external free" href="http://roland.fedorapeople.org/ld-test/">http://roland.fedorapeople.org/ld-test/</a>
+ enabled=1
+ gpgcheck=0
+</pre>
+<p><i>(Note that the changes to ld are within gcc-4.4.3-5.fc13 so this step should not be necessary)</i>
+</p><p>This will enable the mock build to pull the latest test version of ld. Next, run the build by executing mock -r /path/to/deltarpm/srpm
+</p><p>The following error should appear in /var/lib/mock/test/result/build.log&nbsp;:
+</p>
+<pre>RPM build errors:
+<b>/usr/bin/ld.bfd: rpmdumpheader.o: undefined reference to symbol 'Fopen'</b>
+<b>/usr/bin/ld.bfd: note: 'Fopen' is defined in DSO /usr/lib/librpmio.so.0 so try adding it to the linker command line</b>
+<b>/usr/lib/librpmio.so.0: could not read symbols: Invalid operation</b>
+*** /usr/bin/ld: ld behavior mismatch! ***
+*** /usr/bin/ld.bfd succeeeded ***
+*** /usr/bin/ld.bfd --no-add-needed exits 1 ***
+*** arguments: --eh-frame-hdr --build-id -m elf_i386 --hash-style=gnu -dynamic-linker /lib/ld-linux.so.2 -o rpmdumpheader
+/usr/lib/gcc/i686-redhat-linux/4.4.2/../../../crt1.o /usr/lib/gcc/i686-redhat-linux/4.4.2/../../../crti.o /usr/lib/gcc/i686-redhat-linux/4.4.2/crtbegin.o
+-L/usr/lib/gcc/i686-redhat-linux/4.4.2 -L/usr/lib/gcc/i686-redhat-linux/4.4.2 -L/usr/lib/gcc/i686-redhat-linux/4.4.2/../../.. rpmdumpheader.o -lrpm -lgcc 
+--as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/i686-redhat-linux/4.4.2/crtend.o
+/usr/lib/gcc/i686-redhat-linux/4.4.2/../../../crtn.o
+collect2: ld returned 1 exit status
+make: *** [rpmdumpheader] Error 1
+</pre>
+<p><br>
+This indicates that deltarpm used /usr/lib/librpmio.so.0 without explicitly linking to it. To fix, add -lrpmio to the gcc command for any binaries that use librpmio. In deltarpm, this can be done quickly by changing the Makefile:
+</p>
+<pre>rpmdumpheader: rpmdumpheader.o
+-       $(CC) $(LDFLAGS) $^ -lrpm -o $@
+<b>+       $(CC) $(LDFLAGS) $^ -lrpm -lrpmio -o $@</b>
+</pre>
+<!-- 
+NewPP limit report
+Cached time: 20180508120854
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.032 seconds
+Real time usage: 0.040 seconds
+Preprocessor visited node count: 26/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+
+<!-- Saved in parser cache with key fpo-mediawiki-en_:pcache:idhash:30512-0!*!0!!en!*!* and timestamp 20180508120854 and revision id 152837
+ -->
+</div><div class="visualClear"></div><div class="printfooter">Retrieved from "<a dir="ltr" href="https://fedoraproject.org/w/index.php?title=UnderstandingDSOLinkChange&amp;oldid=152837">https://fedoraproject.org/w/index.php?title=UnderstandingDSOLinkChange&amp;oldid=152837</a>"</div><div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				</div>
+			</div>
+
+			<div id="mw-footer" class="footer text-muted text-xs-center m-t-3 p-y-3">
+				<p class="copy">
+				Copyright © 2018 Red Hat, Inc. and others.  All Rights Reserved.  For comments or queries, please <a href="http://fedoraproject.org/wiki/Communicating_and_getting_help">contact us</a>.
+				</p>
+				<p class="disclaimer">
+				The Fedora Project is maintained and driven by the community and sponsored by Red Hat.  This is a community maintained site.  Red Hat is not responsible for content.
+				</p>
+				<ul id="footer-info" role="contentinfo"><li id="footer-info-lastmod"> This page was last edited on 16 February 2010, at 15:56.</li><li id="footer-info-copyright">Content is available under <a href="http://fedoraproject.org/wiki/Legal:Main" title="Legal:Main">Attribution-Share Alike 3.0 Unported</a> unless otherwise noted.</li></ul><ul id="footer-places" role="contentinfo"><li id="footer-places-privacy"><a href="http://fedoraproject.org/wiki/Fedora_Project_Wiki:Privacy_policy" class="mw-redirect" title="Fedora Project Wiki:Privacy policy">Privacy policy</a></li><li id="footer-places-about"><a href="http://fedoraproject.org/wiki/Fedora_Project_Wiki:About" class="mw-redirect" title="Fedora Project Wiki:About">About Fedora Project Wiki</a></li><li id="footer-places-disclaimer"><a href="http://fedoraproject.org/wiki/Fedora_Project_Wiki:General_disclaimer" class="mw-redirect" title="Fedora Project Wiki:General disclaimer">Disclaimers</a></li><li><a href="http://fedoraproject.org/en/sponsors">Sponsors</a></li><li><a href="http://fedoraproject.org/wiki/Legal:Main">Legal</a></li><li><a href="http://fedoraproject.org/wiki/Legal:Trademark_guidelines">Trademark Guidelines</a></li></ul><div class="visualClear"></div>
+			</div>
+		</div>
+
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.032","walltime":"0.040","ppvisitednodes":{"value":26,"limit":1000000},"ppgeneratednodes":{"value":32,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20180508120854","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":488});});</script>		
+		
+
+		<div class="suggestions" style="display: none; font-size: 14px;"><div class="suggestions-results"></div><div class="suggestions-special"></div></div></body></html>
