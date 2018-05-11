@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)http://www.cnblogs.com/lienhua34/p/3675027.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/bundle-AnotherEon001.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/bundle-AnotherEon001-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/lienhua34/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/lienhua34/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/lienhua34/wlwmanifest.xml">
+<script async="" src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/analytics.js"></script><script type="text/javascript" src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/encoder.js"></script><script src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'lienhua34', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<div id="wrapper">
+<div id="header">
+
+<div id="top">
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/lienhua34/">lienhua34</a></h1>
+<div id="subtitle">静坐常思自过，闲谈勿论人非。</div>
+</div>
+<div id="sub"><div id="blog_stats">
+<div class="BlogStats">随笔 - 108, 文章 - 0, 评论 - 147, 引用 - 0</div>
+</div></div>
+
+
+
+</div>
+<div id="main_container">
+<div id="main_content">
+<div id="content">
+	
+<div id="post_detail">
+	<div class="post">
+		<h2>
+			<a id="cb_post_title_url" href="http://www.cnblogs.com/lienhua34/p/3675027.html">ubuntu 下安装 texlive 并设置 ctex 中文套装</a>
+		</h2>
+		<div class="postbody">
+		<div id="cnblogs_post_body" class="blogpost-body"><h1>1 安装 texlive2013</h1>
+<h2>1.1 下载 texlive2013</h2>
+<p>下载地址:<a href="http://ftp.ctex.org/mirrors/CTAN/systems/texlive/Images/texlive2013-%2020130530.iso" target="_blank">http://ftp.ctex.org/mirrors/CTAN/systems/texlive/Images/texlive2013-</a><a href="http://ftp.ctex.org/mirrors/CTAN/systems/texlive/Images/texlive2013-%2020130530.iso" target="_blank">20130530.iso</a></p>
+<h2>1.2 挂载 iso并安装texlive2013</h2>
+<p>将下载的 texlive2013-20130530.iso 挂载到/mnt 目录下并运行 install-tl进行安装</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> <span style="color: #0000ff;">sudo</span> <span style="color: #0000ff;">mount</span> -t -iso9660 -o loop texlive2013-<span style="color: #800080;">20130530</span>.iso /<span style="color: #000000;">mnt
+</span><span style="color: #008080;">2</span> cd /mnt/
+<span style="color: #008080;">3</span> <span style="color: #0000ff;">sudo</span> ./<span style="color: #0000ff;">install</span>-tl</pre>
+</div>
+<p>出现选项之后,输入 I 直接安装即可,几分钟即可安装完毕。安装完成之后,将 texlive2013-20130530.iso 卸载。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> cd /
+<span style="color: #008080;">2</span> <span style="color: #0000ff;">sudo</span> <span style="color: #0000ff;">umount</span> /mnt/</pre>
+</div>
+<h2>1.3 修改环境变量</h2>
+<p>texlive 默认的安装目录是/usr/local/texlive/2013/bin/i386-linux/,为了让 shell 能够自动找到 tex 的 bin 文件,我们需要修改环境变量 PATH。</p>
+<p>如果我们希望系统也能够自动找到 texlive 的 man 或 info 文档,我们一并修改环境变量 MANPATH 和 INFOPATH。打开 /.bashrc,在其中添加下面的内容。</p>
+<div class="cnblogs_code">
+<pre>PATH=/usr/local/texlive/2013/bin/i386-linux:$PATH<span style="color: #008000;">;</span><span style="color: #008000;"> export PATH</span>
+MANPATH=/usr/local/texlive/2013/texmf-dist/doc/man:$MANPATH<span style="color: #008000;">;</span><span style="color: #008000;"> export MANPATH</span>
+INFOPATH=/usr/local/texlive/2013/texmf-dist/doc/info:$INFOPATH<span style="color: #008000;">;</span><span style="color: #008000;"> export INFOPATH</span></pre>
+</div>
+<h2>1.4 测试安装是否成功</h2>
+<p><strong>（1）首先确认我们安装的 tex 版本</strong></p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;"><strong>lienhua34:text$ tex --version</strong>
+TeX </span>3.1415926 (TeX Live 2013<span style="color: #000000;">)
+kpathsea version </span>6.1.1<span style="color: #000000;">
+Copyright </span>2013 D.E. Knuth.</pre>
+</div>
+<p><strong>（2）编写一个简单的 tex 文件,然后编译它</strong></p>
+<p>新建一个 test.tex 文件,然后输入下面内容</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> <span style="color: #000000;">\documentclass{article}
+</span><span style="color: #008080;">2</span> <span style="color: #000000;">\begin{document}
+</span><span style="color: #008080;">3</span> <span style="color: #000000;">Hello \LaTeX!
+</span><span style="color: #008080;">4</span> \end{document}</pre>
+</div>
+<p>然后运行下面命令即可生成 test.pdf。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> lienhua34:text$ xelatex test.tex</pre>
+</div>
+<p>双击打开 test.pdf,看到如下内容</p>
+<p><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/191436090411958.png" alt=""></p>
+<p>ok，texlive正常工作。</p>
+<p><strong>（3）测试 ctex 套装</strong></p>
+<p>要 使 我 们 的 texlive 支 持 中 文, 我 们 使 用 ctex 套 装。 关 于 ctex的 介 绍 见 http://www.ctex.org/HomePage。texlive 安 装 包 默 认 携带 了 ctex 宏 包,ctex 宏 包 的 目 录 为/usr/local/texlive/2013/texmf-dist/tex/latex/ctex。我们新建一个 ctex.tex 文件,输入下面的内容</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> <span style="color: #000000;">\documentclass{ctexart}
+</span><span style="color: #008080;">2</span> <span style="color: #000000;">\begin{document}
+</span><span style="color: #008080;">3</span> 您好,<span style="color: #000000;">\LaTeX!
+</span><span style="color: #008080;">4</span> \end{document}</pre>
+</div>
+<p>保存,然后运行下面命令</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> lienhua34:text$ xelatex ctex.tex</pre>
+</div>
+<p>编译失败,xelatex 命令报如下错误</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+! fontspec error: </span>"font-not-found"<span style="color: #000000;">
+!
+! The font </span>"SimSun"<span style="color: #000000;"> cannot be found.
+!
+! See the fontspec documentation for further information.
+!
+! For immediate help type H &lt;return&gt;.
+!...............................................
+l</span>.5<span style="color: #000000;">
+{SimSun}
+?</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;这 是 因 为 ctex 宏 包 默 认 使 用 的 是 windows 系 统 的 字 体, 而 我 的ubuntu 下 没 有 windows 系 统 的 字 体, 所 以 这 里 报 了 找 不 到 宋 体(SimSun)的错误。那么我们就需要进行字体配置,这是下一节要讲的事。</p>
+<p>现在可以确认我们的 texlive 已经安装成功,只是还没有支持中文字符而已。</p>
+<h1>2 配置 ctex 中文套装</h1>
+<p>ctex 宏包提供了三个字体选项:nofonts、adobefonts 和 winfonts,默认使用的是 winfonts。如果在 tex 源文件中没有使用其他选项修改字体配置,则需要操作系统中安装有中文 Windows 操作系统自带的四种 TrueType 字体:宋体(simsun)、黑体(simhei)、仿宋体(simfang)、楷体(simkai)。</p>
+<p>如果使用 adobefonts 选项,则需要操作系统中安装有 Adobe 公司的四款 OpenType 字体:Adobe 宋体、Adobe 黑体、Adobe 仿宋、Adobe 楷体。</p>
+<p>此处我们打算使用 nofonts 选项,然后通过 CJK 中文方案将 ubuntu自带的中文字体设置成中文的默认字体。</p>
+<h2>2.1 使用 nofonts 选项设置字体</h2>
+<p>我们先通过命令 fc-list :lang-zh 查看 ubuntu 系统自带的中文字体</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;"><strong>lienhua34:text$ fc-list :lang-zh | sort</strong>
+AR PL UKai CN:style</span>=<span style="color: #000000;">Book
+AR PL UKai HK:style</span>=<span style="color: #000000;">Book
+AR PL UKai TW MBE:style</span>=<span style="color: #000000;">Book
+AR PL UKai TW:style</span>=<span style="color: #000000;">Book
+AR PL UMing CN:style</span>=<span style="color: #000000;">Light
+AR PL UMing HK:style</span>=<span style="color: #000000;">Light
+AR PL UMing TW MBE:style</span>=<span style="color: #000000;">Light
+AR PL UMing TW:style</span>=<span style="color: #000000;">Light
+...
+文泉驿等宽微米黑</span>,<span style="color: #000000;">文泉驛等寬微米黑</span>,WenQuanYi Micro Hei Mono:style=<span style="color: #000000;">Regular
+文泉驿等宽正黑</span>,<span style="color: #000000;">文泉驛等寬正黑</span>,WenQuanYi Zen Hei Mono:style=<span style="color: #000000;">Regular
+文泉驿点阵正黑</span>,<span style="color: #000000;">文泉驛點陣正黑</span>,WenQuanYi Zen Hei Sharp:style=<span style="color: #000000;">Regular
+文泉驿微米黑</span>,文泉驛微米黑,WenQuanYi Micro Hei:style=<span style="color: #000000;">Regular
+文泉驿正黑</span>,文泉驛正黑,WenQuanYi Zen Hei:style=Regular</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>我们打开之前的 ctex.tex 文件,然后输入以下内容</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">1</span> \documentclass<span style="color: #800000; font-weight: bold;">[</span><span style="color: #800000;">nofonts</span><span style="color: #800000; font-weight: bold;">]</span><span style="color: #000000;">{ctexart}
+</span><span style="color: #008080;">2</span> \setCJKmainfont<span style="color: #800000; font-weight: bold;">[</span><span style="color: #800000;">ItalicFont={AR PL UKai CN}</span><span style="color: #800000; font-weight: bold;">]</span><span style="color: #000000;">{AR PL UMing CN} %设置中文默认字体
+</span><span style="color: #008080;">3</span> <span style="color: #000000;">\setCJKsansfont{WenQuanYi Zen Hei} %设置文泉驿正黑字体作为中文无衬线字体
+</span><span style="color: #008080;">4</span> <span style="color: #000000;">\setCJKmonofont{WenQuanYi Zen Hei Mono} %设置文泉驿等宽正黑字体作为中文打字机字体
+</span><span style="color: #008080;">5</span> <span style="color: #000000;">\begin{document}
+</span><span style="color: #008080;">6</span> 您好,<span style="color: #000000;">\LaTeX!
+</span><span style="color: #008080;">7</span> \end{document}</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>保存,然后运行命令</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> lienhua34:text$ xelatex ctex.tex</pre>
+</div>
+<p>编译成功,输出了 ctex.pdf 文件,我们双击打开 ctex.pdf 文件,看到如下内容</p>
+<p><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/191441199161684.png" alt=""><br>ok。我们的 texlive 已经能够处理中文字符。但是。。。</p>
+<h2>2.2 自定义 mylinuxfonts.sty 宏包</h2>
+<p>通过 setCJKmainfont 等命令我们可以使用 texlive 处理中文字符了,但是要在每个中文文档都写这么一段命令,确实是个烦人的事情。我们可以通过将这段命令写入到自定义的宏包文件 mylinuxfonts.sty 中,然后在文档中以命令 \usepackage{mylinuxfonts} 使用这个自定义宏包即可。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">1</span> <span style="color: #000000;">% mylinuxfonts.sty
+</span><span style="color: #008080;">2</span> <span style="color: #000000;">\ProvidesPackage{mylinuxfonts}
+</span><span style="color: #008080;">3</span> \setCJKmainfont<span style="color: #800000; font-weight: bold;">[</span><span style="color: #800000;">ItalicFont={AR PL UKai CN}</span><span style="color: #800000; font-weight: bold;">]</span><span style="color: #000000;">{AR PL UMing CN} %设置中文默认字体
+</span><span style="color: #008080;">4</span> <span style="color: #000000;">\setCJKsansfont{WenQuanYi Zen Hei} %设置中文无衬线字体为文泉驿正黑
+</span><span style="color: #008080;">5</span> <span style="color: #000000;">\setCJKmonofont{WenQuanYi Zen Hei Mono} %设置中文打字机(等宽)字体为文泉驿正黑
+</span><span style="color: #008080;">6</span> \endinput</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>然后修改 ctex.tex 的内容如下即可。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> \documentclass<span style="color: #800000; font-weight: bold;">[</span><span style="color: #800000;">nofonts</span><span style="color: #800000; font-weight: bold;">]</span><span style="color: #000000;">{ctexart}
+</span><span style="color: #008080;">2</span> <span style="color: #000000;">\usepackage{mylinuxfonts}
+</span><span style="color: #008080;">3</span> <span style="color: #000000;">\begin{document}
+</span><span style="color: #008080;">4</span> 您好,<span style="color: #000000;">\LaTeX!
+</span><span style="color: #008080;">5</span> \end{document}</pre>
+</div>
+<p>那么我们要将 mylinuxfonts.sty 放在什么地方,texlive 才能够自动找得到呢?texlive 提供一个变量 TEXMFHOME(默认为~/texmf),给用 户 存 放 自 己 独 立 安 装 的 宏 包、 字 体 等。 宏 包 文 件 需 要 放 置 到 目 录TEXMFHOME/tex/latex 或 者 它 的 子 目 录 下。 我 们 将 mylinuxfonts.sty放到目录~/texmf/tex/latex 下,然后编译 ctex.tex 文件。ok,成功!</p>
+<p>当然,如果将 mylinuxfonts.sty 放到目录~/texmf/tex/latex 下,只有当前用户才能够使用。如果我们希望这个宏包对于能够登录当前机器的所有用户都可用,那怎么办?texlive 另外提供了一个变量 TEXMFLOCAL(默认为 /usr/local/texlive/texmf-local),给系统管理员用来安装供整个系统使用的额外的宏包或者字体。宏包文件需要放到目录 TEXMFLOCAL/tex/latex 或者它的子目录下。我们将 mylinuxfonts.sty 文件放到这个目录下。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> lienhua34:latex$ <span style="color: #0000ff;">sudo</span> <span style="color: #0000ff;">cp</span> mylinuxfonts.sty /usr/local/texlive/texmf-local/tex/latex/local</pre>
+</div>
+<p>然后编译 ctex.tex 文件,但提示找不到 “mylinuxfonts.sty” 文件,</p>
+<p><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/191453567754391.png" alt=""></p>
+<p>这是因为 TEXMFLOCAL 目录需要一个保持更新的文件名数据库,否则新增的文件就无法找到。我们通过命令 mktexlsr 来更新它。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;"><strong>lienhua34:latex$ sudo mktexlsr</strong>
+mktexlsr: Updating /usr/local/texlive/</span>2013<span style="color: #000000;">/texmf-config/ls-R...
+mktexlsr: Updating /usr/local/texlive/</span>2013<span style="color: #000000;">/texmf-dist/ls-R...
+mktexlsr: Updating /usr/local/texlive/</span>2013<span style="color: #000000;">/../texmf-local/ls-R...
+mktexlsr: Updating /usr/local/texlive/</span>2013<span style="color: #000000;">/texmf-var/ls-R...
+mktexlsr: Done.</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>此时再编译 ctex.tex。ok,没有问题了。</p>
+<h2>2.3 优化配置</h2>
+<p>现在我们的 texlive 已经支持中文了,但我们还可以再优化一下我们的ctex 配置。</p>
+<p>在我的 ubuntu 下没有安装 windows 系统的字体。而 ctex 默认是使用的字体配置选项是 winfonts,那么我们每个要使用 ctex 宏包的 tex 文档中都要设置 nofonts 选项。</p>
+<p>ctex 宏包提供了一个配置文件 ctexopts.cfg,该文件中的代码会在 ctex宏包的开头(选项定义后面)执行。我们可以使用此文件设置 ctex 宏包的默认选项。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> lienhua34:text$ cd /usr/local/texlive/<span style="color: #800080;">2013</span>/texmf-dist/tex/latex/ctex/<span style="color: #000000;">cfg
+</span><span style="color: #008080;">2</span> lienhua34:cfg$ <span style="color: #0000ff;">sudo</span> <span style="color: #0000ff;">cp</span><span style="color: #000000;"> ctexopts.cfg.template ctexopts.cfg
+</span><span style="color: #008080;">3</span> lienhua34:cfg$ <span style="color: #0000ff;">sudo</span> <span style="color: #0000ff;">vi</span> ctexopts.cfg</pre>
+</div>
+<p>然后输入一下内容</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">1</span> <span style="color: #000000;">% ctexopts.cfg: set default options
+</span><span style="color: #008080;">2</span> <span style="color: #000000;">\ExecuteOptions{nofonts}
+</span><span style="color: #008080;">3</span> \endinput</pre>
+</div>
+<p>保存,然后运行 mktexlsr 命令。ok,此时 ctex 宏包默认的字体选项便改为nofonts 了。</p>
+<h1>3 参考列表</h1>
+<p><a href="http://www.tug.org/texlive/doc/texlive-zh-cn/texlive-zh-cn.pdf" target="_blank">http://www.tug.org/texlive/doc/texlive-zh-cn/texlive-zh-cn.pdf</a><br><a href="http://code.google.com/p/ctex-kit/wiki/CTeXPackage">http://code.google.com/p/ctex-kit/wiki/CTeXPackage</a><br><a href="http://code.google.com/p/ctex-kit/wiki/UnixFonts">http://code.google.com/p/ctex-kit/wiki/UnixFonts</a><br><a href="http://seisman.info/texlive-2013-under-linux.html">http://seisman.info/texlive-2013-under-linux.html</a><br><br></p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/lienhua34/category/571635.html" target="_blank">LaTeX</a></div>
+<div id="EntryTag">标签: <a href="http://www.cnblogs.com/lienhua34/tag/Linux/">Linux</a>, <a href="http://www.cnblogs.com/lienhua34/tag/LaTeX/">LaTeX</a>, <a href="http://www.cnblogs.com/lienhua34/tag/texlive/">texlive</a>, <a href="http://www.cnblogs.com/lienhua34/tag/ctex/">ctex</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(3675027,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;31ee3b0a-2167-e111-aa3f-842b2b196315&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/lienhua34/" target="_blank"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/u382408.jpg" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/lienhua34/">lienhua34</a><br>
+            <a href="http://home.cnblogs.com/u/lienhua34/followees">关注 - 13</a><br>
+            <a href="http://home.cnblogs.com/u/lienhua34/followers">粉丝 - 88</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;31ee3b0a-2167-e111-aa3f-842b2b196315&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(3675027,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">4</span>
+    </div>
+    <div class="buryit" onclick="votePost(3675027,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/lienhua34/p/3500312.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/lienhua34/p/3500312.html" title="发布于2014-01-01 01:22">2013年总结和2014年初步展望</a><br><a href="http://www.cnblogs.com/lienhua34/p/3703841.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/lienhua34/p/3703841.html" title="发布于2014-05-02 18:35">求最大和连续子向量问题的算法分析</a><br></div>
+</div>
+
+
+		</div>
+		<p class="postfoot">
+			posted on <span id="post-date">2014-04-19 14:57</span> <a href="http://www.cnblogs.com/lienhua34/">lienhua34</a> 阅读(<span id="post_view_count">25857</span>) 评论(<span id="post_comment_count">7</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=3675027" rel="nofollow">编辑</a> <a href="http://www.cnblogs.com/lienhua34/p/3675027.html#" onclick="AddToWz(3675027);return false;">收藏</a>
+		</p>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=110670,cb_entryId=3675027,cb_blogApp=currentBlogApp,cb_blogUserGuid='31ee3b0a-2167-e111-aa3f-842b2b196315',cb_entryCreatedDate='2014/4/19 14:57:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+	</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<a name="评论"></a>
+<div id="comments">
+<h3>评论</h3>
+	
+	
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2921183" class="layer">#1楼</a><a name="2921183" id="comment_anchor_2921183"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_2921183" class="blog_comment_body">写的很细心，不错。不过其实安装了必要的字体之后，去github或archwiki上找一个配置好的文件覆盖就可以了。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2921183,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2921183,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2921183_avatar" style="display:none;">http://pic.cnblogs.com/face/550121/20140101195237.png</span>
+				<div class="postfoot">
+					 <span class="comment_date">2014-04-19 16:04</span> | <a id="a_comment_author_2921183" href="http://www.cnblogs.com/UnixAgain/" target="_blank">UnixAgain</a> <a href="http://msg.cnblogs.com/send/UnixAgain" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2921194" class="layer">#2楼</a><a name="2921194" id="comment_anchor_2921194"></a>[<span class="louzhu">楼主</span>]
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_2921194" class="blog_comment_body"><a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2921183" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,2921183);">@</a>
+UnixAgain<br>谢谢~就是自己折腾一下，印象会更深刻一点O(∩_∩)O~</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2921194,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2921194,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2921194_avatar" style="display:none;">http://pic.cnblogs.com/face/u382408.jpg?id=06082153</span>
+				<div class="postfoot">
+					 <span class="comment_date">2014-04-19 16:17</span> | <a id="a_comment_author_2921194" href="http://www.cnblogs.com/lienhua34/" target="_blank">lienhua34</a> <a href="http://msg.cnblogs.com/send/lienhua34" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2921297" class="layer">#3楼</a><a name="2921297" id="comment_anchor_2921297"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_2921297" class="blog_comment_body">latex</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2921297,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2921297,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2921297_avatar" style="display:none;">http://pic.cnblogs.com/face/509621/20130401161154.png</span>
+				<div class="postfoot">
+					 <span class="comment_date">2014-04-19 21:43</span> | <a id="a_comment_author_2921297" href="http://www.cnblogs.com/xjsllll/" target="_blank">Me.thinking</a> <a href="http://msg.cnblogs.com/send/Me.thinking" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2926338" class="layer">#4楼</a><a name="2926338" id="comment_anchor_2926338"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_2926338" class="blog_comment_body"><a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2921183" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,2921183);">@</a>
+UnixAgain<br><fieldset class="comment_quote"><legend><a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2921183" title="查看引用原文">引用</a></legend>写的很细心，不错。不过其实安装了必要的字体之后，去github或archwiki上找一个配置好的文件覆盖就可以了。</fieldset><br>具体怎么做呢？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2926338,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2926338,&#39;Bury&#39;,this)">反对(0)</a></div>
+				<div class="postfoot">
+					 <span class="comment_date">2014-04-27 15:04</span> | <a id="a_comment_author_2926338" href="http://home.cnblogs.com/u/628300/" target="_blank">Ziyang Li</a> <a href="http://msg.cnblogs.com/send/Ziyang%20Li" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2926340" class="layer">#5楼</a><a name="2926340" id="comment_anchor_2926340"></a>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_2926340" class="blog_comment_body">不知道你用的是什么发行版，但通常都是从源里面装texlive包的。之后可以用<a href="https://gist.github.com/lovelock/11339400" target="_blank">https://gist.github.com/lovelock/11339400</a> 提供的配置文件覆盖你安装后自动生成的文件，前提是要安装好需要的字体，Windows的字体最好不要全部复制过来，装几个够用就好，不然会变得不伦不类。如果是安装的包这样就好了，如果是像博主一样（我也是用的texlive.iso）还需要设置环境变量，参照博主写的就好。<br>当然按博主这样手工写也没错，但如果每篇文章开头都写这么一大堆字体预定义太麻烦。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2926340,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2926340,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2926340_avatar" style="display:none;">http://pic.cnblogs.com/face/550121/20140101195237.png</span>
+				<div class="postfoot">
+					 <span class="comment_date">2014-04-27 15:15</span> | <a id="a_comment_author_2926340" href="http://www.cnblogs.com/UnixAgain/" target="_blank">UnixAgain</a> <a href="http://msg.cnblogs.com/send/UnixAgain" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2926479" class="layer">#6楼</a><a name="2926479" id="comment_anchor_2926479"></a>[<span class="louzhu">楼主</span>]
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_2926479" class="blog_comment_body"><a href="http://www.cnblogs.com/lienhua34/p/3675027.html#2926340" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,2926340);">@</a>
+UnixAgain<br>可以参考“2.2 自定义 mylinuxfonts.sty 宏包”设置一个系统级的自定义宏包，在每篇文章开头usepackage一下就ok了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2926479,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2926479,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2926479_avatar" style="display:none;">http://pic.cnblogs.com/face/u382408.jpg?id=06082153</span>
+				<div class="postfoot">
+					 <span class="comment_date">2014-04-27 20:43</span> | <a id="a_comment_author_2926479" href="http://www.cnblogs.com/lienhua34/" target="_blank">lienhua34</a> <a href="http://msg.cnblogs.com/send/lienhua34" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+			<div class="post">
+				<h2>
+					<a href="http://www.cnblogs.com/lienhua34/p/3675027.html#3235453" class="layer">#7楼</a><a name="3235453" id="comment_anchor_3235453"></a><span id="comment-maxId" style="display:none;">3235453</span><span id="comment-maxDate" style="display:none;">2015/7/26 11:51:16</span>
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</h2>
+				<div id="comment_body_3235453" class="blog_comment_body">我的中文就是解决不了，烦死人</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3235453,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3235453,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3235453_avatar" style="display:none;">http://pic.cnblogs.com/face/790204/20160310183620.png</span>
+				<div class="postfoot">
+					 <span class="comment_date">2015-07-26 11:51</span> | <a id="a_comment_author_3235453" href="http://www.cnblogs.com/JackieMe/" target="_blank">JackieMe</a> <a href="http://msg.cnblogs.com/send/JackieMe" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+				</div>
+			</div>
+		
+</div>
+<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/lienhua34/p/3675027.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/lienhua34/p/3675027.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="https://www.yunqi2050.com/" target="_blank">【活动】2050 大会 - 年青人因科技而团聚（5.26-5.27 杭州·云栖小镇）</a><br><a href="http://121.42.243.177/r/?rno=1803" target="_blank">【推荐】跟最课程陆敏技学Java，5个月高薪就业</a><br><a href="http://clickc.admaster.com.cn/c/a105960,b2436452,c1705,i0,m101,8a1,8b2,h" target="_blank">【推荐】0元免费体验华为云服务</a><br><a href="https://cloud.tencent.com/act/first_purchase?fromSource=gwzcw.919198.919198.919198" target="_blank">【活动】腾讯云云服务器新购特惠，5折上云</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);" href="https://cloud.tencent.com/product/tac?fromSource=gwzcw.924353.924353.924353" target="_blank"><img width="300" height="250" src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/24442-20180509134043877-1617765201.jpg" alt="腾讯云0509"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/596390/" target="_blank">唯品会最新股权曝光：沈亚持股12.7% 快被腾讯京东联手追平</a><br> ·  <a href="https://news.cnblogs.com/n/596389/" target="_blank">OPPO打破苹果“独享”，3D人脸解锁6个月内量产</a><br> ·  <a href="https://news.cnblogs.com/n/596388/" target="_blank">这个姑娘，靠一个以常人智商看不懂段子，俘获了钢铁侠马斯克的心</a><br> ·  <a href="https://news.cnblogs.com/n/596387/" target="_blank">关于造车，李斌即将交出第一份答卷</a><br> ·  <a href="https://news.cnblogs.com/n/596386/" target="_blank">红米S2：瞄准小姐姐们自拍的千元线下机</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/47501/" target="_blank"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/TB1oiMKokyWBuNjy0FpXXassXXa-468-60.jpg" alt="" style="width: 468px; height: 60px;"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/577233/" target="_blank">如何高效学习</a><br> ·  <a href="http://kb.cnblogs.com/page/578689/" target="_blank">如何成为优秀的程序员？</a><br> ·  <a href="http://kb.cnblogs.com/page/594930/" target="_blank">菜鸟工程师的超神之路 -- 从校园到职场</a><br> ·  <a href="http://kb.cnblogs.com/page/593985/" target="_blank">如何识别人的技术能力和水平？</a><br> ·  <a href="http://kb.cnblogs.com/page/575255/" target="_blank">写给自学者的入门指南</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+</div>
+</div>
+<div id="leftmenu">
+
+
+<h3>导航</h3>
+<ul>
+<li>
+<a id="blog_nav_sitehome" href="http://www.cnblogs.com/">博客园</a></li>
+<li>
+<a id="blog_nav_myhome" class="two_words" href="http://www.cnblogs.com/lienhua34/">首页</a></li>
+<li>
+<a id="blog_nav_newpost" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li>
+<a id="blog_nav_contact" accesskey="9" class="two_words" rel="nofollow" href="https://msg.cnblogs.com/send/lienhua34">联系</a></li>
+<li>
+<a id="blog_nav_rss" class="two_words" href="http://www.cnblogs.com/lienhua34/rss">订阅</a>
+<a id="blog_nav_rss_image" href="http://www.cnblogs.com/lienhua34/rss"><img src="./ubuntu 下安装 texlive 并设置 ctex 中文套装 - lienhua34 - 博客园_files/xml.gif" alt="订阅"></a>
+</li>
+<li>
+<a id="blog_nav_admin" class="two_words" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+
+<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/04/01&#39;);return false;">&lt;</a></td><td align="center">2018年5月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/06/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td class="CalWeekendDay" align="center">5</td></tr><tr><td class="CalWeekendDay" align="center">6</td><td align="center">7</td><td align="center">8</td><td align="center">9</td><td align="center">10</td><td class="CalTodayDay" align="center">11</td><td class="CalWeekendDay" align="center">12</td></tr><tr><td class="CalWeekendDay" align="center">13</td><td align="center">14</td><td align="center">15</td><td align="center">16</td><td align="center">17</td><td align="center">18</td><td class="CalWeekendDay" align="center">19</td></tr><tr><td class="CalWeekendDay" align="center">20</td><td align="center">21</td><td align="center">22</td><td align="center">23</td><td align="center">24</td><td align="center">25</td><td class="CalWeekendDay" align="center">26</td></tr><tr><td class="CalWeekendDay" align="center">27</td><td align="center">28</td><td align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td></tr><tr><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+<meta name="vs_showGrid" content="False">
+
+<h3>公告</h3>
+<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/lienhua34/">lienhua34</a><br>园龄：<a href="https://home.cnblogs.com/u/lienhua34/" title="入园时间：2012-03-06">6年2个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/lienhua34/followers/">88</a><br>关注：<a href="https://home.cnblogs.com/u/lienhua34/followees/">13</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;31ee3b0a-2167-e111-aa3f-842b2b196315&#39;)">+加关注</a></div><script>getFollowStatus('31ee3b0a-2167-e111-aa3f-842b2b196315')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+
+<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/lienhua34/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/lienhua34/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/lienhua34/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/lienhua34/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/lienhua34/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<h3 class="catListTitle">我的标签</h3>
+<div id="MyTag">
+<ul>
+<li><a href="http://www.cnblogs.com/lienhua34/tag/APUE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">APUE学习笔记</a>(28)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/scheme%E5%AE%9E%E7%8E%B0/">scheme实现</a>(25)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/scheme/">scheme</a>(24)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/">开发日志</a>(24)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/Linux/">Linux</a>(17)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/Wix/">Wix</a>(7)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/%E5%BC%80%E6%BA%90/">开源</a>(7)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/Web-SSH/">Web-SSH</a>(5)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">程序设计</a>(4)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>(4)</li><li><a href="http://www.cnblogs.com/lienhua34/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+		<h3>随笔分类<span style="font-size:11px;font-weight:normal">(116)</span></h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/lienhua34/category/446150.html"> 技术积累(8)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/lienhua34/category/374604.html">C/C++(1)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/lienhua34/category/748983.html">Docker(3)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/lienhua34/category/737826.html">Eclipse-orion(1)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/lienhua34/category/877350.html">emacs(2)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/lienhua34/category/877351.html">golang(3)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/lienhua34/category/571635.html">LaTeX(1)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/lienhua34/category/364656.html">Linux(19)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/lienhua34/category/908352.html">Node.js(1)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/lienhua34/category/362813.html">scheme实现开发日志(24)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_10" href="http://www.cnblogs.com/lienhua34/category/607035.html">UNIX环境高级编程学习笔记(28)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_11" href="http://www.cnblogs.com/lienhua34/category/418197.html">Wix(7)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_12" href="http://www.cnblogs.com/lienhua34/category/413370.html">WPF(3)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_13" href="http://www.cnblogs.com/lienhua34/category/360288.html">程序设计(4)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_14" href="http://www.cnblogs.com/lienhua34/category/900082.html">深度学习(4)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_15" href="http://www.cnblogs.com/lienhua34/category/360286.html">算法(4)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_16" href="http://www.cnblogs.com/lienhua34/category/376531.html">杂谈(3)</a></li>
+			
+				</ul>
+			
+	
+		<h3>随笔档案<span style="font-size:11px;font-weight:normal">(107)</span></h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_1_Link_0" href="http://www.cnblogs.com/lienhua34/archive/2017/01.html">2017年1月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_1" href="http://www.cnblogs.com/lienhua34/archive/2016/11.html">2016年11月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_2" href="http://www.cnblogs.com/lienhua34/archive/2016/10.html">2016年10月 (5)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_3" href="http://www.cnblogs.com/lienhua34/archive/2016/09.html">2016年9月 (2)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_4" href="http://www.cnblogs.com/lienhua34/archive/2016/01.html">2016年1月 (2)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_5" href="http://www.cnblogs.com/lienhua34/archive/2015/12.html">2015年12月 (5)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_6" href="http://www.cnblogs.com/lienhua34/archive/2015/10.html">2015年10月 (9)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_7" href="http://www.cnblogs.com/lienhua34/archive/2015/09.html">2015年9月 (3)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_8" href="http://www.cnblogs.com/lienhua34/archive/2014/11.html">2014年11月 (5)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_9" href="http://www.cnblogs.com/lienhua34/archive/2014/10.html">2014年10月 (12)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_10" href="http://www.cnblogs.com/lienhua34/archive/2014/09.html">2014年9月 (7)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_11" href="http://www.cnblogs.com/lienhua34/archive/2014/08.html">2014年8月 (5)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_12" href="http://www.cnblogs.com/lienhua34/archive/2014/05.html">2014年5月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_13" href="http://www.cnblogs.com/lienhua34/archive/2014/04.html">2014年4月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_14" href="http://www.cnblogs.com/lienhua34/archive/2014/01.html">2014年1月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_15" href="http://www.cnblogs.com/lienhua34/archive/2013/04.html">2013年4月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_16" href="http://www.cnblogs.com/lienhua34/archive/2013/02.html">2013年2月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_17" href="http://www.cnblogs.com/lienhua34/archive/2013/01.html">2013年1月 (3)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_18" href="http://www.cnblogs.com/lienhua34/archive/2012/11.html">2012年11月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_19" href="http://www.cnblogs.com/lienhua34/archive/2012/10.html">2012年10月 (8)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_20" href="http://www.cnblogs.com/lienhua34/archive/2012/09.html">2012年9月 (1)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_21" href="http://www.cnblogs.com/lienhua34/archive/2012/04.html">2012年4月 (8)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_22" href="http://www.cnblogs.com/lienhua34/archive/2012/03.html">2012年3月 (23)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_23" href="http://www.cnblogs.com/lienhua34/archive/2012/02.html">2012年2月 (1)</a></li>
+			
+				</ul>
+			
+	</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<h3 class="catListTitle">最新评论</h3>
+<div class="RecentComment" id="RecentComments">
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/lienhua34/archive/2012/10/20/2731816.html#3950153">1. Re:Wix学习整理（6）——安装快捷方式</a></li>
+        <li class="recent_comment_body">@飞行家引用你好， 缩放的代码打不开呀？不好意思，找不到原稿了...</li>
+        <li class="recent_comment_author">--lienhua34</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/lienhua34/p/6005351.html#3950150">2. Re:Tensorflow学习笔记4：分布式Tensorflow</a></li>
+        <li class="recent_comment_body">@不可一世ywd引用谢谢博主耐心回答我的问题，那怎么样会比较好啊，我现在刚好有三个主机（。。。还在搬），也可以搞到四个，两个PS+两个worker是不是会好呀？我的微信是：13297958977，如果......</li>
+        <li class="recent_comment_author">--lienhua34</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/lienhua34/p/6005351.html#3949718">3. Re:Tensorflow学习笔记4：分布式Tensorflow</a></li>
+        <li class="recent_comment_body">谢谢博主耐心回答我的问题，那怎么样会比较好啊，我现在刚好有三个主机（。。。还在搬），也可以搞到四个，两个PS+两个worker是不是会好呀？我的微信是：13297958977，如果可以加微信给我指导一......</li>
+        <li class="recent_comment_author">--不可一世ywd</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/lienhua34/p/5170335.html#3949620">4. Re:Dockerfile创建自定义Docker镜像以及CMD与ENTRYPOINT指令的比较</a></li>
+        <li class="recent_comment_body">可以</li>
+        <li class="recent_comment_author">--专心走路</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/lienhua34/p/6005351.html#3949380">5. Re:Tensorflow学习笔记4：分布式Tensorflow</a></li>
+        <li class="recent_comment_body">@不可一世ywd引用谢谢博主，我的问题已经解决了，但是现在问题是双机跑的速度比单机还要慢很多，我怀疑可能是wifi之间数据延时的问题，不知道博主是什么想法。一个 PS + Worker 的速度真的可能......</li>
+        <li class="recent_comment_author">--lienhua34</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<h3 class="catListTitle">阅读排行榜</h3>
+<div class="RecentComment" id="TopViewPosts"> 
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/lienhua34/p/4922130.html">1. Docker私有仓库Registry的搭建验证(43512)</a></li><li><a href="http://www.cnblogs.com/lienhua34/p/5170335.html">2. Dockerfile创建自定义Docker镜像以及CMD与ENTRYPOINT指令的比较(26867)</a></li><li><a href="http://www.cnblogs.com/lienhua34/p/3675027.html">3. ubuntu 下安装 texlive 并设置 ctex 中文套装(25857)</a></li><li><a href="http://www.cnblogs.com/lienhua34/p/5998885.html">4. Tensorflow学习笔记3：TensorBoard可视化学习(16599)</a></li><li><a href="http://www.cnblogs.com/lienhua34/archive/2012/03/21/2409133.html">5. samba配置文件smb.conf的语法格式及其重要选项的说明(13345)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<h3 class="catListTitle">评论排行榜</h3>
+<div class="RecentComment" id="TopCommentsPosts">
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="http://www.cnblogs.com/lienhua34/p/6005351.html">1. Tensorflow学习笔记4：分布式Tensorflow(26)</a></li><li><a href="http://www.cnblogs.com/lienhua34/archive/2013/02/19/2917600.html">2. WPF的TextBox产生内存泄露的情况(17)</a></li><li><a href="http://www.cnblogs.com/lienhua34/archive/2012/10/07/2714367.html">3. Wix学习整理（1）——快速入门HelloWorld(14)</a></li><li><a href="http://www.cnblogs.com/lienhua34/archive/2012/10/20/2732100.html">4. Wix学习整理（7）——在开始菜单中为HelloWorld添加卸载快捷方式(12)</a></li><li><a href="http://www.cnblogs.com/lienhua34/archive/2012/04/29/2476461.html">5. 由装逼造就的毕业设计(10)</a></li></ul></div>
+</div></div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="http://www.cnblogs.com/lienhua34/p/3917787.html">1. 使用 SharpSvn 执行 svn 操作的Demo(7)</a></li><li><a href="http://www.cnblogs.com/lienhua34/p/5170335.html">2. Dockerfile创建自定义Docker镜像以及CMD与ENTRYPOINT指令的比较(5)</a></li><li><a href="http://www.cnblogs.com/lienhua34/p/5018119.html">3. #Linux学习笔记# 自定义shell终端提示符(5)</a></li><li><a href="http://www.cnblogs.com/lienhua34/archive/2012/03/10/2388872.html">4. 浅谈静态作用域和动态作用域(5)</a></li><li><a href="http://www.cnblogs.com/lienhua34/p/3675027.html">5. ubuntu 下安装 texlive 并设置 ctex 中文套装(4)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+
+</div>
+</div>
+<div class="clear"></div>
+<div id="footer">
+
+<p id="footer">
+	Powered by: 
+	<br>
+	
+	<a id="Footer1_Hyperlink3" name="Hyperlink1" href="http://www.cnblogs.com/" style="font-family:Verdana;font-size:12px;">博客园</a>
+	<br>
+	Copyright © lienhua34
+</p>
+</div>
+</div>
+
+
+
+</body></html>
