@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)http://www.latexstudio.net/archives/559 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="dns-prefetch" href="http://apps.bdimg.com/">
+<meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-title" content="LaTeX工作室">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<title>LaTeX技巧706:Tikz绘制UML类图(二)-LaTeX工作室</title>
+<link rel="dns-prefetch" href="http://maxcdn.bootstrapcdn.com/">
+<link rel="dns-prefetch" href="http://s.w.org/">
+<link rel="dns-prefetch" href="http://pics.latexstudio.net/">
+<link rel="stylesheet" id="crayon-css" href="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/crayon.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome-css" href="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/font-awesome.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="arconix-shortcodes-css" href="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/arconix-shortcodes.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-email-css" href="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/email-css.css" type="text/css" media="all">
+<link rel="stylesheet" id="_bootstrap-css" href="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/bootstrap.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="_fontawesome-css" href="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/font-awesome.min(1).css" type="text/css" media="all">
+<link rel="stylesheet" id="_main-css" href="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/main.css" type="text/css" media="all">
+<script src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/hm.js"></script><script type="text/javascript" src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/wp-sns-share.js"></script>
+<script type="text/javascript" src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/jquery.min.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"http:\/\/www.latexstudio.net\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/crayon.min.js"></script>
+<link rel="https://api.w.org/" href="http://www.latexstudio.net/wp-json/">
+<link rel="prev" title="LaTeX技巧662:Tikz绘制UML类图" href="http://www.latexstudio.net/archives/557">
+<link rel="next" title="LaTeX技巧715:Tikz绘制物理电路图" href="http://www.latexstudio.net/archives/561">
+<link rel="canonical" href="http://www.latexstudio.net/archives/559">
+<link rel="shortlink" href="http://www.latexstudio.net/?p=559">
+<link rel="alternate" type="application/json+oembed" href="http://www.latexstudio.net/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.latexstudio.net%2Farchives%2F559">
+<link rel="alternate" type="text/xml+oembed" href="http://www.latexstudio.net/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.latexstudio.net%2Farchives%2F559&amp;format=xml">
+<script type="text/javascript">
+	window._se_plugin_version = '8.1.9';
+</script>
+<meta name="keywords" content="Tikz, Tikz&amp;pgf">
+<meta name="description" content="前面博文介绍了LaTeX技巧662:Tikz绘制UML类图，这里许元又有新的绘制UML的类图包，这个包更为漂亮。  	Google包代码首页  	使用手册 	样式样例  在线代码 on writeLaTeX  【演示图】">
+<style>a:hover, .site-navbar li:hover > a, .site-navbar li.active a:hover, .site-navbar a:hover, .search-on .site-navbar li.navto-search a, .topbar a:hover, .site-nav li.current-menu-item > a, .site-nav li.current-menu-parent > a, .site-search-form a:hover, .branding-primary .btn:hover, .title .more a:hover, .excerpt h2 a:hover, .excerpt .meta a:hover, .excerpt-minic h2 a:hover, .excerpt-minic .meta a:hover, .article-content .wp-caption:hover .wp-caption-text, .article-content a, .article-nav a:hover, .relates a:hover, .widget_links li a:hover, .widget_categories li a:hover, .widget_ui_comments strong, .widget_ui_posts li a:hover .text, .widget_ui_posts .nopic .text:hover , .widget_meta ul a:hover, .tagcloud a:hover, .textwidget a, .textwidget a:hover, .sign h3, #navs .item li a, .url, .url:hover, .excerpt h2 a:hover span, .widget_ui_posts a:hover .text span, .widget-navcontent .item-01 li a:hover span, .excerpt-minic h2 a:hover span, .relates a:hover span{color: #8AC78F;}.btn-primary, .label-primary, .branding-primary, .post-copyright:hover, .article-tags a, .pagination ul > .active > a, .pagination ul > .active > span, .pagenav .current, .widget_ui_tags .items a:hover, .sign .close-link, .pagemenu li.active a, .pageheader, .resetpasssteps li.active, #navs h2, #navs nav, .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary, .tag-clouds a:hover{background-color: #8AC78F;}.btn-primary, .search-input:focus, #bdcs .bdcs-search-form-input:focus, #submit, .plinks ul li a:hover,.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary{border-color: #8AC78F;}.search-btn, .label-primary, #bdcs .bdcs-search-form-submit, #submit, .excerpt .cat{background-color: #8AC78F;}.excerpt .cat i{border-left-color:#8AC78F;}@media (max-width: 720px) {.site-navbar li.active a, .site-navbar li.active a:hover, .m-nav-show .m-icon-nav{color: #8AC78F;}}@media (max-width: 480px) {.pagination ul > li.next-page a{background-color:#8AC78F;}}</style>
+<!--HEADER_CODE_START-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7b3257014944d567cdacda65094d4725";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!--HEADER_CODE_END-->
+<link rel="shortcut icon" href="http://www.latexstudio.net/favicon.ico">
+<!--[if lt IE 9]><script src="http://www.latexstudio.net/wp-content/themes/dux/js/libs/html5.min.js"></script><![endif]-->
+<script src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/share.js"></script></head>
+<body class="post-template-default single single-post postid-559 single-format-standard nav_fixed list-comments-r site-layout-2">
+<header class="header">
+	<div class="container">
+		<div class="logo"><a href="http://www.latexstudio.net/" title="LaTeX科技排版工作室"><img src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/logo.png">LaTeX工作室</a></div>		<div class="brand">欢迎光临
+<br>分享与学习LaTeX的王国</div>		<ul class="site-nav site-navbar">
+			<li id="menu-item-835" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-835"><a href="http://www.latexstudio.net/archives/category/tex-tips">TeX技巧<i class="fa fa-angle-down"></i></a>
+<ul class="sub-menu">
+	<li id="menu-item-836" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-836"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-crossref">交叉引用</a></li>
+	<li id="menu-item-837" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-837"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-list">列表环境</a></li>
+	<li id="menu-item-838" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-838"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-bibliography">参考文献</a></li>
+	<li id="menu-item-839" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-839"><a href="http://www.latexstudio.net/archives/category/tex-tips/basic-tex-command">基本命令</a></li>
+	<li id="menu-item-840" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-840"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-fonts-tips">字体技巧</a></li>
+	<li id="menu-item-841" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-841"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-graphics-tex-tips">插图技巧</a></li>
+	<li id="menu-item-842" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-842"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-mathmode">数学公式</a></li>
+	<li id="menu-item-843" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-843"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-text-typesetting">文字排版</a></li>
+	<li id="menu-item-844" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-844"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-symbols">符号输入</a></li>
+	<li id="menu-item-845" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-845"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-tables">表格技巧</a></li>
+	<li id="menu-item-887" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-887"><a href="http://www.latexstudio.net/archives/category/tex-tips/tex-layout">页面版式</a></li>
+</ul>
+</li>
+<li id="menu-item-846" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-846"><a href="http://www.latexstudio.net/archives/category/latex-templates">TeX模板<i class="fa fa-angle-down"></i></a>
+<ul class="sub-menu">
+	<li id="menu-item-884" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-884"><a href="http://www.latexstudio.net/archives/category/latex-templates/thesis-template">论文模板</a></li>
+	<li id="menu-item-848" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-848"><a href="http://www.latexstudio.net/archives/category/latex-templates/tex-typesetting">TeX排版</a></li>
+	<li id="menu-item-849" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-849"><a href="http://www.latexstudio.net/archives/category/latex-templates/tex-cv-template">TeX简历</a></li>
+	<li id="menu-item-850" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-850"><a href="http://www.latexstudio.net/archives/category/latex-templates/book-template">书籍模板</a></li>
+	<li id="menu-item-851" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-851"><a href="http://www.latexstudio.net/archives/category/latex-templates/latex-code-sharing">代码分享</a></li>
+	<li id="menu-item-852" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-852"><a href="http://www.latexstudio.net/archives/category/latex-templates/tex-letter-template">信件模板</a></li>
+	<li id="menu-item-854" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-854"><a href="http://www.latexstudio.net/archives/category/latex-templates/publish-tex-template">出版模板</a></li>
+	<li id="menu-item-855" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-855"><a href="http://www.latexstudio.net/archives/category/latex-templates/internal-university-tex-template">国内高校</a></li>
+	<li id="menu-item-856" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-856"><a href="http://www.latexstudio.net/archives/category/latex-templates/foreign-university-tex-template">国外高校</a></li>
+	<li id="menu-item-857" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-857"><a href="http://www.latexstudio.net/archives/category/latex-templates/tex-report-template">报告模板</a></li>
+	<li id="menu-item-858" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-858"><a href="http://www.latexstudio.net/archives/category/latex-templates/essays-template">散文模板</a></li>
+	<li id="menu-item-859" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-859"><a href="http://www.latexstudio.net/archives/category/latex-templates/tex-academic-journals">期刊模板</a></li>
+	<li id="menu-item-847" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-847"><a href="http://www.latexstudio.net/archives/category/latex-templates/mcm-tex-template">数学建模</a></li>
+	<li id="menu-item-853" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-853"><a href="http://www.latexstudio.net/archives/category/latex-templates/miscellaneous">其他模板</a></li>
+</ul>
+</li>
+<li id="menu-item-860" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-860"><a href="http://www.latexstudio.net/archives/category/tex-design">TeX版式<i class="fa fa-angle-down"></i></a>
+<ul class="sub-menu">
+	<li id="menu-item-862" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-862"><a href="http://www.latexstudio.net/archives/category/tex-design/tex-theorem-algorithm">定理算法</a></li>
+	<li id="menu-item-889" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-889"><a href="http://www.latexstudio.net/archives/category/tex-design/tex-code-design">代码输出</a></li>
+	<li id="menu-item-914" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-914"><a href="http://www.latexstudio.net/archives/category/tex-design/fancy-tex-foot-head-design">页眉页脚</a></li>
+	<li id="menu-item-891" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-891"><a href="http://www.latexstudio.net/archives/category/tex-design/tex-cover-design">封面设计</a></li>
+	<li id="menu-item-892" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-892"><a href="http://www.latexstudio.net/archives/category/tex-design/tex-paragraph-design">段落设计</a></li>
+	<li id="menu-item-894" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-894"><a href="http://www.latexstudio.net/archives/category/tex-design/tex-chapter-design">章节设计</a></li>
+	<li id="menu-item-893" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-893"><a href="http://www.latexstudio.net/archives/category/tex-design/tex-tableofcontents">目录制作</a></li>
+</ul>
+</li>
+<li id="menu-item-895" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-has-children menu-item-895"><a href="http://www.latexstudio.net/archives/category/tex-graphics">TeX绘图<i class="fa fa-angle-down"></i></a>
+<ul class="sub-menu">
+	<li id="menu-item-896" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-896"><a href="http://www.latexstudio.net/archives/category/tex-graphics/metapost-example">metapost</a></li>
+	<li id="menu-item-897" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-897"><a href="http://www.latexstudio.net/archives/category/tex-graphics/pstricks-example">pstricks</a></li>
+	<li id="menu-item-898" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-898"><a href="http://www.latexstudio.net/archives/category/tex-graphics/tikz-example">Tikz&amp;pgf</a></li>
+</ul>
+</li>
+<li id="menu-item-899" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-899"><a href="http://www.latexstudio.net/archives/category/tex-resource">TeX资源<i class="fa fa-angle-down"></i></a>
+<ul class="sub-menu">
+	<li id="menu-item-900" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-900"><a href="http://www.latexstudio.net/archives/category/tex-resource/tex-fonts-resource">TeX字体</a></li>
+	<li id="menu-item-901" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-901"><a href="http://www.latexstudio.net/archives/category/tex-resource/tex-package-resource">TeX宏包</a></li>
+	<li id="menu-item-902" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-902"><a href="http://www.latexstudio.net/archives/category/tex-resource/tex-books">TeX电子书</a></li>
+	<li id="menu-item-903" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-903"><a href="http://www.latexstudio.net/archives/category/tex-resource/tex-vedio-tutorial">TeX视频</a></li>
+	<li id="menu-item-904" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-904"><a href="http://www.latexstudio.net/archives/category/tex-resource/tex-slides-resource">TeX讲义</a></li>
+	<li id="menu-item-906" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-906"><a href="http://www.latexstudio.net/archives/category/tex-resource/typesetting-tips">排版技巧</a></li>
+	<li id="menu-item-907" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-907"><a href="http://www.latexstudio.net/archives/category/tex-resource/tex-experiences">经验分享</a></li>
+	<li id="menu-item-913" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-913"><a href="http://www.latexstudio.net/archives/category/tex-resource/tex-assistant-tool">辅助工具</a></li>
+	<li id="menu-item-905" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-905"><a href="http://www.latexstudio.net/archives/category/tex-resource/tex-miscellaneous-resource">其他资源</a></li>
+</ul>
+</li>
+<li id="menu-item-908" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-908"><a href="http://www.latexstudio.net/archives/category/tex-slides">演示文稿<i class="fa fa-angle-down"></i></a>
+<ul class="sub-menu">
+	<li id="menu-item-909" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-909"><a href="http://www.latexstudio.net/archives/category/tex-slides/beamer-theme-template">beamer</a></li>
+	<li id="menu-item-910" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-910"><a href="http://www.latexstudio.net/archives/category/tex-slides/tex-slides-tex-slides">slides</a></li>
+	<li id="menu-item-911" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-911"><a href="http://www.latexstudio.net/archives/category/tex-slides/latex-poster">学术海报</a></li>
+</ul>
+</li>
+<li id="menu-item-4682" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-4682"><a href="http://www.latexstudio.net/archives/category/limliantze-tex"><i class="fa fa-paint-brush"></i>莲枝专栏</a></li>
+<li id="menu-item-4225" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4225"><a target="_blank" href="http://wenda.latexstudio.net/">问答社区</a></li>
+							<li class="navto-search"><a href="javascript:;" class="search-show active"><i class="fa fa-search"></i></a></li>
+					</ul>
+		<div class="topbar">
+			<ul class="site-nav topmenu">
+				
+<li class="page_item page-item-1750"><a href="http://www.latexstudio.net/introduction-to-latex">LaTeX简介</a></li>
+<li class="page_item page-item-4420"><a href="http://www.latexstudio.net/member">会员中心</a></li>
+<li class="page_item page-item-2"><a href="http://www.latexstudio.net/sample-page">关于我们</a></li>
+<li class="page_item page-item-11707"><a href="http://www.latexstudio.net/tex-documents">学习文档</a></li>
+<li class="page_item page-item-4422"><a href="http://www.latexstudio.net/resetpassword">密码重置</a></li>
+<li class="page_item page-item-2409"><a href="http://www.latexstudio.net/enago-5">英论阁</a></li>
+<li class="page_item page-item-11703"><a href="http://www.latexstudio.net/texsoftware">软件下载</a></li>
+
+								<li class="menusns">
+					<a href="javascript:;">关注本站 <i class="fa fa-angle-down"></i></a>
+					<ul class="sub-menu">
+						<li><a class="sns-wechat" href="javascript:;" title="关注“LaTeX工作室 公众号”" data-src="http://pics.latexstudio.net/wp-content/themes/dux/img/gongzhonghao2.jpg"><i class="fa fa-wechat"></i> 微信</a></li>						<li><a target="_blank" rel="external nofollow" href="http://weibo.com/latexstudio"><i class="fa fa-weibo"></i> 微博</a></li>						<li><a target="_blank" rel="external nofollow" href="http://t.qq.com/chinatex"><i class="fa fa-tencent-weibo"></i> 腾讯微博</a></li>																		<li><a target="_blank" href="http://www.latexstudio.net/feed"><i class="fa fa-rss"></i> RSS订阅</a></li>					</ul>
+				</li>
+							</ul>
+					</div>
+				<i class="fa fa-bars m-icon-nav"></i>
+			</div>
+</header>
+<div class="site-search">
+	<div class="container">
+		<form method="get" class="site-search-form" action="http://www.latexstudio.net/"><input class="search-input" name="s" type="text" placeholder="输入关键字" value=""><button class="search-btn" type="submit"><i class="fa fa-search"></i></button></form>	</div>
+</div>	<div class="breadcrumbs">
+		<div class="container">当前位置：<a href="http://www.latexstudio.net/">LaTeX工作室</a> <small>&gt;</small> <a href="http://www.latexstudio.net/archives/category/tex-graphics">TeX绘图</a> <small>&gt;</small> <a href="http://www.latexstudio.net/archives/category/tex-graphics/tikz-example">Tikz&amp;pgf</a> <small>&gt;</small> 正文</div>
+	</div>
+<section class="container">
+	<div class="content-wrap">
+	<div class="content">
+				<header class="article-header">
+			<h1 class="article-title"><a href="http://www.latexstudio.net/archives/559">LaTeX技巧706:Tikz绘制UML类图(二)</a></h1>
+			<div class="article-meta">
+				<span class="item">2014-02-04</span>
+												<span class="item">分类：<a href="http://www.latexstudio.net/archives/category/tex-graphics/tikz-example" rel="category tag">Tikz&amp;pgf</a></span>
+				<span class="item post-views">阅读(1725)</span>				<span class="item">评论(0)</span>
+				<span class="item"></span>
+			</div>
+		</header>
+		<article class="article-content">
+			<div class="asb asb-post asb-post-01"><a href="https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-3473795048.2.237fb29crrLfNt&amp;id=43823508044" target="_blank"><img src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/latexcourse4.png"></a>
+</div>			<p>前面博文介绍了<a title="LaTeX技巧662:Tikz绘制UML类图" href="http://www.latexstudio.net/?p=176" rel="bookmark">LaTeX技巧662:Tikz绘制UML类图</a>，这里许元又有新的绘制UML的类图包，这个包更为漂亮。</p>
+<ul>
+<li><a href="http://code.google.com/p/pgf-umlsd/" target="_blank"><strong>Google包代码首页</strong></a><br>
+<strong></strong></li>
+<li><strong><a href="http://pgf-umlsd.googlecode.com/git/release/pgf-umlsd-0.6/pgf-umlsd-manual.pdf" target="_blank">使用手册</a></strong></li>
+<li><strong><a href="http://www.texample.net/tikz/examples/pgf-umlsd/" target="_blank">样式样例</a>&nbsp;&nbsp;<a href="https://www.writelatex.com/98894jtzmtd" target="_blank">在线代码 on writeLaTeX</a></strong></li>
+</ul>
+<p><strong>【演示图】</strong></p>
+<p><a href="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/single-thread-example.png"><img title="single-thread-example" alt="" src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/single-thread-example.png" width="369" height="495"></a><a href="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/multi-threads-example.png"><img title="multi-threads-example" alt="" src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/multi-threads-example.png" width="453" height="471"></a></p>
+
+
+<!-- wp-sns-share part begin -->
+<div class="WPSNS_main" style="margin:20px 0;">
+<input id="wp-sns-share-desc" type="hidden" value="前面博文介绍了LaTeX技巧662:Tikz绘制UML类图，这里许元又有新的绘制UML的类图包，这个包更为漂亮。
+
+	Google包...">
+<input id="wp-sns-share-blog" type="hidden" value="LaTeX工作室">
+<input id="wp-sns-share-from" type="hidden" value="single">
+<input id="wp-sns-share-tiny" type="hidden" value="">
+<div width="95%" style="border-top:1px dotted #D4D0C8;height:1px"></div>
+<div style="margin:15px 0;height:27px;">
+<ul class="WPSNS_ul" style="list-style:none;margin:0;padding:0;">
+
+</ul>
+</div>
+<div width="95%" style="border-top:1px dotted #D4D0C8;height:1px"></div>
+</div>
+<!-- wp-sns-share part end -->
+
+		</article>
+								<div class="post-copyright">未经允许不得转载：<a href="http://www.latexstudio.net/">LaTeX工作室</a> » <a href="http://www.latexstudio.net/archives/559">LaTeX技巧706:Tikz绘制UML类图(二)</a></div>		
+					<div class="action-share"><div class="bdsharebuttonbox">
+<span>分享到：</span>
+<a class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+<a class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+<a class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+<a class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+<a class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+<a class="bds_bdhome" data-cmd="bdhome" title="分享到百度新首页"></a>
+<a class="bds_tqf" data-cmd="tqf" title="分享到腾讯朋友"></a>
+<a class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+<a class="bds_more" data-cmd="more">更多</a> <span>(</span><a class="bds_count" data-cmd="count" title="累计分享0次">0</a><span>)</span>
+</div>
+<script>
+window._bd_share_config = {
+    common: {
+		"bdText"     : "",
+		"bdMini"     : "2",
+		"bdMiniList" : false,
+		"bdPic"      : "",
+		"bdStyle"    : "0",
+		"bdSize"     : "24"
+    },
+    share: [{
+        bdCustomStyle: "http://pics.latexstudio.net/wp-content/themes/dux/css/share.css"
+    }]
+}
+with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion="+~(-new Date()/36e5)];
+</script></div>
+		
+		<div class="article-tags">标签：<a href="http://www.latexstudio.net/archives/tag/tikz" rel="tag">Tikz</a></div>
+		
+		
+		            <nav class="article-nav">
+                <span class="article-nav-prev">上一篇<br><a href="http://www.latexstudio.net/archives/557" rel="prev">LaTeX技巧662:Tikz绘制UML类图</a></span>
+                <span class="article-nav-next">下一篇<br><a href="http://www.latexstudio.net/archives/561" rel="next">LaTeX技巧715:Tikz绘制物理电路图</a></span>
+            </nav>
+        
+		<div class="asb asb-post asb-post-02">LaTeX工作室：分享LaTeX/TeX知识<br>
+微信号：latex2015<br>
+关注我们微信公众号：<br>
+<img src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/gongzhonghao2.jpg"></div>		<div class="relates"><div class="title"><h3>相关推荐</h3></div><ul><li><a href="http://www.latexstudio.net/archives/2059">Tikz绘制枚举数列的按钮</a></li><li><a href="http://www.latexstudio.net/archives/1521">latex与流程图 (pgf&amp;tikz)</a></li><li><a href="http://www.latexstudio.net/archives/1481">tikz设计章节样式样例分享</a></li><li><a href="http://www.latexstudio.net/archives/1398">PGF/TikZ 绘图学习笔记</a></li><li><a href="http://www.latexstudio.net/archives/944">LaTeX技巧731:Tikz绘制简单的表情符号</a></li><li><a href="http://www.latexstudio.net/archives/930">matlab2tikz的logo绘制</a></li><li><a href="http://www.latexstudio.net/archives/916">TikZ命令小册子</a></li><li><a href="http://www.latexstudio.net/archives/821">LaTeX技巧674:Tikz制作图章logo</a></li></ul></div>					</div>
+	</div>
+	<div class="sidebar">
+<div class="widget widget_ui_asb"><div class="item"><span style="color:red"><font size="4"><b>本站提供专业LaTeX排版、咨询、定制服务，请点击下图咨询详情</b></font></span><br>
+<a href="https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-3473795048.4.aef4e7d7QgX9X&amp;id=556063186535" target="_blank"><img src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/latextype.png"></a><br>
+<br>
+<span style="color:red"><font size="4"><b>全国首个精品的LaTeX视频教程，大牛带着你入门，让LaTeX学习不再纠结，请点击下图咨询详情</b></font></span><br><br>
+<a href="https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-3473795048.2.237fb29cn0f4YW&amp;id=43823508044" target="_blank"><img src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/latexcourse.jpg"></a></div></div>		<div class="widget widget_recent_entries">		<h3>近期文章</h3>		<ul>
+											<li>
+					<a href="http://www.latexstudio.net/archives/12433">南京航空航天大学用户定制beamer主题</a>
+									</li>
+											<li>
+					<a href="http://www.latexstudio.net/archives/12429">萨尔大学非官方beamer主题</a>
+									</li>
+											<li>
+					<a href="http://www.latexstudio.net/archives/12423">用LaTeX排版个小说如何</a>
+									</li>
+											<li>
+					<a href="http://www.latexstudio.net/archives/12414">LaTeX排版的《Geant4 从入门到放弃》</a>
+									</li>
+											<li>
+					<a href="http://www.latexstudio.net/archives/12409">TeX 主题选讲：字符</a>
+									</li>
+					</ul>
+		</div><div class="widget widget_text"><h3>联系我们</h3>			<div class="textwidget"><b>交流QQ群</b>：91940767<br>
+<b>本站QQ号</b>：343083553<br>
+<b>邮箱联系</b>：<a href="mailto:latexstudio@qq.com">latexstudio@qq.com</a><br> 
+<b>淘宝店铺</b>：<a href="http://latexstudio.taobao.com/" target="_blank">latexstudio.taobao.com</a> 提供排版，模板定制，培训，图片处理，视频教程等LaTeX服务。<br>  <br><b>关注微信公众号</b>： latex2015<br> 
+<img src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/gongzhonghao2.jpg" width="165"> <br><br>
+如果您投稿或者希望加入我们团队，请发送您的简历到latexstudio@qq.com。<br> </div>
+		</div><div class="widget widget_text"><h3>访问统计</h3>			<div class="textwidget"><p><script type="text/javascript" src="./LaTeX技巧706_Tikz绘制UML类图(二)-LaTeX工作室_files/stats" charset="UTF-8"></script></p></div></div></div></section></body></html>
