@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://www.cnblogs.com/xd502djj/p/7112005.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="never">
+<title>将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/bundle-StylePink.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/bundle-StylePink-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/xd502djj/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/xd502djj/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/xd502djj/wlwmanifest.xml">
+<script async="" src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/analytics.js"></script><script src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'xd502djj', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+<!--PageBeginHtml Block Begin-->
+<b>声明：现大部分文章为寻找问题时在网上相互转载，在此博客中做个记录，方便自己也方便有类似问题的朋友，故原出处已不好查到，如有侵权，请发邮件表明文章和原出处地址，我一定在文章中注明。谢谢。</b>
+<!--PageBeginHtml Block End-->
+
+<!--done-->
+<div id="banner">
+<!--done-->
+<div class="header">
+	<div class="headerText">
+		<a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/xd502djj/">董俊杰</a><br>
+		<div class="headerDis">xd502djj@163.com---识大势，懂取舍！分主次，懂先后！
+<br><div>开放、透明、反思。<br>业务思维、结果导向、成本意识。</div></div>
+	</div>
+</div>
+</div>
+<div id="main">
+	<!-- right starts -->
+	<div id="right">
+		<div id="right_content">
+			<div id="mystats">
+				
+					<div id="blog_stats">
+<!--done-->
+<div class="blogStats">
+随笔- 490&nbsp;
+文章- 0&nbsp;
+评论- 104&nbsp;
+
+</div></div>
+				
+			</div>
+			<div id="mylinks">
+<!--done-->
+<a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a>&nbsp;&nbsp;<a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/xd502djj/">首页</a>&nbsp;&nbsp;<a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a>&nbsp;&nbsp;<a id="blog_nav_contact" accesskey="9" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E8%8C%84%E5%AD%90_2008">联系</a>&nbsp;&nbsp;<a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a>&nbsp;&nbsp;<a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/xd502djj/rss">订阅</a>&nbsp;<a id="blog_nav_rss_image" href="http://www.cnblogs.com/xd502djj/rss"><img src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/xml.gif" alt="订阅"></a></div>
+			<div id="topics">
+				
+<div id="post_detail">
+<!--done-->
+<div class="post">
+	<div class="postTitle">
+		<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/xd502djj/p/7112005.html">将你的Vim 打造成轻巧强大的IDE</a>
+	</div>
+	<div id="cnblogs_post_body" class="blogpost-body"><p>Vim和Emacs一个称为神之编辑器一个被称为编辑器之神，固然很是夸张，但也足以说明这两 款软件的优秀和在程序员界的地位。但是它们都已漫长的学习曲线让人望而生畏，阻止了大 多数人进入。作为一名几乎完全使用Vim写各种代码、文档的人，我想把我自己平时使用的 插件和配置整理下来，方便自己的总结和归纳，如果能有幸帮助到一些想学习Vim但是又不知 道如何入门的人来说，那就再荣幸不过了。</p>
+<p>在下面的内容中，我会介绍我使用的插件、Vim的配置，最后如果你觉得这些配置手动太麻烦 的话，我推荐你看我的另一篇文章（<a href="http://yuez.me/cong-ling-da-jian-he-pei-zhi-osxkai-fa-huan-jing/">从零搭建和配置OSX开发环境</a>）， 在那篇文章的末尾，我给出了一个自动化配置和管理Vim的方法。</p>
+<p>先贴一张我的Vim的截图：</p>
+<p><img title="vim as ide" src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/20150424220621_674.png" alt="将你的Vim 打造成轻巧强大的IDE" width="705" height="440"></p>
+<h2 id="articleHeader0">你看的到的插件</h2>
+<p>从上面那种截图中肉眼能看到的插件说起，把整个界面按照左窗口、主窗口、右窗口和下窗 口命名，依次介绍出现在这个窗口中的主要插件。</p>
+<h4>主窗口</h4>
+<p>作为一款主要用于书写代码的文本编辑器，一个足够舒服、靓丽的配色当然是首要考虑的。 我使用的配色主题是molokai（<a href="https://github.com/tomasr/molokai">官方地址</a>），在 你安装好了这个插件之后，你需要下面几行配置应用它：</p>
+<div><div id="highlighter_484748" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell plain">" Switch syntax highlighting on, when the terminal has colors</code></div><div class="line number2 index1 alt1"><code class="shell keyword">if</code> <code class="shell plain">(t_Co &gt; 2 || has(</code><code class="shell string">"gui_running"</code><code class="shell plain">)) &amp;&amp; !exists(</code><code class="shell string">"syntax_on"</code><code class="shell plain">)</code></div><div class="line number3 index2 alt2"><code class="shell spaces">&nbsp;&nbsp;</code><code class="shell plain">syntax on</code></div><div class="line number4 index3 alt1"><code class="shell plain">endif</code></div><div class="line number5 index4 alt2">&nbsp;</div><div class="line number6 index5 alt1"><code class="shell plain">" Javascript syntax hightlight</code></div><div class="line number7 index6 alt2"><code class="shell plain">syntax </code><code class="shell functions">enable</code></div><div class="line number8 index7 alt1">&nbsp;</div><div class="line number9 index8 alt2"><code class="shell plain">" Set syntax highlighting </code><code class="shell keyword">for</code> <code class="shell plain">specific </code><code class="shell functions">file</code> <code class="shell plain">types</code></div><div class="line number10 index9 alt1"><code class="shell plain">autocmd BufRead,BufNewFile Appraisals </code><code class="shell functions">set</code> <code class="shell plain">filetype=ruby</code></div><div class="line number11 index10 alt2"><code class="shell plain">autocmd BufRead,BufNewFile *.md </code><code class="shell functions">set</code> <code class="shell plain">filetype=markdown</code></div><div class="line number12 index11 alt1"><code class="shell plain">autocmd Syntax javascript </code><code class="shell functions">set</code> <code class="shell plain">syntax=jquery</code></div><div class="line number13 index12 alt2">&nbsp;</div><div class="line number14 index13 alt1"><code class="shell plain">" Color scheme</code></div><div class="line number15 index14 alt2"><code class="shell plain">colorscheme molokai</code></div><div class="line number16 index15 alt1"><code class="shell plain">highlight NonText guibg=</code><code class="shell comments">#060606</code></div><div class="line number17 index16 alt2"><code class="shell plain">highlight Folded&nbsp; guibg=</code><code class="shell comments">#0A0A0A guifg=#9090D0</code></div></div></td></tr></tbody></table></div></div>
+<p>&nbsp;</p>
+<p>另外一个推荐的vim主题是solarized(<a href="https://github.com/altercation/vim-colors-solarized">官方地址</a>)。</p>
+<p>在选定了一个适合自己的主题之后，就需要一些配置去解决排版的问题，比如字符编码和缩 进等问题。</p>
+<div><div id="highlighter_758173" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div><div class="line number24 index23 alt1">24</div><div class="line number25 index24 alt2">25</div><div class="line number26 index25 alt1">26</div><div class="line number27 index26 alt2">27</div><div class="line number28 index27 alt1">28</div><div class="line number29 index28 alt2">29</div><div class="line number30 index29 alt1">30</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell plain">" Backspace deletes like most programs </code><code class="shell keyword">in</code> <code class="shell plain">insert mode</code></div><div class="line number2 index1 alt1"><code class="shell functions">set</code> <code class="shell plain">backspace=2</code></div><div class="line number3 index2 alt2"><code class="shell plain">" Show the cursor position all the </code><code class="shell functions">time</code></div><div class="line number4 index3 alt1"><code class="shell functions">set</code> <code class="shell plain">ruler</code></div><div class="line number5 index4 alt2"><code class="shell plain">" Display incomplete commands</code></div><div class="line number6 index5 alt1"><code class="shell functions">set</code> <code class="shell plain">showcmd</code></div><div class="line number7 index6 alt2"><code class="shell plain">" Set fileencodings</code></div><div class="line number8 index7 alt1"><code class="shell functions">set</code> <code class="shell plain">fileencodings=utf-8,bg18030,gbk,big5</code></div><div class="line number9 index8 alt2">&nbsp;</div><div class="line number10 index9 alt1"><code class="shell plain">filetype plugin indent on</code></div><div class="line number11 index10 alt2">&nbsp;</div><div class="line number12 index11 alt1"><code class="shell plain">" Softtabs, 2 spaces</code></div><div class="line number13 index12 alt2"><code class="shell functions">set</code> <code class="shell plain">tabstop=2</code></div><div class="line number14 index13 alt1"><code class="shell functions">set</code> <code class="shell plain">shiftwidth=2</code></div><div class="line number15 index14 alt2"><code class="shell functions">set</code> <code class="shell plain">shiftround</code></div><div class="line number16 index15 alt1"><code class="shell functions">set</code> <code class="shell plain">expandtab</code></div><div class="line number17 index16 alt2">&nbsp;</div><div class="line number18 index17 alt1"><code class="shell plain">" Display extra whitespace</code></div><div class="line number19 index18 alt2"><code class="shell functions">set</code> <code class="shell plain">list listchars=tab:»·,trail:·</code></div><div class="line number20 index19 alt1">&nbsp;</div><div class="line number21 index20 alt2"><code class="shell plain">" Make it obvious where 80 characters is</code></div><div class="line number22 index21 alt1"><code class="shell functions">set</code> <code class="shell plain">textwidth=80</code></div><div class="line number23 index22 alt2"><code class="shell functions">set</code> <code class="shell plain">colorcolumn=+1</code></div><div class="line number24 index23 alt1">&nbsp;</div><div class="line number25 index24 alt2"><code class="shell plain">" Numbers</code></div><div class="line number26 index25 alt1"><code class="shell functions">set</code> <code class="shell plain">number</code></div><div class="line number27 index26 alt2"><code class="shell functions">set</code> <code class="shell plain">numberwidth=5</code></div><div class="line number28 index27 alt1">&nbsp;</div><div class="line number29 index28 alt2"><code class="shell functions">set</code> <code class="shell plain">matchpairs+=&lt;:&gt;</code></div><div class="line number30 index29 alt1"><code class="shell functions">set</code> <code class="shell plain">hlsearch</code></div></div></td></tr></tbody></table></div></div>
+<p><br>在第68行，水平和垂直方向分别有一条高亮条，这是用来表示我当 前光标所处于的行和列 用的。实现它，只需要几行简单的配置就可以了：</p>
+<div><div id="highlighter_157506" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell plain">" Highlight current line</code></div><div class="line number2 index1 alt1"><code class="shell plain">au WinLeave * </code><code class="shell functions">set</code> <code class="shell plain">nocursorline nocursorcolumn</code></div><div class="line number3 index2 alt2"><code class="shell plain">au WinEnter * </code><code class="shell functions">set</code> <code class="shell plain">cursorline cursorcolumn</code></div><div class="line number4 index3 alt1"><code class="shell functions">set</code> <code class="shell plain">cursorline cursorcolumn</code></div></div></td></tr></tbody></table></div></div>
+<p>&nbsp;</p>
+<h5>关于代码补全</h5>
+<p>有些人可能已经发现了，在我的主窗口中没有演示代码补全的功能，我需要对此做一个说明。 我本人不喜欢过于强大的代码补全，所以默认的对于我来说已经完全足够了，如果你需要使 用更强大的代码补全，我推荐你使用YouCompleteMe（<a href="https://github.com/Valloric/YouCompleteMe">官方地址</a>）。</p>
+<p><img title="YouCompleteMe" src="http://yuez.me/photos/you-complete-me.gif" alt="YouCompleteMe" width="600" height="240"></p>
+<h4>左窗口</h4>
+<p>左窗口是一个用于浏览目录结构的插件nerdtree（<a href="https://github.com/scrooloose/nerdtree">官方地址</a>）。 同样一些简单的配置之后，它便能为你提供一个方便够用的功能。</p>
+<div><div id="highlighter_112514" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell plain">" NERD tree</code></div><div class="line number2 index1 alt1"><code class="shell functions">let</code> <code class="shell plain">NERDChristmasTree=0</code></div><div class="line number3 index2 alt2"><code class="shell functions">let</code> <code class="shell plain">NERDTreeWinSize=35</code></div><div class="line number4 index3 alt1"><code class="shell functions">let</code> <code class="shell plain">NERDTreeChDirMode=2</code></div><div class="line number5 index4 alt2"><code class="shell functions">let</code> <code class="shell plain">NERDTreeIgnore=[</code><code class="shell string">'\~$'</code><code class="shell plain">, </code><code class="shell string">'\.pyc$'</code><code class="shell plain">, </code><code class="shell string">'\.swp$'</code><code class="shell plain">]</code></div><div class="line number6 index5 alt1"><code class="shell functions">let</code> <code class="shell plain">NERDTreeShowBookmarks=1</code></div><div class="line number7 index6 alt2"><code class="shell functions">let</code> <code class="shell plain">NERDTreeWinPos=</code><code class="shell string">"left"</code></div><div class="line number8 index7 alt1"><code class="shell plain">" Automatically </code><code class="shell functions">open</code> <code class="shell plain">a NERDTree </code><code class="shell keyword">if</code> <code class="shell plain">no files where specified</code></div><div class="line number9 index8 alt2"><code class="shell plain">autocmd vimenter * </code><code class="shell keyword">if</code> <code class="shell plain">!argc() | NERDTree | endif</code></div><div class="line number10 index9 alt1"><code class="shell plain">" Close vim </code><code class="shell keyword">if</code> <code class="shell plain">the only window left </code><code class="shell functions">open</code> <code class="shell plain">is a NERDTree</code></div><div class="line number11 index10 alt2"><code class="shell plain">autocmd bufenter * </code><code class="shell keyword">if</code> <code class="shell plain">(winnr(</code><code class="shell string">"$"</code><code class="shell plain">) == 1 &amp;&amp; exists(</code><code class="shell string">"b:NERDTreeType"</code><code class="shell plain">) &amp;&amp; b:NERDTreeType == </code><code class="shell string">"primary"</code><code class="shell plain">) | q | endif</code></div><div class="line number12 index11 alt1"><code class="shell plain">" Open a NERDTree</code></div><div class="line number13 index12 alt2"><code class="shell plain">nmap &lt;F5&gt; :NERDTreeToggle&lt;cr&gt;</code></div></div></td></tr></tbody></table></div></div>
+<p>&nbsp;</p>
+<h4>右窗口</h4>
+<p>在我的截图中，右窗口陈列出了我当前打开的rb文件中申明的类、变量及方法等等。这是一 款名叫tagbar的插件，它为我们提供了一个简单的方式去浏览当前文件的结构，并且支持 在各个标签之间快捷的跳转。同理，安装之后，需要一些配置：</p>
+<div><div id="highlighter_78911" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell plain">" Tagbar</code></div><div class="line number2 index1 alt1"><code class="shell functions">let</code> <code class="shell plain">g:tagbar_width=35</code></div><div class="line number3 index2 alt2"><code class="shell functions">let</code> <code class="shell plain">g:tagbar_autofocus=1</code></div><div class="line number4 index3 alt1"><code class="shell plain">nmap &lt;F6&gt; :TagbarToggle&lt;CR&gt;</code></div></div></td></tr></tbody></table></div></div>
+<p>&nbsp;</p>
+<p>如果你发现默认的Tagbar不能支持你的语言，比如Css, Clojure, Markdown等等，你可以 参照<a href="https://github.com/majutsushi/tagbar/wiki">这篇文章</a>为它提供额外的支持。</p>
+<h4>下窗口</h4>
+<p>下窗口包含了两个部分：一个是用于全局搜索的窗口和一个状态条。</p>
+<p>全局搜索是一个基于文件名的搜索功能，可以快速定位一个文件。这是ctrlp这个插件提 供的功能。下面是ctrlp的一些配置：</p>
+<div><div id="highlighter_229815" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell plain">" ctrap</code></div><div class="line number2 index1 alt1"><code class="shell functions">set</code> <code class="shell plain">wildignore+=*</code><code class="shell plain">/tmp/</code><code class="shell plain">*,*.so,*.swp,*.zip,*.png,*.jpg,*.jpeg,*.gif " MacOSX</code><code class="shell plain">/Linux</code></div><div class="line number3 index2 alt2"><code class="shell functions">let</code> <code class="shell plain">g:ctrlp_custom_ignore = </code><code class="shell string">'\v[\/]\.(git|hg|svn)$'</code></div></div></td></tr></tbody></table></div></div>
+<p><br>ctrlp默认会使用grep进行搜索，效率低且慢。所以，我使用了ag去替换默认的搜索 功能。ag是一款轻量级的搜索工具，速度非常快。为了集成ag，需要添加下列配置：</p>
+<div><div id="highlighter_456094" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell keyword">if</code> <code class="shell plain">executable(</code><code class="shell string">'ag'</code><code class="shell plain">)</code></div><div class="line number2 index1 alt1"><code class="shell spaces">&nbsp;&nbsp;</code><code class="shell plain">" Use Ag over Grep</code></div><div class="line number3 index2 alt2"><code class="shell spaces">&nbsp;&nbsp;</code><code class="shell functions">set</code> <code class="shell plain">grepprg=ag\ --nogroup\ --nocolor</code></div><div class="line number4 index3 alt1"><code class="shell spaces">&nbsp;&nbsp;</code><code class="shell plain">" Use ag </code><code class="shell keyword">in</code> <code class="shell plain">CtrlP </code><code class="shell keyword">for</code> <code class="shell plain">listing files.</code></div><div class="line number5 index4 alt2"><code class="shell spaces">&nbsp;&nbsp;</code><code class="shell functions">let</code> <code class="shell plain">g:ctrlp_user_command = </code><code class="shell string">'ag %s -l --nocolor -g ""'</code></div><div class="line number6 index5 alt1"><code class="shell spaces">&nbsp;&nbsp;</code><code class="shell plain">" Ag is fast enough that CtrlP doesn't need to cache</code></div><div class="line number7 index6 alt2"><code class="shell spaces">&nbsp;&nbsp;</code><code class="shell functions">let</code> <code class="shell plain">g:ctrlp_use_caching = 0</code></div><div class="line number8 index7 alt1"><code class="shell plain">endif</code></div></div></td></tr></tbody></table></div></div>
+<p><br>下面状态条中会依次显示：当前模式、Git分支、文件路径、文件是否保存以及当前所载行和 列的信息。这是通过vim-powerline来实现的。其中显示Git信息需要配合vim-fugitive插件一些使用。</p>
+<div><div id="highlighter_708779" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell functions">set</code> <code class="shell plain">laststatus=2 " Always display the status line</code></div><div class="line number2 index1 alt1"><code class="shell functions">set</code> <code class="shell plain">statusline+=%{fugitive</code><code class="shell comments">#statusline()} "&nbsp; Git Hotness</code></div></div></td></tr></tbody></table></div></div>
+<p>&nbsp;</p>
+<h4>小结</h4>
+<p>通过以上的配置，你就可以拥有一些如第一张图所示的那样，看起来还不错的编辑器。当然， Vim之所以如此倍受推崇，只是依靠这些还是远远不够的。接下来，我要介绍一些看不见的插 件来实实在在的提升Vim体验。</p>
+<h2 id="articleHeader1">看不见的实用插件</h2>
+<h4>现代化的插件管理</h4>
+<p>在我的另一篇文章中（<a href="http://yuez.me/cong-ling-da-jian-he-pei-zhi-osxkai-fa-huan-jing/">从零搭建和配置OSX开发环境</a>） ，我已经详细介绍过Vundle这个管理Vim插件的一个软件，这里不做过多介绍。</p>
+<h4>在Vim中执行你想要运行的命令</h4>
+<p>vim-run-interactive让你可以在Vim中执行几乎任何你想要在命令行中执行的命令。举例 来说，假设你有条git update的自定义命令，你可以通过:RunInInteractiveShell git update来执行它，而不需要退出Vim。添加一条配置，可以简化这个步骤：</p>
+<div><div id="highlighter_216943" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell plain">" Run commands that require an interactive shell</code></div><div class="line number2 index1 alt1"><code class="shell plain">nnoremap &lt;Leader&gt;r :RunInInteractiveShell&lt;space&gt;</code></div></div></td></tr></tbody></table></div></div>
+<p>&nbsp;</p>
+<p>如此一来，你可以通过&lt;Leader&gt; + r + 命令键来激活执行命令。如果你不知道什么是Leader键，你可以去百度或者Google一下。</p>
+<h4>Vim的语法检查</h4>
+<p>Vim中有个很强大的语法检查插件，它支持几乎所有常用的语言的语法检测[syntastic(<a href="https://github.com/scrooloose/syntastic">https://github.com/scrooloose/syntastic</a>)]。 附上一张来自官方的截图：</p>
+<p><img title="syntastic plugin" src="http://yuez.me/photos/syntastic.png" alt="syntastic plugin" width="600" height="240"></p>
+<p>为了让它更好的工作，同样需要一些配置：</p>
+<div><div id="highlighter_735218" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell plain">" configure syntastic syntax checking to check on </code><code class="shell functions">open</code> <code class="shell plain">as well as save</code></div><div class="line number2 index1 alt1"><code class="shell functions">let</code> <code class="shell plain">g:syntastic_check_on_open=1</code></div><div class="line number3 index2 alt2"><code class="shell functions">let</code> <code class="shell plain">g:syntastic_html_tidy_ignore_errors=[</code><code class="shell string">" proprietary attribute \"ng-"</code><code class="shell plain">]</code></div><div class="line number4 index3 alt1"><code class="shell functions">let</code> <code class="shell plain">g:syntastic_always_populate_loc_list = 1</code></div><div class="line number5 index4 alt2"><code class="shell functions">let</code> <code class="shell plain">g:syntastic_auto_loc_list = 1</code></div><div class="line number6 index5 alt1"><code class="shell functions">let</code> <code class="shell plain">g:syntastic_check_on_wq = 0</code></div><div class="line number7 index6 alt2"><code class="shell functions">set</code> <code class="shell plain">statusline+=%</code><code class="shell comments">#warningmsg#</code></div><div class="line number8 index7 alt1"><code class="shell functions">set</code> <code class="shell plain">statusline+=%{SyntasticStatuslineFlag()}</code></div><div class="line number9 index8 alt2"><code class="shell functions">set</code> <code class="shell plain">statusline+=%*</code></div></div></td></tr></tbody></table></div></div>
+<p>&nbsp;</p>
+<h4>Rails集成开发套件</h4>
+<p>我是一名Ruby的爱好者，所以Vim中少不了针对Ruby的一系列插件。我作为一名Web开发者， Rails这个大名鼎鼎的框架自然也是有所涉猎。所以在我的Vim中有着针对它们开发的一套插 件。</p>
+<p>插件列表：</p>
+<ul>
+<li><a href="https://github.com/vim-ruby/vim-ruby">ruby-vim</a>：在快速的在module, class, method中跳跃。</li>
+<li><a href="https://github.com/tpope/vim-bundler">vim-bundler</a>：在Vim中集成Bundler。</li>
+<li><a href="https://github.com/tpope/vim-endwise">vim-endwise</a>：自动补全end关键字。</li>
+<li><a href="https://github.com/tpope/vim-rails">vim-rails</a>：它的功能很多，可以说是用 Vim开发Rails不可缺少的一个插件。更详细的信息，可以前往它的官方网站获取。</li>
+<li><a href="https://github.com/thoughtbot/vim-rspec">vim-rspec</a>：在Vim中执行Rspec测试。</li>
+
+</ul>
+<div><div id="highlighter_463277" class="syntaxhighlighter  shell"><div class="toolbar"><span><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="shell plain">" Cucumber navigation commands</code></div><div class="line number2 index1 alt1"><code class="shell plain">autocmd User Rails Rnavcommand step features</code><code class="shell plain">/step_definitions</code> <code class="shell plain">-glob=**/* -suffix=_steps.rb</code></div><div class="line number3 index2 alt2"><code class="shell plain">autocmd User Rails Rnavcommand config config -glob=**/* -suffix=.rb -default=routes</code></div><div class="line number4 index3 alt1">&nbsp;</div><div class="line number5 index4 alt2"><code class="shell plain">" RSpec.vim mappings</code></div><div class="line number6 index5 alt1"><code class="shell plain">map &lt;Leader&gt;t :call RunCurrentSpecFile()&lt;CR&gt;</code></div><div class="line number7 index6 alt2"><code class="shell plain">map &lt;Leader&gt;s :call RunNearestSpec()&lt;CR&gt;</code></div><div class="line number8 index7 alt1"><code class="shell plain">map &lt;Leader&gt;l :call RunLastSpec()&lt;CR&gt;</code></div><div class="line number9 index8 alt2"><code class="shell plain">map &lt;Leader&gt;a :call RunAllSpecs()&lt;CR&gt;</code></div></div></td></tr></tbody></table></div></div>
+<p>&nbsp;</p>
+<h4>更多好用的工具</h4>
+<p>还有很多好用的插件，如果每个都一一说明，那么篇幅再长一倍怕也是不够。所以，我这里 就把一些好用的插件列出来，有兴趣的可以自己看看。</p>
+<ul>
+<li><a href="https://github.com/danro/rename.vim">rename.vim</a>：在Vim中为文件重命名。</li>
+<li><a href="https://github.com/kchmck/vim-coffee-script">vim-coffee-script</a>：在Vim中舒心 的编写、编译Coffeescript。</li>
+<li><a href="https://github.com/pbrisbin/vim-mkdir">vim-mkdir</a>：当你在Vim中新建文件的时候， 自动帮你创建不存在的目录。</li>
+<li><a href="https://github.com/tpope/vim-surround">vim-surround</a>：快速的删除、修改和添加 括号、引号、XML标签等等。</li>
+<li><a href="https://github.com/tmhedberg/matchit">matchit</a>：用%去在两个对应的字符间跳转。</li>
+<li><a href="https://github.com/vim-scripts/tComment">tComment</a>：快速注释、反注释代码。</li>
+<li><a href="https://github.com/mattn/emmet-vim">emmet-vim</a>：Emmet的Vim版。</li>
+<li><a href="https://github.com/godlygeek/tabular">tabular</a>：快速对齐。</li>
+<li><a href="https://github.com/msanders/snipmate.vim">snipmate.vim</a>：快速的代码片段。</li>
+<li><a href="https://github.com/Lokaltog/vim-easymotion">vim-easymotion</a>：在文件中快速定位。</li>
+<li><a href="https://github.com/suan/vim-instant-markdown">vim-instant-markdown</a>：Vim中对 Markdown文档的实时预览。</li>
+
+</ul>
+<h2 id="articleHeader2">备注</h2>
+<p>&nbsp;</p>
+<p>转&nbsp;http://www.open-open.com/lib/view/open1429884437588.html</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag">标签: <a href="http://www.cnblogs.com/xd502djj/tag/mac/">mac</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(7112005,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;0a05470b-63cf-dd11-9e4d-001cf0cd104b&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/xd502djj/" target="_blank"><img src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/xd502djj/">茄子_2008</a><br>
+            <a href="http://home.cnblogs.com/u/xd502djj/followees">关注 - 11</a><br>
+            <a href="http://home.cnblogs.com/u/xd502djj/followers">粉丝 - 395</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;0a05470b-63cf-dd11-9e4d-001cf0cd104b&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(7112005,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(7112005,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/xd502djj/p/7111999.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/xd502djj/p/7111999.html" title="发布于2017-07-03 17:05">从零搭建和配置OSX开发环境</a><br><a href="http://www.cnblogs.com/xd502djj/p/7116076.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/xd502djj/p/7116076.html" title="发布于2017-07-04 12:51">sparklyr-R语言访问Spark的另外一种方法</a><br></div>
+</div>
+
+
+	<div class="postDesc">posted on <span id="post-date">2017-07-03 17:06</span> <a href="http://www.cnblogs.com/xd502djj/">茄子_2008</a> 阅读(<span id="post_view_count">1595</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=7112005" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" onclick="AddToWz(7112005);return false;">收藏</a></div>
+</div>
+<script type="text/javascript">var allowComments=true,cb_blogId=48738,cb_entryId=7112005,cb_blogApp=currentBlogApp,cb_blogUserGuid='0a05470b-63cf-dd11-9e4d-001cf0cd104b',cb_entryCreatedDate='2017/7/3 17:06:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/xd502djj/p/7112005.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="http://clickc.admaster.com.cn/c/a105960,b2436453,c1705,i0,m101,8a1,8b2,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-DevCloud&#39;)">【推荐】华为云7大明星产品0元免费使用</a><br><a href="https://cloud.tencent.com/act/mid-year?fromSource=gwzcw.945655.945655.945655" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-腾讯云&#39;)">【活动】腾讯云释放技术红利，热门云产品3折起</a><br><a href="http://challenge.xfyun.cn/?ch=bk" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-xfyun&#39;)">【大赛】2018首届“顶天立地”AI开发者大赛</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);" href="https://cloud.tencent.com/product/tac?fromSource=gwzcw.945615.945615.945615" target="_blank"><img width="300" height="250" src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/24442-20180530101048589-14642248.jpg" alt="腾讯云0530"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/598035/" target="_blank">GDPR来了：欧盟没有科技巨头，但是有法律</a><br> ·  <a href="https://news.cnblogs.com/n/598034/" target="_blank">京东发布2020规划：机器人规模全球前五</a><br> ·  <a href="https://news.cnblogs.com/n/598033/" target="_blank">Ubuntu 18.04 LTS首个维护版本更新敲定6月26日上线</a><br> ·  <a href="https://news.cnblogs.com/n/598032/" target="_blank">王健林锲而不舍搞电商：飞凡遇阻后开启新布局</a><br> ·  <a href="https://news.cnblogs.com/n/598030/" target="_blank">Mozilla Firefox开始支持Web组件技术 复杂网站开发变得更加容易</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/34770/" target="_blank"><img src="./将你的Vim 打造成轻巧强大的IDE - 茄子_2008 - 博客园_files/TB1gBPhgZLJ8KJjy0FnXXcFDpXa-468-60.jpg" alt="" style="width: 468px; height: 60px;"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/576411/" target="_blank">你可以把编程当做一项托付终身的职业</a><br> ·  <a href="http://kb.cnblogs.com/page/596164/" target="_blank">评审的艺术——谈谈现实中的代码评审</a><br> ·  <a href="http://kb.cnblogs.com/page/577233/" target="_blank">如何高效学习</a><br> ·  <a href="http://kb.cnblogs.com/page/578689/" target="_blank">如何成为优秀的程序员？</a><br> ·  <a href="http://kb.cnblogs.com/page/594930/" target="_blank">菜鸟工程师的超神之路 -- 从校园到职场</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"><b>历史上的今天:</b><br>2016-07-03 <a href="http://www.cnblogs.com/xd502djj/p/5638042.html">相信</a><br></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+			</div>
+		</div>
+	</div>
+	<!-- right ends -->
+	<!-- left starts -->
+	<div id="left">
+		<!-- 左侧工具部分 -->
+		<div id="left_content">
+			<div id="calendar"><div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/04/01&#39;);return false;">&lt;</a></td><td align="center">2018年5月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/06/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td class="CalWeekendDay" align="center">5</td></tr><tr><td class="CalWeekendDay" align="center">6</td><td align="center"><a href="http://www.cnblogs.com/xd502djj/archive/2018/05/07.html"><u>7</u></a></td><td align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td class="CalWeekendDay" align="center">12</td></tr><tr><td class="CalWeekendDay" align="center">13</td><td align="center"><a href="http://www.cnblogs.com/xd502djj/archive/2018/05/14.html"><u>14</u></a></td><td align="center">15</td><td align="center">16</td><td align="center">17</td><td align="center">18</td><td class="CalWeekendDay" align="center">19</td></tr><tr><td class="CalWeekendDay" align="center">20</td><td align="center">21</td><td align="center">22</td><td align="center">23</td><td align="center">24</td><td align="center">25</td><td class="CalWeekendDay" align="center">26</td></tr><tr><td class="CalWeekendDay" align="center">27</td><td align="center">28</td><td align="center">29</td><td align="center">30</td><td class="CalTodayDay" align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td></tr><tr><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+			
+<!--done-->
+<!-- <h1 class="listtitle">公告</h1> -->
+<div class="newsItem">
+	<div id="blog-news"><ul>
+<li>如果一件事情你觉得难的完不成，你可以把它分为若干步,并不断寻找合适的方法。最后你会发现你是个超人。不要给自己找麻烦，但遇到麻烦绝不怕，更不要退缩。</li>
+<li>电工查找电路不通点的最快方法是：分段诊断排除，快速定位。你有什么启示吗?</li>
+<li>求知若饥，虚心若愚。</li>
+<li>当你对一个事情掌控不足的时候，你需要做的就是“梳理”，并制定相应的规章制度，并使资源各司其职。</li>
+<li>官网永远是获得第一时间获得第一手资料的最佳通道。</li>
+<li>去繁归简:作为一个程序员，最痛恨的代码就是如老婆的裹脚布又臭又长一样的代码；最崇尚的就是清晰、简洁、模块化的代码。</li>
+</ul><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/xd502djj/">茄子_2008</a><br>园龄：<a href="https://home.cnblogs.com/u/xd502djj/" title="入园时间：2008-12-02">9年5个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/xd502djj/followers/">395</a><br>关注：<a href="https://home.cnblogs.com/u/xd502djj/followees/">11</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;0a05470b-63cf-dd11-9e4d-001cf0cd104b&#39;)">+加关注</a></div><script>getFollowStatus('0a05470b-63cf-dd11-9e4d-001cf0cd104b')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			
+				<div id="leftcontentcontainer">
+					<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/xd502djj/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/xd502djj/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/xd502djj/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/xd502djj/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/xd502djj/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<h3 class="catListTitle">我的标签</h3>
+<div id="MyTag">
+<ul>
+<li><a href="http://www.cnblogs.com/xd502djj/tag/Linux/">Linux</a>(98)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/Road/">Road</a>(57)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/Oracle/">Oracle</a>(42)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/Java/">Java</a>(35)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/Mysql/">Mysql</a>(30)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/C%2B%2B/">C++</a>(25)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/Tools/">Tools</a>(24)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/hadoop/">hadoop</a>(21)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/PHP/">PHP</a>(18)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/hive/">hive</a>(18)</li><li><a href="http://www.cnblogs.com/xd502djj/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<!--done-->
+
+		<h1 class="catListTitle">随笔档案</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_0" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2018/05.html">2018年5月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_1" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2018/04.html">2018年4月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_2" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2018/03.html">2018年3月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_3" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2018/01.html">2018年1月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_4" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/12.html">2017年12月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_5" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/11.html">2017年11月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_6" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/10.html">2017年10月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_7" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/09.html">2017年9月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_8" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/08.html">2017年8月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_9" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/07.html">2017年7月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_10" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/06.html">2017年6月 (13)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_11" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/05.html">2017年5月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_12" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/04.html">2017年4月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_13" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/03.html">2017年3月 (9)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_14" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/02.html">2017年2月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_15" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2017/01.html">2017年1月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_16" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/12.html">2016年12月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_17" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/11.html">2016年11月 (7)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_18" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/10.html">2016年10月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_19" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/09.html">2016年9月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_20" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/08.html">2016年8月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_21" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/07.html">2016年7月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_22" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/06.html">2016年6月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_23" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/05.html">2016年5月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_24" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/03.html">2016年3月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_25" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/02.html">2016年2月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_26" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2016/01.html">2016年1月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_27" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/12.html">2015年12月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_28" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/11.html">2015年11月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_29" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/10.html">2015年10月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_30" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/09.html">2015年9月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_31" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/08.html">2015年8月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_32" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/07.html">2015年7月 (19)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_33" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/06.html">2015年6月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_34" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/05.html">2015年5月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_35" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/04.html">2015年4月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_36" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/03.html">2015年3月 (7)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_37" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/02.html">2015年2月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_38" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2015/01.html">2015年1月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_39" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/12.html">2014年12月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_40" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/11.html">2014年11月 (18)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_41" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/10.html">2014年10月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_42" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/09.html">2014年9月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_43" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/08.html">2014年8月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_44" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/07.html">2014年7月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_45" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/06.html">2014年6月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_46" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/05.html">2014年5月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_47" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/04.html">2014年4月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_48" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/03.html">2014年3月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_49" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/02.html">2014年2月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_50" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2014/01.html">2014年1月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_51" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/12.html">2013年12月 (7)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_52" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/11.html">2013年11月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_53" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/10.html">2013年10月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_54" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/09.html">2013年9月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_55" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/08.html">2013年8月 (10)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_56" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/07.html">2013年7月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_57" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/05.html">2013年5月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_58" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/04.html">2013年4月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_59" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/03.html">2013年3月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_60" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/02.html">2013年2月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_61" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2013/01.html">2013年1月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_62" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/12.html">2012年12月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_63" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/11.html">2012年11月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_64" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/10.html">2012年10月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_65" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/09.html">2012年9月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_66" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/08.html">2012年8月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_67" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/07.html">2012年7月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_68" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/06.html">2012年6月 (7)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_69" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/05.html">2012年5月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_70" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/04.html">2012年4月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_71" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/03.html">2012年3月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_72" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2012/01.html">2012年1月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_73" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/12.html">2011年12月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_74" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/11.html">2011年11月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_75" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/10.html">2011年10月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_76" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/09.html">2011年9月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_77" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/08.html">2011年8月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_78" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/07.html">2011年7月 (10)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_79" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/06.html">2011年6月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_80" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/05.html">2011年5月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_81" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/04.html">2011年4月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_82" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/03.html">2011年3月 (13)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_83" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/02.html">2011年2月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_84" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2011/01.html">2011年1月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_85" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/12.html">2010年12月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_86" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/11.html">2010年11月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_87" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/10.html">2010年10月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_88" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/09.html">2010年9月 (42)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_89" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/08.html">2010年8月 (18)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_90" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/07.html">2010年7月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_91" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/06.html">2010年6月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_92" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/05.html">2010年5月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_93" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/04.html">2010年4月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_94" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2010/03.html">2010年3月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_95" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2009/10.html">2009年10月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_96" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2009/07.html">2009年7月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_97" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2009/06.html">2009年6月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_98" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2009/03.html">2009年3月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_99" class="listitem" href="https://www.cnblogs.com/xd502djj/archive/2009/02.html">2009年2月 (7)</a></li>
+			
+				</ul>
+			
+	
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<h3 class="catListTitle">最新评论</h3>
+<div class="RecentComment" id="RecentComments">
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/xd502djj/archive/2010/09/22/1832912.html#3910785">1. Re:C++ Virtual详解</a></li>
+        <li class="recent_comment_body">mark</li>
+        <li class="recent_comment_author">--牛逼闪闪亮晶晶</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/xd502djj/archive/2010/09/22/1832913.html#3900007">2. Re:C++中的指针与引用</a></li>
+        <li class="recent_comment_body">写的很好</li>
+        <li class="recent_comment_author">--鄙视哥_小白</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/xd502djj/archive/2011/05/03/2035599.html#3896691">3. Re:Linux下如何查看系统启动时间和运行时间</a></li>
+        <li class="recent_comment_body">@季成威多谢噢 上面加的有链接噢 ：）...</li>
+        <li class="recent_comment_author">--茄子_2008</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/xd502djj/archive/2011/05/03/2035599.html#3896437">4. Re:Linux下如何查看系统启动时间和运行时间</a></li>
+        <li class="recent_comment_body">部分原创</li>
+        <li class="recent_comment_author">--季成威</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/xd502djj/archive/2011/05/03/2035599.html#3896435">5. Re:Linux下如何查看系统启动时间和运行时间</a></li>
+        <li class="recent_comment_body"><a href="https://www.cnblogs.com/xd502djj/p/7112005.html" target="_blank"></a><br>原创在这里</li>
+        <li class="recent_comment_author">--季成威</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<h3 class="catListTitle">阅读排行榜</h3>
+<div class="RecentComment" id="TopViewPosts"> 
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/03/01/1968041.html">1. Linux查看CPU和内存使用情况(976831)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/11/25/2263562.html">2. Linux 的cp命令(551454)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/11/23/2260094.html">3. Linux添加/删除用户和用户组(505698)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/07/21/2112683.html">4. java取整和java四舍五入方法(203613)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/03/01/1967800.html">5. linux配置IP的方法(153502)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<h3 class="catListTitle">评论排行榜</h3>
+<div class="RecentComment" id="TopCommentsPosts">
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/11/23/2260094.html">1. Linux添加/删除用户和用户组(9)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/03/01/1968041.html">2. Linux查看CPU和内存使用情况(9)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/05/03/2035599.html">3. Linux下如何查看系统启动时间和运行时间(7)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2010/09/22/1832912.html">4. C++ Virtual详解(5)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2010/09/21/1832493.html">5. __declspec(dllexport) &amp; __declspec(dllimport)(4)</a></li></ul></div>
+</div></div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/03/01/1968041.html">1. Linux查看CPU和内存使用情况(21)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/11/23/2260094.html">2. Linux添加/删除用户和用户组(19)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2011/11/25/2263562.html">3. Linux 的cp命令(11)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2010/09/22/1832912.html">4. C++ Virtual详解(9)</a></li><li><a href="https://www.cnblogs.com/xd502djj/archive/2012/06/25/2561318.html">5. Netty了解与小试(6)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+				</div>
+			
+		</div>
+		<!-- //右侧工具部分 -->
+	</div>
+	<!-- left ends -->	
+	<div class="clear"></div>
+</div>
+<div id="footer">
+	
+<!--done-->
+Copyright ©2018 茄子_2008
+</div>
+
+<!--PageEndHtml Block Begin-->
+<b>声明：现大部分文章为寻找问题时在网上相互转载，在此博客中做个记录，方便自己也方便有类似问题的朋友，故原出处已不好查到，如有侵权，请发邮件表明文章和原出处地址，我一定在文章中注明。谢谢。</b>
+<!--PageEndHtml Block End-->
+
+
+</body></html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0049)https://www.linuxidc.com/Linux/2015-01/111501.htm -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>看开源代码利器—用Graphviz + CodeViz生成C/C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站</title>
+
+<link rel="icon" href="https://www.linuxidc.com/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="https://www.linuxidc.com/favicon.ico" type="image/x-icon">
+<meta name="description" content="CodeViz是《Understanding The Linux Virtual Memory Manager》的作者 Mel Gorman 写的一款分析C/C++源代码中函数调用关系的open">
+<meta name="keywords" content="Graphviz,CodeViz,C/C++,看开源代码利器—用Graphviz + CodeViz生成C/C++函数调用图(call graph),编程,Linux编程,Linux Shell,Android,Android教程,JAVA,C语言,Python,HTML5">
+<link rel="canonical" href="http://www.linuxidc.com/Linux/2015-01/111501.htm">
+<meta name="generator" content="Linux公社">
+<meta name="generator" content="Linux">
+<link rel="stylesheet" href="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/style.css" type="text/css">
+<meta name="generator" content="专业的Linux网站">
+<script charset="utf-8" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/s.js"></script><script src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/f.txt"></script><script src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/ca-pub-5195587195407606.js"></script><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/jquery.js"></script>
+<script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/iwms.js"></script>
+<script type="text/javascript">iwms.urlPrefix="../../";</script>
+
+<script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/show.js"></script>
+<link rel="preload" href="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/f(1).txt" as="script"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/f(1).txt"></script><style>html #hm_t_undefined .hm-t-go-top {position:fixed;right:2px;bottom:2px;z-index:99998;cursor:pointer;width:40px;height:37px!important;text-align:center;white-space:normal;font-size:14px;line-height:17px;padding-top:3px;color:#fff;background:#404040;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEkAAAAXCAYAAABH92JbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDowMjgwMTE3NDA3MjA2ODExODA4M0UyNDA4ODdDRTZBQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBQjc5RkRFNkI5ODMxMUUzQkZGNDhENEJFQjM2OTcyRiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBQjc5RkRFNUI5ODMxMUUzQkZGNDhENEJFQjM2OTcyRiIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDI4MDExNzQwNzIwNjgxMTgwODNFMjQwODg3Q0U2QUIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDI4MDExNzQwNzIwNjgxMTgwODNFMjQwODg3Q0U2QUIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5HPYM5AAACC0lEQVR42uyZTSgEYRjH90NoqaVcpDblvKW2XOSkNh8H5Yac9sBBDqQokiJKSMpNTi5OPo6Ktsgu67JcUHIXWfK1u3b8Xx6Zxuzu+64dM83uv34zNfu8b8/8Z+d5P8YqSZLFJNLsRmyWvIRMKgVD4AhEwA3YAV0pzGwEqyAEwmAddIICHe7FqhnsdQM14FxKLj+ooFiGE2ykiD8GVbJ4I1ELAnTmasMODnAhpVcIFIMicMgRH6Z4IxnUAh4pP3Zu5TVpUOLXDJgWiB8wkEF9IK7IL07X05oUFLjpZ4JXQQOYYwfzafJcoDjVPqw43KE4lWtUTF+AQ8eBqQSsgTaO2E0apJ7URrdCDZOM62hQJfBzGmShOD+1+2XSiYaJ7utkkBsEgEewnYfauZUmzWmU6DuY0sEgLzgArgzbu6i992cu/1WclqXsa1iHIt0DYlnKP0b9fRZu5pWdZs7dWXqa7B80+s//oF5aMSjflGqBPq5BQnFtVv4UmGHjIPEH96PAZ6C5kVMwf6daPzbFKnqCqvx9Bk/yFjSBFTMvcL+1DerAmUA/p9Rm1+y7AHJdgnqwx9EHm1s0gKtc2CpR6gE00/ZHMm3RKxbJlf0kNb2BDrCk8hsbDdvBay5tuiUTGxL7waTs2iLw0YTR9BLZQRwDUVqwjuTS9q3VRB8C1OQUnM6UqdXX/IcADn0IMADs2AqDOPSutQAAAABJRU5ErkJggg==) no-repeat -42px center #666;*background-image:url(http://ecma.bdimg.com/holmes/t-popup-icons-png8.png);_position:absolute;_top:expression(eval(document.documentElement.scrollTop+(document.documentElement.clientHeight||document.body.clientHeight)-this.offsetHeight-2));}</style></head>
+<body>
+<div class="topBar">
+	<div class="twidth">
+	
+	<div style="float:right">
+		<script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/language.js"></script> <a id="StranLink" href="javascript:StranBody()" title="點擊以繁體中文方式浏覽">繁體</a>
+	</div>
+	
+	<div id="topUser">你好，游客 <a href="https://www.linuxidc.com/Linux/2015-01/111501.htm#" onclick="iwms.logPop()">登录</a>
+	<a href="https://www.linuxidc.com/memberreg.aspx" rel="nofollow">注册</a>
+	<a href="https://www.linuxidc.com/search.aspx" rel="nofollow">搜索</a>
+	</div>
+	</div>
+</div>
+<div class="twidth">
+<div id="sitehead">
+<div class="l"></div>
+<div class="r"></div>
+<div class="m">
+	<table width="100%">
+	<tbody><tr align="center"><td width="160">
+	<a href="http://www.linuxidc.com/"><img style="filter: chroma(color=#FFFFFF);" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/logo.jpg" alt="Linux公社" width="155" height="53" border="0"></a>
+	</td><td>
+	<div align="center"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux.js"></script></div>
+	</td>
+	</tr></tbody></table>
+</div>
+</div>
+<div id="navbar">
+<div class="l"></div>
+<div class="r"></div>
+<div class="m">
+	<a href="https://www.linuxidc.com/index.htm" class="first">首页</a><a href="https://www.linuxidc.com/it/">Linux新闻</a><a href="https://www.linuxidc.com/Linuxit/">Linux教程</a><a href="https://www.linuxidc.com/MySql/">数据库技术</a><a href="https://www.linuxidc.com/RedLinux/" class="thisclass">Linux编程</a><a href="https://www.linuxidc.com/Apache/">服务器应用</a><a href="https://www.linuxidc.com/Unix/">Linux安全</a><a href="https://www.linuxidc.com/download/">Linux下载</a><a href="https://www.linuxidc.com/Linuxrz/">Linux认证</a><a href="https://www.linuxidc.com/theme/">Linux主题</a><a href="https://www.linuxidc.com/Linuxwallpaper/">Linux壁纸</a><a href="https://www.linuxidc.com/linuxsoft/">Linux软件</a><a href="https://www.linuxidc.com/digi/">数码</a><a href="https://www.linuxidc.com/mobile/">手机</a><a href="https://www.linuxidc.com/diannao/">电脑</a>
+
+</div>
+</div>
+
+<div id="navsub">
+<div class="l"></div>
+<div class="r"></div>
+<div class="m">
+	<a href="https://www.linuxidc.com/index.htm">首页</a> → <a href="https://www.linuxidc.com/RedLinux/">Linux编程</a>
+</div>
+</div>
+<div class="linuxe1"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linuxe1.js"></script></div>
+<div class="linux1"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux1.js"></script></div>
+<div class="linuxa"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linuxa.js"></script></div>
+<div class="linuxa1"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linuxa1.js"></script></div>
+<table id="middle" width="100%" cellspacing="0" cellpadding="0" style="table-layout:fixed">
+<tbody><tr valign="top"><td>
+
+	<div class="mframe mR">
+	<div class="tl"></div>
+	<div class="tr"></div>
+	<div class="tm">
+		<div class="moreR">
+			背景：<script type="text/javascript">WriteBg()</script><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#EDF0F5" alt="#EDF0F5" onclick="ContentBg(&quot;#EDF0F5&quot;)"> <img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#FAFBE6" alt="#FAFBE6" onclick="ContentBg(&quot;#FAFBE6&quot;)"> <img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#FFF2E2" alt="#FFF2E2" onclick="ContentBg(&quot;#FFF2E2&quot;)"> <img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#FDE6E0" alt="#FDE6E0" onclick="ContentBg(&quot;#FDE6E0&quot;)"> <img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#F3FFE1" alt="#F3FFE1" onclick="ContentBg(&quot;#F3FFE1&quot;)"> <img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#DAFAF3" alt="#DAFAF3" onclick="ContentBg(&quot;#DAFAF3&quot;)"> <img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#EAEAEF" alt="#EAEAEF" onclick="ContentBg(&quot;#EAEAEF&quot;)"> <img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#FFF" alt="默认" onclick="ContentBg(&quot;&quot;)"> 
+		</div>
+		<span class="tt">阅读新闻</span>
+	</div>
+	<div class="wrapper">
+	<div class="ml"></div>
+	<div class="mr"></div>
+	<div class="mm" id="bodyTd">
+		<div id="printBody" style="word-break:break-all;">
+			<div style="text-align:center"><h1 class="aTitle">看开源代码利器—用Graphviz + CodeViz生成C/C++函数调用图(call graph)</h1></div>
+			
+			<table width="97%" align="center">
+				<tbody><tr>
+				<td width="140">[日期：2015-01-09]</td>
+				<td align="center">来源：Linux社区&nbsp;
+				作者：lanxuezaipiao</td>
+				<td width="160" align="right">[字体：<a href="javascript:ContentSize(16)">大</a> <a href="javascript:ContentSize(0)">中</a> <a href="javascript:ContentSize(12)">小</a>]
+				</td></tr>
+			</tbody></table>
+<div id="li_all">
+<div id="li_1"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux201.js"></script><script async="" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/f(2).txt"></script>
+<!-- Linux公社内容页正中 -->
+<ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-5195587195407606" data-ad-slot="9714521574" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><iframe width="336" height="280" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:336px;height:280px;" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/saved_resource.html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div id="li_2"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux2.js"></script></div>
+</div>
+			<div id="content" style="overflow-x: hidden; word-break: break-all;"><h4><strong><span style="font-size: 14px;">一、Graphviz + CodeViz简单介绍</span></strong></h4>
+<p><span style="font-size: 14px;">CodeViz是《Understanding The Linux Virtual Memory Manager》的作者&nbsp;Mel Gorman&nbsp;写的一款分析C/C++源代码中函数调用关系的open source工具（类似的open source软件有&nbsp;<a style="text-decoration: none; color: #2e9ce9;" href="http://www.gson.org/egypt/egypt.html" target="_blank">egypt</a>、<a style="text-decoration: none; color: #2e9ce9;" href="http://students.ceid.upatras.gr/~sxanth/ncc/" target="_blank">ncc</a>）。其基本原理是给 GCC 打个补丁（如果你的gcc版本不符合它的要求还得先下载正确的gcc版本），让它在编译每个源文件时 dump 出其中函数的 call graph，然后用 Perl 脚本收集并整理调用关系，转交给<a style="text-decoration: none; color: #2e9ce9;" href="http://www.graphviz.org/" target="_blank">Graphviz</a>绘制图形（<a style="text-decoration: none; color: #2e9ce9;" href="http://www.graphviz.org/" target="_blank">Graphviz</a>属于后端，CodeViz属于前端）。</span></p>
+<p><span style="font-size: 14px;">CodeViz 原本是作者用来分析 Linux virtual memory 的源码时写的一个小工具，现在已经基本支持 C++ 语言，最新的 1.0.9 版能在 Windows + Cygwin 下顺利地编译使用。</span></p>
+<p><span style="font-size: 14px;"><strong>二、Graphviz + CodeViz编译安装</strong><br></span></p>
+<h4><span style="font-size: 14px;">1. 安装 GraphViz</span></h4>
+<p><span style="font-size: 14px;">调用图的生成依赖于 GraphViz，所以首先要安装 GraphViz。可以下载源码包编译、安装（下载主页：<a style="text-decoration: none; color: #2e9ce9;" href="http://www.graphviz.org/Download.php" target="_blank">http://www.graphviz.org/Download.php</a>）。<br>如果是<a href="http://www.linuxidc.com/topicnews.aspx?tid=2" target="_blank" title="Ubuntu">Ubuntu</a>系统可以直接apt安装： sudo apt-get install graphviz<br></span></p>
+<h4><span style="font-size: 14px;">2. 安装 CodeViz</span></h4>
+<p><span style="font-size: 14px;">下载CodeVize源码包：<a style="text-decoration: none; color: #2e9ce9;" href="http://www.csn.ul.ie/~mel/projects/codeviz/" target="_blank">http://www.csn.ul.ie/~mel/projects/codeviz/</a><br>解压：tar xvf codeviz-1.0.12.tar.gz （目前最新版是1.0.12）<br></span></p>
+<p><span style="font-size: 14px;">进入解压后的目录：cd codeviz-1.0.12/</span></p>
+<p><span style="font-size: 14px;">CodeViz 使用了一个 patch 版本的 GCC 编译器，而且不同的 CodeViz 版本使用的GCC 版本也不同，可以下载 CodeViz 的源码包后查看 Makefile 文件来确定要使用的 GCC 版<br></span></p>
+<p><span style="font-size: 14px;">本，codeviz-1.0.12 使用 GCC-4.6.2。实际上安装 CodeViz 时安装脚本make会检查当前的GCC版本如果不符合则会自动下载对应的 GCC并打 patch，但由于GCC较大如果网速不好且在虚拟机中的话容易下载失败或系统错误什么的，因此这里我们还是分步安装比较好，先安装gcc再回来安装 CodeViz。<br></span></p>
+<p><span style="font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-size: 14px;">（1）安装 GCC </span></p>
+<p><span style="font-size: 14px;">下载gcc-4.6.2.tar.gz到 cd codeviz-1.0.12目录下的compilers里。<br>下载地址：ftp://ftp.gnu.org/pub/gnu/gcc/gcc-4.6.2/gcc-4.6.2.tar.gz<br><br>CodeViz 的安装脚本 compilers/install_gcc-4.6.2.sh 会自动检测 compilers 目录下是否有 gcc 的源码包，若没有则自动下载并打 patch。这里前面已经下载，直接移到该目录即可,则剩下的就是解压安装了。install_gcc-3.4.6.sh 会解压缩 gcc打 patch，并将其安装到指定目录,若是没有指定目录,则缺省使用$HOME/gcc-graph，通常指定安装在/usr/<br>local/gcc-graph(这时需要 root 权限)。<br></span></p>
+<p><span style="font-size: 14px;">安装： ./install_gcc-4.6.2.sh<br></span></p>
+<p><span style="font-size: 14px;">注意：这里可能安装时有些错误，具体错误及解决方案见后面。<br></span></p>
+<p><span style="font-size: 14px;"><br>（2）安装 CodeViz<br>./configure &amp;&amp; make install-codeviz<br></span></p>
+<p><span style="font-size: 14px;">注1：不需要 make ，因为make的作用就是检测是否有gcc若没有则下载源码包，所以这里只要安装 codeviz 即可。具体查看 Makefile 文件。<br></span></p>
+<p><span style="font-size: 14px;">注意：这里为什么不是通常用的make install，因为这里make install的作用是先安装gcc再安装codeviz，而前面已经安装了 gcc，所以这里只需要安装 codeviz ，即make install-codeviz脚本，该脚本也就是将genfull 和 gengraph 复制到/usr/local/bin 目录下。</span></p>
+<p><span style="font-size: 14px;">目前为止,CodeViz 安装完成了。</span></p>
+<h4><span style="font-size: 14px;">三、基本使用方法</span></h4>
+<p><span style="font-size: 14px;">GraphViz 支持生成不同风格的调用图,但是一些需要安装额外的支持工具或者库程序，有兴趣的朋友可以到<a style="text-decoration: none; color: #2e9ce9;" href="http://www.graphviz.org/" target="_blank">官网</a>上查找相关资料。这里重点讲述 CodeViz 的使用方法，具体的图像风格控制不再详述。</span></p>
+<p><span style="font-size: 14px;">CodeViz 使用两个脚本来生成调用图，一个是 genfull，该脚本可以生成项目的完整调用图，因此调用图可能很大很复杂，缺省使用 cdepn 文件来创建调用图；另一个是gengraph，该脚本可以对给定一组函数生成一个小的调用图，还可以生成对应的postscript 文件。安装时这两个脚本被复制到/usr/local/bin 目录下，所以可以直接使用而不需要指定路径。其基本步骤如下：</span></p>
+<p><span style="font-size: 14px;">下面以<span style="font-size: 14px;">编译一个简单的test.c文件为例进行说明：</span><br></span></p>
+<p><span style="font-size: 14px;">1. 使用刚刚安装的gcc-4.6.2来编译当前目录下所有.c文件，gcc/g++为编译的每个 C/C++文件生成.cdepn 文件。只要编译(参数&nbsp;-c)就行，无需链接。</span></p>
+<p><span style="font-size: 14px;">即为：$ ~/gcc-graph/bin/gcc test.c</span></p>
+<p><span style="font-size: 14px;"><br>2.调用genful会在当前目录生成一个full.graph文件，该脚本可以生成项目的完整调用图信息文件，记录了所有函数在源码中的位置和它们之间的调用关系。 因此调用图信息文件可能很大很复杂,，缺省使用 cdepn 文件来创建调用图信息文件。</span></p>
+<p><span style="font-size: 14px;">即为：$ genfull</span></p>
+<p><span style="font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-size: 14px;">3. 使用gengraph可以对给定一组函数生成一个小的调用图，显示函数调用关系。</span></p>
+<p><span style="font-size: 14px;">即为：$ gengraph</span></p>
+<h4><span style="font-size: 14px;">四、简单示例演示</span></h4>
+<p><span style="font-size: 14px;">自己编写个简单的程序，看下效果再说~~~</span></p>
+<p>&nbsp;</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<pre class="brush">// test.c
+#include &lt;stdio.h&gt;
+
+void test1();
+void test2();
+void test3();
+
+int main()
+{
+    test1();
+    test2();
+
+    return 0;
+}
+
+void test1()
+{
+}
+
+void test2()
+{
+    test2();
+}
+
+void test3()
+{
+}
+</pre>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14px;">按照上面的三个步骤依次进行如下图所示：</span></p>
+<p><span style="font-size: 14px;"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119078.png" alt=""><br></span></p>
+<div id="cnblogs_post_body">
+<p><span style="font-size: 14px;">打开main.ps看到效果如下，一目了然：</span></p>
+<p><span style="font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-size: 14px;"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119079.png" alt=""></span></p>
+</div>
+<h4><span style="font-size: 14px;">五、进阶使用</span></h4>
+<p><span style="font-size: 14px;">当然大家使用CodeViz都不是用来玩的，而是用于真正的项目中，四中简单的使用根本不够，下面来点稍微高深点的。</span></p>
+<h4><span style="font-size: 14px;">1. 先来分析下上面的执行流程<br></span></h4>
+<p><span style="font-size: 14px;">首先使用刚刚安装的gcc编译我们的.c文件（PS：这里一定要指定刚刚安装gcc的 地方，否则用的是系统gcc而非我们安装的gcc），然后genfull创建full.graph文件，可以使用genfull --help或者genfull --man来查看如何使用。最简单的方式是在项目的顶级目录以无参数方式运行。由于项目的完全调用信息非常庞大，所以通常只是简单的生成项目的 full.graph，然后在后面使用genfull获取需要的调用信息。若是需要完整信息则将full.graph由dot处理然后查看来生成的 postscript文件。（dot是GraphViz中的一个工具，具体使用没有深究过，感兴趣的读者可以自行查阅~~~）。到test.c所在目录运 行genfull看到生成了full.graph文件，大家可以用cat查看下。接下来使用gengraph生成函数调用图，可以使用gengraph --help或gengraph --man来查看如何使用。对于我而言，目前只关注下面几个选项就够了，即：</span></p>
+<p><span style="font-size: 14px; color: #660000;">-f：指定顶级函数，即入口函数，如main等（当然不限定是main了）；</span></p>
+<p><span style="font-size: 14px; color: #660000;">-o：指定输出的postfile文件名，不指定的话就是函数名了，如上面的main；</span></p>
+<p><span style="font-size: 14px; color: #660000;">--output-type：指定输出类型，例如png、gif、html和ps，缺省是ps，如上面的main.ps；</span></p>
+<p><span style="font-size: 14px; color: #660000;"><span style="font-size: 14px;">-d：指定最大调用层数；</span></span></p>
+<p><span style="font-size: 14px; color: #660000;"><span style="font-size: 14px;">-s：仅仅显示指定的函数，而不对其调用进行展开；</span></span></p>
+<p><span style="font-size: 14px; color: #660000;"><span style="font-size: 14px;">-i：忽略指定的函数</span></span></p>
+<p><span style="font-size: 14px; color: #660000;"><span style="font-size: 14px;">-t：忽略Linux特有的内核函数集；<br></span></span></p>
+<p><span style="font-size: 14px;"><span style="font-size: 14px; color: #660000;">-k：保留由-s忽略的内部细节形成的中间文件，为sub.graph</span><br></span></p>
+<h4><span style="font-size: 14px;">2. 使用gengraph时的选项参数值要使用""括起来，例如：</span></h4>
+<p><span style="font-size: 14px;">gengraph --output-type "png" -f main</span></p>
+<h4><span style="font-size: 14px;">3. 命名冲突问题</span></h4>
+<p><span style="font-size: 14px;">在一个复杂的项目中，full.graph并不十分完美。例如，kernel中的模块 有许多同名函数，这时genfull不能区分它们，有两种方法可以解决，其中第一种方法太复杂易错不推荐使用，这里就介绍下第二种方法，即使用 genfull的-s选项，-s指定了检测哪些子目录。例如kernel中在mm目录和drivers/char/drm目录下都定义了 alloc_pages函数，那么可以以下列方式调用genfull：</span></p>
+<p><span style="font-size: 14px;">genfull -s "mm include/linux drivers/block arch/i386"</span></p>
+<p><span style="font-size: 14px;">实际的使用中，-s非常方便，请大家记住这个选项。</span></p>
+<h4><span style="font-size: 14px;">4. 使用Daemon/Client模式</span></h4>
+<p><span style="font-size: 14px;">当full.graph很大时，大量的时间花费到读取输入文件上了，例如kernel的full.graph是很大的，前面生成的大约有15M，这还不是全部内核的函数调用分析信息。为了节省时间，可以讲gengraph以daemon方式运行，这药使用-p选项：</span></p>
+<p><span style="font-size: 14px;">gengraph -p -g linux-2.6.25/full.graph</span></p>
+<p><span style="font-size: 14px;">该命令返回时gengraph以daemon方式运行，同时在/tmp目录下生成了codeviz.pipe文件。要生成函数调用图，可以使用-q选项：</span></p>
+<p><span style="font-size: 14px;">gengraph -q -t -d 2 -f alloc_pages</span></p>
+<p><span style="font-size: 14px;">要终止gengraph的运行，使用如下命令：</span></p>
+<p><span style="font-size: 14px;">echo QUIT &gt; /tmpcodeviz.pipe</span></p>
+<h4><span style="font-size: 14px;">六、进阶演示</span></h4>
+<p><span style="font-size: 14px;">以分析《嵌入式实时操作系统 uC/OS-II (第二版)》中的第一个范例程序为例，是什么程序不要紧，这里主要看的是如何使用及使用后的效果。</span></p>
+<p><span style="font-size: 14px;">首先分析main()：</span></p>
+<p><span style="font-size: 14px;">1. <code><strong>gengraph --output-type gif -f main</strong></code><br>分析main()的call graph，得到的图如下，看不出要领：<br><a href="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119071.gif" target="_blank"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119071.gif" alt="" width="705" vspace="5" style="cursor: pointer; display: block;"></a></span></p>
+<p><span style="font-size: 14px;">2. <code>gengraph --output-type gif -f main -s OSInit</code><br>暂时不关心OSInit()的内部实现细节(参数<code> -s</code>)，让它显示为一个节点。得到的图如下，有点乱，不过好多了：<br><a href="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119072.gif" target="_blank"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119072.gif" alt="" width="705" vspace="5" style="cursor: pointer; display: block;"></a></span></p>
+<p><span style="font-size: 14px;">3. <code>gengraph --output-type gif -f main -s OSInit -i "OSCPUSaveSR;OSCPURestoreSR"</code><br>基本上每个函数都会有进入/退出临界区的代码，忽略之(参数<code> -i</code>)。得到的图如下，基本清楚了：<br><a href="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119073.gif" target="_blank"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119073.gif" alt="" width="705" vspace="5" style="cursor: pointer; display: block;"></a></span></p>
+<p><span style="font-size: 14px;">4. <code><strong>gengraph --output-type gif -f main -s "OSInit;OSSemCreate" -i "OSCPUSaveSR;OSCPURestoreSR" -k</strong></code><br>OSSemCreate()的内部细节似乎也不用关心，不过保留中间文件sub.graph(参数<code> -k</code>)，得到的图如下，<br><a href="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119074.gif" target="_blank"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119074.gif" alt="" width="705" vspace="5" style="cursor: pointer; display: block;"></a></span></p>
+<p><span style="font-size: 14px;">5. <code><strong>dot -Tgif -o main.gif sub.graph</strong></code><br>修改sub.graph，使图形符合函数调用顺序，最后得到的图如下，有了这个都不用看代码了:)<br><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119075.gif" alt="" width="705" vspace="5" style="cursor: pointer; display: block;"></span></p>
+<p><span style="font-size: 14px;">接着分析OSTimeDly()的被调用关系：</span></p>
+<p><span style="font-size: 14px;"><span class="Code">gengraph --output-type gif -r -f OSTimeDly</span><br><br>看看哪些函数调用了OSTimeDly()，参数 -r ，Task()和TaskStart()都是用户编写的函数：</span></p>
+<p><span style="font-size: 14px;"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119077.gif" alt="" width="509" height="277"></span></p>
+<p><span style="font-size: 14px;">最后看看Task()直接调用了哪些函数：</span></p>
+<p><span style="font-size: 14px;"><span class="Code">gengraph --output-type gif -d 1 -f Task</span></span></p>
+<p><span style="font-size: 14px;">只看从Task出发的第一层调用（参数 -d 1）：</span></p>
+<p><span style="font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-size: 14px;"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/150109082119076.gif" alt="" width="272" height="349"></span><a name="t12"></a></p>
+<p>&nbsp;</p>
+<h4><span style="font-size: 14px;">七、安装过程出现的错误及解决方案</span></h4>
+<p><span style="font-size: 14px;">1. 在运行./install_gcc-4.6.2.sh时出现下面错误：</span></p>
+<p><span style="font-size: 14px;">gcc configure: error: Building GCC requires GMP 4.2+, MPFR 2.3.1+ and MPC 0.8.0+</span></p>
+<p><span style="font-size: 14px;">从错误中可以看出：GCC编译需要GMP， MPFR， MPC这三个库（有的系统已经安装了就没有这个提示，我的没有安装），有两种安装方法（建议第二种）：</span></p>
+<p><span style="font-size: 14px;"><strong>（1）二进制源码安装（强烈不推荐）</strong><br></span></p>
+<p><span style="font-size: 14px;">我使用的版本为gmp-4.3.2，mpfr-2.4.2和mpc-0.8.1，在“<a href="ftp://gcc.gnu.org/pub/gcc/infrastructure/" target="_blank">ftp://gcc.gnu.org/pub/gcc/infrastructure/</a>" 下载，根据提示的顺序分别安装GMP，MPFR和MPC（mpfr依赖gmp，mpc依赖gmp和mpfr），这里全部自己指定了安装目录，如果没有指定 则默认分装在在/usr/include、/usr/lib和/usr/share，管理起来不方便，比如想卸载的时候还得一个个去找：</span></p>
+<p><span style="font-size: 14px; color: #000099;">安装gmp: ./configure --prefix=/usr/local/gmp-4.3.2; make install<br></span></p>
+<p><span style="font-size: 14px; color: #000099;">安装mpfr: ./configure --prefix=/usr/local/mpfr-2.4.2 --with-gmp=/usr/local/gmp-4.3.2/; make install<br></span></p>
+<p><span style="font-size: 14px; color: #000099;">安装mpc: ./configure --prefix=/usr/local/mpc-0.8.1 --with-gmp=/usr/local/gmp-4.3.2/ --with-mpfr=/usr/local/mpfr-2.4.2/; make install</span></p>
+<p><span style="font-size: 14px; color: #990000;">PS：安装过程中可能又出现新的错误提示，请看2、3、4条。</span></p>
+<p><span style="font-size: 14px; color: #000066;">配置环境变量：我这里指定了安装位置，如果没有指定则 这几个库的默认位置是/usr/local/include和/usr/local/lib，不管有没有指定GCC编译时都可能会找不到这三个库，需要确 认库位置是否在环境变量LD_LIBRARY_PATH中，查看环境变量内容可以用命令<br><span id="MathJax-Element-1-Frame" class="MathJax" style="display: inline-block;"><span id="MathJax-Span-1" class="math" style="width: 2.51em; display: inline-block;"><span style="font-size: 126%; height: 0px; width: 1.98em; position: relative; display: inline-block;"><span style="clip: rect(3.16em 1000em 4.2em -0.47em); position: absolute; left: 0em; top: -4.02em;"><span id="MathJax-Span-2" class="mrow"><span id="MathJax-Span-3" class="mi" style="font-family: MathJax_Math-italic-Web;">e</span><span id="MathJax-Span-4" class="mi" style="font-family: MathJax_Math-italic-Web;">c</span><span id="MathJax-Span-5" class="mi" style="font-family: MathJax_Math-italic-Web;">h</span><span id="MathJax-Span-6" class="mi" style="font-family: MathJax_Math-italic-Web;">o</span></span>&nbsp;</span></span></span></span> LD_LIBRARY_PATH<br>设置该环境变量命令如下：</span></p>
+<p><span style="font-size: 14px; color: #000066;">指定安装：export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/gmp-4.3.2/lib:/usr/local/mpfr-2.4.2/lib:/usr/local/mpc-0.8.1/lib<br></span></p>
+<p><span style="font-size: 14px; color: #000066;">默认安装：<span id="MathJax-Element-2-Frame" class="MathJax" style="display: inline-block;"><span id="MathJax-Span-7" class="math" style="width: 16.94em; display: inline-block;"><span style="font-size: 126%; height: 0px; width: 13.43em; position: relative; display: inline-block;"><span style="clip: rect(3.13em 1000em 4.38em -0.47em); position: absolute; left: 0em; top: -4.02em;"><span id="MathJax-Span-8" class="mrow"><span id="MathJax-Span-9" class="mi" style="font-family: MathJax_Math-italic-Web;">e</span><span id="MathJax-Span-10" class="mi" style="font-family: MathJax_Math-italic-Web;">x</span><span id="MathJax-Span-11" class="mi" style="font-family: MathJax_Math-italic-Web;">p</span><span id="MathJax-Span-12" class="mi" style="font-family: MathJax_Math-italic-Web;">o</span><span id="MathJax-Span-13" class="mi" style="font-family: MathJax_Math-italic-Web;">r</span><span id="MathJax-Span-14" class="mi" style="font-family: MathJax_Math-italic-Web;">t</span><span id="MathJax-Span-15" class="mi" style="font-family: MathJax_Math-italic-Web;">L</span><span id="MathJax-Span-16" class="msubsup"><span style="height: 0px; width: 1.37em; position: relative; display: inline-block;"><span style="clip: rect(1.92em 1000em 2.94em -0.47em); position: absolute; left: 0em; top: -2.77em;"><span id="MathJax-Span-17" class="mi" style="font-family: MathJax_Math-italic-Web;">D</span>&nbsp;</span><span style="position: absolute; left: 0.85em; top: -2.4em;"><span id="MathJax-Span-18" class="mi" style="font-size: 70.7%; font-family: MathJax_Math-italic-Web;">L</span>&nbsp;</span></span></span><span id="MathJax-Span-19" class="mi" style="font-family: MathJax_Math-italic-Web;">I</span><span id="MathJax-Span-20" class="mi" style="font-family: MathJax_Math-italic-Web;">B</span><span id="MathJax-Span-21" class="mi" style="font-family: MathJax_Math-italic-Web;">R</span><span id="MathJax-Span-22" class="mi" style="font-family: MathJax_Math-italic-Web;">A</span><span id="MathJax-Span-23" class="mi" style="font-family: MathJax_Math-italic-Web;">R</span><span id="MathJax-Span-24" class="msubsup"><span style="height: 0px; width: 1.14em; position: relative; display: inline-block;"><span style="clip: rect(1.92em 1000em 2.94em -0.48em); position: absolute; left: 0em; top: -2.77em;"><span id="MathJax-Span-25" class="mi" style="font-family: MathJax_Math-italic-Web;">Y</span>&nbsp;</span><span style="position: absolute; left: 0.55em; top: -2.4em;"><span id="MathJax-Span-26" class="mi" style="font-size: 70.7%; font-family: MathJax_Math-italic-Web;">P</span>&nbsp;</span></span></span><span id="MathJax-Span-27" class="mi" style="font-family: MathJax_Math-italic-Web;">A</span><span id="MathJax-Span-28" class="mi" style="font-family: MathJax_Math-italic-Web;">T</span><span id="MathJax-Span-29" class="mi" style="font-family: MathJax_Math-italic-Web;">H</span><span id="MathJax-Span-30" class="mo" style="font-family: MathJax_Main-Web; padding-left: 0.27em;">=<span style="font-family: MathJax_Main-Web;">"</span></span></span>&nbsp;</span></span></span></span> LD_LIBRARY_PATH:/usr/local/lib</span></p>
+<p><span style="font-size: 14px;"><span style="color: #990000;">PS：十分不推荐这种安装方法，一般来说这样的确可以成功安装，但是也不排除安装过程中又出现新的问题，具体看问题5。</span><br></span></p>
+<p><span style="font-size: 14px;">&nbsp;</span></p>
+<p><strong><span style="font-size: 14px; color: #ff0000;">（2）gcc自带脚本安装（强烈推荐）</span></strong></p>
+<p><span style="font-size: 14px;">方法（1）的安装方法十分繁琐，安装过程中可能出现各种预料不到的新错误，因此gcc 源码包中自带了一个gcc依赖库安装脚本download_prerequisites，位置在gcc源码目录中的 contrib/download_prerequisites，因此只需要进入该目录，直接运行脚本安装即可：. /download_prerequisites</span></p>
+<p><strong><span style="font-size: 14px;">PS：该脚本内容如下：</span></strong></p>
+<p>&nbsp;</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<pre class="brush">#! /bin/sh
+
+# Download some prerequisites needed by gcc.
+# Run this from the top level of the gcc source tree and the gcc
+# build will do the right thing.
+#
+# (C) 2010 Free Software Foundation
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see http://www.gnu.org/licenses/.
+
+MPFR=mpfr-2.4.2
+GMP=gmp-4.3.2
+MPC=mpc-0.8.1
+
+wget ftp://gcc.gnu.org/pub/gcc/infrastructure/$MPFR.tar.bz2 || exit 1
+tar xjf $MPFR.tar.bz2 || exit 1
+ln -sf $MPFR mpfr || exit 1
+
+wget ftp://gcc.gnu.org/pub/gcc/infrastructure/$GMP.tar.bz2 || exit 1
+tar xjf $GMP.tar.bz2  || exit 1
+ln -sf $GMP gmp || exit 1
+
+wget ftp://gcc.gnu.org/pub/gcc/infrastructure/$MPC.tar.gz || exit 1
+tar xzf $MPC.tar.gz || exit 1
+ln -sf $MPC mpc || exit 1
+
+rm $MPFR.tar.bz2 $GMP.tar.bz2 $MPC.tar.gz || exit 1
+</pre>
+</div>
+<p><span style="font-size: 14px;">可见是通过wget的方式下载安装，因此如果没有安装wget则需要先安装下。</span></p>
+<p><span style="font-size: 14px;">大家仔细看下这个脚本，发现非常简单，就是从网上自动下载三个依赖库并解压，然后建立三个改名后的软链接分别指向这三个库，这里建立软链接过程中也可能出错，具体看问题6，大家也可以自己修改脚本，改成直接修改名称然后移到gcc目录下。</span></p>
+<p><span style="font-size: 14px;">技巧：从这里也可以看出，gcc所依赖的库其实只要解压了放在gcc当前目录下就行了，方法（1）的那么多步骤其实都可以省掉，直接将下载的三个压缩包解压后改名移到gcc下面即可，也不用设置环境变量了。<br></span></p>
+<p><span style="font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-size: 14px;">2. 编译gmp时出现错误：</span></p>
+<p><span style="font-size: 14px;">No usable m4 in $PATH or /usr/5bin (see config.log for reasons).<br>由此可以看出是缺少M4文件。可以去这里下载：http://ftp.gnu.org/gnu/m4/然后编译安装，我由于是Ubuntu系统，就直接</span></p>
+<p><span style="font-size: 14px;">sudo apt-get install m4安装了。</span></p>
+<p><span style="font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-size: 14px;">3. 安装mpfr时出现错误：</span></p>
+<p><span style="font-size: 14px;">configure: error: gmp.h can't be found, or is unusable.</span></p>
+<p><span style="font-size: 14px;">这是因为在安装mpfr时未先安装gmp导致的，mpfr依赖于gmp。</span></p>
+<p><span style="font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-size: 14px;">4. 安装mpc时出现错误：<br></span></p>
+<p><span style="font-size: 14px;">configure: error: libgmp not found or uses a different ABI.和configure: error: libmpfr not found or uses a different ABI.“。</span></p>
+<p><span style="font-size: 14px;">同样是因为未安装mpc依赖的库gmp和mpfr。</span></p>
+<p><span style="font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-size: 14px;">5. 在运行./install_gcc-4.6.2.sh过程中出现错误，即按照gcc过程中出现的问题：</span></p>
+<p><span style="font-size: 14px;">（1）libmpfr.so.1: cannot open shared object file: No such file or directory</span></p>
+<p><span style="font-size: 14px;">分析：该脚本就是安装gcc，但是如果你出现了问题1，并且使用方法（1）解决该问题，那么你后期就可能出现这样的问题，当然你运气没那么背的话一般不会出现这样的问题，反正我运行比较背，出现了这样的问题。</span></p>
+<p><span style="font-size: 14px;">解决方法：可以参考这篇文章http://blog.csdn.net/leo115/article/details/7671819解决。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14px;">（2）../../gcc-4.6.2/gcc/realmpfr.h:27:17: fatal error: mpc.h: No such file or directory<br>分析：gcc没找到所依赖的库mpc，原因很多，最有可能是你没设置环境变量或mpc放的地方不对。</span></p>
+<p><span style="font-size: 14px;">解决方法：设置环境变量，看问题1。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14px;">（3） /usr/include/stdc-predef.h:30:26: fatal error: bits/predefs.h: No such file or directory</span></p>
+<p><span style="font-size: 14px;"><span style="font-size: 14px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;">分析：用命令“<span style="font-size: 14px;"><span style="font-family: Arial; line-height: 26px;"><span style="font-family: Arial; line-height: 26px;">locate bits/predefs.h</span></span></span>”找下该头文件的路径，发现是在<span style="font-size: 14px;"><span style="font-family: Arial; line-height: 26px;"><span style="font-family: Arial; line-height: 26px;">'/usr/include/x86_64-linux-gnu'</span></span></span><br>解决方法：设置环境变量：<br>#export C_INCLUDE_PATH=/usr/include/i386-linux-gnu &amp;&amp; export CPLUS_INCLUDE_PATH=$C_INCLUDE_PATH</span></span></span></span></p>
+<p><span style="font-size: 14px;"><span style="font-size: 14px;">&nbsp;</span></span></p>
+<p><span style="font-size: 14px;"><span style="font-size: 14px;">（4） <span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;">/usr/bin/ld: cannot find crti.o: No such file or directory<br></span></span></span></span></span></span></p>
+<p><span style="font-size: 14px;"><span style="font-size: 14px;">分析：<span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;">同样用“locate crti.o” 找下这个文件，在'/usr/lib/<span style="font-size: 14px; font-family: Arial; line-height: 26px;">i386</span>-linux-gnu/crti.o'。</span></span></span></span></span></span></p>
+<p><span style="font-size: 14px;"><span style="font-size: 14px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;">解决方法：设置LIBRARY_PATH (LDFLAGS)这个环境变量如下：<br>#export LIBRARY_PATH=/usr/lib/i386-linux-gnu<br><br></span></span></span></span></span></span></p>
+<p><span style="color: #660000;"><span style="font-size: 14px;"><span style="font-size: 14px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;">（5）unwind-dw2.c:1031: error: field `info' has incomplete type</span></span></span></span></span></span></span></p>
+<p><span style="font-size: 14px;"><span style="font-size: 14px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;">分析：这个错误搞了好久，因为网上找不到对应的解决方法，只说这是gcc的一个bug。</span></span></span></span></span></span></p>
+<p><span style="font-size: 14px;"><span style="font-size: 14px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;"><span style="font-size: 14px; font-family: Arial; line-height: 26px;">解决方法：深入到源文件中，发现错误的地方是这样的：</span></span></span></span></span></span></p>
+<p>&nbsp;</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<pre class="brush">static _Unwind_Reason_Code
+uw_frame_state_for (struct _Unwind_Context *context, _Unwind_FrameState *fs)
+{
+  struct dwarf_fde *fde;
+  struct dwarf_cie *cie;
+  const unsigned char *aug, *insn, *end;
+ 
+  memset (fs, 0, sizeof (*fs));
+  context-&gt;args_size = 0;
+  context-&gt;lsda = 0;
+ 
+  fde = _Unwind_Find_FDE (context-&gt;ra - 1, &amp;context-&gt;bases); //这里返回了NULL
+  if (fde == NULL)
+    {
+      /* Couldn't find frame unwind info for this function.  Try a
+     target-specific fallback mechanism.  This will necessarily
+     not profide a personality routine or LSDA.  */
+#ifdef MD_FALLBACK_FRAME_STATE_FOR
+      MD_FALLBACK_FRAME_STATE_FOR (context, fs, success); // 出错的地方
+      return _URC_END_OF_STACK;
+    success:
+      return _URC_NO_REASON;
+#else
+      return _URC_END_OF_STACK;  //出错返回
+#endif
+    }
+.....
+}
+</pre>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14px;">出错的地方用标注了，因为fde返回了NULL，导致不能找到frame unwind info，最重要的是下面这个方法</span></p>
+<div class="dp-highlighter bg_cpp">
+<div class="cnblogs_Highlighter sh-gutter">
+<pre class="brush">MD_FALLBACK_FRAME_STATE_FOR (context, fs, success);  
+</pre>
+</div>
+</div>
+<p><span style="font-size: 14px;">出错了，为什么返回NULL我肯定研究不出来，只知道这个函数调用失败了，导致不成功，于是我的解决方法十分偷懒，就是将下面的两行注释掉了，直接success，哈哈，勿喷我，因为这样做过后就解决了，后面一路成功~~~</span></p>
+<div class="cnblogs_Highlighter sh-gutter">
+<pre class="brush">// MD_FALLBACK_FRAME_STATE_FOR (context, fs, success); // 出错的地方  
+// return _URC_END_OF_STACK; 
+</pre>
+</div>
+<p>&nbsp;</p>
+<p><span style="font-size: 14px;">6.&nbsp; </span><span style="font-size: 14px;">解决ln&nbsp;-s&nbsp;软链接产生Too&nbsp;many&nbsp;levels&nbsp;of&nbsp;symbolic&nbsp;links错误</span><span style="font-size: 14px;"><br></span></p>
+<p><span style="font-size: 14px;">从网上查找了一下原因，原来是建立软连接的时候采用的是相对路径，所以才会产生这样的错误，解决方式是采用绝对路径建立软链接：</span><span style="font-size: 14px;">这样问题就解决了。</span></p>
+<h4><span style="font-size: 14px;">八、小结</span></h4>
+<p><span style="font-size: 14px;">本文查阅了网上的许多资料比较详细的讲解了CodeViz的安装和使用。CodeViz依赖于GraphViz，因而可以生成十分丰富的函数调用图。具体选项的使用及图像格式的选择可由读者根据个人需要和偏好自己揣摩使用。<span style="font-size: 14px;">在分析源码的时候，把这些图形打印在手边，在上面做笔记，实在方便收益颇多。</span></span></p>
+<p><span style="font-size: 14px;"><span style="font-size: 14px;"><strong>本文永久更新链接地址</strong>：<a href="https://www.linuxidc.com/Linux/2015-01/111501.htm">http://www.linuxidc.com/Linux/2015-01/111501.htm</a></span></span></p><a href="http://www.linuxidc.com/" target="_blank"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/logo.gif" alt="linux" width="15" height="17"></a></div><a href="http://www.linuxidc.com/" target="_blank">
+<div class="linux3"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux3.js"></script><script async="" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/f(2).txt"></script>
+<!-- LinuxIDC.com���������¹�� -->
+<ins class="adsbygoogle" style="display: inline-block; width: 300px; height: 250px;" data-ad-client="ca-pub-5195587195407606" data-ad-slot="4132633744" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;width:300px;height:250px;" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/saved_resource(1).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div class="linux302"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux302.js"></script></div>		
+			
+			
+		</a></div><a href="http://www.linuxidc.com/" target="_blank">
+<div class="linuxfx"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/fx.js"></script></div>	
+<div class="linux8"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux8.js"></script><script async="" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/f(2).txt"></script>
+<!-- Google匹配内容 -->
+<ins class="adsbygoogle" style="display:inline-block;width:760px;height:410px" data-ad-client="ca-pub-5195587195407606" data-ad-slot="7446930524" data-adsbygoogle-status="done"><ins id="aswift_2_expand" style="display:inline-table;border:none;height:410px;margin:0;padding:0;position:relative;visibility:visible;width:760px;background-color:transparent;"><ins id="aswift_2_anchor" style="display:block;border:none;height:410px;margin:0;padding:0;position:relative;visibility:visible;width:760px;background-color:transparent;"><iframe width="760" height="410" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_2" name="aswift_2" style="left:0;position:absolute;top:0;width:760px;height:410px;" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/saved_resource(2).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</a><div class="linux801"><a href="http://www.linuxidc.com/" target="_blank"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux801.js"></script></a><p style="text-align: center;"><a href="http://www.linuxidc.com/" target="_blank"></a><a href="https://www.linuxidc.com/Linux/2014-08/106019.htm" target="_blank"><span style="color: #ff0000; font-size: medium;"><strong>关注Linux公社（LinuxIDC.com）官方微信与QQ群，随机发放邀请码</strong></span></a></p>
+</div>
+		<div class="nearNews">
+			<div class="prevNews"><a href="https://www.linuxidc.com/Linux/2015-01/111500.htm">GCC 函数调用探测功能</a></div>
+			<div class="nextNews"><a href="https://www.linuxidc.com/Linux/2015-01/111505.htm">10道C++输出易错笔试题收集</a></div>
+		</div>
+	</div>
+	</div>
+	<div class="bl"></div>
+	<div class="br"></div>
+	<div class="bm"></div>
+	</div>
+<div class="linux809"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux809.js"></script></div>
+	<div class="mframe mR">
+	<div class="tl"></div>
+	<div class="tr"></div>
+	<div class="tm">
+		<span class="tt">相关资讯</span> &nbsp; &nbsp; &nbsp;
+		<a href="https://www.linuxidc.com/search.aspx?where=nkey&amp;keyword=4198" target="_blank">C/C++</a>&nbsp; <a href="https://www.linuxidc.com/search.aspx?where=nkey&amp;keyword=9915" target="_blank">Graphviz</a>&nbsp; <a href="https://www.linuxidc.com/search.aspx?where=nkey&amp;keyword=33350" target="_blank">CodeViz</a>&nbsp; 
+	</div>
+	<div class="wrapper">
+	<div class="ml"></div>
+	<div class="mr"></div>
+	<div class="mm">
+		<table width="100%"><tbody><tr><td width="50%" valign="top"><ul class="nl"><li><a href="https://www.linuxidc.com/Linux/2017-02/141094.htm" target="_blank" title="C/C++程序运行时进程的内存分布情况">C/C++程序运行时进程的内存分布情</a>&nbsp; <span class="gray">(<span class="time">今 07:37</span>)</span></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-10/135873.htm" target="_blank">C及C++中typedef的简单使用指南</a>&nbsp; <span class="gray">(10/10/2016 08:19:13)</span></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-05/131055.htm" target="_blank">绘图工具Graphviz学习使用</a>&nbsp; <span class="gray">(05/06/2016 12:37:47)</span></li>
+</ul></td><td width="50%" valign="top"><ul class="nl"><li><a href="https://www.linuxidc.com/Linux/2017-02/140697.htm" target="_blank">C/C++中慎用宏(#define)</a>&nbsp; <span class="gray">(02月16日)</span></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-05/131060.htm" target="_blank">程序员绘图利器 — Graphviz</a>&nbsp; <span class="gray">(05/06/2016 12:46:36)</span></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-05/131050.htm" target="_blank">Graphviz的使用及中文乱码问题解决</a>&nbsp; <span class="gray">(05/06/2016 12:09:44)</span></li>
+</ul></td></tr></tbody></table>
+	</div>
+	</div>
+	<div class="bl"></div>
+	<div class="br"></div>
+	<div class="bm"></div>
+	</div>
+<div class="linux808"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux808.js"></script></div>
+	
+	<div class="mframe mR">
+	<div class="tl"></div>
+	<div class="tr"></div>
+	<div class="tm">
+		<span class="tt">本文评论</span>
+		 	　　<a href="https://www.linuxidc.com/remark.aspx?id=111501" target="_blank">查看全部评论</a> <span class="gray">(0)</span>
+	</div>
+	<div class="wrapper">
+	<div class="ml"></div>
+	<div class="mr"></div>
+	<div class="mm">
+		<table width="100%" style="margin:6px">		
+		<tbody><tr><td width="50%">
+			<form action="https://www.linuxidc.com/Linux/2015-01/111501.htm" name="fmRemarkSt" onsubmit="return remark.post(this);">
+			<input type="hidden" value="1" name="face" disabled="disabled">
+			表情： <img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/b.gif" alt="表情" class="face1" style="cursor:pointer;vertical-align:middle" onclick="remark.dispFace(this)" onmouseout="remark.hideFace()">
+			姓名： <input type="text" name="username" value="" maxlength="15" style="width:60px" class="inputbg" disabled="disabled">
+			<input type="checkbox" id="rmAnonymitySt" onclick="remark.anony(this)" disabled="disabled"><label for="rmAnonymitySt">匿名</label>
+			字数 <input type="text" id="bodyLen" size="3" readonly="readonly" style="border-width:0;background:transparent;vertical-align:middle" value="0" disabled="disabled">
+			<br>
+			<textarea name="body" cols="40" rows="4" onkeydown="remark.dispLen(this)" onkeyup="remark.handle(event,this);remark.dispLen(this)" style="width:39em;height:100px;margin:3px 0;overflow-y:auto" disabled="disabled"></textarea>
+				<br>
+		　　　<input type="checkbox" checked="checked" id="rmAgreeSt" disabled="disabled"><label for="rmAgreeSt">同意评论声明</label>
+		　　　<button type="submit" style="width: 50px; padding: 0px;" disabled="disabled">请登录</button>
+			</form><br>
+			评论声明
+			<ul style="list-style-type:square;margin:5px 0 0 1em;padding:0">
+			<li>尊重网上道德，遵守中华人民共和国的各项有关法律法规</li>
+			<li>承担一切因您的行为而直接或间接导致的民事或刑事法律责任</li>
+			<li>本站管理人员有权保留或删除其管辖留言中的任意内容</li>
+			<li>本站有权在网站内转载或引用您的评论</li>
+			<li>参与本评论即表明您已经阅读并接受上述条款</li>
+			</ul>
+		</td>
+		<td width="50%"><div class="linux799"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux799.js"></script><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/weixin.png" alt="" width="291" height="250">
+</div></td></tr>
+		</tbody></table>
+		<script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/remark.js"></script>
+		<script type="text/javascript">
+			remark.maxSize=500;
+			remark.minSize=2;
+			remark.sourceEle=$(document.fmRemarkSt).find("button").get(0);
+			iwms.vCode="D2BDA41E";
+			iwms.user.name.length==0 ? $i("rmAnonymitySt").click() : $i("rmAnonymitySt").form.username.value=iwms.user.name;
+		</script>
+		<div class="reCont" id="reContainer"></div>
+	</div>
+	</div>
+	<div class="bl"></div>
+	<div class="br"></div>
+	<div class="bm"></div>
+	</div>
+	
+</td><td width="300" valign="top">
+<div class="linux901"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux901.js"></script></div>
+<div class="linux902"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux902.js"></script><a href="https://www.linuxprobe.com/chapter-00.html" rel="nofollow" target="_blank"><img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/lws.jpg" alt="" width="300" height="300"></a>
+</div>
+<div class="linux903"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux903.js"></script></div>
+<div class="linux905"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux905.js"></script></div>
+	
+	<div class="lframe">
+	<div class="tl"></div>
+	<div class="tr"></div>
+	<div class="tm">
+		<span class="tt">最新资讯</span>
+	</div>
+	<div class="wrapper">
+	<div class="ml"></div>
+	<div class="mr"></div>
+	<div class="mm">
+		<ul class="nl">
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141094.htm" target="_blank">C/C++程序运行时进程的内存分布情况</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141093.htm" target="_blank">Java多线程之内存可见性</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141092.htm" target="_blank">MySQL数据库操作教程</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141091.htm" target="_blank">Ubuntu 16.04下FFmpeg搭建简易监控环境</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141090.htm" target="_blank">Oracle里常见的执行计划</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141089.htm" target="_blank">使用yum安装cmake</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141088.htm" target="_blank" title="Ubuntu 16.04 Vim YouCompleteMe自动补全的安装配置与使用">Ubuntu 16.04 Vim YouCompleteMe自动补全的</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141087.htm" target="_blank" title="VMware Virtual SAN 设计和规模设定指南 PDF">VMware Virtual SAN 设计和规模设定指南 </a></li>
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141086.htm" target="_blank">Virtual SAN 6.1 延伸群集指南 PDF</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2017-02/141085.htm" target="_blank" title="VMware Virtual SAN 6.0 设计和优化指南 docx">VMware Virtual SAN 6.0 设计和优化指南 </a></li>
+</ul>
+	</div>
+	</div>
+	<div class="bl"></div>
+	<div class="br"></div>
+	<div class="bm"></div>
+	</div>
+	<div class="u70"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/u70.js"></script></div>
+	<div class="u80"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/u80.js"></script></div>
+	<div class="u90"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/u90.js"></script></div>
+	<div class="space"></div>
+	<div id="pin" style="position: fixed; top: 0px;">
+	<script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/pin.js"></script><script async="" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/f(2).txt"></script>
+<!-- 右侧粘性自适应 -->
+<ins class="adsbygoogle" style="display: block; height: 600px;" data-ad-client="ca-pub-5195587195407606" data-ad-slot="7669622914" data-ad-format="auto" data-adsbygoogle-status="done"><ins id="aswift_3_expand" style="display:inline-table;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_3_anchor" style="display:block;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_3" name="aswift_3" style="left:0;position:absolute;top:0;width:300px;height:600px;" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/saved_resource(3).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+	</div>
+</td></tr>
+</tbody></table>
+<div class="linux906"><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linux906.js"></script></div>
+<div id="footer">
+<a href="http://www.linuxidc.com/aboutus.htm">Linux公社简介</a> - <a href="http://www.linuxidc.com/adsense.htm">广告服务</a> - <a href="http://www.linuxidc.com/sitemap.aspx">网站地图</a> - <a href="http://www.linuxidc.com/help.htm">帮助信息</a> - <a href="http://www.linuxidc.com/contactus.htm">联系我们</a><br>本站（LinuxIDC）所刊载文章不代表同意其说法或描述，仅���提供更多信息，也不构成任何建议。<br><script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/qq.js"></script>主编：漏网的鱼 联系邮箱:<img src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/email.png" alt="" width="138" height="20"> (如有合作请联系)
+<br>
+<script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/foot.js"></script>本站带宽由[<font color="red">808.Ai</font>]友情提供<br>关注Linux，关注LinuxIDC.com，<font color="red">请向您的QQ好友宣传LinuxIDC.com</font>，多谢支持！
+<br>Copyright © 2006-2016　<a href="http://www.linuxidc.com/">Linux公社</a>　All rights reserved 沪ICP备15008072号-1号
+	<script type="text/javascript">iwms.aId=111501;$(function(){iwms.imgCont=$i('content');iwms.imgResize();InitContStyle();iwms.getVars();})</script>
+	
+</div>
+</div>
+<script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linuxren1.js"></script><script type="text/javascript">
+document.body.oncopy = function () { setTimeout( function () { var text = clipboardData.getData("text"); if (text) { text = text + "\r\n本篇文章来源于 Linux公社网站(www.linuxidc.com)  原文链接："+location.href; clipboardData.setData("text", text); } }, 100 ) }
+</script>
+
+<script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linuxren2.js"></script>
+<script type="text/javascript" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/linuxren3.js"></script><script src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/h.js" type="text/javascript"></script><iframe id="google_osd_static_frame_2750641403851" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./看开源代码利器—用Graphviz + CodeViz生成C_C++函数调用图(call graph)_Linux编程_Linux公社-Linux系统门户网站_files/saved_resource(4).html"></iframe>
+
+<div id="hm_t_undefined" class="hm-t-container"><div class="hm-t-go-top" style="display: block;"></div></div></body></html>

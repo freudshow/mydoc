@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0049)https://www.linuxidc.com/Linux/2016-12/138601.htm -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站</title>
+
+<link rel="icon" href="https://www.linuxidc.com/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="https://www.linuxidc.com/favicon.ico" type="image/x-icon">
+<meta name="description" content="Ubuntu下配置Common Lisp开发环境 安装 Emacs sudo apt-get install emacs 安装 Common Lisp 环境 sudo apt-get install common-">
+<meta name="keywords" content="Common Lisp开发环境,Common Lisp,Ubuntu下配置Common Lisp开发环境,Linux,Linux教程,Linux系统,Linux安装,Ubuntu,Fedora,RedHat,SUSE,CentOS,红旗Linux">
+<link rel="canonical" href="http://www.linuxidc.com/Linux/2016-12/138601.htm">
+<meta name="generator" content="Linux公社">
+<meta name="generator" content="Linux">
+<link rel="stylesheet" href="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/style.css" type="text/css">
+<meta name="generator" content="专业的Linux网站">
+<script charset="utf-8" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/s.js"></script><script src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/f.txt"></script><script src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/ca-pub-5195587195407606.js"></script><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/jquery.js"></script>
+<script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/iwms.js"></script>
+<script type="text/javascript">iwms.urlPrefix="../../";</script>
+
+<script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/show.js"></script>
+<link rel="preload" href="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/f(1).txt" as="script"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/f(1).txt"></script><style>html #hm_t_undefined .hm-t-go-top {position:fixed;right:2px;bottom:2px;z-index:99998;cursor:pointer;width:40px;height:37px!important;text-align:center;white-space:normal;font-size:14px;line-height:17px;padding-top:3px;color:#fff;background:#404040;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEkAAAAXCAYAAABH92JbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDowMjgwMTE3NDA3MjA2ODExODA4M0UyNDA4ODdDRTZBQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBQjc5RkRFNkI5ODMxMUUzQkZGNDhENEJFQjM2OTcyRiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBQjc5RkRFNUI5ODMxMUUzQkZGNDhENEJFQjM2OTcyRiIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDI4MDExNzQwNzIwNjgxMTgwODNFMjQwODg3Q0U2QUIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDI4MDExNzQwNzIwNjgxMTgwODNFMjQwODg3Q0U2QUIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5HPYM5AAACC0lEQVR42uyZTSgEYRjH90NoqaVcpDblvKW2XOSkNh8H5Yac9sBBDqQokiJKSMpNTi5OPo6Ktsgu67JcUHIXWfK1u3b8Xx6Zxuzu+64dM83uv34zNfu8b8/8Z+d5P8YqSZLFJNLsRmyWvIRMKgVD4AhEwA3YAV0pzGwEqyAEwmAddIICHe7FqhnsdQM14FxKLj+ooFiGE2ykiD8GVbJ4I1ELAnTmasMODnAhpVcIFIMicMgRH6Z4IxnUAh4pP3Zu5TVpUOLXDJgWiB8wkEF9IK7IL07X05oUFLjpZ4JXQQOYYwfzafJcoDjVPqw43KE4lWtUTF+AQ8eBqQSsgTaO2E0apJ7URrdCDZOM62hQJfBzGmShOD+1+2XSiYaJ7utkkBsEgEewnYfauZUmzWmU6DuY0sEgLzgArgzbu6i992cu/1WclqXsa1iHIt0DYlnKP0b9fRZu5pWdZs7dWXqa7B80+s//oF5aMSjflGqBPq5BQnFtVv4UmGHjIPEH96PAZ6C5kVMwf6daPzbFKnqCqvx9Bk/yFjSBFTMvcL+1DerAmUA/p9Rm1+y7AHJdgnqwx9EHm1s0gKtc2CpR6gE00/ZHMm3RKxbJlf0kNb2BDrCk8hsbDdvBay5tuiUTGxL7waTs2iLw0YTR9BLZQRwDUVqwjuTS9q3VRB8C1OQUnM6UqdXX/IcADn0IMADs2AqDOPSutQAAAABJRU5ErkJggg==) no-repeat -42px center #666;*background-image:url(http://ecma.bdimg.com/holmes/t-popup-icons-png8.png);_position:absolute;_top:expression(eval(document.documentElement.scrollTop+(document.documentElement.clientHeight||document.body.clientHeight)-this.offsetHeight-2));}</style></head>
+<body>
+<div class="topBar">
+	<div class="twidth">
+	
+	<div style="float:right">
+		<script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/language.js"></script> <a id="StranLink" href="javascript:StranBody()" title="點擊以繁體中文方式浏覽">繁體</a>
+	</div>
+	
+	<div id="topUser">你好，游客 <a href="https://www.linuxidc.com/Linux/2016-12/138601.htm#" onclick="iwms.logPop()">登录</a>
+	<a href="https://www.linuxidc.com/memberreg.aspx" rel="nofollow">注册</a>
+	<a href="https://www.linuxidc.com/search.aspx" rel="nofollow">搜索</a>
+	</div>
+	</div>
+</div>
+<div class="twidth">
+<div id="sitehead">
+<div class="l"></div>
+<div class="r"></div>
+<div class="m">
+	<table width="100%">
+	<tbody><tr align="center"><td width="160">
+	<a href="http://www.linuxidc.com/"><img style="filter: chroma(color=#FFFFFF);" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/logo.jpg" alt="Linux公社" width="155" height="53" border="0"></a>
+	</td><td>
+	<div align="center"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux.js"></script></div>
+	</td>
+	</tr></tbody></table>
+</div>
+</div>
+<div id="navbar">
+<div class="l"></div>
+<div class="r"></div>
+<div class="m">
+	<a href="https://www.linuxidc.com/index.htm" class="first">首页</a><a href="https://www.linuxidc.com/it/">Linux新闻</a><a href="https://www.linuxidc.com/Linuxit/" class="thisclass">Linux教程</a><a href="https://www.linuxidc.com/MySql/">数据库技术</a><a href="https://www.linuxidc.com/RedLinux/">Linux编程</a><a href="https://www.linuxidc.com/Apache/">服务器应用</a><a href="https://www.linuxidc.com/Unix/">Linux安全</a><a href="https://www.linuxidc.com/download/">Linux下载</a><a href="https://www.linuxidc.com/Linuxrz/">Linux认证</a><a href="https://www.linuxidc.com/theme/">Linux主题</a><a href="https://www.linuxidc.com/Linuxwallpaper/">Linux壁纸</a><a href="https://www.linuxidc.com/linuxsoft/">Linux软件</a><a href="https://www.linuxidc.com/digi/">数码</a><a href="https://www.linuxidc.com/mobile/">手机</a><a href="https://www.linuxidc.com/diannao/">电脑</a>
+
+</div>
+</div>
+
+<div id="navsub">
+<div class="l"></div>
+<div class="r"></div>
+<div class="m">
+	<a href="https://www.linuxidc.com/index.htm">首页</a> → <a href="https://www.linuxidc.com/Linuxit/">Linux教程</a>
+</div>
+</div>
+<div class="linuxe1"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linuxe1.js"></script></div>
+<div class="linux1"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux1.js"></script></div>
+<div class="linuxa"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linuxa.js"></script></div>
+<div class="linuxa1"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linuxa1.js"></script></div>
+<table id="middle" width="100%" cellspacing="0" cellpadding="0" style="table-layout:fixed">
+<tbody><tr valign="top"><td>
+
+	<div class="mframe mR">
+	<div class="tl"></div>
+	<div class="tr"></div>
+	<div class="tm">
+		<div class="moreR">
+			背景：<script type="text/javascript">WriteBg()</script><img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#EDF0F5" alt="#EDF0F5" onclick="ContentBg(&quot;#EDF0F5&quot;)"> <img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#FAFBE6" alt="#FAFBE6" onclick="ContentBg(&quot;#FAFBE6&quot;)"> <img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#FFF2E2" alt="#FFF2E2" onclick="ContentBg(&quot;#FFF2E2&quot;)"> <img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#FDE6E0" alt="#FDE6E0" onclick="ContentBg(&quot;#FDE6E0&quot;)"> <img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#F3FFE1" alt="#F3FFE1" onclick="ContentBg(&quot;#F3FFE1&quot;)"> <img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#DAFAF3" alt="#DAFAF3" onclick="ContentBg(&quot;#DAFAF3&quot;)"> <img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#EAEAEF" alt="#EAEAEF" onclick="ContentBg(&quot;#EAEAEF&quot;)"> <img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/b.gif" style="cursor:pointer;width:7px;height:6px;border:1px solid #999;background:#FFF" alt="默认" onclick="ContentBg(&quot;&quot;)"> 
+		</div>
+		<span class="tt">阅读新闻</span>
+	</div>
+	<div class="wrapper">
+	<div class="ml"></div>
+	<div class="mr"></div>
+	<div class="mm" id="bodyTd">
+		<div id="printBody" style="word-break:break-all;">
+			<div style="text-align:center"><h1 class="aTitle">Ubuntu下配置Common Lisp开发环境</h1></div>
+			
+			<table width="97%" align="center">
+				<tbody><tr>
+				<td width="140">[日期：2016-12-20]</td>
+				<td align="center">来源：blog.csdn.net/nomasp&nbsp;
+				作者：nomasp</td>
+				<td width="160" align="right">[字体：<a href="javascript:ContentSize(16)">大</a> <a href="javascript:ContentSize(0)">中</a> <a href="javascript:ContentSize(12)">小</a>]
+				</td></tr>
+			</tbody></table>
+<div id="li_all">
+<div id="li_1"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux201.js"></script><script async="" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/f(2).txt"></script>
+<!-- Linux公社内容页正中 -->
+<ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-5195587195407606" data-ad-slot="9714521574" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><iframe width="336" height="280" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:336px;height:280px;" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/saved_resource.html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div id="li_2"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux2.js"></script></div>
+</div>
+			<div id="content" style="overflow-x: hidden; word-break: break-all;"><p><strong><a href="http://www.linuxidc.com/topicnews.aspx?tid=2" target="_blank" title="Ubuntu">Ubuntu</a>下配置Common Lisp开发环境</strong></p>
+<p>安装 Emacs</p>
+<pre class="prettyprint"><code class="hljs bash has-numbering"><span class="hljs-built_in">sudo</span> apt-get install emacs</code></pre>
+<p>安装 Common Lisp 环境</p>
+<pre class="prettyprint"><code class="hljs lasso has-numbering">sudo apt<span class="hljs-attribute">-get</span> install common<span class="hljs-attribute">-lisp</span><span class="hljs-attribute">-controller</span></code></pre>
+<p>安装 Slime</p>
+<pre class="prettyprint"><code class="hljs bash has-numbering"><span class="hljs-built_in">sudo</span> apt-get install slime</code></pre>
+<p>修改 Emacs 配置文件，以支持 Common Lisp</p>
+<pre class="prettyprint"><code class="hljs lasso has-numbering">emacs <span class="hljs-attribute">-nw</span> ~<span class="hljs-subst">/</span><span class="hljs-built_in">.</span>emacs<span class="hljs-built_in">.</span>d/user<span class="hljs-built_in">.</span>el
+
+(setq inferior<span class="hljs-attribute">-lisp</span><span class="hljs-attribute">-program</span> <span class="hljs-string">"/usr/bin/sbcl"</span>)
+    (add<span class="hljs-attribute">-to</span><span class="hljs-attribute">-list</span> <span class="hljs-string">'load-path "/usr/local/bin/slime/")
+    (require '</span>slime)
+    (slime<span class="hljs-attribute">-setup</span>)
+(slime<span class="hljs-attribute">-setup</span> <span class="hljs-string">'(slime-fancy))</span></code></pre>
+<p>验证开发环境</p>
+<pre class="prettyprint"><code class="hljs lasso has-numbering">emacs 或 emacs <span class="hljs-attribute">-nw</span>
+
+输入 Alt <span class="hljs-subst">+</span> X，输入 slime，回车</code></pre>
+<p><img title="" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/161220195875381.png" alt="这里写图片描述" width="705" vspace="5" style="cursor: pointer; display: block;"></p>
+<p><span style="font-size: small;"><strong>本文永久更新链接地址</strong></span>：<a href="https://www.linuxidc.com/Linux/2016-12/138601.htm">http://www.linuxidc.com/Linux/2016-12/138601.htm</a></p><a href="http://www.linuxidc.com/" target="_blank"><img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/logo.gif" alt="linux" width="15" height="17"></a></div><a href="http://www.linuxidc.com/" target="_blank">
+<div class="linux3"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux3.js"></script><script async="" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/f(2).txt"></script>
+<!-- LinuxIDC.com���������¹�� -->
+<ins class="adsbygoogle" style="display: inline-block; width: 300px; height: 250px;" data-ad-client="ca-pub-5195587195407606" data-ad-slot="4132633744" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;width:300px;height:250px;" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/saved_resource(1).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div class="linux302"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux302.js"></script></div>		
+			
+			
+		</a></div><a href="http://www.linuxidc.com/" target="_blank">
+<div class="linuxfx"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/fx.js"></script></div>	
+<div class="linux8"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux8.js"></script><script async="" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/f(2).txt"></script>
+<!-- Google匹配内容 -->
+<ins class="adsbygoogle" style="display:inline-block;width:760px;height:410px" data-ad-client="ca-pub-5195587195407606" data-ad-slot="7446930524" data-adsbygoogle-status="done"><ins id="aswift_2_expand" style="display:inline-table;border:none;height:410px;margin:0;padding:0;position:relative;visibility:visible;width:760px;background-color:transparent;"><ins id="aswift_2_anchor" style="display:block;border:none;height:410px;margin:0;padding:0;position:relative;visibility:visible;width:760px;background-color:transparent;"><iframe width="760" height="410" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_2" name="aswift_2" style="left:0;position:absolute;top:0;width:760px;height:410px;" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/saved_resource(2).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</a><div class="linux801"><a href="http://www.linuxidc.com/" target="_blank"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux801.js"></script></a><p style="text-align: center;"><a href="http://www.linuxidc.com/" target="_blank"></a><a href="https://www.linuxidc.com/Linux/2014-08/106019.htm" target="_blank"><span style="color: #ff0000; font-size: medium;"><strong>关注Linux公社（LinuxIDC.com）官方微信与QQ群，随机发放邀请码</strong></span></a></p>
+</div>
+		<div class="nearNews">
+			<div class="prevNews"><a href="https://www.linuxidc.com/Linux/2016-12/138600.htm">使用Windows 10远程控制Ubuntu 16.04</a></div>
+			<div class="nextNews"><a href="https://www.linuxidc.com/Linux/2016-12/138602.htm">Ubuntu Tweak运行崩溃解决实例</a></div>
+		</div>
+	</div>
+	</div>
+	<div class="bl"></div>
+	<div class="br"></div>
+	<div class="bm"></div>
+	</div>
+<div class="linux809"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux809.js"></script></div>
+	<div class="mframe mR">
+	<div class="tl"></div>
+	<div class="tr"></div>
+	<div class="tm">
+		<span class="tt">相关资讯</span> &nbsp; &nbsp; &nbsp;
+		<a href="https://www.linuxidc.com/search.aspx?where=nkey&amp;keyword=11535" target="_blank">Common Lisp</a>&nbsp; <a href="https://www.linuxidc.com/search.aspx?where=nkey&amp;keyword=48160" target="_blank">Common Lisp开发环境</a>&nbsp; 
+	</div>
+	<div class="wrapper">
+	<div class="ml"></div>
+	<div class="mr"></div>
+	<div class="mm">
+		<ul class="nl">
+<li><a href="https://www.linuxidc.com/Linux/2012-06/63554.htm" target="_blank">Ubuntu下Common Lisp配置</a>&nbsp; <span class="gray">(06/22/2012 20:16:15)</span></li>
+</ul>
+
+	</div>
+	</div>
+	<div class="bl"></div>
+	<div class="br"></div>
+	<div class="bm"></div>
+	</div>
+<div class="linux808"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux808.js"></script></div>
+	
+	<div class="mframe mR">
+	<div class="tl"></div>
+	<div class="tr"></div>
+	<div class="tm">
+		<span class="tt">本文评论</span>
+		 	　　<a href="https://www.linuxidc.com/remark.aspx?id=138601" target="_blank">查看全部评论</a> <span class="gray">(0)</span>
+	</div>
+	<div class="wrapper">
+	<div class="ml"></div>
+	<div class="mr"></div>
+	<div class="mm">
+		<table width="100%" style="margin:6px">		
+		<tbody><tr><td width="50%">
+			<form action="https://www.linuxidc.com/Linux/2016-12/138601.htm" name="fmRemarkSt" onsubmit="return remark.post(this);">
+			<input type="hidden" value="1" name="face" disabled="disabled">
+			表情： <img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/b.gif" alt="表情" class="face1" style="cursor:pointer;vertical-align:middle" onclick="remark.dispFace(this)" onmouseout="remark.hideFace()">
+			姓名： <input type="text" name="username" value="" maxlength="15" style="width:60px" class="inputbg" disabled="disabled">
+			<input type="checkbox" id="rmAnonymitySt" onclick="remark.anony(this)" disabled="disabled"><label for="rmAnonymitySt">匿名</label>
+			字数 <input type="text" id="bodyLen" size="3" readonly="readonly" style="border-width:0;background:transparent;vertical-align:middle" value="0" disabled="disabled">
+			<br>
+			<textarea name="body" cols="40" rows="4" onkeydown="remark.dispLen(this)" onkeyup="remark.handle(event,this);remark.dispLen(this)" style="width:39em;height:100px;margin:3px 0;overflow-y:auto" disabled="disabled"></textarea>
+				<br>
+		　　　<input type="checkbox" checked="checked" id="rmAgreeSt" disabled="disabled"><label for="rmAgreeSt">同意评论声明</label>
+		　　　<button type="submit" style="width: 50px; padding: 0px;" disabled="disabled">请登录</button>
+			</form><br>
+			评论声明
+			<ul style="list-style-type:square;margin:5px 0 0 1em;padding:0">
+			<li>尊重网上道德，遵守中华人民共和国的各项有关法律法规</li>
+			<li>承担一切因您的行为而直接或间接导致的民事或刑事法律责任</li>
+			<li>本站管理人员有权保留或删除其管辖留言中的任意内容</li>
+			<li>本站有权在网站内转载或引用您的评论</li>
+			<li>参与本评论即表明您已经阅读并接受上述条款</li>
+			</ul>
+		</td>
+		<td width="50%"><div class="linux799"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux799.js"></script><img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/weixin.png" alt="" width="291" height="250">
+</div></td></tr>
+		</tbody></table>
+		<script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/remark.js"></script>
+		<script type="text/javascript">
+			remark.maxSize=500;
+			remark.minSize=2;
+			remark.sourceEle=$(document.fmRemarkSt).find("button").get(0);
+			iwms.vCode="D2BDA41E";
+			iwms.user.name.length==0 ? $i("rmAnonymitySt").click() : $i("rmAnonymitySt").form.username.value=iwms.user.name;
+		</script>
+		<div class="reCont" id="reContainer"></div>
+	</div>
+	</div>
+	<div class="bl"></div>
+	<div class="br"></div>
+	<div class="bm"></div>
+	</div>
+	
+</td><td width="300" valign="top">
+<div class="linux901"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux901.js"></script></div>
+<div class="linux902"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux902.js"></script><a href="https://www.linuxprobe.com/chapter-00.html" rel="nofollow" target="_blank"><img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/lws.jpg" alt="" width="300" height="300"></a>
+</div>
+<div class="linux903"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux903.js"></script></div>
+<div class="linux905"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux905.js"></script></div>
+	
+	<div class="lframe">
+	<div class="tl"></div>
+	<div class="tr"></div>
+	<div class="tm">
+		<span class="tt">最新资讯</span>
+	</div>
+	<div class="wrapper">
+	<div class="ml"></div>
+	<div class="mr"></div>
+	<div class="mm">
+		<ul class="nl">
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138602.htm" target="_blank">Ubuntu Tweak运行崩溃解决实例</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138601.htm" target="_blank">Ubuntu下配置Common Lisp开发环境</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138600.htm" target="_blank">使用Windows 10远程控制Ubuntu 16.04</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138599.htm" target="_blank">Linux下查看内存的使用情况</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138598.htm" target="_blank">Linux vmstat 命令参数详解</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138597.htm" target="_blank">Linux设备管理（三）_总线设备的挂接</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138596.htm" target="_blank">谷歌自驾车大变身，外型更流线型、更成熟</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138595.htm" target="_blank">据报 Airbnb 正研究加入订购机票服务</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138594.htm" target="_blank">ZUK Edge 登场，主打 86.4% 屏占比</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2016-12/138593.htm" target="_blank" title="移动版 Facebook Messenger 加入群组视频通话">移动版 Facebook Messenger 加入群组视频通</a></li>
+</ul>
+	</div>
+	</div>
+	<div class="bl"></div>
+	<div class="br"></div>
+	<div class="bm"></div>
+	</div>
+	<div class="u70"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/u70.js"></script></div>
+	<div class="u80"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/u80.js"></script></div>
+	<div class="u90"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/u90.js"></script></div>
+	<div class="space"></div>
+	<div id="pin" style="position: fixed; top: 0px;">
+	<script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/pin.js"></script><script async="" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/f(2).txt"></script>
+<!-- 右侧粘性自适应 -->
+<ins class="adsbygoogle" style="display: block; height: 600px;" data-ad-client="ca-pub-5195587195407606" data-ad-slot="7669622914" data-ad-format="auto" data-adsbygoogle-status="done"><ins id="aswift_3_expand" style="display:inline-table;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_3_anchor" style="display:block;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_3" name="aswift_3" style="left:0;position:absolute;top:0;width:300px;height:600px;" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/saved_resource(3).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+	</div>
+</td></tr>
+</tbody></table>
+<div class="linux906"><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linux906.js"></script></div>
+<div id="footer">
+<a href="http://www.linuxidc.com/aboutus.htm">Linux公社简介</a> - <a href="http://www.linuxidc.com/adsense.htm">广告服务</a> - <a href="http://www.linuxidc.com/sitemap.aspx">网站地图</a> - <a href="http://www.linuxidc.com/help.htm">帮助信息</a> - <a href="http://www.linuxidc.com/contactus.htm">联系我们</a><br>本站（LinuxIDC）所刊载文章不代表同意其说法或描述，仅为提供更多信息，也不构成任何建议。<br><script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/qq.js"></script>主编：漏网的鱼 联系邮箱:<img src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/email.png" alt="" width="138" height="20"> (如有合作请联系)
+<br>
+<script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/foot.js"></script>本站带宽由[<font color="red">808.Ai</font>]友情提供<br>关注Linux，关注LinuxIDC.com，<font color="red">请向您的QQ好友宣传LinuxIDC.com</font>，多谢支持！
+<br>Copyright © 2006-2016　<a href="http://www.linuxidc.com/">Linux公社</a>　All rights reserved 沪ICP备15008072号-1号
+	<script type="text/javascript">iwms.aId=138601;$(function(){iwms.imgCont=$i('content');iwms.imgResize();InitContStyle();iwms.getVars();})</script>
+	
+</div>
+</div><iframe id="google_osd_static_frame_5319000292655" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/saved_resource(4).html"></iframe>
+<script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linuxren1.js"></script><script type="text/javascript">
+document.body.oncopy = function () { setTimeout( function () { var text = clipboardData.getData("text"); if (text) { text = text + "\r\n本篇文章来源于 Linux公社网站(www.linuxidc.com)  原文链接："+location.href; clipboardData.setData("text", text); } }, 100 ) }
+</script>
+
+<script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linuxren2.js"></script>
+<script type="text/javascript" src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/linuxren3.js"></script><script src="./Ubuntu下配置Common Lisp开发环境_Linux教程_Linux公社-Linux系统门户网站_files/h.js" type="text/javascript"></script>
+
+<div id="hm_t_undefined" class="hm-t-container"><div class="hm-t-go-top" style="display: block;"></div></div></body></html>

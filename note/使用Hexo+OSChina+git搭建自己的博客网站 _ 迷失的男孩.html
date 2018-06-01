@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/ -->
+<html lang="zh"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="baidu-site-verification" content="lKl7jYajUz">
+    
+    
+    <title>使用Hexo+OSChina+git搭建自己的博客网站 | 迷失的男孩</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="火龙战士,zhengweishan,郑伟山的博客，bolg,博客">
+    <meta name="description" content="基础工具介绍码云Pages码云 Pages 是一个免费的静态网页托管服务，您可以使用码云 Pages 托管博客、项目官网等静态网页。如果您使用过 Github Pages 那么您会很快上手使用码云的Pages服务。
+官方介绍：http://www.oschina.net/news/73980/gitosc-pages
+HexoHexo 是一个简单地、轻量地、基于Node的一个静态博客框架，可以方便">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Hexo+OSChina+git搭建自己的博客网站">
+<meta property="og:url" content="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/index.html">
+<meta property="og:site_name" content="迷失的男孩">
+<meta property="og:description" content="基础工具介绍码云Pages码云 Pages 是一个免费的静态网页托管服务，您可以使用码云 Pages 托管博客、项目官网等静态网页。如果您使用过 Github Pages 那么您会很快上手使用码云的Pages服务。
+官方介绍：http://www.oschina.net/news/73980/gitosc-pages
+HexoHexo 是一个简单地、轻量地、基于Node的一个静态博客框架，可以方便">
+<meta property="og:image" content="http://i.imgur.com/W3lmqUy.png">
+<meta property="og:image" content="http://i.imgur.com/Umw13aq.png">
+<meta property="og:image" content="http://i.imgur.com/7eS6yvB.png">
+<meta property="og:image" content="http://i.imgur.com/qWvBXKb.png">
+<meta property="og:image" content="http://i.imgur.com/r6WAvKY.png">
+<meta property="og:updated_time" content="2017-01-22T03:50:05.209Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Hexo+OSChina+git搭建自己的博客网站">
+<meta name="twitter:description" content="基础工具介绍码云Pages码云 Pages 是一个免费的静态网页托管服务，您可以使用码云 Pages 托管博客、项目官网等静态网页。如果您使用过 Github Pages 那么您会很快上手使用码云的Pages服务。
+官方介绍：http://www.oschina.net/news/73980/gitosc-pages
+HexoHexo 是一个简单地、轻量地、基于Node的一个静态博客框架，可以方便">
+<meta name="twitter:image" content="http://i.imgur.com/W3lmqUy.png">
+    
+
+    
+        <link rel="alternate" href="http://zhengweishan.oschina.io/atom.xml" title="迷失的男孩" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="http://zhengweishan.oschina.io/css/images/favicon.ico">
+    
+
+    <link rel="stylesheet" href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/font-awesome.min.css">
+    <link rel="stylesheet" href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/styles.css">
+    <link rel="stylesheet" href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/styles(1).css">
+
+    <link rel="stylesheet" href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/style.css">
+    <link rel="alternate stylesheet" href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" title="highlight">
+    <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/hm.js"></script><script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?eb23f1849f20e62c924d275e4edef134";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+<script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/share.js"></script><script src="http://hexo-theme-icarus.disqus.com/embed.js" data-timestamp="1527729206212"></script><link rel="stylesheet" href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/share_style0_16.css"></head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="http://zhengweishan.oschina.io/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">迷失的男孩</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="http://zhengweishan.oschina.io/">主页</a>
+                
+                    <a class="main-nav-link" href="http://zhengweishan.oschina.io/archives">归档</a>
+                
+                    <a class="main-nav-link" href="http://zhengweishan.oschina.io/categories">分类</a>
+                
+                    <a class="main-nav-link" href="http://zhengweishan.oschina.io/tags">标签</a>
+                
+                    <a class="main-nav-link" href="http://zhengweishan.oschina.io/about">关于我</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/avatar.jpg">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tbody><tr>
+                
+                    <td><a class="main-nav-link" href="http://zhengweishan.oschina.io/">主页</a></td>
+                
+                    <td><a class="main-nav-link" href="http://zhengweishan.oschina.io/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="http://zhengweishan.oschina.io/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="http://zhengweishan.oschina.io/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="http://zhengweishan.oschina.io/about">关于我</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/avatar.jpg">
+            <h2 id="name">迷失的男孩</h2>
+            <h3 id="title">为API生，为框架死，为debug奋斗一辈子，吃符号亏，上大小写的当，最后死在需求上。</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>中国, 北京</span>
+            <a id="follow" target="_blank" href="https://github.com/wesley5201314">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                25
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                13
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tbody><tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/wesley5201314" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://git.oschina.net/zhengweishan" target="_blank" title="git" class="tooltip">
+                            <i class="fa fa-git"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://zhengweishan.oschina.io/css/images/weixin.png" target="_blank" title="weixin" class="tooltip">
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://zhengweishan.oschina.io/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://weibo.com/wesley5201314" target="_blank" title="weibo" class="tooltip">
+                            <i class="fa fa-weibo"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://zhengweishan.oschina.io/atom.xml" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </tbody></table>
+        </div>
+        
+        <div class="base-info" style="text-align:center">
+        <span style="color:#38b7ea">今天是：
+                 <script type="text/javascript">
+                　　today=new Date(); 
+                    var tdate,tday, x,year; 
+                    var x = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五","星期六");
+                　　var MSIE=navigator.userAgent.indexOf("MSIE");
+                    if(MSIE != -1)
+                    　year =(today.getFullYear());
+                    else
+                    　year = (today.getYear()+1900);
+                    　tdate= year+ "年" + (today.getMonth() + 1 ) + "月" + today.getDate() + "日" + " " + x[today.getDay()];
+                    　document.write(tdate); 
+                </script>2018年5月31日 星期四
+        </span> 
+        </div>
+        <div class="base-info" style="text-align:center">
+                <span style="color:#38b7ea;"><script type="text/javascript">
+                    today=new Date();
+                    var day; var date; var hello;
+                    hour=new Date().getHours()
+                    if(hour < 6)hello='  凌晨好! '
+                    else if(hour < 9)hello=' 早上好! '
+                    else if(hour < 12)hello=' 上午好! '
+                    else if(hour < 14)hello=' 中午好! '
+                    else if(hour < 17)hello=' 下午好! '
+                    else if(hour < 19)hello=' 傍晚好! '
+                    else if(hour < 22)hello=' 晚上好! '
+                    else {hello='夜深了! '}
+                    var webUrl = webUrl;
+                    document.write(' '+hello);
+                </script>  上午好! 
+                </span>
+            <span id="busuanzi_container_site_uv" style="display: inline;">
+                您是本站第<span id="busuanzi_value_site_uv" class="foot-count">1824</span>位访客
+            </span>
+        </div>
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Hexo+OSChina" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            使用Hexo+OSChina+git搭建自己的博客网站
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/">
+            <time datetime="2017-01-21T16:00:00.000Z" itemprop="datePublished">2017-01-22</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="http://zhengweishan.oschina.io/categories/Hexo/">Hexo</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="http://zhengweishan.oschina.io/tags/Hexo/">Hexo</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody" lg-uid="lg0">
+        
+            
+            <h1 id="基础工具介绍"><a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#%E5%9F%BA%E7%A1%80%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D" class="headerlink" title="基础工具介绍"></a>基础工具介绍</h1><h3 id="码云Pages"><a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#%E7%A0%81%E4%BA%91Pages" class="headerlink" title="码云Pages"></a>码云Pages</h3><p>码云 Pages 是一个免费的静态网页托管服务，您可以使用码云 Pages 托管博客、项目官网等静态网页。如果您使用过 Github Pages 那么您会很快上手使用码云的Pages服务。</p>
+<p>官方介绍：<a href="http://www.oschina.net/news/73980/gitosc-pages" target="_blank" rel="external">http://www.oschina.net/news/73980/gitosc-pages</a></p>
+<h3 id="Hexo"><a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p>Hexo 是一个简单地、轻量地、基于Node的一个静态博客框架，可以方便的生成静态网页托管在github和Heroku上，引用Hexo作者 <a href="https://github.com/hexojs/hexo" target="_blank" rel="external">[@tommy351]</a> 的话：</p>
+<p>快速、简单且功能强大的 Node.js 博客框架。A fast, simple &amp; powerful blog framework, powered by Node.js.</p>
+<p>官网地址：<a href="https://hexo.io/" target="_blank" rel="external">https://hexo.io</a></p>
+<h3 id="git"><a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#git" class="headerlink" title="git"></a>git</h3><p>Git是一个开源的分布式版本控制系统，用以有效、高速的处理从很小到非常大的项目版本管理。</p>
+<p>官网地址：<a href="https://git-scm.com/" target="_blank" rel="external">https://git-scm.com</a><br><a id="more"></a></p>
+<h1 id="搭建环境"><a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83" class="headerlink" title="搭建环境"></a>搭建环境</h1><h3 id="码云Pages使用"><a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#%E7%A0%81%E4%BA%91Pages%E4%BD%BF%E7%94%A8" class="headerlink" title="码云Pages使用"></a>码云Pages使用</h3><p>这里使用开源中国码云，没有使用github（你懂的，支持下国内软件），没有开源中国码云的小伙伴赶紧注册了。具体可以参见 ：<a href="http://www.oschina.net/news/73980/gitosc-pages" target="_blank" rel="external">官网</a> 的介绍以及使用，这里就不在啰里啰嗦的介绍了。</p>
+<p>因为我想以根目录访问网站，所以我创建了一个这样子的项目：</p>
+<p><a href="https://git.oschina.net/zhengweishan/zhengweishan" target="_blank" rel="external">https://git.oschina.net/zhengweishan/zhengweishan</a>.</p>
+<p>启动码云Pages,就可以访问了，访问地址：</p>
+<p><a href="http://zhengweishan.oschina.io/">http://zhengweishan.oschina.io/</a></p>
+<p>官方说明如下：</p>
+<p><strong>*如果你想以根目录的形式访问自己的静态网站，只需要建立一个与自己个性地址同名的项目即可，如<a href="http://git.oschina.net/ipvb" target="_blank" rel="external">http://git.oschina.net/ipvb</a> 这个用户，想要创建一个自己的站点，但不想以子目录的方式访问，想以ipvb.oschina.io 直接访问，那么他就可以创建一个名字为ipvb的项目<a href="http://git.oschina.net/ipvb/ipvb" target="_blank" rel="external">http://git.oschina.net/ipvb/ipvb</a> 部署完成后，就可以以<a href="http://ipvb.oschina.io/" target="_blank" rel="external">http://ipvb.oschina.io</a> 进行访问了。</strong> *</p>
+<h3 id="git安装"><a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#git%E5%AE%89%E8%A3%85" class="headerlink" title="git安装"></a>git安装</h3><p>请参考<a href="http://www.runoob.com/git/git-install-setup.html" target="_blank" rel="external">http://www.runoob.com/git/git-install-setup.html</a>，这里就不在累赘的介绍了。</p>
+<h3 id="Node-js安装"><a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#Node-js%E5%AE%89%E8%A3%85" class="headerlink" title="Node.js安装"></a>Node.js安装</h3><p>请参考<a href="http://www.runoob.com/nodejs/nodejs-install-setup.html" target="_blank" rel="external">http://www.runoob.com/nodejs/nodejs-install-setup.html</a>，这里就不在累赘的介绍了。可能有人会问：为什么要安装Node.js？很简单嘛，我们的Hexo是基于Node的一个静态博客框架嘛。</p>
+<h3 id="Hexo安装"><a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#Hexo%E5%AE%89%E8%A3%85" class="headerlink" title="Hexo安装"></a>Hexo安装</h3><ul>
+<li><p><strong>安装</strong></p>
+<p>  如果您的电脑中已经安装上述必备程序，那么恭喜您！接下来只需要使用 npm 即可完成 Hexo 的安装（可以参看<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">官网文档</a>）。打开命令窗口输入下面代码：</p>
+<p>  <code>npm install hexo-cli -g</code></p>
+<p>  安装成功后输入hexo 如果得到下面这个结果，恭喜你！安装成功！</p>
+<p>  <a href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/W3lmqUy.png" title="" class="gallery-item" lg-event-uid="&amp;1"><img src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/W3lmqUy.png" alt=""></a></p>
+<p>  Hexo常用命令请参考：<a href="https://hexo.io/zh-cn/docs/commands.html" target="_blank" rel="external">https://hexo.io/zh-cn/docs/commands.html</a></p>
+</li>
+<li><p><strong>本地运行</strong></p>
+<p>  安装 Hexo 完成后，Hexo 将会在指定文件夹中新建所需要的文件。这里本地先新建了与博客地址一样的文件夹：<br>  zhengweishan.oschina.io.然后请进入你创建的改文件夹的上级目录，在该目录下打开命令行窗口，依次执行下列命令:</p>
+<ol>
+<li><code>hexo init zhengweishan.oschina.io</code></li>
+<li><code>cd zhengweishan.oschina.io</code></li>
+<li><code>npm install   #install before start blogging</code></li>
+<li><p><code>hexo generate  #生成静态文件到项目根目录的public文件夹中</code></p>
+<p>新建完成后，指定文件夹的目录如下：</p>
+<p><strong>.</strong></p>
+<p>├── .deploy       #需要部署的文件</p>
+<p>├── node_modules  #Hexo插件</p>
+<p>├── public        #生成的静态网页文件</p>
+<p>├── scaffolds     #模板</p>
+<p>├── source        #博客正文和其他源文件, 404 favicon CNAME 等都应该放在这里</p>
+<p>|    ├── _drafts   #草稿</p>
+<p>|    └── _posts    #文章</p>
+<p>├── themes        #主题</p>
+<p>├── _config.yml   #全局配置文件</p>
+<p>└── package.json</p>
+<p>进行到这步后就可以先在本地运行下，看看效果了。执行下面命令：</p>
+</li>
+<li><p><code>cd zhengweishan.oschina.io</code></p>
+</li>
+<li><code>npm install #install before start blogging</code></li>
+<li><p><code>hexo server #运行本地服务</code></p>
+<p>浏览器输入<a href="http://localhost:4000/" target="_blank" rel="external">http://localhost:4000</a>就可以看到效果。如下：</p>
+<p><a href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/Umw13aq.png" title="" class="gallery-item" lg-event-uid="&amp;2"><img src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/Umw13aq.png" alt=""></a></p>
+</li>
+</ol>
+</li>
+<li><p><strong>远程发布</strong></p>
+<p>  注册一个码云帐号，并创建一个项目，这里使用已经创建好的项目<a href="https://git.oschina.net/zhengweishan/zhengweishan" target="_blank" rel="external">https://git.oschina.net/zhengweishan/zhengweishan</a>，然后获取git地址：<a href="https://git.oschina.net/zhengweishan/zhengweishan.git" target="_blank" rel="external">https://git.oschina.net/zhengweishan/zhengweishan.git</a></p>
+<p>  这里使用git将项目中public文件夹下的文件管理起来，并推送到码云上。借用一个插件来帮助我们完成，安装 hexo-deployer-git。安装代码如下：<br>  <code>npm install hexo-deployer-git --save</code><br>  配置项目根目录_config.yml 文件，修改deploy的值，如下图：</p>
+<p>  <a href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/7eS6yvB.png" title="" class="gallery-item" lg-event-uid="&amp;3"><img src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/7eS6yvB.png" alt=""></a> </p>
+<p>  参考：<a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">https://hexo.io/docs/deployment.html</a></p>
+<p>  修改完后在命令窗口执行下面命令：</p>
+<ol>
+<li><code>cd zhengweishan.oschina.io</code></li>
+<li><code>npm install #install before start blogging</code></li>
+<li><p><code>hexo deploy #一键部署功能</code></p>
+<p>之后会弹出一个对话框，输入码云的帐号密码。大家最后在安装好git以后配置一个全局的文件，这样就可以不用每次提交都输入账号密码了。</p>
+<p>部署成功之后，登录码云，查看之前创建的项目中出现了public文件夹中的文件，这时候代表之前的部署是成功的。</p>
+<p>最后启动码云的Pages功能，详细参看：<a href="http://www.oschina.net/news/73980/gitosc-pages" target="_blank" rel="external">http://www.oschina.net/news/73980/gitosc-pages</a></p>
+<p>启动之后如下图，</p>
+<p><a href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/qWvBXKb.png" title="" class="gallery-item" lg-event-uid="&amp;4"><img src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/qWvBXKb.png" alt=""></a></p>
+<p>然后浏览器输入生成的网址就可以访问了，如下图所示：</p>
+<p><a href="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/r6WAvKY.png" title="" class="gallery-item" lg-event-uid="&amp;5"><img src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/r6WAvKY.png" alt=""></a></p>
+</li>
+</ol>
+</li>
+</ul>
+<p>看到之前和本地启动一样的效果了,这样子博客网站就部署完成了。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox bdshare-button-style0-16" data-bd-bind="1527729206483">
+    <a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+        <a href="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="http://zhengweishan.oschina.io/2017/01/22/JMS%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    JMS学习（一）-----基本概念
+                
+            </div>
+        </a>
+    
+    
+        <a href="http://zhengweishan.oschina.io/2017/01/22/java%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">JAVA常用开发环境配置</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="http://zhengweishan.oschina.io/2017/03/27/CountDownLatch/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="http://zhengweishan.oschina.io/categories/%E5%B9%B6%E5%8F%91/">并发</a></p>
+                            <p class="item-title"><a href="http://zhengweishan.oschina.io/2017/03/27/CountDownLatch/" class="title">java并发包里的CountDownLatch的用法</a></p>
+                            <p class="item-date"><time datetime="2017-03-26T16:00:00.000Z" itemprop="datePublished">2017-03-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="http://zhengweishan.oschina.io/2017/03/24/spring-boot-demo/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="http://zhengweishan.oschina.io/categories/SpringBoot/">SpringBoot</a></p>
+                            <p class="item-title"><a href="http://zhengweishan.oschina.io/2017/03/24/spring-boot-demo/" class="title">spring boot + mybatis + quartz + druid + swagger2</a></p>
+                            <p class="item-date"><time datetime="2017-03-23T16:00:00.000Z" itemprop="datePublished">2017-03-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="http://zhengweishan.oschina.io/2017/03/23/boy-rpc-framework/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="http://zhengweishan.oschina.io/categories/rpc/">rpc</a></p>
+                            <p class="item-title"><a href="http://zhengweishan.oschina.io/2017/03/23/boy-rpc-framework/" class="title">分布式rpc框架</a></p>
+                            <p class="item-date"><time datetime="2017-03-22T16:00:00.000Z" itemprop="datePublished">2017-03-23</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="http://zhengweishan.oschina.io/2017/02/10/%EF%BC%88%E5%85%AD%EF%BC%89Tomcat_7.0.70%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="http://zhengweishan.oschina.io/categories/Tomcat%E6%BA%90%E7%A0%81/">Tomcat源码</a></p>
+                            <p class="item-title"><a href="http://zhengweishan.oschina.io/2017/02/10/%EF%BC%88%E5%85%AD%EF%BC%89Tomcat_7.0.70%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/" class="title">Tomcat源码学习（六）--Tomcat_7.0.70 生命周期管理</a></p>
+                            <p class="item-date"><time datetime="2017-02-09T16:00:00.000Z" itemprop="datePublished">2017-02-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="http://zhengweishan.oschina.io/2017/02/09/%EF%BC%88%E4%BA%94%EF%BC%89Tomcat_7.0.70%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%BD%93%E7%B3%BB/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="http://zhengweishan.oschina.io/categories/Tomcat%E6%BA%90%E7%A0%81/">Tomcat源码</a></p>
+                            <p class="item-title"><a href="http://zhengweishan.oschina.io/2017/02/09/%EF%BC%88%E4%BA%94%EF%BC%89Tomcat_7.0.70%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%BD%93%E7%B3%BB/" class="title">Tomcat源码学习（五）-- Tomcat_7.0.70 类加载体系分析</a></p>
+                            <p class="item-date"><time datetime="2017-02-08T16:00:00.000Z" itemprop="datePublished">2017-02-09</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/Elasticsearch/">Elasticsearch</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/JAVA/">JAVA</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/JMS/">JMS</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/JVM/">JVM</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/Tomcat%E6%BA%90%E7%A0%81/">Tomcat源码</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/kafka/">kafka</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/rpc/">rpc</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="http://zhengweishan.oschina.io/categories/%E5%B9%B6%E5%8F%91/">并发</a><span class="category-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="http://zhengweishan.oschina.io/tags/ActiveMQ/" style="font-size: 16.67px;">ActiveMQ</a> <a href="http://zhengweishan.oschina.io/tags/Elasticsearch%E5%AD%A6%E4%B9%A0/" style="font-size: 13.33px;">Elasticsearch学习</a> <a href="http://zhengweishan.oschina.io/tags/GC/" style="font-size: 13.33px;">GC</a> <a href="http://zhengweishan.oschina.io/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="http://zhengweishan.oschina.io/tags/JAVA/" style="font-size: 16.67px;">JAVA</a> <a href="http://zhengweishan.oschina.io/tags/JMS/" style="font-size: 16.67px;">JMS</a> <a href="http://zhengweishan.oschina.io/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="http://zhengweishan.oschina.io/tags/Reflection/" style="font-size: 10px;">Reflection</a> <a href="http://zhengweishan.oschina.io/tags/SpingBoot/" style="font-size: 10px;">SpingBoot</a> <a href="http://zhengweishan.oschina.io/tags/kafka/" style="font-size: 16.67px;">kafka</a> <a href="http://zhengweishan.oschina.io/tags/rpc-%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">rpc 分布式</a> <a href="http://zhengweishan.oschina.io/tags/tomcat/" style="font-size: 20px;">tomcat</a> <a href="http://zhengweishan.oschina.io/tags/%E5%B9%B6%E5%8F%91%EF%BC%8CCountDownLatch/" style="font-size: 10px;">并发，CountDownLatch</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io/">Hexo</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://longfeizheng.github.io/">龙飞</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up" style="display: block; left: 1077.95px;"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+<script async="" src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/busuanzi.pure.mini.js"></script>
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            © 2017 郑伟山 版权所有<br> 
+            由 <a href="http://hexo.io/" target="_blank">Hexo</a> 强力驱动 ¦ 主题 -- <a href="https://github.com/ppoffice/hexo-theme-icarus">Icarus</a><br>
+            
+        </div>
+		<div class="inner">
+        	<span id="busuanzi_container_site_pv" style="display: inline;">
+    			本站总访问量<span id="busuanzi_value_site_pv" class="foot-count">3645</span>次
+			</span>
+		</div>
+    </div>
+<script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/highlight.min.js"></script>
+</footer>
+        
+    
+    <script>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://zhengweishan.oschina.io/2017/01/22/Hexo+OSChina/';
+        
+        this.page.identifier = 'Hexo+OSChina';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+    
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lightgallery.min.js"></script>
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lg-thumbnail.min.js"></script>
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lg-pager.min.js"></script>
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lg-autoplay.min.js"></script>
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lg-fullscreen.min.js"></script>
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lg-zoom.min.js"></script>
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lg-hash.min.js"></script>
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lg-share.min.js"></script>
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/lg-video.min.js"></script>
+    
+    
+        <script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/jquery.justifiedGallery.min.js"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="./使用Hexo+OSChina+git搭建自己的博客网站 _ 迷失的男孩_files/main.js"></script>
+
+    </div><div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"><section class="ins-section"><header class="ins-section-header">文章</header><div class="ins-selectable ins-search-item" data-url="/2017/02/01/kafka学习(一) ---- 基本概念以及环境搭建/"><header><i class="fa fa-file"></i>kafka学习(一) ---- 基本概念以及环境搭建</header><p class="ins-search-preview">前言由于项目涉及到kafka，自己以前没有接触过这方面的，学习了下，将搭建kafka运行环境同大家分享(单机搭建的Windows下的运行环境，Linux下的由于懒得装虚拟机就没有搭建，以后有时间在分享一次，搭建这个环境就是只为了学习)。 1、基本概念1.1 什么是kafka Apache Kafka</p></div><div class="ins-selectable ins-search-item" data-url="/2017/03/27/CountDownLatch/"><header><i class="fa fa-file"></i>java并发包里的CountDownLatch的用法</header><p class="ins-search-preview">CountDownLatch:官方的解释为：一个同步辅助类，在完成一组正在其他线程中执行的操作之前，它允许一个或多个线程一直等待。 我们现在就把它理解为倒数计数器，什么是倒数计数器呢，通俗的理解就是这个计数器事先有一个初始计数，在这个计数减到0之前，所有的线程等待。 最近公司有出去旅游，一个业务场景</p></div><div class="ins-selectable ins-search-item" data-url="/2017/03/23/boy-rpc-framework/"><header><i class="fa fa-file"></i>分布式rpc框架</header><p class="ins-search-preview">什么是RPCRPC（Remote Procedure Call Protocol）——远程过程调用协议，它是一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。说得通俗一点就是：调用远程计算机上的服务，就像调用本地服务一样。它可以有不同的实现方式:如RMI(远程方法调用)、Hes</p></div><div class="ins-selectable ins-search-item" data-url="/2017/02/10/（六）Tomcat_7.0.70生命周期管理/"><header><i class="fa fa-file"></i>Tomcat源码学习（六）--Tomcat_7.0.70 生命周期管理</header><p class="ins-search-preview">想必大家都知道，从server.xml文件解析出来的各个对象都是容器，比如：Server、Service、Connector等。这些容器都具有新建、初始化完成、启动、停止、失败、销毁等状态。Tomcat的实现机制是通过实现org.apache.catalina.Lifecycle接口来管理。 Tom</p></div><div class="ins-selectable ins-search-item" data-url="/2017/02/09/（五）Tomcat_7.0.70类加载体系/"><header><i class="fa fa-file"></i>Tomcat源码学习（五）-- Tomcat_7.0.70 类加载体系分析</header><p class="ins-search-preview">1、前言Tomcat遵循J2EE规范，实现了Web容器。Java虚拟机有自己的一套类加载体系，同样Tomcat也有自己的一套类加载体系。 2、概述首先简单介绍下Java虚拟机的主要的类加载器： 启动类加载器（bootstrap classloader） 它用来加载 Java 的核心库，是用原生代码(</p></div></section><section class="ins-section"><header class="ins-section-header">页面</header><div class="ins-selectable ins-search-item" data-url="/categories/index.html"><header><i class="fa fa-file"></i>文章分类</header></div><div class="ins-selectable ins-search-item" data-url="/about/index.html"><header><i class="fa fa-file"></i>关于我</header><p class="ins-search-preview">自我介绍祖籍河南，现居北京。IT技术狂，程序猿，软件工程专业，主要从事软件研发。现就职于天源迪科，研发中国联通号卡资源管理项目，中航电子采购平台项目。网络常用ID：火龙战士，迷失的男孩，大山，wesley5201314。 联系方式： Email: wesley5201314@live.com Git</p></div><div class="ins-selectable ins-search-item" data-url="/tags/index.html"><header><i class="fa fa-file"></i>标签云</header></div></section><section class="ins-section"><header class="ins-section-header">分类</header><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/categories/并发/"><header><i class="fa fa-folder"></i>并发<span class="ins-slug">并发</span></header></div><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/categories/SpringBoot/"><header><i class="fa fa-folder"></i>SpringBoot<span class="ins-slug">SpringBoot</span></header></div><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/categories/rpc/"><header><i class="fa fa-folder"></i>rpc<span class="ins-slug">rpc</span></header></div><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/categories/Tomcat源码/"><header><i class="fa fa-folder"></i>Tomcat源码<span class="ins-slug">Tomcat源码</span></header></div><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/categories/kafka/"><header><i class="fa fa-folder"></i>kafka<span class="ins-slug">kafka</span></header></div></section><section class="ins-section"><header class="ins-section-header">标签</header><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/tags/ActiveMQ/"><header><i class="fa fa-tag"></i>ActiveMQ<span class="ins-slug">ActiveMQ</span></header></div><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/tags/并发，CountDownLatch/"><header><i class="fa fa-tag"></i>并发，CountDownLatch<span class="ins-slug">并发，CountDownLatch</span></header></div><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/tags/rpc-分布式/"><header><i class="fa fa-tag"></i>rpc 分布式<span class="ins-slug">rpc-分布式</span></header></div><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/tags/tomcat/"><header><i class="fa fa-tag"></i>tomcat<span class="ins-slug">tomcat</span></header></div><div class="ins-selectable ins-search-item" data-url="http://zhengweishan.oschina.io/tags/kafka/"><header><i class="fa fa-tag"></i>kafka<span class="ins-slug">kafka</span></header></div></section></div>
+        </div>
+    </div>
+</div>
+
+</body></html>
