@@ -1,0 +1,495 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<!-- saved from url=(0056)https://www.cs.uic.edu/~troy/fall99/eecs471/sockets.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; I) [Netscape]">
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+
+<h1>
+Network Programming</h1>
+
+<h2>
+Sockets</h2>
+Sockets are a protocol independent method of creating a connection between
+processes. Sockets can be either
+<ul>
+<li>
+<i>connection based</i> or <i>connectionless</i>: Is a connection established
+before communication or does each packet describe the destination.</li>
+
+<li>
+<i>packet based</i> or <i>streams based</i>: Are there message boundaries
+is it one stream.</li>
+
+<li>
+<i>reliable</i> or <i>unreliable</i>. Can messages be lost, duplicated,
+reordered, or corrupted?</li>
+</ul>
+Socket are characterized by their domain, type and transport protocol.
+Common domains are:
+<ul>
+<li>
+AF_UNIX: address format is UNIX pathname</li>
+
+<li>
+AF_INET: address format is host and port number</li>
+</ul>
+Common types are:
+<ul>
+<li>
+virtual circuit: received in order transmitted and reliably</li>
+
+<li>
+datagram: arbitrary order, unreliable</li>
+</ul>
+Each socket has one or more protocols. Ex:
+<ul>
+<li>
+TCP/IP (virtual circuits)</li>
+
+<li>
+UDP (datagram)</li>
+</ul>
+
+<ul>
+<li>
+Connection--based sockets communicate client-server: the server waits for
+a connection from the client</li>
+
+<li>
+Connectionless sockets are peer-to-peer: each process is symmetric.</li>
+</ul>
+
+<ul>
+<li>
+socket: creates a socket of a given domain, type, protocol (buy a phone)</li>
+
+<li>
+bind: assigns a name to the socket (get a telephone number)</li>
+
+<li>
+listen: specifies the number of pending client messages that can be queued
+for a server socket. (call waiting allowance)</li>
+
+<li>
+accept: server accepts a connection request from a client (answer phone)</li>
+
+<li>
+connect: client requests a connection request to a server (call)</li>
+
+<li>
+send, sendto: write to connection</li>
+
+<li>
+recv, recvfrom: read from connection</li>
+
+<li>
+shutdown: end the call</li>
+</ul>
+
+<h3>
+Connection based communication</h3>
+Server performs the following actions
+<ul>
+<li>
+socket: create the socket</li>
+
+<li>
+bind: give the address of the socket on the server</li>
+
+<li>
+listen: specifies the maximum number of connection requests that can be
+pending for this process</li>
+
+<li>
+accept: establish the connection with a specific client</li>
+
+<li>
+send,recv: stream-based equivalents of read and write (repeated)</li>
+
+<li>
+shutdown: end reading or writing</li>
+
+<li>
+close: release kernel data stuctures</li>
+</ul>
+Client performs the following actions
+<ul>
+<li>
+socket: create the socket</li>
+
+<li>
+connect: connect to a server</li>
+
+<li>
+send,recv: (repeated)</li>
+
+<li>
+shutdown</li>
+
+<li>
+close</li>
+</ul>
+
+<h3>
+Connectionless communication</h3>
+Communication is symmetric (peer-to-peer)
+<ul>
+<li>
+socket</li>
+
+<li>
+bind</li>
+
+<li>
+sendto, recvfrom (repeated)</li>
+
+<li>
+shutdown</li>
+
+<li>
+close</li>
+</ul>
+
+<h3>
+Sockets API</h3>
+
+<h4>
+socket</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+<b>int</b> socket(<b>int</b> domain, <b>int</b> type, <b>int</b> protocol)</tt>
+
+</pre>
+Returns a file descriptor (called a socket ID) if successful, -1 otherwise.
+<p>The type arguments are
+</p><ul>
+<li>
+SOCK_STREAM: Established a virtual circuit for stream</li>
+
+<li>
+SOCK_DGRAM: Establishes a datagram for communication</li>
+
+<li>
+SOCK_SEQPACKET: Establishes a reliable, connection based, two way communication
+with maximum message size. (This is not available on most machines.)</li>
+</ul>
+Protocol is usually zero, so the.
+<p>Note that the socket returns a socket descriptor which is the same as
+a file descriptor (-1 if failure).
+</p><h4>
+bind</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+<b>int</b> bind(<b>int</b> sid, <b>struct sockaddr *</b>addrPtr, <b>int</b> len)</tt>
+
+</pre>
+Where
+<ul>
+<li>
+sid: is the socket id</li>
+
+<li>
+addrPtr: is a pointer to the address family dependent address structure</li>
+
+<li>
+len: is the size of *addrPtr</li>
+</ul>
+For the internet family:
+<pre><tt>struct sockaddr_in {
+&nbsp;&nbsp; short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sin_family; // = AF_INET
+&nbsp;&nbsp; u_short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sin_port;&nbsp;&nbsp; // is a port number
+&nbsp;&nbsp; struct in_addr sin_addr;&nbsp;&nbsp; // an IP address
+}</tt>
+
+</pre>
+For unix sockets (only works between processes on the same machine)
+<pre><tt>struct sockaddr {
+&nbsp;&nbsp; short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sin_family; // = AF_UNIX
+&nbsp;&nbsp; char&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sin_port[]; // is a port number
+}</tt>
+
+</pre>
+
+<h4>
+listen</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+<b>int</b> listen(<b>int</b> sid, <b>int</b> size)</tt>
+
+</pre>
+Where size it the number of pending connection requests allowed (typically
+limited by Unix kernels to 5).
+<h4>
+accept</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+<b>int</b> accept(<b>int</b> sid, <b>struct sockaddr *</b>addrPtr, <b>int *</b>lenPtr)</tt>
+
+</pre>
+Returns the address of client connecting to socket
+<p>if lenPtr or addrPtr equal zero, no address structure is returned
+</p><p>lenPtr is the maximum size of address structure that can be called,
+returns the actual value.
+</p><h4>
+send</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+
+<b>int</b> send(<b>int</b> sid, <b>const char *</b>bufferPtr, <b>int</b> len, <b>int</b> flags)</tt>
+
+</pre>
+flag is either
+<ul>
+<li>
+0: default</li>
+
+<li>
+MSG_OOB: Out-of-band high priority communication</li>
+</ul>
+
+<h4>
+recv</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+<b>int</b> recv(<b>int</b> sid, <b>char *</b>bufferPtr, <b>int</b> len, <b>int</b> flags)</tt>
+
+</pre>
+flags can be either
+<ul>
+<li>
+0: default</li>
+
+<li>
+MSG_OOB: out-of-bound message</li>
+
+<li>
+MSG_PEEK: look at message without removing</li>
+</ul>
+
+<h4>
+shutdown</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+<b>int</b> shutdown(<b>int</b> sid, <b>int</b> how)</tt>
+
+</pre>
+Disables sending (how=1 or how=2) or receiving (how=0 or how=2).
+<h3>
+Client calls</h3>
+
+<h4>
+connect</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+<b>int</b> connect(<b>int</b> sid, <b>struct sockaddr *</b>addrPtr, int len)</tt>
+
+</pre>
+
+<h3>
+Connectionless protocols</h3>
+
+<h4>
+sendto</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+<b>int</b> sendto(<b>int</b> sid, <b>const char *</b>bufferPtr, <b>int</b> len, <b>int</b> flag,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>struct sockaddr *</b>addrPtr, <b>int</b> len)</tt>
+
+</pre>
+
+<h4>
+recvfrom</h4>
+
+<pre><tt>#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+
+<b>int</b> recvfrom(<b>int</b> sid, <b>const char *</b>bufferPtr, <b>int</b> len, <b>int</b> flag,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>struct sockaddr *</b>addrPtr, <b>int *</b>lenPtr)</tt>
+
+</pre>
+
+<h3>
+Auxiliary functions</h3>
+
+<h4>
+Gethostbyname</h4>
+
+<pre><tt>#include &lt;netdb.h&gt;
+
+<b>struct hostent</b> *gethostbyname(<b>const char *</b>hostname)</tt>
+
+</pre>
+Translates a DNS name into a hostent.
+<p>The hostent stucture is as follows:
+</p><pre><tt>struct hostent {
+&nbsp;&nbsp;&nbsp; char&nbsp; *h_name;&nbsp;&nbsp;&nbsp;&nbsp; // official (canonical) name of the host
+&nbsp;&nbsp;&nbsp; char **h_aliases;&nbsp; // null terminated array of alternative hostnames
+&nbsp;&nbsp;&nbsp; int&nbsp;&nbsp;&nbsp; h_addrtype; // host address type AF_INET or AF_INET6
+&nbsp;&nbsp;&nbsp; int&nbsp;&nbsp;&nbsp; h_length;&nbsp;&nbsp; // 4 or 16 bytes
+&nbsp;&nbsp;&nbsp; char **h_addr_list;// IPv4 or IPv6 list of addresses
+}</tt>
+
+</pre>
+Error is return through <tt>h_error</tt> which can be:
+<ul>
+<li>
+HOST_NOT_FOUND</li>
+
+<li>
+TRY_AGAIN</li>
+
+<li>
+NO_RECOVERY</li>
+
+<li>
+NO_DATA</li>
+</ul>
+
+<h4>
+Gethostname</h4>
+
+<pre><tt>#include &lt;unistd.h&gt;
+
+<b>int</b> gethostname(<b>char *</b>hostname, <b>size_t</b> nameLength)</tt>
+
+</pre>
+Returns -1 on failure, 0 on success.
+<p>MAXHOSTNAMELEN is defined in &lt;sys/param.h&gt;.
+</p><h3>
+Network byte ordering</h3>
+Network ordering in big endian. (Sparc is big endian, Intel is little endian).
+<h4>
+htons</h4>
+Host to network byte order for shorts (16 bit)
+<pre><tt><b>uint_16t</b> htons(<b>uint_16t</b> v);</tt>
+
+</pre>
+
+<h4>
+htonl</h4>
+Host to network byte order for long (32 bit)
+<pre><tt><b>uint_32t</b> htonl(<b>uint_32t</b> v);</tt>
+
+</pre>
+
+<h4>
+ntohs</h4>
+Network to host byte order for long (16 bit)
+<pre><tt><b>uint_16t</b> ntohs(<b>uint_16t</b> v);</tt>
+
+</pre>
+
+<h4>
+ntohl</h4>
+Network to host byte order for long (32 bit)
+<pre><tt><b>uint_32t</b> ntohl(<b>uint_32t</b> v);</tt>
+
+</pre>
+
+<h3>
+IP address strings to 32 bit number</h3>
+In what follows, 'p' stands for presentation.
+<h4>
+inet_pton</h4>
+
+<pre><tt>#include &lt;arpa/inet.h&gt;
+
+<b>int</b> inet_pton(<b>int</b> family, <b>const char *</b>strPtr, <b>void *</b>addrPtr);</tt>
+
+</pre>
+returns 1 if OK, 0 if presentation error, -1 error
+<p>Where family is either AF_INET or AF_INET6.
+</p><p>The strPtr is the ip address as a dotted string.
+</p><p>Finally, addrPtr points to either the 32 bit result (AF_INET) or 128
+bit result (AF_INET6).
+</p><h4>
+inet_ntop</h4>
+
+<pre><tt>#include &lt;arpa/inet.h&gt;
+
+<b>int</b> inet_ntop(<b>int</b> family, <b>const char *</b>addrPtr, <b>char *</b>strPtr, <b>size_t</b> len);</tt>
+
+</pre>
+returns 1 if OK, 0 if presentation error, -1 error
+<p>Where family is either AF_INET or AF_INET6.
+</p><p>The strPtr is the return ip address as a dotted string.
+</p><p>Finally, addrPtr points to either the 32 bit (AF_INET) or 128 bit (AF_INET6).
+</p><p>Length is the size of destination.
+</p><h3>
+Example</h3>
+
+<h4>
+TCP/IP Server</h4>
+Without error checking.
+<pre><tt>int listenFd, connectFd;
+struct sockaddr_in serverAddr;
+
+listenFd = socket(AF_INET, SOCK_STREAM, 0); // get a tcp/ip socket
+
+bzero(&amp;serverAddr, sizeof(serverAddr));
+serverAddr.sin_family = AF_INET;
+serverAddr.sin_addr.s_addr = htonl(INADDR_ANY); // any iternet interface
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // on this server.
+serverAddr.sin_port = htons(13);
+
+bind(listenFd, (struct sockaddr_in *) &amp;serverAddr, sizeof(serverAddr));
+
+listen(listenFd, 5);
+
+for ( ; ; ) {
+&nbsp;&nbsp;&nbsp; connectFd = accept(listenFd, (struct sockaddr_in *) NULL, NULL);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // .. read and write operations on connectFd ..
+&nbsp;&nbsp;&nbsp; shutdown(connectFd, 2);
+&nbsp;&nbsp;&nbsp; close(connectFd);
+}</tt>
+
+</pre>
+Note that the above is an iterative server, which means that it serves
+one connection at a time.
+<p>To build a concurrent server, a fork is performed after the accept.
+The child process closes listenFd, and communicates using connectFd. The
+parent process closses connectFd, and then loops back to the accept to
+wait for another connection request.
+</p><h4>
+TCP/IP Client code</h4>
+
+<pre><tt>int sockFd;
+struct sockaddr_in serverAddr;
+
+sockFd = socket(AF_INET, SOCK_STREAM, 0); // get a tcp/ip socket
+
+bzero(&amp;serverAddr, sizeof(serverAddr));
+serverAddr.sin_family = AF_INET;
+inet_pton(AF_INET, serverName, serverAddr.sin_addr); // host IP #
+serverAddr.sin_port = htons(13);
+
+connect(sockFd, (struct sockaddr_in *) serverAddr, sizeof(serverAddr));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // .. read and write operations on sockFd ..
+shutdown(sockFd, 2);
+close(sockFd);</tt>
+
+</pre>
+
+
+
+</body></html>
