@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)https://www.cnblogs.com/pslydff/p/7041444.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pthread_mutex_lock实现 - pslydhh - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./pthread_mutex_lock实现 - pslydhh - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./pthread_mutex_lock实现 - pslydhh - 博客园_files/bundle-SimpleMemory.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./pthread_mutex_lock实现 - pslydhh - 博客园_files/bundle-SimpleMemory-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/pslydff/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/pslydff/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/pslydff/wlwmanifest.xml">
+<script async="" src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/analytics.js"></script><script type="text/javascript" src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/encoder.js"></script><script src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'pslydff', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/pslydff/"><img id="blogLogo" src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/pslydff/">pslydhh</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/pslydff/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/pslydhh">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/pslydff/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/pslydff/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 1&nbsp; </span>
+<span id="stats_article_count">文章 - 2&nbsp; </span>
+<span id="stats-comment_count">评论 - 0</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/pslydff/p/7041444.html">pthread_mutex_lock实现</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>我们来考察下pthread中锁的实现。</p>
+<p>首先看下初始化宏:PTHREAD_MUTEX_INITIALIZER。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000"># define PTHREAD_MUTEX_INITIALIZER \
+  { { </span><span style="color: #800080">0</span>, <span style="color: #800080">0</span>, <span style="color: #800080">0</span>, <span style="color: #800080">0</span>, <span style="color: #800080">0</span>, __PTHREAD_SPINS, { <span style="color: #800080">0</span>, <span style="color: #800080">0</span> } } }</pre>
+</div>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008000">/*</span><span style="color: #008000"> Data structures for mutex handling.  The structure of the attribute
+   type is not exposed on purpose.  </span><span style="color: #008000">*/<br>/*删减了32位的代码*/<br></span><span style="color: #000000">
+typedef union
+{
+  </span><span style="color: #0000ff">struct</span><span style="color: #000000"> __pthread_mutex_s
+  {
+    </span><span style="color: #0000ff">int</span><span style="color: #000000"> __lock;
+    unsigned </span><span style="color: #0000ff">int</span><span style="color: #000000"> __count;
+    </span><span style="color: #0000ff">int</span><span style="color: #000000"> __owner;
+#ifdef __x86_64__
+    unsigned </span><span style="color: #0000ff">int</span><span style="color: #000000"> __nusers;
+</span><span style="color: #0000ff">#endif</span>
+    <span style="color: #008000">/*</span><span style="color: #008000"> KIND must stay at this position in the structure to maintain
+       binary compatibility with static initializers.  </span><span style="color: #008000">*/</span>
+    <span style="color: #0000ff">int</span><span style="color: #000000"> __kind;
+#ifdef __x86_64__
+    </span><span style="color: #0000ff">short</span><span style="color: #000000"> __spins;
+    </span><span style="color: #0000ff">short</span><span style="color: #000000"> __elision;
+    __pthread_list_t __list;
+# define __PTHREAD_MUTEX_HAVE_PREV    </span><span style="color: #800080">1</span>
+<span style="color: #008000">/*</span><span style="color: #008000"> Mutex __spins initializer used by PTHREAD_MUTEX_INITIALIZER.  </span><span style="color: #008000">*/</span><span style="color: #000000">
+# define __PTHREAD_SPINS             </span><span style="color: #800080">0</span>, <span style="color: #800080">0</span>
+<span style="color: #0000ff">#else</span>
+<span style="color: #0000ff">#endif</span><span style="color: #000000">
+  } __data;
+  </span><span style="color: #0000ff">char</span><span style="color: #000000"> __size[__SIZEOF_PTHREAD_MUTEX_T];
+  </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000"> __align;
+} pthread_mutex_t;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<pre><span>注意PTHREAD_MUTEX_INITIALIZER 是8个成员的结构体，与pthread_mutex_t定义相符。并且所有成为初始化为0。<br><br>初始化之后，我们接着看看pthread_mutex_lock操作：<br></span></pre>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080">  1</span> <span style="color: #000000">#ifndef __pthread_mutex_lock
+</span><span style="color: #008080">  2</span> <span style="color: #000000">strong_alias (__pthread_mutex_lock, pthread_mutex_lock)
+</span><span style="color: #008080">  3</span> <span style="color: #000000">hidden_def (__pthread_mutex_lock)
+</span><span style="color: #008080">  4</span> <span style="color: #0000ff">#endif</span>
+<span style="color: #008080">  5</span> 
+<span style="color: #008080">  6</span> <span style="color: #0000ff">int</span>
+<span style="color: #008080">  7</span> __pthread_mutex_lock (pthread_mutex_t *<span style="color: #000000">mutex)
+</span><span style="color: #008080">  8</span> <span style="color: #000000">{
+</span><span style="color: #008080">  9</span>   assert (<span style="color: #0000ff">sizeof</span> (mutex-&gt;__size) &gt;= <span style="color: #0000ff">sizeof</span> (mutex-&gt;<span style="color: #000000">__data));
+</span><span style="color: #008080"> 10</span> 
+<span style="color: #008080"> 11</span>   unsigned <span style="color: #0000ff">int</span> type =<span style="color: #000000"> PTHREAD_MUTEX_TYPE_ELISION (mutex);
+</span><span style="color: #008080"> 12</span> 
+<span style="color: #008080"> 13</span>   LIBC_PROBE (mutex_entry, <span style="color: #800080">1</span><span style="color: #000000">, mutex);
+</span><span style="color: #008080"> 14</span> 
+<span style="color: #008080"> 15</span>   <span style="color: #0000ff">if</span> (__builtin_expect (type &amp; ~<span style="color: #000000">(PTHREAD_MUTEX_KIND_MASK_NP
+</span><span style="color: #008080"> 16</span>                  | PTHREAD_MUTEX_ELISION_FLAGS_NP), <span style="color: #800080">0</span><span style="color: #000000">))
+</span><span style="color: #008080"> 17</span>     <span style="color: #0000ff">return</span><span style="color: #000000"> __pthread_mutex_lock_full (mutex);
+</span><span style="color: #008080"> 18</span> 
+<span style="color: #008080"> 19</span>   <span style="color: #0000ff">if</span> (__glibc_likely (type ==<span style="color: #000000"> PTHREAD_MUTEX_TIMED_NP))
+</span><span style="color: #008080"> 20</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 21</span>       FORCE_ELISION (mutex, <span style="color: #0000ff">goto</span><span style="color: #000000"> elision);
+</span><span style="color: #008080"> 22</span> <span style="color: #000000">    simple:
+</span><span style="color: #008080"> 23</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Normal mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 24</span> <span style="color: #000000">      LLL_MUTEX_LOCK (mutex);
+</span><span style="color: #008080"> 25</span>       assert (mutex-&gt;__data.__owner == <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080"> 26</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 27</span> <span style="color: #000000">#ifdef HAVE_ELISION
+</span><span style="color: #008080"> 28</span>   <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span> (__glibc_likely (type ==<span style="color: #000000"> PTHREAD_MUTEX_TIMED_ELISION_NP))
+</span><span style="color: #008080"> 29</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 30</span> <span style="color: #000000">  elision: __attribute__((unused))
+</span><span style="color: #008080"> 31</span>       <span style="color: #008000">/*</span><span style="color: #008000"> This case can never happen on a system without elision,
+</span><span style="color: #008080"> 32</span> <span style="color: #008000">         as the mutex type initialization functions will not
+</span><span style="color: #008080"> 33</span> <span style="color: #008000">     allow to set the elision flags.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 34</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Don't record owner or users for elision case.  This is a
+</span><span style="color: #008080"> 35</span> <span style="color: #008000">         tail call.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 36</span>       <span style="color: #0000ff">return</span><span style="color: #000000"> LLL_MUTEX_LOCK_ELISION (mutex);
+</span><span style="color: #008080"> 37</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 38</span> <span style="color: #0000ff">#endif</span>
+<span style="color: #008080"> 39</span>   <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span><span style="color: #000000"> (__builtin_expect (PTHREAD_MUTEX_TYPE (mutex)
+</span><span style="color: #008080"> 40</span>                  == PTHREAD_MUTEX_RECURSIVE_NP, <span style="color: #800080">1</span><span style="color: #000000">))
+</span><span style="color: #008080"> 41</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 42</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Recursive mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 43</span>       pid_t id =<span style="color: #000000"> THREAD_GETMEM (THREAD_SELF, tid);
+</span><span style="color: #008080"> 44</span> 
+<span style="color: #008080"> 45</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Check whether we already hold the mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 46</span>       <span style="color: #0000ff">if</span> (mutex-&gt;__data.__owner ==<span style="color: #000000"> id)
+</span><span style="color: #008080"> 47</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 48</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Just bump the counter.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 49</span>       <span style="color: #0000ff">if</span> (__glibc_unlikely (mutex-&gt;__data.__count + <span style="color: #800080">1</span> == <span style="color: #800080">0</span><span style="color: #000000">))
+</span><span style="color: #008080"> 50</span>         <span style="color: #008000">/*</span><span style="color: #008000"> Overflow of the counter.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 51</span>         <span style="color: #0000ff">return</span><span style="color: #000000"> EAGAIN;
+</span><span style="color: #008080"> 52</span> 
+<span style="color: #008080"> 53</span>       ++mutex-&gt;<span style="color: #000000">__data.__count;
+</span><span style="color: #008080"> 54</span> 
+<span style="color: #008080"> 55</span>       <span style="color: #0000ff">return</span> <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080"> 56</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 57</span> 
+<span style="color: #008080"> 58</span>       <span style="color: #008000">/*</span><span style="color: #008000"> We have to get the mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 59</span> <span style="color: #000000">      LLL_MUTEX_LOCK (mutex);
+</span><span style="color: #008080"> 60</span> 
+<span style="color: #008080"> 61</span>       assert (mutex-&gt;__data.__owner == <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080"> 62</span>       mutex-&gt;__data.__count = <span style="color: #800080">1</span><span style="color: #000000">;
+</span><span style="color: #008080"> 63</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 64</span>   <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span><span style="color: #000000"> (__builtin_expect (PTHREAD_MUTEX_TYPE (mutex)
+</span><span style="color: #008080"> 65</span>               == PTHREAD_MUTEX_ADAPTIVE_NP, <span style="color: #800080">1</span><span style="color: #000000">))
+</span><span style="color: #008080"> 66</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 67</span>       <span style="color: #0000ff">if</span> (!<span style="color: #000000"> __is_smp)
+</span><span style="color: #008080"> 68</span>     <span style="color: #0000ff">goto</span><span style="color: #000000"> simple;
+</span><span style="color: #008080"> 69</span> 
+<span style="color: #008080"> 70</span>       <span style="color: #0000ff">if</span> (LLL_MUTEX_TRYLOCK (mutex) != <span style="color: #800080">0</span><span style="color: #000000">)
+</span><span style="color: #008080"> 71</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 72</span>       <span style="color: #0000ff">int</span> cnt = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080"> 73</span>       <span style="color: #0000ff">int</span> max_cnt =<span style="color: #000000"> MIN (MAX_ADAPTIVE_COUNT,
+</span><span style="color: #008080"> 74</span>                  mutex-&gt;__data.__spins * <span style="color: #800080">2</span> + <span style="color: #800080">10</span><span style="color: #000000">);
+</span><span style="color: #008080"> 75</span>       <span style="color: #0000ff">do</span>
+<span style="color: #008080"> 76</span> <span style="color: #000000">        {
+</span><span style="color: #008080"> 77</span>           <span style="color: #0000ff">if</span> (cnt++ &gt;=<span style="color: #000000"> max_cnt)
+</span><span style="color: #008080"> 78</span> <span style="color: #000000">        {
+</span><span style="color: #008080"> 79</span> <span style="color: #000000">          LLL_MUTEX_LOCK (mutex);
+</span><span style="color: #008080"> 80</span>           <span style="color: #0000ff">break</span><span style="color: #000000">;
+</span><span style="color: #008080"> 81</span> <span style="color: #000000">        }
+</span><span style="color: #008080"> 82</span> <span style="color: #000000">          atomic_spin_nop ();
+</span><span style="color: #008080"> 83</span> <span style="color: #000000">        }
+</span><span style="color: #008080"> 84</span>       <span style="color: #0000ff">while</span> (LLL_MUTEX_TRYLOCK (mutex) != <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080"> 85</span> 
+<span style="color: #008080"> 86</span>       mutex-&gt;__data.__spins += (cnt - mutex-&gt;__data.__spins) / <span style="color: #800080">8</span><span style="color: #000000">;
+</span><span style="color: #008080"> 87</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 88</span>       assert (mutex-&gt;__data.__owner == <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080"> 89</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 90</span>   <span style="color: #0000ff">else</span>
+<span style="color: #008080"> 91</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 92</span>       pid_t id =<span style="color: #000000"> THREAD_GETMEM (THREAD_SELF, tid);
+</span><span style="color: #008080"> 93</span>       assert (PTHREAD_MUTEX_TYPE (mutex) ==<span style="color: #000000"> PTHREAD_MUTEX_ERRORCHECK_NP);
+</span><span style="color: #008080"> 94</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Check whether we already hold the mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 95</span>       <span style="color: #0000ff">if</span> (__glibc_unlikely (mutex-&gt;__data.__owner ==<span style="color: #000000"> id))
+</span><span style="color: #008080"> 96</span>     <span style="color: #0000ff">return</span><span style="color: #000000"> EDEADLK;
+</span><span style="color: #008080"> 97</span>       <span style="color: #0000ff">goto</span><span style="color: #000000"> simple;
+</span><span style="color: #008080"> 98</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 99</span> 
+<span style="color: #008080">100</span>   pid_t id =<span style="color: #000000"> THREAD_GETMEM (THREAD_SELF, tid);
+</span><span style="color: #008080">101</span> 
+<span style="color: #008080">102</span>   <span style="color: #008000">/*</span><span style="color: #008000"> Record the ownership.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">103</span>   mutex-&gt;__data.__owner =<span style="color: #000000"> id;
+</span><span style="color: #008080">104</span> <span style="color: #000000">#ifndef NO_INCR
+</span><span style="color: #008080">105</span>   ++mutex-&gt;<span style="color: #000000">__data.__nusers;
+</span><span style="color: #008080">106</span> <span style="color: #0000ff">#endif</span>
+<span style="color: #008080">107</span> 
+<span style="color: #008080">108</span>   LIBC_PROBE (mutex_acquired, <span style="color: #800080">1</span><span style="color: #000000">, mutex);
+</span><span style="color: #008080">109</span> 
+<span style="color: #008080">110</span>   <span style="color: #0000ff">return</span> <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">111</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<pre><span>首先看下第一句</span></pre>
+<pre>assert (sizeof (mutex-&gt;__size) &gt;= sizeof (mutex-&gt;<span>__data));<br></span>这句的意思是成员_size和_data所占内存相同，我们来验证下。</pre>
+<pre>char<span> __size[__SIZEOF_PTHREAD_MUTEX_T]的字节数：40.<br></span></pre>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span> <span style="color: #000000">#ifdef __x86_64__
+</span><span style="color: #008080">2</span> # <span style="color: #0000ff">if</span> __WORDSIZE == <span style="color: #800080">64</span>
+<span style="color: #008080">3</span> #  define __SIZEOF_PTHREAD_ATTR_T <span style="color: #800080">56</span>
+<span style="color: #008080">4</span> #  define __SIZEOF_PTHREAD_MUTEX_T <span style="color: #800080">40</span></pre>
+</div>
+<p>另一方面_data中的字节数是int、short、unsigned、__pthread_list_t这些个加起来，刚好为40字节.</p>
+<p>所以这个union在64位计算机上最大的空间为40个字节。</p>
+<p>接着是：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span>   unsigned <span style="color: #0000ff">int</span> type = PTHREAD_MUTEX_TYPE_ELISION (mutex);</pre>
+</div>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span> <span style="color: #0000ff">#define</span> PTHREAD_MUTEX_TYPE_ELISION(m) \
+<span style="color: #008080">2</span>   ((m)-&gt;__data.__kind &amp; (<span style="color: #800080">127</span>|PTHREAD_MUTEX_ELISION_NP))</pre>
+</div>
+<p>因为__kind为0，所以这里的type显然为0；</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span>   <span style="color: #0000ff">if</span> (__builtin_expect (type &amp; ~<span style="color: #000000">(PTHREAD_MUTEX_KIND_MASK_NP
+</span><span style="color: #008080">2</span>                  | PTHREAD_MUTEX_ELISION_FLAGS_NP), <span style="color: #800080">0</span><span style="color: #000000">))
+</span><span style="color: #008080">3</span>     <span style="color: #0000ff">return</span> __pthread_mutex_lock_full (mutex);</pre>
+</div>
+<p>这里的结果为0，所以显然不走这个分支。</p>
+<p>&nbsp;</p>
+<p>PTHREAD_MUTEX_TIMED_NP值为0，所以我们的代码显然是进入如下第一行的分支。</p>
+<p>根据注释/* Normal mutex. */，很可能是通过这里得到锁。我们继续探索下，</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008000">/*</span><span style="color: #008000"> Mutex types.  </span><span style="color: #008000">*/</span>
+<span style="color: #0000ff">enum</span><span style="color: #000000">
+{
+  PTHREAD_MUTEX_TIMED_NP,
+  PTHREAD_MUTEX_RECURSIVE_NP,
+  PTHREAD_MUTEX_ERRORCHECK_NP,
+  PTHREAD_MUTEX_ADAPTIVE_NP
+</span><span style="color: #0000ff">#if</span> defined __USE_UNIX98 || defined __USE_XOPEN2K8</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span>   <span style="color: #0000ff">if</span> (__glibc_likely (type ==<span style="color: #000000"> PTHREAD_MUTEX_TIMED_NP))
+</span><span style="color: #008080"> 2</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 3</span>       FORCE_ELISION (mutex, <span style="color: #0000ff">goto</span><span style="color: #000000"> elision);
+</span><span style="color: #008080"> 4</span> <span style="color: #000000">    simple:
+</span><span style="color: #008080"> 5</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Normal mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 6</span> <span style="color: #000000">      LLL_MUTEX_LOCK (mutex);
+</span><span style="color: #008080"> 7</span>       assert (mutex-&gt;__data.__owner == <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080"> 8</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 9</span> <span style="color: #000000">#ifdef HAVE_ELISION
+</span><span style="color: #008080">10</span>   <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span> (__glibc_likely (type ==<span style="color: #000000"> PTHREAD_MUTEX_TIMED_ELISION_NP))
+</span><span style="color: #008080">11</span> <span style="color: #000000">    {
+</span><span style="color: #008080">12</span> <span style="color: #000000">  elision: __attribute__((unused))
+</span><span style="color: #008080">13</span>       <span style="color: #008000">/*</span><span style="color: #008000"> This case can never happen on a system without elision,
+</span><span style="color: #008080">14</span> <span style="color: #008000">         as the mutex type initialization functions will not
+</span><span style="color: #008080">15</span> <span style="color: #008000">     allow to set the elision flags.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">16</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Don't record owner or users for elision case.  This is a
+</span><span style="color: #008080">17</span> <span style="color: #008000">         tail call.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">18</span>       <span style="color: #0000ff">return</span><span style="color: #000000"> LLL_MUTEX_LOCK_ELISION (mutex);
+</span><span style="color: #008080">19</span> <span style="color: #000000">    }
+</span><span style="color: #008080">20</span> <span style="color: #0000ff">#endif</span>
+<span style="color: #008080">21</span>   <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span><span style="color: #000000"> (__builtin_expect (PTHREAD_MUTEX_TYPE (mutex)
+</span><span style="color: #008080">22</span>                  == PTHREAD_MUTEX_RECURSIVE_NP, <span style="color: #800080">1</span><span style="color: #000000">))
+</span><span style="color: #008080">23</span> <span style="color: #000000">    {
+</span><span style="color: #008080">24</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Recursive mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">25</span>       pid_t id =<span style="color: #000000"> THREAD_GETMEM (THREAD_SELF, tid);
+</span><span style="color: #008080">26</span> 
+<span style="color: #008080">27</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Check whether we already hold the mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">28</span>       <span style="color: #0000ff">if</span> (mutex-&gt;__data.__owner ==<span style="color: #000000"> id)
+</span><span style="color: #008080">29</span> <span style="color: #000000">    {
+</span><span style="color: #008080">30</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Just bump the counter.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">31</span>       <span style="color: #0000ff">if</span> (__glibc_unlikely (mutex-&gt;__data.__count + <span style="color: #800080">1</span> == <span style="color: #800080">0</span><span style="color: #000000">))
+</span><span style="color: #008080">32</span>         <span style="color: #008000">/*</span><span style="color: #008000"> Overflow of the counter.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">33</span>         <span style="color: #0000ff">return</span><span style="color: #000000"> EAGAIN;
+</span><span style="color: #008080">34</span> 
+<span style="color: #008080">35</span>       ++mutex-&gt;<span style="color: #000000">__data.__count;
+</span><span style="color: #008080">36</span> 
+<span style="color: #008080">37</span>       <span style="color: #0000ff">return</span> <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">38</span> <span style="color: #000000">    }
+</span><span style="color: #008080">39</span> 
+<span style="color: #008080">40</span>       <span style="color: #008000">/*</span><span style="color: #008000"> We have to get the mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">41</span> <span style="color: #000000">      LLL_MUTEX_LOCK (mutex);
+</span><span style="color: #008080">42</span> 
+<span style="color: #008080">43</span>       assert (mutex-&gt;__data.__owner == <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080">44</span>       mutex-&gt;__data.__count = <span style="color: #800080">1</span><span style="color: #000000">;
+</span><span style="color: #008080">45</span> <span style="color: #000000">    }
+</span><span style="color: #008080">46</span>   <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span><span style="color: #000000"> (__builtin_expect (PTHREAD_MUTEX_TYPE (mutex)
+</span><span style="color: #008080">47</span>               == PTHREAD_MUTEX_ADAPTIVE_NP, <span style="color: #800080">1</span><span style="color: #000000">))
+</span><span style="color: #008080">48</span> <span style="color: #000000">    {
+</span><span style="color: #008080">49</span>       <span style="color: #0000ff">if</span> (!<span style="color: #000000"> __is_smp)
+</span><span style="color: #008080">50</span>     <span style="color: #0000ff">goto</span><span style="color: #000000"> simple;
+</span><span style="color: #008080">51</span> 
+<span style="color: #008080">52</span>       <span style="color: #0000ff">if</span> (LLL_MUTEX_TRYLOCK (mutex) != <span style="color: #800080">0</span><span style="color: #000000">)
+</span><span style="color: #008080">53</span> <span style="color: #000000">    {
+</span><span style="color: #008080">54</span>       <span style="color: #0000ff">int</span> cnt = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">55</span>       <span style="color: #0000ff">int</span> max_cnt =<span style="color: #000000"> MIN (MAX_ADAPTIVE_COUNT,
+</span><span style="color: #008080">56</span>                  mutex-&gt;__data.__spins * <span style="color: #800080">2</span> + <span style="color: #800080">10</span><span style="color: #000000">);
+</span><span style="color: #008080">57</span>       <span style="color: #0000ff">do</span>
+<span style="color: #008080">58</span> <span style="color: #000000">        {
+</span><span style="color: #008080">59</span>           <span style="color: #0000ff">if</span> (cnt++ &gt;=<span style="color: #000000"> max_cnt)
+</span><span style="color: #008080">60</span> <span style="color: #000000">        {
+</span><span style="color: #008080">61</span> <span style="color: #000000">          LLL_MUTEX_LOCK (mutex);
+</span><span style="color: #008080">62</span>           <span style="color: #0000ff">break</span><span style="color: #000000">;
+</span><span style="color: #008080">63</span> <span style="color: #000000">        }
+</span><span style="color: #008080">64</span> <span style="color: #000000">          atomic_spin_nop ();
+</span><span style="color: #008080">65</span> <span style="color: #000000">        }
+</span><span style="color: #008080">66</span>       <span style="color: #0000ff">while</span> (LLL_MUTEX_TRYLOCK (mutex) != <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080">67</span> 
+<span style="color: #008080">68</span>       mutex-&gt;__data.__spins += (cnt - mutex-&gt;__data.__spins) / <span style="color: #800080">8</span><span style="color: #000000">;
+</span><span style="color: #008080">69</span> <span style="color: #000000">    }
+</span><span style="color: #008080">70</span>       assert (mutex-&gt;__data.__owner == <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080">71</span> <span style="color: #000000">    }
+</span><span style="color: #008080">72</span>   <span style="color: #0000ff">else</span>
+<span style="color: #008080">73</span> <span style="color: #000000">    {
+</span><span style="color: #008080">74</span>       pid_t id =<span style="color: #000000"> THREAD_GETMEM (THREAD_SELF, tid);
+</span><span style="color: #008080">75</span>       assert (PTHREAD_MUTEX_TYPE (mutex) ==<span style="color: #000000"> PTHREAD_MUTEX_ERRORCHECK_NP);
+</span><span style="color: #008080">76</span>       <span style="color: #008000">/*</span><span style="color: #008000"> Check whether we already hold the mutex.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">77</span>       <span style="color: #0000ff">if</span> (__glibc_unlikely (mutex-&gt;__data.__owner ==<span style="color: #000000"> id))
+</span><span style="color: #008080">78</span>     <span style="color: #0000ff">return</span><span style="color: #000000"> EDEADLK;
+</span><span style="color: #008080">79</span>       <span style="color: #0000ff">goto</span><span style="color: #000000"> simple;
+</span><span style="color: #008080">80</span>     }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>这里的意思：将_data中的__lock作为参数填入lll_lock，注意，这里是宏定义。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000">#ifndef LLL_MUTEX_LOCK
+# define LLL_MUTEX_LOCK(mutex) \
+  lll_lock ((mutex)</span>-&gt;__data.__lock, PTHREAD_MUTEX_PSHARED (mutex))</pre>
+</div>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span> <span style="color: #0000ff">#if</span> LLL_PRIVATE == 0 &amp;&amp; LLL_SHARED == 128
+<span style="color: #008080">2</span> <span style="color: #000000"># define PTHREAD_MUTEX_PSHARED(m) \
+</span><span style="color: #008080">3</span>   ((m)-&gt;__data.__kind &amp; <span style="color: #800080">128</span><span style="color: #000000">)
+</span><span style="color: #008080">4</span> <span style="color: #0000ff">#else</span></pre>
+</div>
+<p>这里的PTHREAD_MUTEX_PSHARED将__kind字段和128做&amp;操作，推测是第8个标志位用来标识该锁是否共享。</p>
+<p>既然如此， 我们这里两者填入的都是0，但是第一个__lock在后续使用中有取地址的可能。</p>
+<p>我们接着看看lll_lock：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span> <span style="color: #0000ff">#define</span> lll_lock(futex, private)    \
+<span style="color: #008080">2</span>   __lll_lock (&amp;(futex), <span style="color: #0000ff">private</span>)</pre>
+</div>
+<p>取了地址， 那么这里就是原mutex中__lock字段的地址和数值0.</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span> <span style="color: #0000ff">#define</span> __lll_lock(futex, private)                                      \
+<span style="color: #008080"> 2</span>   ((<span style="color: #0000ff">void</span><span style="color: #000000">)                                                               \
+</span><span style="color: #008080"> 3</span> <span style="color: #000000">   ({                                                                   \
+</span><span style="color: #008080"> 4</span>      <span style="color: #0000ff">int</span> *__futex =<span style="color: #000000"> (futex);                                            \
+</span><span style="color: #008080"> 5</span>      <span style="color: #0000ff">if</span><span style="color: #000000"> (__glibc_unlikely                                               \
+</span><span style="color: #008080"> 6</span>          (atomic_compare_and_exchange_bool_acq (__futex, <span style="color: #800080">1</span>, <span style="color: #800080">0</span><span style="color: #000000">)))        \
+</span><span style="color: #008080"> 7</span> <span style="color: #000000">       {                                                                \
+</span><span style="color: #008080"> 8</span>          <span style="color: #0000ff">if</span> (__builtin_constant_p (<span style="color: #0000ff">private</span>) &amp;&amp; (<span style="color: #0000ff">private</span>) ==<span style="color: #000000"> LLL_PRIVATE) \
+</span><span style="color: #008080"> 9</span> <span style="color: #000000">           __lll_lock_wait_private (__futex);                           \
+</span><span style="color: #008080">10</span>          <span style="color: #0000ff">else</span><span style="color: #000000">                                                           \
+</span><span style="color: #008080">11</span>            __lll_lock_wait (__futex, <span style="color: #0000ff">private</span><span style="color: #000000">);                          \
+</span><span style="color: #008080">12</span> <span style="color: #000000">       }                                                                \
+</span><span style="color: #008080">13</span>    }))</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>根据值， 走__lll_lock_wait：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span> <span style="color: #008000">/*</span><span style="color: #008000"> Note that we need no lock prefix.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 2</span> <span style="color: #0000ff">#define</span> atomic_exchange_acq(mem, newvalue) \
+<span style="color: #008080"> 3</span>   ({ __typeof (*<span style="color: #000000">mem) result;                              \
+</span><span style="color: #008080"> 4</span>      <span style="color: #0000ff">if</span> (<span style="color: #0000ff">sizeof</span> (*mem) == <span style="color: #800080">1</span><span style="color: #000000">)                              \
+</span><span style="color: #008080"> 5</span>        __asm __volatile (<span style="color: #800000">"</span><span style="color: #800000">xchgb %b0, %1</span><span style="color: #800000">"</span><span style="color: #000000">                      \
+</span><span style="color: #008080"> 6</span>              : <span style="color: #800000">"</span><span style="color: #800000">=q</span><span style="color: #800000">"</span> (result), <span style="color: #800000">"</span><span style="color: #800000">=m</span><span style="color: #800000">"</span> (*<span style="color: #000000">mem)                  \
+</span><span style="color: #008080"> 7</span>              : <span style="color: #800000">"</span><span style="color: #800000">0</span><span style="color: #800000">"</span> (newvalue), <span style="color: #800000">"</span><span style="color: #800000">m</span><span style="color: #800000">"</span> (*<span style="color: #000000">mem));                  \
+</span><span style="color: #008080"> 8</span>      <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span> (<span style="color: #0000ff">sizeof</span> (*mem) == <span style="color: #800080">2</span><span style="color: #000000">)                          \
+</span><span style="color: #008080"> 9</span>        __asm __volatile (<span style="color: #800000">"</span><span style="color: #800000">xchgw %w0, %1</span><span style="color: #800000">"</span><span style="color: #000000">                      \
+</span><span style="color: #008080">10</span>              : <span style="color: #800000">"</span><span style="color: #800000">=r</span><span style="color: #800000">"</span> (result), <span style="color: #800000">"</span><span style="color: #800000">=m</span><span style="color: #800000">"</span> (*<span style="color: #000000">mem)                  \
+</span><span style="color: #008080">11</span>              : <span style="color: #800000">"</span><span style="color: #800000">0</span><span style="color: #800000">"</span> (newvalue), <span style="color: #800000">"</span><span style="color: #800000">m</span><span style="color: #800000">"</span> (*<span style="color: #000000">mem));                  \
+</span><span style="color: #008080">12</span>      <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span> (<span style="color: #0000ff">sizeof</span> (*mem) == <span style="color: #800080">4</span><span style="color: #000000">)                          \
+</span><span style="color: #008080">13</span>        __asm __volatile (<span style="color: #800000">"</span><span style="color: #800000">xchgl %0, %1</span><span style="color: #800000">"</span><span style="color: #000000">                          \
+</span><span style="color: #008080">14</span>              : <span style="color: #800000">"</span><span style="color: #800000">=r</span><span style="color: #800000">"</span> (result), <span style="color: #800000">"</span><span style="color: #800000">=m</span><span style="color: #800000">"</span> (*<span style="color: #000000">mem)                  \
+</span><span style="color: #008080">15</span>              : <span style="color: #800000">"</span><span style="color: #800000">0</span><span style="color: #800000">"</span> (newvalue), <span style="color: #800000">"</span><span style="color: #800000">m</span><span style="color: #800000">"</span> (*<span style="color: #000000">mem));                  \
+</span><span style="color: #008080">16</span>      <span style="color: #0000ff">else</span><span style="color: #000000">                                      \
+</span><span style="color: #008080">17</span>        __asm __volatile (<span style="color: #800000">"</span><span style="color: #800000">xchgq %q0, %1</span><span style="color: #800000">"</span><span style="color: #000000">                      \
+</span><span style="color: #008080">18</span>              : <span style="color: #800000">"</span><span style="color: #800000">=r</span><span style="color: #800000">"</span> (result), <span style="color: #800000">"</span><span style="color: #800000">=m</span><span style="color: #800000">"</span> (*<span style="color: #000000">mem)                  \
+</span><span style="color: #008080">19</span>              : <span style="color: #800000">"</span><span style="color: #800000">0</span><span style="color: #800000">"</span><span style="color: #000000"> ((atomic64_t) cast_to_integer (newvalue)),     \
+</span><span style="color: #008080">20</span>                <span style="color: #800000">"</span><span style="color: #800000">m</span><span style="color: #800000">"</span> (*<span style="color: #000000">mem));                          \
+</span><span style="color: #008080">21</span>      result; })</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span> <span style="color: #008000">/*</span><span style="color: #008000"> This function doesn't get included in libc.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 2</span> <span style="color: #0000ff">#if</span> IS_IN (libpthread)
+<span style="color: #008080"> 3</span> <span style="color: #0000ff">void</span>
+<span style="color: #008080"> 4</span> __lll_lock_wait (<span style="color: #0000ff">int</span> *futex, <span style="color: #0000ff">int</span> <span style="color: #0000ff">private</span><span style="color: #000000">)
+</span><span style="color: #008080"> 5</span> <span style="color: #000000">{
+</span><span style="color: #008080"> 6</span>   <span style="color: #0000ff">if</span> (*futex == <span style="color: #800080">2</span><span style="color: #000000">)
+</span><span style="color: #008080"> 7</span>     lll_futex_wait (futex, <span style="color: #800080">2</span>, <span style="color: #0000ff">private</span>); <span style="color: #008000">/*</span><span style="color: #008000"> Wait if *futex == 2.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080"> 8</span> 
+<span style="color: #008080"> 9</span>   <span style="color: #0000ff">while</span> (atomic_exchange_acq (futex, <span style="color: #800080">2</span>) != <span style="color: #800080">0</span><span style="color: #000000">)
+</span><span style="color: #008080">10</span>     lll_futex_wait (futex, <span style="color: #800080">2</span>, <span style="color: #0000ff">private</span>); <span style="color: #008000">/*</span><span style="color: #008000"> Wait if *futex == 2.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">11</span> <span style="color: #000000">}
+</span><span style="color: #008080">12</span> <span style="color: #0000ff">#endif</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>所以到了关键的地方， 这里是将futex(&amp;__lock)的值从0原子变为2就成功。否则调用lll_futex_wait，阻塞。这里的atomic_exchange_acq是一个返回旧值的原子操作，直接采用了内敛汇编(xchg)的方式，并且根据变量类型从而选取linux下不同的汇编指令。</p>
+<p>到了这里，只要这个原子xchg的是正确的，并且阻塞与唤醒(wake up)之间的协议是正确的，那么这个mutex的语义就得到保证了。</p>
+<p>&nbsp;</p>
+<p>我们接着看看lll_futex_wait是怎么样的(val = 2, private = 0)：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span> <span style="color: #008000">/*</span><span style="color: #008000"> Wait while *FUTEXP == VAL for an lll_futex_wake call on FUTEXP.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">2</span> <span style="color: #0000ff">#define</span> lll_futex_wait(futexp, val, private) \
+<span style="color: #008080">3</span>   lll_futex_timed_wait (futexp, val, NULL, <span style="color: #0000ff">private</span>)</pre>
+</div>
+<p>参数多了个NULL(val = 2, timeout = NULL, private = 0)，</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span> <span style="color: #0000ff">#define</span> lll_futex_timed_wait(futexp, val, timeout, private)     \
+<span style="color: #008080">2</span>   lll_futex_syscall (<span style="color: #800080">4</span><span style="color: #000000">, futexp,                                 \
+</span><span style="color: #008080">3</span>              __lll_private_flag (FUTEX_WAIT, <span style="color: #0000ff">private</span><span style="color: #000000">),  \
+</span><span style="color: #008080">4</span>              val, timeout)</pre>
+</div>
+<p>展开__lll_private_flag</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span> # <span style="color: #0000ff">else</span>
+<span style="color: #008080">2</span> #  define __lll_private_flag(fl, <span style="color: #0000ff">private</span><span style="color: #000000">) \
+</span><span style="color: #008080">3</span>   ((fl) |<span style="color: #000000"> THREAD_GETMEM (THREAD_SELF, header.private_futex))
+</span><span style="color: #008080">4</span> # endif</pre>
+</div>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span> <span style="color: #000000"># define THREAD_SELF \
+</span><span style="color: #008080">2</span>   ({ <span style="color: #0000ff">struct</span> pthread *<span style="color: #000000">__self;                              \
+</span><span style="color: #008080">3</span>      asm (<span style="color: #800000">"</span><span style="color: #800000">mov %%fs:%c1,%0</span><span style="color: #800000">"</span> : <span style="color: #800000">"</span><span style="color: #800000">=r</span><span style="color: #800000">"</span><span style="color: #000000"> (__self)                      \
+</span><span style="color: #008080">4</span>       : <span style="color: #800000">"</span><span style="color: #800000">i</span><span style="color: #800000">"</span> (offsetof (<span style="color: #0000ff">struct</span><span style="color: #000000"> pthread, header.self)));               \
+</span><span style="color: #008080">5</span>      __self;})</pre>
+</div>
+<p>这里是从struct pthread中取得private_futex来计算的，值为0。这里实际上只保留了FUTEX_WAIT的值，同样为0.</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span> <span style="color: #0000ff">#define</span> FUTEX_WAIT        0
+<span style="color: #008080"> 2</span> <span style="color: #0000ff">#define</span> FUTEX_WAKE        1
+<span style="color: #008080"> 3</span> <span style="color: #0000ff">#define</span> FUTEX_REQUEUE        3
+<span style="color: #008080"> 4</span> <span style="color: #0000ff">#define</span> FUTEX_CMP_REQUEUE    4
+<span style="color: #008080"> 5</span> <span style="color: #0000ff">#define</span> FUTEX_WAKE_OP        5
+<span style="color: #008080"> 6</span> <span style="color: #0000ff">#define</span> FUTEX_OP_CLEAR_WAKE_IF_GT_ONE    ((4 &lt;&lt; 24) | 1)
+<span style="color: #008080"> 7</span> <span style="color: #0000ff">#define</span> FUTEX_LOCK_PI        6
+<span style="color: #008080"> 8</span> <span style="color: #0000ff">#define</span> FUTEX_UNLOCK_PI        7
+<span style="color: #008080"> 9</span> <span style="color: #0000ff">#define</span> FUTEX_TRYLOCK_PI    8
+<span style="color: #008080">10</span> <span style="color: #0000ff">#define</span> FUTEX_WAIT_BITSET    9
+<span style="color: #008080">11</span> <span style="color: #0000ff">#define</span> FUTEX_WAKE_BITSET    10
+<span style="color: #008080">12</span> <span style="color: #0000ff">#define</span> FUTEX_WAIT_REQUEUE_PI   11
+<span style="color: #008080">13</span> <span style="color: #0000ff">#define</span> FUTEX_CMP_REQUEUE_PI    12
+<span style="color: #008080">14</span> <span style="color: #0000ff">#define</span> FUTEX_PRIVATE_FLAG    128
+<span style="color: #008080">15</span> <span style="color: #0000ff">#define</span> FUTEX_CLOCK_REALTIME    256
+<span style="color: #008080">16</span> 
+<span style="color: #008080">17</span> <span style="color: #0000ff">#define</span> FUTEX_BITSET_MATCH_ANY    0xffffffff</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>所以这里的lll_futex_syscall调用简化为：</p>
+<div class="cnblogs_code">
+<pre> lll_futex_syscall (<span style="color: #800080">4</span>, futexp,   <span style="color: #800080">0</span>,     <span style="color: #800080">2</span>,   NULL)</pre>
+</div>
+<p>我们接着看：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff">#define</span> lll_futex_syscall(nargs, futexp, op, ...)                       \<span style="color: #000000">
+  ({                                                                    \
+    INTERNAL_SYSCALL_DECL (__err);                                      \
+    </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __ret =<span style="color: #000000"> INTERNAL_SYSCALL (futex, __err, nargs, futexp, op, \
+                       __VA_ARGS__);                    \
+    (__glibc_unlikely (INTERNAL_SYSCALL_ERROR_P (__ret, __err))         \
+     </span>? -INTERNAL_SYSCALL_ERRNO (__ret, __err) : <span style="color: #800080">0</span><span style="color: #000000">);                     \
+  })</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>这里的futex作为字符串字面量后续使用，__VA_ARGS__指代了2和NULL。</p>
+<p>我们看一下INTERNAL_SYSCALL：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000"># define INTERNAL_SYSCALL(name, err, nr, args...) \
+  INTERNAL_SYSCALL_NCS (__NR_##name, err, nr, ##args)
+
+# define INTERNAL_SYSCALL_NCS(name, err, nr, args...) \
+  ({                                          \
+    unsigned </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000"> resultvar;                          \
+    LOAD_ARGS_##nr (args)                              \
+    LOAD_REGS_##nr                                  \
+    asm </span><span style="color: #0000ff">volatile</span><span style="color: #000000"> (                                  \
+    </span><span style="color: #800000">"</span><span style="color: #800000">syscall\n\t</span><span style="color: #800000">"</span><span style="color: #000000">                                  \
+    : </span><span style="color: #800000">"</span><span style="color: #800000">=a</span><span style="color: #800000">"</span><span style="color: #000000"> (resultvar)                                  \
+    : </span><span style="color: #800000">"</span><span style="color: #800000">0</span><span style="color: #800000">"</span> (name) ASM_ARGS_##nr : <span style="color: #800000">"</span><span style="color: #800000">memory</span><span style="color: #800000">"</span><span style="color: #000000">, REGISTERS_CLOBBERED_BY_SYSCALL);   \
+    (</span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span>) resultvar; })</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>那么这里的INTERNAL_SYSCALL_NCS调用， 参数为( __NR_futex，err，4， futexp，0， 2， NULL）。第四个参数开始为futexp，0， 2， NULL。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000"># define LOAD_ARGS_4(a1, a2, a3, a4)                       \
+  LOAD_ARGS_TYPES_4 (</span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span>, a1, <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span>, a2, <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">, a3,           \
+             </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">, a4)
+
+# define LOAD_REGS_4                               \
+  LOAD_REGS_TYPES_4 (</span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span>, a1, <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span>, a2, <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">, a3,           \
+             </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">, a4)
+
+# define ASM_ARGS_4    ASM_ARGS_3, </span><span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a4)</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;</p>
+<p>将LOAD_ARGS_##nr (args)、LOAD_REGS_##nr、ASM_ARGS_##nr、REGISTERS_CLOBBERED_BY_SYSCALL展开带入，之后可将INTERNAL_SYSCALL_NCS转换为如下：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>    unsigned <span style="color: #0000ff">long</span> <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000"> resultvar;
+    </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg4 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (NULL);                           \
+    </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg3 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (2);                           \
+    </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg2 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (0);                           \
+    </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg1 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (futexp);                           \    
+    register </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a4 asm (<span style="color: #800000">"</span><span style="color: #800000">r10</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg4;                       \
+    register </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a3 asm (<span style="color: #800000">"</span><span style="color: #800000">rdx</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg3;                       \
+    register </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a2 asm (<span style="color: #800000">"</span><span style="color: #800000">rsi</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg2;                       \
+    register </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a1 asm (<span style="color: #800000">"</span><span style="color: #800000">rdi</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg1;                       \
+    asm </span><span style="color: #0000ff">volatile</span><span style="color: #000000"> (                        \          
+    </span><span style="color: #800000">"</span><span style="color: #800000">syscall\n\t</span><span style="color: #800000">"</span><span style="color: #000000">                                  \
+    : </span><span style="color: #800000">"</span><span style="color: #800000">=a</span><span style="color: #800000">"</span><span style="color: #000000"> (resultvar)                                  \
+    : </span><span style="color: #800000">"</span><span style="color: #800000">0</span><span style="color: #800000">"</span> (__NR_futex), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a1), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a2), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a3), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a4) : <span style="color: #800000">"</span><span style="color: #800000">memory</span><span style="color: #800000">"</span>, <span style="color: #800000">"</span><span style="color: #800000">cc</span><span style="color: #800000">"</span>, <span style="color: #800000">"</span><span style="color: #800000">r11</span><span style="color: #800000">"</span>, <span style="color: #800000">"</span><span style="color: #800000">cx</span><span style="color: #800000">"</span><span style="color: #000000">);   \
+    (</span><span style="color: #0000ff">long</span> <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span>) resultvar; })</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>这里的__NR_futex为找不到，这应该是个linux系统定义的系统调用号，并且由它来定义SYS_futex的值。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff">#define</span> SYS_futex        __NR_futex</pre>
+</div>
+<pre><span>那么上面的那段代码真的确定是使用(FUTEX_WAIT)futex来陷入了阻塞吗？ <br>让我尝试将之前写的一段直接采用futex做同步区块的代码修改下做检验。<br>原代码：<br></span></pre>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span> #include &lt;stdio.h&gt;
+<span style="color: #008080"> 2</span> #include &lt;pthread.h&gt;
+<span style="color: #008080"> 3</span> #include &lt;linux/futex.h&gt;
+<span style="color: #008080"> 4</span> #include &lt;syscall.h&gt;
+<span style="color: #008080"> 5</span> #include &lt;unistd.h&gt;
+<span style="color: #008080"> 6</span> #include &lt;sys/time.h&gt;
+<span style="color: #008080"> 7</span> 
+<span style="color: #008080"> 8</span> 
+<span style="color: #008080"> 9</span> <span style="color: #0000ff">#define</span> NUM 1000
+<span style="color: #008080">10</span> 
+<span style="color: #008080">11</span> 
+<span style="color: #008080">12</span> <span style="color: #0000ff">int</span> num = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">13</span> <span style="color: #0000ff">int</span> futex_addr = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">14</span> 
+<span style="color: #008080">15</span> <span style="color: #0000ff">int</span> futex_wait(<span style="color: #0000ff">void</span>* addr, <span style="color: #0000ff">int</span><span style="color: #000000"> val){
+</span><span style="color: #008080">16</span>     <span style="color: #0000ff">return</span> syscall(SYS_futex, addr, FUTEX_WAIT, val, NULL, NULL, <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080">17</span> <span style="color: #000000">}
+</span><span style="color: #008080">18</span> <span style="color: #0000ff">int</span> futex_wake(<span style="color: #0000ff">void</span>* addr, <span style="color: #0000ff">int</span><span style="color: #000000"> val){
+</span><span style="color: #008080">19</span>   <span style="color: #0000ff">return</span> syscall(SYS_futex, addr, FUTEX_WAKE, val, NULL, NULL, <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080">20</span> <span style="color: #000000">}
+</span><span style="color: #008080">21</span> 
+<span style="color: #008080">22</span> <span style="color: #0000ff">void</span>* thread_f(<span style="color: #0000ff">void</span>*<span style="color: #000000"> par){
+</span><span style="color: #008080">23</span>         <span style="color: #0000ff">int</span> id = (<span style="color: #0000ff">int</span><span style="color: #000000">) par;
+</span><span style="color: #008080">24</span> 
+<span style="color: #008080">25</span>     <span style="color: #008000">/*</span><span style="color: #008000">go to sleep</span><span style="color: #008000">*/</span>
+<span style="color: #008080">26</span> <span style="color: #0000ff">for</span>(<span style="color: #0000ff">int</span> i = <span style="color: #800080">0</span>; i &lt; <span style="color: #800080">1000</span>; ++<span style="color: #000000">i){
+</span><span style="color: #008080">27</span>     <span style="color: #0000ff">while</span>(<span style="color: #800080">1</span> == __sync_val_compare_and_swap(&amp;futex_addr, <span style="color: #800080">0</span>, <span style="color: #800080">1</span><span style="color: #000000">) ){
+</span><span style="color: #008080">28</span>         futex_wait(&amp;futex_addr,<span style="color: #800080">1</span><span style="color: #000000">);
+</span><span style="color: #008080">29</span> <span style="color: #000000">    }
+</span><span style="color: #008080">30</span>     ++<span style="color: #000000">num;
+</span><span style="color: #008080">31</span>     futex_addr = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">32</span>     futex_wake(&amp;<span style="color: #000000">futex_addr, NUM);
+</span><span style="color: #008080">33</span> <span style="color: #000000">}
+</span><span style="color: #008080">34</span>   <span style="color: #008000">//</span><span style="color: #008000">      printf("Thread %d starting to work!\n",id);</span>
+<span style="color: #008080">35</span>         <span style="color: #0000ff">return</span><span style="color: #000000"> NULL;
+</span><span style="color: #008080">36</span> <span style="color: #000000">}
+</span><span style="color: #008080">37</span> 
+<span style="color: #008080">38</span> <span style="color: #0000ff">int</span><span style="color: #000000"> main(){
+</span><span style="color: #008080">39</span> <span style="color: #000000">        pthread_t threads[NUM];
+</span><span style="color: #008080">40</span>         <span style="color: #0000ff">int</span><span style="color: #000000"> i;
+</span><span style="color: #008080">41</span> 
+<span style="color: #008080">42</span>         printf(<span style="color: #800000">"</span><span style="color: #800000">Everyone go...\n</span><span style="color: #800000">"</span><span style="color: #000000">);
+</span><span style="color: #008080">43</span>         <span style="color: #0000ff">float</span> time_use=<span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">44</span>         <span style="color: #0000ff">struct</span><span style="color: #000000"> timeval start;
+</span><span style="color: #008080">45</span>         <span style="color: #0000ff">struct</span><span style="color: #000000"> timeval end;
+</span><span style="color: #008080">46</span>         gettimeofday(&amp;<span style="color: #000000">start,NULL);
+</span><span style="color: #008080">47</span> 
+<span style="color: #008080">48</span> 
+<span style="color: #008080">49</span> 
+<span style="color: #008080">50</span>         <span style="color: #0000ff">for</span> (i=<span style="color: #800080">0</span>;i&lt;NUM;i++<span style="color: #000000">){
+</span><span style="color: #008080">51</span>                 pthread_create(&amp;threads[i],NULL,thread_f,(<span style="color: #0000ff">void</span> *<span style="color: #000000">)i);
+</span><span style="color: #008080">52</span> <span style="color: #000000">        }
+</span><span style="color: #008080">53</span> 
+<span style="color: #008080">54</span>     <span style="color: #008000">/*</span><span style="color: #008000">wake threads</span><span style="color: #008000">*/</span>
+<span style="color: #008080">55</span> 
+<span style="color: #008080">56</span>     <span style="color: #008000">/*</span><span style="color: #008000">give the threads time to complete their tasks</span><span style="color: #008000">*/</span>
+<span style="color: #008080">57</span>         <span style="color: #0000ff">for</span> (i=<span style="color: #800080">0</span>;i&lt;NUM;i++<span style="color: #000000">){
+</span><span style="color: #008080">58</span>                 pthread_join(*(threads +<span style="color: #000000"> i), NULL);
+</span><span style="color: #008080">59</span> <span style="color: #000000">        }
+</span><span style="color: #008080">60</span> 
+<span style="color: #008080">61</span> 
+<span style="color: #008080">62</span>     printf(<span style="color: #800000">"</span><span style="color: #800000">Main is quitting...\n</span><span style="color: #800000">"</span><span style="color: #000000">);
+</span><span style="color: #008080">63</span>     printf(<span style="color: #800000">"</span><span style="color: #800000">and num is %d\n</span><span style="color: #800000">"</span><span style="color: #000000">, num);
+</span><span style="color: #008080">64</span> 
+<span style="color: #008080">65</span>     gettimeofday(&amp;<span style="color: #000000">end,NULL);
+</span><span style="color: #008080">66</span>     time_use=(end.tv_sec-start.tv_sec)+(end.tv_usec-start.tv_usec) / <span style="color: #800080">1000000.0</span>;<span style="color: #008000">//</span><span style="color: #008000">微秒</span>
+<span style="color: #008080">67</span>     printf(<span style="color: #800000">"</span><span style="color: #800000">time_use is %f \n</span><span style="color: #800000">"</span><span style="color: #000000">,time_use);
+</span><span style="color: #008080">68</span>     <span style="color: #0000ff">return</span> <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">69</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>执行输出为：</p>
+<p>Everyone go...<br>Main is quitting...<br>and num is 1000000<br>time_use is 0.283753 </p>
+<p>1000个线程执行1000次+1，答案为1000000正确。</p>
+<p>我们尝试将futex_wait中sys_call做一下修改：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff">int</span> futex_wait(<span style="color: #0000ff">void</span>* addr, <span style="color: #0000ff">int</span><span style="color: #000000"> val){
+</span><span style="color: #008000">//</span><span style="color: #008000">  return syscall(SYS_futex, addr, FUTEX_WAIT, val, NULL, NULL, 0);</span>
+    <span style="color: #0000ff">return</span><span style="color: #000000"> INTERNAL_SYSCALL_NCS(addr, FUTEX_WAIT, val, NULL);
+}</span></pre>
+</div>
+<p>然后添加宏INTERNAL_SYSCALL_NCS：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff">#define</span> INTERNAL_SYSCALL_NCS(a1, a2, a3, a4)  \<span style="color: #000000">
+  ({                                          \
+    unsigned </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000"> resultvar;          \
+    </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg4 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (a4);                         \
+    </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg3 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (a3);                         \
+    </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg2 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (a2);                         \
+    </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg1 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (a1);                         \    
+    register </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a4 asm (<span style="color: #800000">"</span><span style="color: #800000">r10</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg4;                    \
+    register </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a3 asm (<span style="color: #800000">"</span><span style="color: #800000">rdx</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg3;                    \
+    register </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a2 asm (<span style="color: #800000">"</span><span style="color: #800000">rsi</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg2;                    \
+    register </span><span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a1 asm (<span style="color: #800000">"</span><span style="color: #800000">rdi</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg1;                    \
+    asm </span><span style="color: #0000ff">volatile</span><span style="color: #000000"> ( \
+    </span><span style="color: #800000">"</span><span style="color: #800000">syscall\n\t</span><span style="color: #800000">"</span><span style="color: #000000">                                 \
+    : </span><span style="color: #800000">"</span><span style="color: #800000">=a</span><span style="color: #800000">"</span><span style="color: #000000"> (resultvar)                                \
+    : </span><span style="color: #800000">"</span><span style="color: #800000">0</span><span style="color: #800000">"</span> (SYS_futex), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a1), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a2), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a3), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a4) : <span style="color: #800000">"</span><span style="color: #800000">memory</span><span style="color: #800000">"</span>, <span style="color: #800000">"</span><span style="color: #800000">cc</span><span style="color: #800000">"</span>, <span style="color: #800000">"</span><span style="color: #800000">r11</span><span style="color: #800000">"</span>, <span style="color: #800000">"</span><span style="color: #800000">cx</span><span style="color: #800000">"</span><span style="color: #000000">);   \
+    (</span><span style="color: #0000ff">long</span> <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span>) resultvar; })</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>得到如下代码：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span> #include &lt;stdio.h&gt;
+<span style="color: #008080"> 2</span> #include &lt;pthread.h&gt;
+<span style="color: #008080"> 3</span> #include &lt;linux/futex.h&gt;
+<span style="color: #008080"> 4</span> #include &lt;syscall.h&gt;
+<span style="color: #008080"> 5</span> #include &lt;unistd.h&gt;
+<span style="color: #008080"> 6</span> #include &lt;sys/time.h&gt;
+<span style="color: #008080"> 7</span> 
+<span style="color: #008080"> 8</span> 
+<span style="color: #008080"> 9</span> <span style="color: #0000ff">#define</span> NUM 1000
+<span style="color: #008080">10</span> 
+<span style="color: #008080">11</span> <span style="color: #0000ff">#define</span> INTERNAL_SYSCALL_NCS(a1, a2, a3, a4)  \
+<span style="color: #008080">12</span> <span style="color: #000000">  ({                                          \
+</span><span style="color: #008080">13</span>     unsigned <span style="color: #0000ff">long</span> <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000"> resultvar;          \
+</span><span style="color: #008080">14</span>     <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg4 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (a4);                         \
+</span><span style="color: #008080">15</span>     <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg3 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (a3);                         \
+</span><span style="color: #008080">16</span>     <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg2 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (a2);                         \
+</span><span style="color: #008080">17</span>     <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> __arg1 = (<span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) (a1);                         \    
+</span><span style="color: #008080">18</span>     register <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a4 asm (<span style="color: #800000">"</span><span style="color: #800000">r10</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg4;                    \
+</span><span style="color: #008080">19</span>     register <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a3 asm (<span style="color: #800000">"</span><span style="color: #800000">rdx</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg3;                    \
+</span><span style="color: #008080">20</span>     register <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a2 asm (<span style="color: #800000">"</span><span style="color: #800000">rsi</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg2;                    \
+</span><span style="color: #008080">21</span>     register <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span> _a1 asm (<span style="color: #800000">"</span><span style="color: #800000">rdi</span><span style="color: #800000">"</span>) =<span style="color: #000000"> __arg1;                    \
+</span><span style="color: #008080">22</span>     asm <span style="color: #0000ff">volatile</span><span style="color: #000000"> ( \
+</span><span style="color: #008080">23</span>     <span style="color: #800000">"</span><span style="color: #800000">syscall\n\t</span><span style="color: #800000">"</span><span style="color: #000000">                                 \
+</span><span style="color: #008080">24</span>     : <span style="color: #800000">"</span><span style="color: #800000">=a</span><span style="color: #800000">"</span><span style="color: #000000"> (resultvar)                                \
+</span><span style="color: #008080">25</span>     : <span style="color: #800000">"</span><span style="color: #800000">0</span><span style="color: #800000">"</span> (SYS_futex), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a1), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a2), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a3), <span style="color: #800000">"</span><span style="color: #800000">r</span><span style="color: #800000">"</span> (_a4) : <span style="color: #800000">"</span><span style="color: #800000">memory</span><span style="color: #800000">"</span>, <span style="color: #800000">"</span><span style="color: #800000">cc</span><span style="color: #800000">"</span>, <span style="color: #800000">"</span><span style="color: #800000">r11</span><span style="color: #800000">"</span>, <span style="color: #800000">"</span><span style="color: #800000">cx</span><span style="color: #800000">"</span><span style="color: #000000">);   \
+</span><span style="color: #008080">26</span>     (<span style="color: #0000ff">long</span> <span style="color: #0000ff">long</span> <span style="color: #0000ff">int</span><span style="color: #000000">) resultvar; })
+</span><span style="color: #008080">27</span> 
+<span style="color: #008080">28</span> 
+<span style="color: #008080">29</span> <span style="color: #0000ff">int</span> num = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">30</span> <span style="color: #0000ff">int</span> futex_addr = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">31</span> 
+<span style="color: #008080">32</span> <span style="color: #0000ff">int</span> futex_wait(<span style="color: #0000ff">void</span>* addr, <span style="color: #0000ff">int</span><span style="color: #000000"> val){
+</span><span style="color: #008080">33</span> <span style="color: #008000">//</span><span style="color: #008000">  return syscall(SYS_futex, addr, FUTEX_WAIT, val, NULL, NULL, 0);</span>
+<span style="color: #008080">34</span>     <span style="color: #0000ff">return</span><span style="color: #000000"> INTERNAL_SYSCALL_NCS(addr, FUTEX_WAIT, val, NULL);
+</span><span style="color: #008080">35</span> <span style="color: #000000">}
+</span><span style="color: #008080">36</span> <span style="color: #0000ff">int</span> futex_wake(<span style="color: #0000ff">void</span>* addr, <span style="color: #0000ff">int</span><span style="color: #000000"> val){
+</span><span style="color: #008080">37</span>   <span style="color: #0000ff">return</span> syscall(SYS_futex, addr, FUTEX_WAKE, val, NULL, NULL, <span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080">38</span> <span style="color: #000000">}
+</span><span style="color: #008080">39</span> 
+<span style="color: #008080">40</span> <span style="color: #0000ff">void</span>* thread_f(<span style="color: #0000ff">void</span>*<span style="color: #000000"> par){
+</span><span style="color: #008080">41</span>         <span style="color: #0000ff">int</span> id = (<span style="color: #0000ff">int</span><span style="color: #000000">) par;
+</span><span style="color: #008080">42</span> 
+<span style="color: #008080">43</span>     <span style="color: #008000">/*</span><span style="color: #008000">go to sleep</span><span style="color: #008000">*/</span>
+<span style="color: #008080">44</span> <span style="color: #0000ff">for</span>(<span style="color: #0000ff">int</span> i = <span style="color: #800080">0</span>; i &lt; <span style="color: #800080">1000</span>; ++<span style="color: #000000">i){
+</span><span style="color: #008080">45</span>     <span style="color: #0000ff">while</span>(<span style="color: #800080">1</span> == __sync_val_compare_and_swap(&amp;futex_addr, <span style="color: #800080">0</span>, <span style="color: #800080">1</span><span style="color: #000000">) ){
+</span><span style="color: #008080">46</span>         futex_wait(&amp;futex_addr,<span style="color: #800080">1</span><span style="color: #000000">);
+</span><span style="color: #008080">47</span> <span style="color: #000000">    }
+</span><span style="color: #008080">48</span>     ++<span style="color: #000000">num;
+</span><span style="color: #008080">49</span>     futex_addr = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">50</span>     futex_wake(&amp;<span style="color: #000000">futex_addr, NUM);
+</span><span style="color: #008080">51</span> <span style="color: #000000">}
+</span><span style="color: #008080">52</span>   <span style="color: #008000">//</span><span style="color: #008000">      printf("Thread %d starting to work!\n",id);</span>
+<span style="color: #008080">53</span>         <span style="color: #0000ff">return</span><span style="color: #000000"> NULL;
+</span><span style="color: #008080">54</span> <span style="color: #000000">}
+</span><span style="color: #008080">55</span> 
+<span style="color: #008080">56</span> <span style="color: #0000ff">int</span><span style="color: #000000"> main(){
+</span><span style="color: #008080">57</span> <span style="color: #000000">        pthread_t threads[NUM];
+</span><span style="color: #008080">58</span>         <span style="color: #0000ff">int</span><span style="color: #000000"> i;
+</span><span style="color: #008080">59</span> 
+<span style="color: #008080">60</span>         printf(<span style="color: #800000">"</span><span style="color: #800000">Everyone go...\n</span><span style="color: #800000">"</span><span style="color: #000000">);
+</span><span style="color: #008080">61</span>         <span style="color: #0000ff">float</span> time_use=<span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">62</span>         <span style="color: #0000ff">struct</span><span style="color: #000000"> timeval start;
+</span><span style="color: #008080">63</span>         <span style="color: #0000ff">struct</span><span style="color: #000000"> timeval end;
+</span><span style="color: #008080">64</span>         gettimeofday(&amp;<span style="color: #000000">start,NULL);
+</span><span style="color: #008080">65</span> 
+<span style="color: #008080">66</span> 
+<span style="color: #008080">67</span> 
+<span style="color: #008080">68</span>         <span style="color: #0000ff">for</span> (i=<span style="color: #800080">0</span>;i&lt;NUM;i++<span style="color: #000000">){
+</span><span style="color: #008080">69</span>                 pthread_create(&amp;threads[i],NULL,thread_f,(<span style="color: #0000ff">void</span> *<span style="color: #000000">)i);
+</span><span style="color: #008080">70</span> <span style="color: #000000">        }
+</span><span style="color: #008080">71</span> 
+<span style="color: #008080">72</span>     <span style="color: #008000">/*</span><span style="color: #008000">wake threads</span><span style="color: #008000">*/</span>
+<span style="color: #008080">73</span> 
+<span style="color: #008080">74</span>     <span style="color: #008000">/*</span><span style="color: #008000">give the threads time to complete their tasks</span><span style="color: #008000">*/</span>
+<span style="color: #008080">75</span>         <span style="color: #0000ff">for</span> (i=<span style="color: #800080">0</span>;i&lt;NUM;i++<span style="color: #000000">){
+</span><span style="color: #008080">76</span>                 pthread_join(*(threads +<span style="color: #000000"> i), NULL);
+</span><span style="color: #008080">77</span> <span style="color: #000000">        }
+</span><span style="color: #008080">78</span> 
+<span style="color: #008080">79</span> 
+<span style="color: #008080">80</span>     printf(<span style="color: #800000">"</span><span style="color: #800000">Main is quitting...\n</span><span style="color: #800000">"</span><span style="color: #000000">);
+</span><span style="color: #008080">81</span>     printf(<span style="color: #800000">"</span><span style="color: #800000">and num is %d\n</span><span style="color: #800000">"</span><span style="color: #000000">, num);
+</span><span style="color: #008080">82</span> 
+<span style="color: #008080">83</span>     gettimeofday(&amp;<span style="color: #000000">end,NULL);
+</span><span style="color: #008080">84</span>     time_use=(end.tv_sec-start.tv_sec)+(end.tv_usec-start.tv_usec) / <span style="color: #800080">1000000.0</span>;<span style="color: #008000">//</span><span style="color: #008000">微秒</span>
+<span style="color: #008080">85</span>     printf(<span style="color: #800000">"</span><span style="color: #800000">time_use is %f \n</span><span style="color: #800000">"</span><span style="color: #000000">,time_use);
+</span><span style="color: #008080">86</span>     <span style="color: #0000ff">return</span> <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">87</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>注意到我们这里与pthread不一样的地方在于</p>
+<div class="cnblogs_code">
+<pre><span style="color: #800080">1</span> == __sync_val_compare_and_swap(&amp;futex_addr, <span style="color: #800080">0</span>, <span style="color: #800080">1</span>)</pre>
+</div>
+<p>注意到我们这里的和pthread_mutex不一样的地方在于我们是原子得将值futex_addr从0改为1.</p>
+<p>执行如上代码，输出为：</p>
+<p>Everyone go...<br>Main is quitting...<br>and num is 1000000<br>time_use is 0.254833 </p>
+<p>答案同样是1000000，所以这个采用汇编形式的调用符合了我们的预期，应该是和系统调用一致的。</p>
+<p>最后我们看假如已经获得了锁，需要做什么：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080">1</span>   pid_t id =<span style="color: #000000"> THREAD_GETMEM (THREAD_SELF, tid);
+</span><span style="color: #008080">2</span> 
+<span style="color: #008080">3</span>   <span style="color: #008000">/*</span><span style="color: #008000"> Record the ownership.  </span><span style="color: #008000">*/</span>
+<span style="color: #008080">4</span>   mutex-&gt;__data.__owner =<span style="color: #000000"> id;
+</span><span style="color: #008080">5</span> <span style="color: #000000">#ifndef NO_INCR
+</span><span style="color: #008080">6</span>   ++mutex-&gt;<span style="color: #000000">__data.__nusers;
+</span><span style="color: #008080">7</span> <span style="color: #0000ff">#endif</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>知识简单地把__data中的__owner设置为id，已经++__nusers。从而代表这个锁的使用者人数+1，并且当前有用者为该id的线程。</p>
+<p>&nbsp;</p>
+<p>我们之后接着来看看pthread_mutex_unlock的实现。</p>
+<pre></pre>
+<pre><span>&nbsp;</span></pre></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(7041444,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;3800146d-51e7-e611-845c-ac853d9f53ac&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/pslydff/" target="_blank"><img src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/pslydff/">pslydhh</a><br>
+            <a href="http://home.cnblogs.com/u/pslydff/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/pslydff/followers">粉丝 - 0</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;3800146d-51e7-e611-845c-ac853d9f53ac&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(7041444,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(7041444,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-06-17 21:43</span> <a href="http://www.cnblogs.com/pslydff/">pslydhh</a> 阅读(<span id="post_view_count">1353</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=7041444" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/pslydff/p/7041444.html#" onclick="AddToWz(7041444);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=329861,cb_entryId=7041444,cb_blogApp=currentBlogApp,cb_blogUserGuid='3800146d-51e7-e611-845c-ac853d9f53ac',cb_entryCreatedDate='2017/6/17 21:43:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/pslydff/p/7041444.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/pslydff/p/7041444.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型工控、组态\仿真、建模CAD源码2018！</a><br><a href="https://www.cnblogs.com/cmt/p/8462669.html" target="_blank">【活动】杭州云栖·2050大会-追逐早上七八点钟的太阳-源点</a><br><a href="https://cloud.tencent.com/solution/la?fromSource=gwzcw.766790.766790.766790" target="_blank">【推荐】微信小程序一站式部署 多场景模板定制</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="http://www.gcpowertools.com.cn/products/spreadjs/?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS2&amp;utm_campaign=community" target="_blank"><img width="300" height="250" src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/24442-20171206093644566-325426505.png" alt="SpreadJS2_1206"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/590373/" target="_blank">一个在印度创业的中国记者的春节回乡手记</a><br> ·  <a href="https://news.cnblogs.com/n/590372/" target="_blank">苹果Apple Store开疆拓土，只因手机创新力不足</a><br> ·  <a href="https://news.cnblogs.com/n/590371/" target="_blank">算法瓶颈与激进布局下的危机：今日头条，走好</a><br> ·  <a href="https://news.cnblogs.com/n/590370/" target="_blank">巴菲特年度致股东信：经济下滑正是赚钱良机，将继续负责投资业务</a><br> ·  <a href="https://news.cnblogs.com/n/590369/" target="_blank">百度员工晒“职业装备”：大开眼界</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/34770/" target="_blank"><img width="468" height="60" src="./pthread_mutex_lock实现 - pslydhh - 博客园_files/24442-20171208101900738-116140477.jpg" alt="阿里云C2-1208"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/588938/" target="_blank">优秀技术人的管理陷阱</a><br> ·  <a href="http://kb.cnblogs.com/page/590141/" target="_blank">作为一个程序员，数学对你到底有多重要</a><br> ·  <a href="http://kb.cnblogs.com/page/586236/" target="_blank">领域驱动设计在互联网业务开发中的实践</a><br> ·  <a href="http://kb.cnblogs.com/page/585502/" target="_blank">步入云计算</a><br> ·  <a href="http://kb.cnblogs.com/page/531409/" target="_blank">以操作系统的角度述说线程与进程</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/pslydff/">pslydhh</a><br>园龄：<a href="https://home.cnblogs.com/u/pslydff/" title="入园时间：2017-01-31">1年</a><br>粉丝：<a href="https://home.cnblogs.com/u/pslydff/followers/">0</a><br>关注：<a href="https://home.cnblogs.com/u/pslydff/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;3800146d-51e7-e611-845c-ac853d9f53ac&#39;)">+加关注</a></div><script>getFollowStatus('3800146d-51e7-e611-845c-ac853d9f53ac')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/01/01&#39;);return false;">&lt;</a></td><td align="center">2018年2月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/03/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td align="center">2</td><td class="CalWeekendDay" align="center">3</td></tr><tr><td class="CalWeekendDay" align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td align="center">9</td><td class="CalWeekendDay" align="center">10</td></tr><tr><td class="CalWeekendDay" align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td align="center">16</td><td class="CalWeekendDay" align="center">17</td></tr><tr><td class="CalWeekendDay" align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td align="center">23</td><td class="CalWeekendDay" align="center">24</td></tr><tr><td class="CalTodayDay" align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td></tr><tr><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td><td class="CalOtherMonthDay" align="center">10</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/pslydff/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/pslydff/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/pslydff/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/pslydff/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/pslydff/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/pslydff/archive/2017/06.html">2017年6月 (1)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap" style="display: none;">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"></div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/pslydff/p/7041444.html">1. pthread_mutex_lock实现(1353)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap" style="display: none;">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap" style="display: none;">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 pslydhh
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>

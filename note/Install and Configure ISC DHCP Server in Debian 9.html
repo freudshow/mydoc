@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<!-- saved from url=(0086)https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/ -->
+<html id="XenForo" lang="en-US" dir="LTR" class="Public NoJs LoggedOut Sidebar Responsive" xmlns:fb="http://www.facebook.com/2008/fbml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--<base href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/">--><base href=".">
+<script async="" src="./Install and Configure ISC DHCP Server in Debian 9_files/analytics.js"></script><script src="./Install and Configure ISC DHCP Server in Debian 9_files/pubads_impl_rendering_170.js"></script><script src="./Install and Configure ISC DHCP Server in Debian 9_files/ads"></script><script src="./Install and Configure ISC DHCP Server in Debian 9_files/ca-pub-3043223216276099.js"></script><script src="./Install and Configure ISC DHCP Server in Debian 9_files/osd.js"></script><script async="" type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/gpt.js"></script><script>
+			var _b = document.getElementsByTagName('base')[0], _bH = "https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/";
+			if (_b && _b.href != _bH) _b.href = _bH;
+		</script>
+<title>Install and Configure ISC DHCP Server in Debian 9</title>
+<meta name="keywords" content="debian,linux,server">
+<meta name="description" content="In this tutorial, we’ll learn how to install and configure DHCP server in Debian 9. DHCP or Dynamic Host Configuration Protocol is a protocol used i... ">
+<meta name="og:title" content="Install and Configure ISC DHCP Server in Debian 9">
+<meta name="og:description" content="In this tutorial, we’ll learn how to install and configure DHCP server in Debian 9. DHCP or Dynamic Host Configuration Protocol is a protocol used i... ">
+<meta name="og:site_name" content="Howtoforge">
+<meta name="og:type" content="article">
+<meta property="og:image" content="https://www.howtoforge.com/images/teaser/debian.gif">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="howtoforgecom">
+<meta name="twitter:creator" content="howtoforgecom">
+<meta name="twitter:title" content="Install and Configure ISC DHCP Server in Debian 9">
+<meta name="twitter:description" content="In this tutorial, we’ll learn how to install and configure DHCP server in Debian 9. DHCP or Dynamic Host Configuration Protocol is a protocol used i... ">
+<link rel="alternate" href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/" hreflang="en">
+<link rel="canonical" href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/">
+<link rel="amphtml" href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/amp/">
+<noscript>&lt;style&gt;.JsOnly, .jsOnly { display: none !important; }&lt;/style&gt;</noscript>
+<link rel="stylesheet" href="./Install and Configure ISC DHCP Server in Debian 9_files/font-awesome.min.css">
+<link href="./Install and Configure ISC DHCP Server in Debian 9_files/css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="./Install and Configure ISC DHCP Server in Debian 9_files/css.php">
+<link rel="stylesheet" href="./Install and Configure ISC DHCP Server in Debian 9_files/css(1).php">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>if (!window.jQuery) { document.write('<scr'+'ipt type="text/javascript" src="/js/jquery/jquery-1.11.3.min.js"><\/scr'+'ipt>'); }</script><script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/jquery-1.11.3.min.js"></script>
+<script src="./Install and Configure ISC DHCP Server in Debian 9_files/xenforo.js"></script>
+<script src="./Install and Configure ISC DHCP Server in Debian 9_files/zloader.js"></script>
+<link href="./Install and Configure ISC DHCP Server in Debian 9_files/font-awesome.css" rel="stylesheet">
+<script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="./Install and Configure ISC DHCP Server in Debian 9_files/jquery.fancybox-1.3.4.css" media="screen">
+<link href="./Install and Configure ISC DHCP Server in Debian 9_files/style.css" rel="stylesheet">
+<link rel="alternate" type="application/rss+xml" title="RSS-Feed für Howtoforge" href="https://www.howtoforge.com/feed.rss">
+<script src="./Install and Configure ISC DHCP Server in Debian 9_files/tinymce.min.js"></script>
+<script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/google_service.js">
+</script>
+<script type="text/javascript">
+GS_googleAddAdSenseService("ca-pub-3043223216276099");
+GS_googleEnableAllServices();
+</script><script src="./Install and Configure ISC DHCP Server in Debian 9_files/google_ads.js"></script>
+<script language="JavaScript">
+GA_googleAddAttr("Category", "Debian");
+GA_googleAddAttr("Category", "Linux");
+GA_googleAddAttr("Category", "Server");
+</script>
+<script type="text/javascript">
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_article_leaderboard_a_728x90");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_article_rectangle_a_300x250");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_article_rectangle_b_300x250");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_article_halfpage_a_300x600");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_article_leaderboard_b_728x90");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_article_halfpage_b_300x600");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_textlink_a_600x50");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_textlink_b_600x50");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_textlink_c_600x50");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_textlink_d_600x50");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_list_sidebar_top");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_list_content_middle");
+GA_googleAddSlot("ca-pub-3043223216276099", "howtoforge_com_list_bottom");
+</script>
+<script type="text/javascript">
+GA_googleFetchAds();
+</script>
+
+<script type="text/javascript">
+    window.cookieconsent_options = {"message":"This website uses cookies to ensure you get the best experience on our website","dismiss":"Got it!","learnMore":"More info","link":"https://www.howtoforge.com/community/help/cookies","theme":"dark-bottom"};
+</script>
+<script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/cookieconsent.latest.min.js"></script>
+
+<link rel="preload" href="./Install and Configure ISC DHCP Server in Debian 9_files/integrator.js" as="script"><script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/integrator.js"></script><script src="./Install and Configure ISC DHCP Server in Debian 9_files/pubads_impl_170.js" async=""></script><link rel="stylesheet" type="text/css" href="./Install and Configure ISC DHCP Server in Debian 9_files/dark-bottom.css"><script id="_fbn_projs" type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/C6ADVKE.json"></script></head>
+<body><div class="cc_banner-wrapper "><div class="cc_banner cc_container cc_container--open"><a href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/#null" data-cc-event="click:dismiss" class="cc_btn cc_btn_accept_all">Got it!</a><p class="cc_message">This website uses cookies to ensure you get the best experience on our website <a data-cc-if="options.link" class="cc_more_info" href="https://www.howtoforge.com/community/help/cookies">More info</a></p><a class="cc_logo" target="_blank" href="http://silktide.com/cookieconsent">Cookie Consent plugin for the EU cookie law</a></div></div>
+<div id="loginBar">
+<div class="pageWidth">
+<div class="pageContent">
+<h3 id="loginBarHandle">
+<label for="LoginControl"><a href="https://www.howtoforge.com/community/login/" class="concealed noOutline">Log in or Sign up</a></label>
+</h3>
+<span class="helper"></span>
+</div>
+</div>
+</div>
+<header>
+<div id="header">
+<div id="logoBlock">
+<div class="pageWidth">
+<div class="pageContent">
+<div id="logo"><a href="https://www.howtoforge.com/">
+<span></span>
+<img src="./Install and Configure ISC DHCP Server in Debian 9_files/howtoforge_logo_trans.gif" alt="Howtoforge" style="margin-left:20px;">
+</a></div>
+<span class="helper"></span>
+<div class="langSwitch">
+<b><img src="./Install and Configure ISC DHCP Server in Debian 9_files/gb.png" alt="HowtoForge - Linux Tutorials in English"> English</b> | <a href="https://www.howtoforge.de/" title="HowtoForge.de - Linux Tutorials auf Deutsch"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/de.png" alt="HowtoForge.de - Linux Tutorials auf Deutsch"> Deutsch</a>
+</div>
+</div>
+</div>
+</div>
+<div id="navigation" class="pageWidth withSearch">
+<div class="pageContent">
+<nav>
+<div class="navTabs">
+<ul class="publicTabs">
+
+<li class="navTab forums selected">
+<a href="https://www.howtoforge.com/" class="navLink">Tutorials</a>
+<div class="tabLinks forumsTabLinks">
+<ul class="secondaryContent blockLinksList">
+<li><a href="https://www.howtoforge.com/search/">Tutorial search</a></li>
+</ul>
+</div>
+</li>
+<li class="navTab forums PopupClosed">
+<a href="https://www.howtoforge.com/tutorials/" class="navLink">Tags</a>
+</li>
+<li class="navTab forums PopupClosed"><a href="https://www.howtoforge.com/community/" class="navLink">Forums</a></li>
+<li class="navTab forums PopupClosed"><a href="https://www.howtoforge.com/linux-commands/" class="navLink">Linux Commands</a></li>
+<li class="navTab forums PopupClosed"><a href="https://www.howtoforge.com/subscription/" class="navLink">Subscribe</a></li>
+<li class="navTab forums PopupClosed"><a href="http://www.ispconfig.org/" class="navLink">ISPConfig</a></li>
+<li class="navTab forums PopupClosed"><a href="http://www.lxer.com/" class="navLink">News</a></li>
+</ul>
+</div>
+<span class="helper"></span>
+</nav>
+</div>
+</div>
+<div id="searchBar" class="pageWidth">
+<span id="QuickSearchPlaceholder" title=" Search..."> Search</span>
+<fieldset id="QuickSearch">
+<form action="https://www.howtoforge.com/" method="post" class="formPopup">
+<div class="primaryControls">
+
+<input type="search" name="q" value="" class="textCtrl" placeholder="Search..." results="0" title="Enter your search and hit enter..." id="QuickSearchQuery">
+
+</div>
+<input type="hidden" name="_xfToken" value="">
+</form>
+</fieldset>
+</div>
+</div>
+</header>
+<div id="content" class="forum_list">
+<div class="pageWidth">
+<div class="pageContent">
+
+<div class="mainContainer">
+<div class="mainContent">
+
+<div class="breadBoxTop">
+<nav>
+<fieldset class="breadcrumb">
+<span class="crumbs">
+<span class="crust homeCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+<a href="https://www.howtoforge.com/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Tutorials</span></a>
+<span class="arrow"><span></span></span>
+</span>
+<span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+<a href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Install and Configure ISC DHCP Server in Debian 9</span></a>
+<span class="arrow"><span>&gt;</span></span>
+</span>
+</span>
+</fieldset>
+</nav>
+</div>
+
+<div id="htfContentPage">
+<div class="bsa-apiads"><a href="https://ispprotect.com/?pk_campaign=htftxt" target="_blank" rel="nofollow">Scan your Web-Server for Malware with ISPProtect now. Get Free Trial.</a></div>
+<h1>Install and Configure ISC DHCP Server in Debian 9</h1>
+<div class="contributeEdit" style="float:right; width:450px; max-width:100%;">
+
+<div id="tocContainer">
+<h3>On this page</h3>
+<ol class="toc">
+<li><a href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/#requirements">Requirements</a></li>
+<li><a href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/#install-isc-dhcp-server">Install ISC DHCP Server</a></li>
+<li><a href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/#configure-dhcp">Configure DHCP</a></li>
+<li><a href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/#configuring-dhcp-server-to-deliver-reserved-ip-address">Configuring DHCP server to deliver reserved IP address</a></li>
+</ol>
+</div>
+</div>
+<p>DHCP or Dynamic Host Configuration Protocol is a protocol used in networks through which a system can automatically obtain the network settings, at boot time, required for communicating with other network devices. Using a DHCP server at your premises greatly simplifies the administration of network settings for all network hosts and also allows a centralizing management point for machines network configurations. By using a DHCP you can also ensure that all desktop machines, mobile phones or other network devices that require that the IP settings to be configured at boot time will receive the same set of configurations, as per your network settings.</p>
+<p>The DHCP server can provide a huge number parameters and options that are related to configuring the network settings needed for interactively joining the network. Some ordinary settings a DHCP server can provide is the IP address related to your network and also other information, such as the broadcast address of the network you belong to, the netmask of the network, DNS name servers, the IP address of your network exit point, typically the gateway router, the address of a NTP servers from you network, needed for devices to accurately sync time, and other, more exotic settings.</p><div style="width:336px;float:left; margin: 10px 15px 10px 0px;background-color:white;">
+
+<script type="text/javascript">
+GA_googleFillSlot('howtoforge_com_article_rectangle_a_300x250');
+</script><script src="./Install and Configure ISC DHCP Server in Debian 9_files/ads(1)"></script><div id="google_ads_div_howtoforge_com_article_rectangle_a_300x250_ad_wrapper">
+<div id="google_ads_div_howtoforge_com_article_rectangle_a_300x250_ad_container" style="display:inline-block;"><script>(function(){var aa="function"==typeof Object.create?Object.create:function(a){var b=function(){};b.prototype=a;return new b},l;if("function"==typeof Object.setPrototypeOf)l=Object.setPrototypeOf;else{var n;a:{var ba={a:!0},q={};try{q.__proto__=ba;n=q.a;break a}catch(a){}n=!1}l=n?function(a,b){a.__proto__=b;if(a.__proto__!==b)throw new TypeError(a+" is not extensible");return a}:null}var t=l,u=this,v=function(a,b){a=a.split(".");var c=u;a[0]in c||!c.execScript||c.execScript("var "+a[0]);for(var d;a.length&&(d=a.shift());)a.length||void 0===b?c[d]&&c[d]!==Object.prototype[d]?c=c[d]:c=c[d]={}:c[d]=b},w=Date.now||function(){return+new Date};var x=document,y=window;var ca=Array.prototype.forEach?function(a,b){Array.prototype.forEach.call(a,b,void 0)}:function(a,b){for(var c=a.length,d="string"==typeof a?a.split(""):a,e=0;e<c;e++)e in d&&b.call(void 0,d[e],e,a)};var z=function(a){z[" "](a);return a};z[" "]=function(){};var A=function(a){try{var b;if(b=!!a&&null!=a.location.href)a:{try{z(a.foo);b=!0;break a}catch(c){}b=!1}return b}catch(c){return!1}},B=function(a,b){for(var c in a)Object.prototype.hasOwnProperty.call(a,c)&&b.call(void 0,a[c],c,a)};var da;da=/^true$/.test("");var ea=function(a,b,c){a.addEventListener?a.addEventListener(b,c,void 0):a.attachEvent&&a.attachEvent("on"+b,c)};var fa=function(a,b){a.google_image_requests||(a.google_image_requests=[]);var c=a.document.createElement("img");c.src=b;a.google_image_requests.push(c)};var ha=!!window.google_async_iframe_id,C=ha&&window.parent||window;var E=function(a){return{visible:1,hidden:2,prerender:3,preview:4,unloaded:5}[a.webkitVisibilityState||a.mozVisibilityState||a.visibilityState||""]||0},ia=function(a){var b;a.mozVisibilityState?b="mozvisibilitychange":a.webkitVisibilityState?b="webkitvisibilitychange":a.visibilityState&&(b="visibilitychange");return b};var F=null,G=!1,I=function(){this.g=x;this.o=y;this.j=!1;this.h=this.l=null;this.i=[];this.m=[];G?this.h=w():3==E(this.g)?(this.h=w(),ka(this)):H(this)},H=function(a){if(!a.j){a.j=!0;for(var b=0;b<a.i.length;++b)a.u.apply(a,a.i[b]);a.i=[];for(b=0;b<a.m.length;++b)a.o.setTimeout(a.m[b],0);a.m=[]}},ka=function(a){var b=function(){if(3!=E(a.g)){H(a);var b=ia(a.g);if(b&&a.l){var c=a.g,f=a.l;c.removeEventListener?c.removeEventListener(b,f,void 0):c.detachEvent&&c.detachEvent("on"+b,f)}}};F&&(b=F("di::vch",b));a.l=b;var c=ia(a.g);c&&ea(a.g,c,b)};I.prototype.u=function(a){this.o.rvdt=this.h?w()-this.h:0;fa(this.o,a)};I.g=void 0;I.h=function(){return I.g?I.g:I.g=new I};var J=function(a,b,c){c=void 0===c?{}:c;this.error=a;this.context=b.context;this.line=b.line||-1;this.msg=b.message||"";this.file=b.file||"";this.id=b.id||"jserror";this.meta=c};var la=/^https?:\/\/(\w|-)+\.cdn\.ampproject\.(net|org)(\?|\/|$)/,ma=function(a,b){this.g=a;this.h=b},na=function(a,b){this.url=a;this.s=!!b;this.depth=null};var K=function(){this.i="&";this.j=!1;this.h={};this.l=0;this.g=[]},oa=function(a,b){var c={};c[a]=b;return[c]},qa=function(a,b,c,d,e){var f=[];B(a,function(a,m){(a=pa(a,b,c,d,e))&&f.push(m+"="+a)});return f.join(b)},pa=function(a,b,c,d,e){if(null==a)return"";b=b||"&";c=c||",$";"string"==typeof c&&(c=c.split(""));if(a instanceof Array){if(d=d||0,d<c.length){for(var f=[],g=0;g<a.length;g++)f.push(pa(a[g],b,c,d+1,e));return f.join(c[d])}}else if("object"==typeof a)return e=e||0,2>e?encodeURIComponent(qa(a,b,c,d,e+1)):"...";return encodeURIComponent(String(a))},L=function(a,b,c,d){a.g.push(b);a.h[b]=oa(c,d)},sa=function(a,b,c,d){b=b+"//"+c+d;var e=ra(a)-d.length-0;if(0>e)return"";a.g.sort(function(a,b){return a-b});d=null;c="";for(var f=0;f<a.g.length;f++)for(var g=a.g[f],m=a.h[g],k=0;k<m.length;k++){if(!e){d=null==d?g:d;break}var h=qa(m[k],a.i,",$");if(h){h=c+h;if(e>=h.length){e-=h.length;b+=h;c=a.i;break}else a.j&&(c=e,h[c-1]==a.i&&--c,b+=h.substr(0,c),c=a.i,e=0);d=null==d?g:d}}a="";null!=d&&(a=c+"trn="+d);return b+a+""},ra=function(a){var b=1,c;for(c in a.h)b=c.length>b?c.length:b;return 3997-b-a.i.length-1};var ta=function(a,b,c,d){if(Math.random()<(d||a.g))try{if(c instanceof K)var e=c;else e=new K,B(c,function(a,b){var c=e,d=c.l++;a=oa(b,a);c.g.push(d);c.h[d]=a});var f=sa(e,a.j,a.h,a.i+b+"&");f&&fa(u,f)}catch(g){}};var M=null;var ua=function(){var a=u.performance;return a&&a.now&&a.timing?Math.floor(a.now()+a.timing.navigationStart):w()},va=function(){var a=u.performance;return a&&a.now?a.now():null};var wa=function(a,b,c){this.label=a;this.type=b;this.value=c;this.duration=0;this.uniqueId=this.label+"_"+this.type+"_"+Math.random();this.slotId=void 0};var N=u.performance,xa=!!(N&&N.mark&&N.measure&&N.clearMarks),P=function(a){var b=!1,c;return function(){b||(c=a(),b=!0);return c}}(function(){var a;if(a=xa){var b;if(null===M){M="";try{a="";try{a=u.top.location.hash}catch(c){a=u.location.hash}a&&(M=(b=a.match(/\bdeid=([\d,]+)/))?b[1]:"")}catch(c){}}b=M;a=!!b.indexOf&&0<=b.indexOf("1337")}return a}),ya=function(){var a=Q;this.h=[];this.i=a||u;var b=null;a&&(a.google_js_reporting_queue=a.google_js_reporting_queue||[],this.h=a.google_js_reporting_queue,b=a.google_measure_js_timing);this.g=P()||(null!=b?b:1>Math.random())},za=function(a){a&&P()&&(N.clearMarks("goog_"+a.uniqueId+"_start"),N.clearMarks("goog_"+a.uniqueId+"_end"))};ya.prototype.start=function(a,b){if(!this.g)return null;var c=va()||ua();a=new wa(a,b,c);b="goog_"+a.uniqueId+"_start";P()&&N.mark(b);return a};var Ba=function(){var a=R;this.i=Aa;this.j=this.h;this.g=void 0===a?null:a},Ca=function(a,b,c,d){try{if(a.g&&a.g.g){var e=a.g.start(b.toString(),3);var f=c();var g=a.g;c=e;if(g.g&&"number"==typeof c.value){var m=va()||ua();c.duration=m-c.value;var k="goog_"+c.uniqueId+"_end";P()&&N.mark(k);g.g&&g.h.push(c)}}else f=c()}catch(h){g=!0;try{za(e),g=a.j.call(a,b,new S(V(h),h.fileName,h.lineNumber),void 0,d)}catch(p){a.h(217,p)}if(!g)throw h;}return f},W=function(a,b,c){var d=Da;return function(e){for(var f=[],g=0;g<arguments.length;++g)f[g-0]=arguments[g];return Ca(d,a,function(){return b.apply(void 0,f)},c)}};Ba.prototype.h=function(a,b,c,d,e){e=e||"jserror";try{var f=new K;f.j=!0;L(f,1,"context",a);b.error&&b.meta&&b.id||(b=new S(V(b),b.fileName,b.lineNumber));b.msg&&L(f,2,"msg",b.msg.substring(0,512));b.file&&L(f,3,"file",b.file);0<b.line&&L(f,4,"line",b.line);var g=b.meta||{};if(d)try{d(g)}catch(T){}b=[g];f.g.push(5);f.h[5]=b;g=u;b=[];var m=null;do{d=g;if(A(d)){var k=d.location.href;m=d.document&&d.document.referrer||null}else k=m,m=null;b.push(new na(k||""));try{g=d.parent}catch(T){g=null}}while(g&&d!=g);k=0;for(var h=b.length-1;k<=h;++k)b[k].depth=h-k;d=u;if(d.location&&d.location.ancestorOrigins&&d.location.ancestorOrigins.length==b.length-1)for(k=1;k<b.length;++k){var p=b[k];p.url||(p.url=d.location.ancestorOrigins[k-1]||"",p.s=!0)}var O=new na(u.location.href,!1);h=null;var U=b.length-1;for(p=U;0<=p;--p){var r=b[p];!h&&la.test(r.url)&&(h=r);if(r.url&&!r.s){O=r;break}}r=null;var Ga=b.length&&b[U].url;0!=O.depth&&Ga&&(r=b[U]);var D=new ma(O,r);D.h&&L(f,6,"top",D.h.url||"");L(f,7,"url",D.g.url||"");ta(this.i,e,f,c)}catch(T){try{ta(this.i,e,{context:"ecmserr",rctx:a,msg:V(T),url:D.g.url},c)}catch(Ha){}}return!0};var V=function(a){var b=a.toString();a.name&&-1==b.indexOf(a.name)&&(b+=": "+a.name);a.message&&-1==b.indexOf(a.message)&&(b+=": "+a.message);if(a.stack){a=a.stack;var c=b;try{-1==a.indexOf(c)&&(a=c+"\n"+a);for(var d;a!=d;)d=a,a=a.replace(/((https?:\/..*\/)[^\/:]*:\d+(?:.|\n)*)\2/,"$1");b=a.replace(/\n */g,"\n")}catch(e){b=c}}return b},S=function(a,b,c){J.call(this,Error(a),{message:a,file:void 0===b?"":b,line:void 0===c?-1:c})},X=S;X.prototype=aa(J.prototype);X.prototype.constructor=X;if(t)t(X,J);else for(var Y in J)if("prototype"!=Y)if(Object.defineProperties){var Ea=Object.getOwnPropertyDescriptor(J,Y);Ea&&Object.defineProperty(X,Y,Ea)}else X[Y]=J[Y];X.v=J.prototype;var Aa,Da;if(ha&&!A(C)){var Z="."+x.domain;try{for(;2<Z.split(".").length&&!A(C);)x.domain=Z=Z.substr(Z.indexOf(".")+1),C=window.parent}catch(a){}A(C)||(C=window)}var Q=C,R=new ya,Fa=function(){if(!Q.google_measure_js_timing){var a=R;a.g=!1;a.h!=a.i.google_js_reporting_queue&&(P()&&ca(a.h,za),a.h.length=0)}};Aa=new function(){var a=void 0===a?y:a;this.j="http:"===a.location.protocol?"http:":"https:";this.h="pagead2.googlesyndication.com";this.i="/pagead/gen_204?id=";this.g=.01};Da=new Ba;"complete"==Q.document.readyState?Fa():R.g&&ea(Q,"load",function(){Fa()});F=function(a,b,c){return W(a,b,c)};G=da;v("vu",W("vu",function(a){a=a.replace("&amp;","&");var b=/(google|doubleclick).*\/pagead\/adview/.test(a),c=I.h();if(b){b="&vis="+E(c.g);var d=a.indexOf("&adurl");a=-1==d?a+b:a.substring(0,d)+b+a.substring(d)}c.j?c.u(a):c.i.push([a])},void 0));v("vv",W("vv",function(){G&&H(I.h())},void 0));}).call(this);</script><script>vu("https://securepubads.g.doubleclick.net/pcs/view?xai\x3dAKAOjsuWHL9ko486mQvD3YK8ZSHdTFZGESS4DFNo4N5T_hCiliCiTlHpND58FqI-2UFfxM3ExserU17rvdQVF2_rxypDhfUr4h7TMe4pYYUsfU1XE8zADhDKoS9oTNN0i3KJnEnM5bwDVyW_vrYSp0jY5CCOKZaJO1VR5lBeFZLezdAuYSFJ7YfRNg48o9cjVLBEL3-na5gMwAkGrS_qLj0fsE2rtkHmQFqUzhtSc4_egckd_Hh9IFcnUWBX_oYDW2ZJiCub6JofzMYmIm_4ReEA1xhRMQA\x26sig\x3dCg0ArKJSzPIcxTYu8bGUEAE\x26urlfix\x3d1\x26adurl\x3d")</script><script type="text/javascript">
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+    (function() {
+      var gads = document.createElement("script");
+      gads.async = true;
+      gads.type = "text/javascript";
+      var useSSL = "https:" == document.location.protocol;
+      gads.src = (useSSL ? "https:" : "http:") + "//www.googletagservices.com/tag/js/gpt.js";
+      var node =document.getElementsByTagName("script")[0];
+      node.parentNode.insertBefore(gads, node);
+     })();
+</script>
+
+
+<div id="div-gpt-ad-1905218304119-0" data-google-query-id="CPmSi_uZmNgCFYM7lgod9doDPA">
+    <script type="text/javascript">
+       googletag.cmd.push(function() {
+         googletag.defineSlot('/8456/IDG.Howtoforge(English).com_Homepage/IDG.Howtoforge(English).com_Article', [300,250],'div-gpt-ad-1905218304119-0')
+           .addService(googletag.pubads())
+           .setTargeting("pos", "ATF");
+         googletag.enableServices();
+         googletag.display('div-gpt-ad-1905218304119-0');
+       });
+    </script>
+<div id="google_ads_iframe_/8456/IDG.Howtoforge(English).com_Homepage/IDG.Howtoforge(English).com_Article_0__container__" style="border: 0pt none; display: inline-block; width: 300px; height: 250px;"><iframe frameborder="0" src="./Install and Configure ISC DHCP Server in Debian 9_files/container.html" id="google_ads_iframe_/8456/IDG.Howtoforge(English).com_Homepage/IDG.Howtoforge(English).com_Article_0" title="3rd party ad content" name="" scrolling="no" marginwidth="0" marginheight="0" width="300" height="250" data-is-safeframe="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" style="border: 0px; vertical-align: bottom;"></iframe></div></div><div style="bottom:0;right:0;width:86px;height:250px;background:initial !important;position:absolute !important;max-width:100% !important;max-height:100% !important;pointer-events:none !important;image-rendering:pixelated !important;z-index:2147483647;background-image:url(&#39;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAWBAMAAACrl3iAAAAABlBMVEUAAAD+AciWmZzWAAAAAnRSTlMAApidrBQAAAB+SURBVBjTbZABDsAwCALxB/z/tUuRWtrMNUvNEG8A/1VdqHWfDqC+0qrdSYF4PEmQ1BvRjbrGHY83w3tI6iKZkmdyw1ode0tHmGZdDWXzvcDqY6iB3mJZGwPOJkHY4NoTpB6qK7Mdi1hOCnGuBMH400iwiR7v9qTPJFg7nVUf0qsFYKE9ZMkAAAAASUVORK5CYII=&#39;) !important"></div>
+</div>
+</div>
+
+</div>
+<p>In case you have just a few computers to manage, commonly desktops or laptops, the manual addressing is favored. But currently, with the explosion of small network devices and mobile devices, the static/manual configuration for each of these devices can prove to be very difficult, if not impossible sometimes, in case of embedded devices. This should be the main factor you should consider in favoring of installing and configuring a DHCP server on your premises. A DHCP server can limit the amount of time and effort you should invest in manually configuring each network related device and maintain a table of what IP has been setup for what device.</p>
+<p>However, static/manual IP address assignment is always a must in case you deploy servers at your premises. The servers should always be configured with a static IP Address. But, a DHCP can be configured to simplify the static IP addressing for servers, by releasing the same IP address for devices based on the connected interface MAC address.</p>
+<p>Now, let’s see how a DHCP server operates in a network. The DHCP negotiation unfolds as explained in the below steps:</p>
+<ol>
+<li>The network device, or the client who need to be assigned with a static address, sends a broadcast in a network with the message “DHCP Discover”. In the message sent, the client device also includes its MAC address. The clients send this message in order to identify if a DHCP server is somewhere in the network, listening for these type of incoming messages.</li>
+</ol>
+<ol start="2">
+<li>The listening DHCP server receives the broadcast frame and replies to the client with a “DHCP Offer” message: The offer contains the network settings needed for the client to be registered in the network and its own IP address, in order for the client to correctly identify the source of the offer. Usually, the offer contains an IP address, subnet mask, default gateway and other parameters for the network. If more than one DHCP server are configured at your premises, a broadcast message is sent so that the offer can be received by the client.</li>
+</ol>
+<ol start="3">
+<li>After receiving the offer, the client, if satisfied with the settings it received, sends a “DHCP Request” message back to DHCP server and informs that it agrees with the formal network settings offered. A record of the offer is included so that only the server that sent the offer will set aside the requested IP address. Again, the request is sent as a broadcast to all other DHCP servers that may have responded because the client hasn’t officially started assigning the offered IP address.</li>
+</ol>
+<ol start="4">
+<li>Finally, the DHCP server replies with the “DHCP ACK” unicast message. In this stage, the IP address and all other network parameters are sent to the client device because they are now approved to be used by the client. The ACK message is sent as a unicast, but may be broadcast instead.</li>
+</ol>
+<p>The Internet Software Consortium is the main author and developer of the most used DHCP server in Linux, typically known as ISC DHCP Server. In Debian 9 the matching binary package is called <strong>isc-dhcp-server</strong>. Further, in this tutorial, we’ll learn how to install and configure DHCP server in Debian 9.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>A Fresh installation of Debian 9.</li>
+<li>A static IP address configured for the network interface that the DHCP server will listen to.</li>
+<li>An account with root privileges or direct access to root account.</li>
+</ul>
+<p>In order to install an ISC DHCP server in Debian 9. First, we need to make sure the package tree is up –to-date with the latest software versions by issuing the below command.</p>
+<p class="command">sudo apt-get update</p>
+<p>Then, after the local package tree is in sync with the remote sources, issue the below command in order to search all pre-compiled packages available of the ISC DHCP software, as illustrated in the following screenshot.</p>
+<p class="command">sudo apt search isc-dhcp</p>
+<p><strong>&nbsp;<a class="fancybox" id="img-Debian_9_LEMP-2017-09-10-17-54-49" href="https://www.howtoforge.com/images/install_and_configure_isc_dhcp_server_in_debian_9/big/Debian_9_LEMP-2017-09-10-17-54-49.png"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/Debian_9_LEMP-2017-09-10-17-54-49.png" alt="Install DHCP server on Debian" width="550" height="413"></a></strong></p>
+<h2 id="install-isc-dhcp-server">Install ISC DHCP Server</h2>
+<p>Now, that we’ve got the list of all available packages for ISC DHCP server, issue the below command to install ISC DHCP Server.</p>
+<p class="command">sudo apt install isc-dhcp-server</p>
+<p>The DHCP server main configuration file is <strong>dhcpd.conf</strong>, which is located in <strong>/etc/dhcp/</strong> directory. The configuration file will contain a lot of comments, denoted by a leading hash mark (#). All other uncommented lines are either <em>parameters</em> of dhcp server (used for general configuration features of the dhcpd daemon) or <em>declarations</em>, which describe the network IP ranges and IP addresses or other network values the server can send to client devices.</p>
+<p>Before actually start editing a new blank configuration file, first backup the original file by issuing the below command.</p>
+<p class="command">cp /etc/dhcp/dhcpd.conf{,.backup}</p>
+<p class="command">cat /dev/null &gt; /etc/dhcp/dhcpd.conf</p>
+<h2 id="configure-dhcp">Configure DHCP</h2>
+<p>Next, start editing the dhcp configuration file to look like as presented in the below excerpt.</p>
+<p class="command">nano /etc/dhcp/dhcpd.conf</p>
+<p>dhcpd.conf file excerpt:</p>
+<pre>ddns-update-style none;<br>default-lease-time 600;<br>max-lease-time 7200;<br>#ping true;<br>option domain-name-servers 172.27.15.2, 10.72.81.2;<br>option domain-name "example.com";<br>authorative;<br>log-facility local7;<br>&nbsp;<br>subnet 192.168.1.0 netmask 255.255.255.0 {<br>range 192.168.1.50 192.168.1.115;<br>option subnet-mask 255.255.255.0;<br>option domain-name-servers 192.168.1.254, 10.128.254.254;<br>option domain-name “example.com”;<br>option routers 192.168.1.1;<br>option netbios-name-servers 192.168.1.3;<br>option netbios-node-type 8;<br>get-lease-hostnames true;<br>use-host-decl-names true;<br>default-lease-time 600;<br>max-lease-time 7200;<br>}<br>&nbsp;</pre>
+<p>Explaining the DHCP configuration parameters:</p>
+<p>All parameter lines end with semicolons (;) in dhcp configuration file. Some parameters might have more than just one value, such as <strong><em>domain-name-servers </em></strong>which has two IP addresses separated by a comma. The lines that begins with a hashtag # are comments and are not parsed by the dhcp server.</p>
+<p>Some common DHCP server parameters:</p>
+<p><strong>default-lease-time</strong> = Integer which sets the default lease time in seconds.</p>
+<p><strong>max-lease-time</strong> = Integer which sets the maximum lease time, in seconds</p>
+<p><strong>ping</strong> = check boolean If true, the server pings an address before assigning a lease on that address to a client.</p>
+<p><strong>option domain-name–servers</strong> = The IP address or addresses of DNS servers the clients may use.</p>
+<p><strong>option domain-name</strong> = The name of the domain that will grant fr the clients to use.</p>
+<p><strong>authorative</strong> = The server is authoritative, this DHCP server should send DHCPNAK messages to misconfigured clients</p>
+<p><strong>log-facility local7</strong> = Send logs to syslog facility local7</p>
+<p><strong>subnet 192.168.1.0 netmask 255.255.255.0</strong> <strong>{ anything enclosed here }</strong> the subnet declaration for 192.168.1.10 network</p>
+<p><strong>range 192.168.1.50 192.168.1.115</strong> = defines the IP address range that the server will lease IPs.</p>
+<p><strong>option routers</strong> = defines the IP address of your gateway or the network exit point.</p>
+<p><strong><em>option netbios-name-servers = </em></strong>The IP addresses of NetBIOS Name Service (NBNS) servers or Windows Internet Name Service (WINS) servers which are used by SMB/CIFS protocols to share files on Windows.</p>
+<p><strong>option netbios-node-type = </strong>A code for how NetBIOS clients should attempt name resolution. Values are 1 to use broadcasts, 2 to use a WINS server, 4 to try broadcasts first followed by a WINS server and 8 to try a WINS server first followed by a broadcast.</p>
+<p>You should replace the presented values with the parameters specific for your own network.</p>
+<p>After you’ve edited the main configuration file and declared your own IP ranges, open <strong>/etc/default/isc-dhcp-server</strong> file and replace the <strong><em>INTERFACESv4</em></strong> parameter with the name of the network interface that will be configured for your network, as illustrated in the below image. Use <strong>ip</strong> or <strong>ifconfig</strong> commands to list all your network interfaces.</p>
+<pre>INTERFACESv4="ens33"</pre>
+<p>&nbsp;<a class="fancybox" id="img-Debian_9_LEMP-2017-09-10-17-55-30" href="https://www.howtoforge.com/images/install_and_configure_isc_dhcp_server_in_debian_9/big/Debian_9_LEMP-2017-09-10-17-55-30.png"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/Debian_9_LEMP-2017-09-10-17-55-30.png" alt="Network interfaces file" width="550" height="413"></a></p>
+<p>Finally, after you’ve made all the changes, restart the dhcp server to apply new configurations and check service status by issuing the below commands.</p>
+<p class="command">systemctl restart isc-dhcp-server</p>
+<p class="command">systemctl status isc-dhcp-server</p>
+<p>&nbsp;<a class="fancybox" id="img-Debian_9_LEMP-2017-09-11-12-51-37" href="https://www.howtoforge.com/images/install_and_configure_isc_dhcp_server_in_debian_9/big/Debian_9_LEMP-2017-09-11-12-51-37.png"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/Debian_9_LEMP-2017-09-11-12-51-37.png" alt="Restart DHCP server" width="550" height="413"></a></p>
+<p>The clients should now start receiving IP leases from your dhcp server. To list the granted addresses to your clients in real time, you should inspect the content of the log file by issuing tail command as illustrated below.</p>
+<p class="command">tail -f /var/log/syslog</p>
+<p>&nbsp;<a class="fancybox" id="img-Debian_9_LEMP-2017-09-11-12-59-17" href="https://www.howtoforge.com/images/install_and_configure_isc_dhcp_server_in_debian_9/big/Debian_9_LEMP-2017-09-11-12-59-17.png"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/Debian_9_LEMP-2017-09-11-12-59-17.png" alt="Check the syslog file" width="550" height="413"></a></p>
+<h2 id="configuring-dhcp-server-to-deliver-reserved-ip-address">Configuring DHCP server to deliver reserved IP address</h2>
+<p>I order to configure your DHCP server to assign a fixed IP address for special network devices from your network, such as servers, use a declaration with the name of the host you want to grant a fixed IP address and the Media Access Control (MAC) address of the network interface plug-in to your network. The reserved IP address will be assigned to the client each time it boots. You should reserve a fixed IP address from the outside any IP range you’ve declared for your network in DHCP server. The declaration of the fixed IP address should be enclosed in the lines you’ve declared for your network range and should have the following content, as illustrated below. However, the reserved IP address entry can be also added after the subnet declaration.</p>
+<p class="command">nano /etc/dhcp/dhcpd.conf</p>
+<p>Fixed IP declaration sample:</p> 
+<pre>subnet 192.168.1.0 netmask 255.255.255.0 {<br>range declarations….<br>&nbsp;<br>host WIN-SERVER {<br>&nbsp; hardware ethernet 00:0c:19:bc:2e:e1;<br>&nbsp; fixed-address 192.168.1.7;}<br>}<br><br></pre>
+<p><strong><em>&nbsp;<a class="fancybox" id="img-Debian_9_LEMP-2017-09-11-13-16-31" href="https://www.howtoforge.com/images/install_and_configure_isc_dhcp_server_in_debian_9/big/Debian_9_LEMP-2017-09-11-13-16-31.png"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/Debian_9_LEMP-2017-09-11-13-16-31.png" alt="Configure IP address" width="550" height="413"></a></em></strong></p>
+<p>After you’ve added the lines for your fixed IP addresses, restart the DHCP server in order to apply changes, by issuing the following command.</p>
+<p class="command"><strong>&nbsp;</strong>systemctl restart isc-dhcp-server</p>
+<p>That’s all! You have successfully installed and configured a DHCP server in Debian 9 at your premises.</p>
+<div style="height:30px; margin-top:20px;">
+<p style="text-align:right;"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/pdficon_small.png"> <a href="https://www.howtoforge.com/subscription/">view as pdf</a> | <img src="./Install and Configure ISC DHCP Server in Debian 9_files/print.gif"> <a href="https://www.howtoforge.com/subscription/">print</a></p>
+</div>
+<div style="height:30px; margin-top:20px;">
+<div style="float:left;"><b>Share this page:</b></div>
+<div style="float:left; margin-left:10px;"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-lang="en-US" data-url="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/" data-via="howtoforgecom">Tweet</a> <a class="twitter-follow-button" href="https://twitter.com/howtoforgecom">Follow</a></div>
+<div style="float:left; margin-left:20px;"><fb:like href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/" layout="button_count" action="recommend" font="trebuchet ms" colorscheme="light"></fb:like></div>
+<div style="float:left; margin-left:50px;"><div class="g-plusone" data-size="medium" data-count="true" data-href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/"></div></div>
+</div>
+</div>
+
+
+<div id="htfContentPagePaging">
+<h2>Suggested articles</h2>
+<script async="" src="./Install and Configure ISC DHCP Server in Debian 9_files/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display: block; height: 485px;" data-ad-format="autorelaxed" data-ad-client="ca-pub-3043223216276099" data-ad-slot="8940054090" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:485px;margin:0;padding:0;position:relative;visibility:visible;width:971px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:485px;margin:0;padding:0;position:relative;visibility:visible;width:971px;background-color:transparent;"><iframe width="971" height="485" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:971px;height:485px;" src="./Install and Configure ISC DHCP Server in Debian 9_files/saved_resource.html"></iframe></ins></ins></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<div id="htfContentPageComment">
+<a name="comments"></a>
+<h2>0 Comment(s)</h2>
+
+<div id="commentform">
+<div class="commentContainerHead" style="font-size:18px;">Add comment</div>
+<div class="commentContainer">
+<form method="post" action="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/#comments">
+<input type="hidden" name="reply_to" id="reply-to-comment" value="0">
+<div id="commentFormDetail">
+<div style="width:48%; float:left; margin-right:3%">
+<label for="commentname">Name *</label>
+<input id="commentname" name="commentname" value="">
+</div>
+<div style="width:48%;float:left;">
+<label for="commentname">Email *</label>
+<input id="commentemail" name="commentemail" value="">
+</div>
+<div style="clear:both;"></div>
+</div>
+<textarea id="commentedit" name="commentedit" style="width:auto;"></textarea>
+<div>
+<div style="float:left;">
+<div class="g-recaptcha" data-sitekey="6LdX9fUSAAAAALWwVoPdeXScMSketz4npF-0QcQ1"></div>
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=en">
+      </script>
+</div>
+<div style="margin-top:10px;margin-bottom:10px;">
+<input type="submit" name="submit" class="button primary" style="float:right;" value="Submit comment">
+</div>
+<div style="clear:both;"></div>
+</div>
+
+<script>
+	tinymce.init({
+		selector: "textarea#commentedit",
+		theme: "modern",
+		height: 100,
+		apply_source_formatting : true,
+		remove_linebreaks : false,
+		menubar : false,
+		/*auto_focus : "commentedit",*/
+		plugins: [
+		"link"
+		],
+		/*plugins: [
+			"advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+			"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+			"save table contextmenu directionality emoticons template paste textcolor"
+		],*/
+		content_css: "https://www.howtoforge.com/themes/howtoforge/css/custom.css",
+		toolbar: "undo redo | bold italic link", 
+		/*style_formats: [
+			{title: 'Bold text', inline: 'b'},
+			{title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+			{title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+			{title: 'Example 1', inline: 'span', classes: 'example1'},
+			{title: 'Example 2', inline: 'span', classes: 'example2'},
+			{title: 'Table styles'},
+			{title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+		]*/
+	}); 
+	</script>
+</form>
+</div>
+</div>
+
+</div>
+
+<div class="breadBoxBottom">
+<nav>
+<fieldset class="breadcrumb">
+<span class="crumbs">
+<span class="crust homeCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+<a href="https://www.howtoforge.com/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Tutorials</span></a>
+<span class="arrow"><span></span></span>
+</span>
+<span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+<a href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Install and Configure ISC DHCP Server in Debian 9</span></a>
+<span class="arrow"><span>&gt;</span></span>
+</span>
+</span>
+</fieldset>
+</nav>
+</div>
+<script>
+<!--
+
+$(document).on('click', 'a.reply-to', function(e) {
+	e.preventDefault();
+	
+	var self = $(this);
+	var cid = self.attr('data-comment');
+	console.log(cid);
+	if(!cid) return this;
+	
+	$('#commentform').insertAfter('#comment' + cid);
+	$('#reply-to-comment').val(cid);
+	/*tinyMCE.activeEditor.focus();*/
+	var textareaId = 'commentedit';
+	tinyMCE.get(textareaId).remove();
+	tinyMCE.execCommand("mceAddEditor", false, textareaId);
+	tinyMCE.activeEditor.focus();
+});
+//-->
+</script>
+<div style="margin-top:10px;margin-bottom:10px;text-align:center;">
+
+<center>
+
+
+<script type="text/javascript">
+GA_googleFillSlot("howtoforge_com_article_leaderboard_b_728x90");
+</script><script src="./Install and Configure ISC DHCP Server in Debian 9_files/ads(2)"></script><div id="google_ads_div_howtoforge_com_article_leaderboard_b_728x90_ad_wrapper">
+<div id="google_ads_div_howtoforge_com_article_leaderboard_b_728x90_ad_container" style="display:inline-block;"><script>(function(){var aa="function"==typeof Object.create?Object.create:function(a){var b=function(){};b.prototype=a;return new b},l;if("function"==typeof Object.setPrototypeOf)l=Object.setPrototypeOf;else{var n;a:{var ba={a:!0},q={};try{q.__proto__=ba;n=q.a;break a}catch(a){}n=!1}l=n?function(a,b){a.__proto__=b;if(a.__proto__!==b)throw new TypeError(a+" is not extensible");return a}:null}var t=l,u=this,v=function(a,b){a=a.split(".");var c=u;a[0]in c||!c.execScript||c.execScript("var "+a[0]);for(var d;a.length&&(d=a.shift());)a.length||void 0===b?c[d]&&c[d]!==Object.prototype[d]?c=c[d]:c=c[d]={}:c[d]=b},w=Date.now||function(){return+new Date};var x=document,y=window;var ca=Array.prototype.forEach?function(a,b){Array.prototype.forEach.call(a,b,void 0)}:function(a,b){for(var c=a.length,d="string"==typeof a?a.split(""):a,e=0;e<c;e++)e in d&&b.call(void 0,d[e],e,a)};var z=function(a){z[" "](a);return a};z[" "]=function(){};var A=function(a){try{var b;if(b=!!a&&null!=a.location.href)a:{try{z(a.foo);b=!0;break a}catch(c){}b=!1}return b}catch(c){return!1}},B=function(a,b){for(var c in a)Object.prototype.hasOwnProperty.call(a,c)&&b.call(void 0,a[c],c,a)};var da;da=/^true$/.test("");var ea=function(a,b,c){a.addEventListener?a.addEventListener(b,c,void 0):a.attachEvent&&a.attachEvent("on"+b,c)};var fa=function(a,b){a.google_image_requests||(a.google_image_requests=[]);var c=a.document.createElement("img");c.src=b;a.google_image_requests.push(c)};var ha=!!window.google_async_iframe_id,C=ha&&window.parent||window;var E=function(a){return{visible:1,hidden:2,prerender:3,preview:4,unloaded:5}[a.webkitVisibilityState||a.mozVisibilityState||a.visibilityState||""]||0},ia=function(a){var b;a.mozVisibilityState?b="mozvisibilitychange":a.webkitVisibilityState?b="webkitvisibilitychange":a.visibilityState&&(b="visibilitychange");return b};var F=null,G=!1,I=function(){this.g=x;this.o=y;this.j=!1;this.h=this.l=null;this.i=[];this.m=[];G?this.h=w():3==E(this.g)?(this.h=w(),ka(this)):H(this)},H=function(a){if(!a.j){a.j=!0;for(var b=0;b<a.i.length;++b)a.u.apply(a,a.i[b]);a.i=[];for(b=0;b<a.m.length;++b)a.o.setTimeout(a.m[b],0);a.m=[]}},ka=function(a){var b=function(){if(3!=E(a.g)){H(a);var b=ia(a.g);if(b&&a.l){var c=a.g,f=a.l;c.removeEventListener?c.removeEventListener(b,f,void 0):c.detachEvent&&c.detachEvent("on"+b,f)}}};F&&(b=F("di::vch",b));a.l=b;var c=ia(a.g);c&&ea(a.g,c,b)};I.prototype.u=function(a){this.o.rvdt=this.h?w()-this.h:0;fa(this.o,a)};I.g=void 0;I.h=function(){return I.g?I.g:I.g=new I};var J=function(a,b,c){c=void 0===c?{}:c;this.error=a;this.context=b.context;this.line=b.line||-1;this.msg=b.message||"";this.file=b.file||"";this.id=b.id||"jserror";this.meta=c};var la=/^https?:\/\/(\w|-)+\.cdn\.ampproject\.(net|org)(\?|\/|$)/,ma=function(a,b){this.g=a;this.h=b},na=function(a,b){this.url=a;this.s=!!b;this.depth=null};var K=function(){this.i="&";this.j=!1;this.h={};this.l=0;this.g=[]},oa=function(a,b){var c={};c[a]=b;return[c]},qa=function(a,b,c,d,e){var f=[];B(a,function(a,m){(a=pa(a,b,c,d,e))&&f.push(m+"="+a)});return f.join(b)},pa=function(a,b,c,d,e){if(null==a)return"";b=b||"&";c=c||",$";"string"==typeof c&&(c=c.split(""));if(a instanceof Array){if(d=d||0,d<c.length){for(var f=[],g=0;g<a.length;g++)f.push(pa(a[g],b,c,d+1,e));return f.join(c[d])}}else if("object"==typeof a)return e=e||0,2>e?encodeURIComponent(qa(a,b,c,d,e+1)):"...";return encodeURIComponent(String(a))},L=function(a,b,c,d){a.g.push(b);a.h[b]=oa(c,d)},sa=function(a,b,c,d){b=b+"//"+c+d;var e=ra(a)-d.length-0;if(0>e)return"";a.g.sort(function(a,b){return a-b});d=null;c="";for(var f=0;f<a.g.length;f++)for(var g=a.g[f],m=a.h[g],k=0;k<m.length;k++){if(!e){d=null==d?g:d;break}var h=qa(m[k],a.i,",$");if(h){h=c+h;if(e>=h.length){e-=h.length;b+=h;c=a.i;break}else a.j&&(c=e,h[c-1]==a.i&&--c,b+=h.substr(0,c),c=a.i,e=0);d=null==d?g:d}}a="";null!=d&&(a=c+"trn="+d);return b+a+""},ra=function(a){var b=1,c;for(c in a.h)b=c.length>b?c.length:b;return 3997-b-a.i.length-1};var ta=function(a,b,c,d){if(Math.random()<(d||a.g))try{if(c instanceof K)var e=c;else e=new K,B(c,function(a,b){var c=e,d=c.l++;a=oa(b,a);c.g.push(d);c.h[d]=a});var f=sa(e,a.j,a.h,a.i+b+"&");f&&fa(u,f)}catch(g){}};var M=null;var ua=function(){var a=u.performance;return a&&a.now&&a.timing?Math.floor(a.now()+a.timing.navigationStart):w()},va=function(){var a=u.performance;return a&&a.now?a.now():null};var wa=function(a,b,c){this.label=a;this.type=b;this.value=c;this.duration=0;this.uniqueId=this.label+"_"+this.type+"_"+Math.random();this.slotId=void 0};var N=u.performance,xa=!!(N&&N.mark&&N.measure&&N.clearMarks),P=function(a){var b=!1,c;return function(){b||(c=a(),b=!0);return c}}(function(){var a;if(a=xa){var b;if(null===M){M="";try{a="";try{a=u.top.location.hash}catch(c){a=u.location.hash}a&&(M=(b=a.match(/\bdeid=([\d,]+)/))?b[1]:"")}catch(c){}}b=M;a=!!b.indexOf&&0<=b.indexOf("1337")}return a}),ya=function(){var a=Q;this.h=[];this.i=a||u;var b=null;a&&(a.google_js_reporting_queue=a.google_js_reporting_queue||[],this.h=a.google_js_reporting_queue,b=a.google_measure_js_timing);this.g=P()||(null!=b?b:1>Math.random())},za=function(a){a&&P()&&(N.clearMarks("goog_"+a.uniqueId+"_start"),N.clearMarks("goog_"+a.uniqueId+"_end"))};ya.prototype.start=function(a,b){if(!this.g)return null;var c=va()||ua();a=new wa(a,b,c);b="goog_"+a.uniqueId+"_start";P()&&N.mark(b);return a};var Ba=function(){var a=R;this.i=Aa;this.j=this.h;this.g=void 0===a?null:a},Ca=function(a,b,c,d){try{if(a.g&&a.g.g){var e=a.g.start(b.toString(),3);var f=c();var g=a.g;c=e;if(g.g&&"number"==typeof c.value){var m=va()||ua();c.duration=m-c.value;var k="goog_"+c.uniqueId+"_end";P()&&N.mark(k);g.g&&g.h.push(c)}}else f=c()}catch(h){g=!0;try{za(e),g=a.j.call(a,b,new S(V(h),h.fileName,h.lineNumber),void 0,d)}catch(p){a.h(217,p)}if(!g)throw h;}return f},W=function(a,b,c){var d=Da;return function(e){for(var f=[],g=0;g<arguments.length;++g)f[g-0]=arguments[g];return Ca(d,a,function(){return b.apply(void 0,f)},c)}};Ba.prototype.h=function(a,b,c,d,e){e=e||"jserror";try{var f=new K;f.j=!0;L(f,1,"context",a);b.error&&b.meta&&b.id||(b=new S(V(b),b.fileName,b.lineNumber));b.msg&&L(f,2,"msg",b.msg.substring(0,512));b.file&&L(f,3,"file",b.file);0<b.line&&L(f,4,"line",b.line);var g=b.meta||{};if(d)try{d(g)}catch(T){}b=[g];f.g.push(5);f.h[5]=b;g=u;b=[];var m=null;do{d=g;if(A(d)){var k=d.location.href;m=d.document&&d.document.referrer||null}else k=m,m=null;b.push(new na(k||""));try{g=d.parent}catch(T){g=null}}while(g&&d!=g);k=0;for(var h=b.length-1;k<=h;++k)b[k].depth=h-k;d=u;if(d.location&&d.location.ancestorOrigins&&d.location.ancestorOrigins.length==b.length-1)for(k=1;k<b.length;++k){var p=b[k];p.url||(p.url=d.location.ancestorOrigins[k-1]||"",p.s=!0)}var O=new na(u.location.href,!1);h=null;var U=b.length-1;for(p=U;0<=p;--p){var r=b[p];!h&&la.test(r.url)&&(h=r);if(r.url&&!r.s){O=r;break}}r=null;var Ga=b.length&&b[U].url;0!=O.depth&&Ga&&(r=b[U]);var D=new ma(O,r);D.h&&L(f,6,"top",D.h.url||"");L(f,7,"url",D.g.url||"");ta(this.i,e,f,c)}catch(T){try{ta(this.i,e,{context:"ecmserr",rctx:a,msg:V(T),url:D.g.url},c)}catch(Ha){}}return!0};var V=function(a){var b=a.toString();a.name&&-1==b.indexOf(a.name)&&(b+=": "+a.name);a.message&&-1==b.indexOf(a.message)&&(b+=": "+a.message);if(a.stack){a=a.stack;var c=b;try{-1==a.indexOf(c)&&(a=c+"\n"+a);for(var d;a!=d;)d=a,a=a.replace(/((https?:\/..*\/)[^\/:]*:\d+(?:.|\n)*)\2/,"$1");b=a.replace(/\n */g,"\n")}catch(e){b=c}}return b},S=function(a,b,c){J.call(this,Error(a),{message:a,file:void 0===b?"":b,line:void 0===c?-1:c})},X=S;X.prototype=aa(J.prototype);X.prototype.constructor=X;if(t)t(X,J);else for(var Y in J)if("prototype"!=Y)if(Object.defineProperties){var Ea=Object.getOwnPropertyDescriptor(J,Y);Ea&&Object.defineProperty(X,Y,Ea)}else X[Y]=J[Y];X.v=J.prototype;var Aa,Da;if(ha&&!A(C)){var Z="."+x.domain;try{for(;2<Z.split(".").length&&!A(C);)x.domain=Z=Z.substr(Z.indexOf(".")+1),C=window.parent}catch(a){}A(C)||(C=window)}var Q=C,R=new ya,Fa=function(){if(!Q.google_measure_js_timing){var a=R;a.g=!1;a.h!=a.i.google_js_reporting_queue&&(P()&&ca(a.h,za),a.h.length=0)}};Aa=new function(){var a=void 0===a?y:a;this.j="http:"===a.location.protocol?"http:":"https:";this.h="pagead2.googlesyndication.com";this.i="/pagead/gen_204?id=";this.g=.01};Da=new Ba;"complete"==Q.document.readyState?Fa():R.g&&ea(Q,"load",function(){Fa()});F=function(a,b,c){return W(a,b,c)};G=da;v("vu",W("vu",function(a){a=a.replace("&amp;","&");var b=/(google|doubleclick).*\/pagead\/adview/.test(a),c=I.h();if(b){b="&vis="+E(c.g);var d=a.indexOf("&adurl");a=-1==d?a+b:a.substring(0,d)+b+a.substring(d)}c.j?c.u(a):c.i.push([a])},void 0));v("vv",W("vv",function(){G&&H(I.h())},void 0));}).call(this);</script><script>vu("https://securepubads.g.doubleclick.net/pcs/view?xai\x3dAKAOjsuSBaRT-6OB2He7726JpSmf9GEGia5J929hEpm4Vc_WRv-1UHipqO5O5FL_XIe7faZG29JsehDSFeRyC2ic8cMd1zsuDDeSdh5oL0C2i5LcBUUl9OOUqZ2Sr8rYV7fHDGNdbTFeDl3XiZHxrOxz5UscTvFX3zKNNbVK-HiTK4apla8gNXYLvdcEUA8zLV9OLjk-WsIjA9-kxt4u0mHdzizUpQoKazw8nePYSK1c6L4b8EF3o0DdRf0O0X5nCjkfDvxbmpgGqrWJ25a9iBfMIXTJZg\x26sig\x3dCg0ArKJSzA0qi3jIag6yEAE\x26urlfix\x3d1\x26adurl\x3d")</script><div>
+<script src="./Install and Configure ISC DHCP Server in Debian 9_files/gpt.js">
+    googletag.pubads().definePassback('/8095840/.2_7098.3_howtoforge.com_tier1', [728, 90]).display();
+</script><script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/ads(3)" id="sae-script-1"></script><div id="gpt_unit_/8095840/.2_7098.3_howtoforge.com_tier1_1_ad_container"><script>var viewReq = new Array();function vu(u) {var i=new Image();i.src=u.replace("&amp;","&");viewReq.push(i);}</script><script>vu("https://securepubads.g.doubleclick.net/pcs/view?xai\x3dAKAOjsvlwqgK4Qg5yhJ-LAvsxPqlYZSQBLcxcrKmLttTGEqRDKH1L5Bw7wD38YXva5RIYSVkTtFOyAwWpbvnajwd43y9YFYr7_6JAUyge7Icdzlb9yGdfVB4ljQwyXyEgfVWojsc8mrQAADhC1HspgxwxaAIyJ9C1pXO5sWuLvJF3gP-dgCmAPXz_eTkXhWNY9GZa7KverztNA2IfvJRFV44t3FqG2q_yHaW6G_CQ_Gr6nhG_9cb96u3BgtVkyxD6azMuhEkXFleS0briHsOH1XoGBQ\x26sig\x3dCg0ArKJSzBwIo6yR3NN6EAE\x26urlfix\x3d1\x26adurl\x3d")</script><script src="./Install and Configure ISC DHCP Server in Debian 9_files/gpt.js">
+  googletag.pubads().definePassback('/8095840/.2_7098.3_howtoforge.com_tier2', [728, 90]).display();
+</script><script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/ads(4)" id="sae-script-2"></script><div id="gpt_unit_/8095840/.2_7098.3_howtoforge.com_tier2_2_ad_container"><script>var viewReq = new Array();function vu(u) {var i=new Image();i.src=u.replace("&amp;","&");viewReq.push(i);}</script><script>vu("https://securepubads.g.doubleclick.net/pcs/view?xai\x3dAKAOjsvkCZ3Cusk1yn_GHfotq3sHXzho45Oq0oMFFJfCk25spqDWsUhSAF1hCGI3swlFLVw7ejV122Vv5AjT5GFhPx51cZaZtSYCigWKQ3Vr_7-pEYr3EC48G_9FhFltsejhEvTi806Jx7pvOcwqJ__pycroO6RxYzTQMZAAXVfrKD_qdJttDP6CiINFMaKnhbPr33phXp39A6ji4aMNkO7PKseaiKa5_Xp9I2xgyoHvT4dW8unBmSqyEzC1nA8ngGip1cMVBgzLD83OcHfe5ZIpG2U\x26sig\x3dCg0ArKJSzE5LR9UeLb47EAE\x26urlfix\x3d1\x26adurl\x3d")</script><script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/amzn_ads.js"></script>
+<script type="text/javascript">
+  try {
+    /* Slot size: 728x90 */ 
+    amznads.getAdForSlot('3137', 'b63059c7-117a-496c-9796-171eadcdfa98');
+  } catch(e) { /*ignore*/}
+</script><script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/getad"></script><!-- PubMatic ad tag (Javascript) : .2 7098.3 howtoforge.com ROW tier1 desktop 728x90 | https://www.howtoforge.com/ | 728 x 90 Leaderboard-728X90 -->
+<script type="text/javascript">
+		var pubId=38381;
+		var siteId=169023;
+		var kadId=874283;
+		var kadwidth=728;
+		var kadheight=90;
+		var kadtype=1;
+		var kadpageurl= "https%3A%2F%2Fhowtoforge.com%2F";
+</script>
+<script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/showad.js"></script><script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/UCookieSetPug"></script><script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/showad.js"></script><iframe frameborder="0" allowtransparency="true" marginheight="0" marginwidth="0" scrolling="no" width="0" hspace="0" vspace="0" height="0" style="height:0px;width:0px;display:none;" src="./Install and Configure ISC DHCP Server in Debian 9_files/showad.html"></iframe><iframe frameborder="0" allowtransparency="true" marginheight="0" marginwidth="0" scrolling="no" width="0" hspace="0" vspace="0" height="0" style="height:0px;width:0px;display:none;" src="./Install and Configure ISC DHCP Server in Debian 9_files/showad(1).html" onload="PubMatic.ifl(this,0)"></iframe><script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/AdServerServlet" onload="PubMatic.tags[0].jsl();"></script><span class="PubAdAI" id="2C13B561-EED2-439C-A6BB-6E5B32D8A096"><script type="text/javascript">
+    google_ad_client = "ca-pub-3043223216276099";
+    google_ad_slot = "1445120496";
+    google_ad_width = 728;
+    google_ad_height = 90;
+</script>
+<!-- Howtoforge 728x90 PubGalaxy Passback -->
+<script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/show_ads.js">
+</script><ins id="aswift_1_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><iframe width="728" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;width:728px;height:90px;" src="./Install and Configure ISC DHCP Server in Debian 9_files/saved_resource(1).html"></iframe></ins></ins>
+<iframe name="pbeacon" frameborder="0" allowtransparency="true" hspace="0" vspace="0" marginheight="0" marginwidth="0" scrolling="no" width="0" height="0" style="position:absolute;top:-20000px;" src="./Install and Configure ISC DHCP Server in Debian 9_files/AdDisplayTrackerServlet.html"> </iframe><!-- PubMatic Ad Ends --> </span><script src="./Install and Configure ISC DHCP Server in Debian 9_files/osd_listener.js"></script><script type="text/javascript">osdlfm(-1,'','BYlnHjCM6WvCMJsHE9QWwzLmwBwAAAAAQATgByAEJwAIC4AIA4AQBoAYW0ggFCIBhEAE','',1325106299,true,'ud\x3d1\x26la\x3d0\x26alp\x3dxai\x26alh\x3d733743663\x26',3,'CAASBORo4iE','https://pagead2.googlesyndication.com/pcs/activeview?xai\x3dAKAOjst3Ltu_EFkcdWwSGaZHZjIuYwY7yyupwQwe2bUF3NuCseAN0EsCvF_cKgMTplJloCqaU1CF-EdnzwrYGWdykOQWP_HGSIvgWy4\x26sig\x3dCg0ArKJSzHKJnKN9gtfoEAE');</script><script>if (window.top && window.top.postMessage) {window.top.postMessage('{"googMsgType":"adpnt"}','*');}</script>
+</div>
+<script src="./Install and Configure ISC DHCP Server in Debian 9_files/osd_listener.js"></script><script type="text/javascript">osdlfm(-1,'','BoxuwjCM6WvXIEsOT9AWS_bMIAAAAABABOAHIAQnAAgLgAgDgBAGgBhbSCAUIgGEQAQ','',1030248120,true,'la\x3d0\x26alp\x3dxai\x26alh\x3d2240708006\x26',3,'CAASBORoiiQ','https://pagead2.googlesyndication.com/pcs/activeview?xai\x3dAKAOjssS8tpR7-XQd3PkmGW3tQRD9a5218zyJpnAyDWB0fAdfvSsMzKVAZ7wFO1A0Jki_pcocMqh7d06VT4I80nUS7_dxh0SmljqwY8\x26sig\x3dCg0ArKJSzHMewl4sMQkMEAE');</script><script>if (window.top && window.top.postMessage) {window.top.postMessage('{"googMsgType":"adpnt"}','*');}</script>
+</div>
+<script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/pubads_impl_rendering_170.js" id="gpt_rendering"></script>
+</div><div style="bottom:0;right:0;width:246px;height:90px;background:initial !important;position:absolute !important;max-width:100% !important;max-height:100% !important;pointer-events:none !important;image-rendering:pixelated !important;z-index:2147483647;background-image:url(&#39;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAWBAMAAACrl3iAAAAABlBMVEUAAAD+AciWmZzWAAAAAnRSTlMAApidrBQAAAB/SURBVBjTbVEBDgAhCLIf8P/XXiIqbeda6iREi/i3U3aDPJMFWL03gM2IiLOed1YSVkBMNvUMHvRwW9a9h19K2iDk6A7heTgAYRJCXz1ADVIi/sZjZ4SkS26RivyxomYH26CgJd7mkhDhbYMRo8c2aE8cXXr1UcvdjqFvcDf+AZroBi8Ep06HAAAAAElFTkSuQmCC&#39;) !important"></div>
+</div>
+</div>
+
+
+</center>
+</div>
+
+
+<form action="https://www.howtoforge.com/community/login/login?redirect=/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/" method="post" class="xenForm eAuth" id="login" style="display:none">
+<ul id="eAuthUnit">
+<li><a href="https://www.howtoforge.com/community/register/facebook?reg=1" class="fbLogin" tabindex="110"><span>Log in with Facebook</span></a></li>
+<li><a href="https://www.howtoforge.com/community/register/twitter?reg=1" class="twitterLogin" tabindex="110"><span>Log in with Twitter</span></a></li>
+<li><span class="googleLogin GoogleLogin JsOnly" tabindex="110" data-client-id="198773272284-b6tfk0c28bje81p774prrcrkq9jb3o44.apps.googleusercontent.com" data-redirect-url="/community/register/google?code=__CODE__&amp;csrf=hVMXbW_3rnrmq4Em"><span>Log in with Google</span></span></li>
+</ul>
+<div class="ctrlWrapper">
+<dl class="ctrlUnit">
+<dt><label for="LoginControl">Your name or email address:</label></dt>
+<dd><input type="text" name="login" id="LoginControl" class="textCtrl" tabindex="101"></dd>
+</dl>
+<dl class="ctrlUnit">
+<dt>
+<label for="ctrl_password">Do you already have an account?</label>
+</dt>
+<dd>
+<ul>
+<li><label for="ctrl_not_registered"><input type="radio" name="register" value="1" id="ctrl_not_registered" tabindex="105">
+No, create an account now.</label></li>
+<li><label for="ctrl_registered"><input type="radio" name="register" value="0" id="ctrl_registered" tabindex="105" checked="checked" class="Disabler">
+Yes, my password is:</label></li>
+<li id="ctrl_registered_Disabler">
+<input type="password" name="password" class="textCtrl" id="ctrl_password" tabindex="102">
+<div class="lostPassword"><a href="https://www.howtoforge.com/community/lost-password/" tabindex="106">Forgot your password?</a></div>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="ctrlUnit submitUnit">
+<dt></dt>
+<dd>
+<input type="submit" class="button primary" value="Log in" tabindex="104" data-loginphrase="Log in" data-signupphrase="Sign up">
+<label for="ctrl_remember" class="rememberPassword"><input type="checkbox" name="remember" value="1" id="ctrl_remember" tabindex="103"> Stay logged in</label>
+</dd>
+</dl>
+</div>
+<input type="hidden" name="cookie_check" value="1">
+<input type="hidden" name="redirect" value="/community/">
+<input type="hidden" name="_xfToken" value="">
+</form>
+
+</div>
+</div>
+
+<aside>
+<div class="sidebar">
+<div class="section loginButton">
+<div class="secondaryContent">
+<label for="LoginControl" id="SignupButton"><a href="https://www.howtoforge.com/community/login/" class="inner">Sign up now!</a></label>
+</div>
+</div>
+<div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-2">
+
+<div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-5">
+<div class="section infoBlock sharePage">
+<div class="secondaryContent socialMediaIcon">
+<a href="https://twitter.com/howtoforgecom" target="_blank"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/twitter.png"></a>
+<a href="https://www.facebook.com/howtoforge" target="_blank"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/facebook.png"></a>
+<a href="https://plus.google.com/+howtoforge/posts" target="_blank"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/googleplus.png"></a>
+<a href="https://www.howtoforge.com/feed" target="_blank"><img src="./Install and Configure ISC DHCP Server in Debian 9_files/rss.png"></a>
+</div>
+</div>
+</div>
+<div class="section widget-group-no-name widget-container">
+<div class="secondaryContent widget WidgetFramework_WidgetRenderer_Stats" id="widget-3">
+<p class="mnuinfo">Tutorial Info</p>
+<div class="pairsJustified">
+<dl class="discussionCount">
+<dt>Author:</dt>
+<dd>Matt Vas</dd>
+</dl>
+<dl class="discussionCount">
+<dt>Published:</dt>
+<dd>Sep 14, 2017</dd>
+</dl>
+<dl class="discussionCount">
+<dt>Tags:</dt>
+<dd><a href="https://www.howtoforge.com/tutorials/debian/" rel="tag">debian</a>, <a href="https://www.howtoforge.com/tutorials/linux/" rel="tag">linux</a>, <a href="https://www.howtoforge.com/tutorials/server/" rel="tag">server</a></dd>
+</dl>
+</div>
+</div>
+</div>
+
+<div class="widget WidgetFramework_WidgetRenderer_ShareThisPage" id="widget-5">
+<div class="section infoBlock sharePage">
+<div class="secondaryContent">
+<p class="mnuinfo mnushare">Share This Page</p>
+<div class="tweet shareControl">
+<a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-lang="en-US" data-url="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/" data-via="howtoforgecom">Tweet</a> <a class="twitter-follow-button" data-show-screen-name="false" href="https://twitter.com/howtoforgecom">Follow</a>
+</div>
+<div class="facebookLike shareControl">
+<fb:like href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/" layout="button_count" action="recommend" font="trebuchet ms" colorscheme="light"></fb:like>
+</div>
+<div class="plusone shareControl">
+<div class="g-plusone" data-size="medium" data-count="true" data-href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/"></div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<script type="text/javascript">
+    google_ad_client = "ca-pub-3043223216276099";
+    google_ad_slot = "6709042890";
+    google_ad_width = 300;
+    google_ad_height = 600;
+</script>
+
+<script type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/show_ads.js">
+</script><ins id="aswift_2_expand" style="display:inline-table;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_2_anchor" style="display:block;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_2" name="aswift_2" style="left:0;position:absolute;top:0;width:300px;height:600px;" src="./Install and Configure ISC DHCP Server in Debian 9_files/saved_resource(2).html"></iframe></ins></ins>
+
+
+<div class="section widget-group-no-name widget-container">
+<div class="secondaryContent widget WidgetFramework_WidgetRenderer_Stats" id="widget-3">
+<p class="mnuinfo">Popular Tutorials</p>
+<div class="pairsJustified">
+<ul>
+<li><a href="https://www.howtoforge.com/tutorial/how-to-update-onlyoffice-to-version-95-with-docker/">How to update ONLYOFFICE to version 9.5 with Docker</a></li>
+<li><hr></li>
+<li><a href="https://www.howtoforge.com/tutorial/personal-backups-with-duplicati-on-linux/">Personal Backups with Duplicati on Linux</a></li>
+<li><hr></li>
+<li><a href="https://www.howtoforge.com/tutorial/perfect-server-ubuntu-16.04-with-apache-php-myqsl-pureftpd-bind-postfix-doveot-and-ispconfig/">The Perfect Server - Ubuntu 16.04 (Xenial Xerus) with Apache, PHP, MySQL, PureFTPD, BIND, Postfix, Dovecot and ISPConfig 3.1</a></li>
+<li><hr></li>
+<li><a href="https://www.howtoforge.com/linux_lvm">A Beginner's Guide To LVM</a></li>
+<li><hr></li>
+<li><a href="https://www.howtoforge.com/tutorial/perfect-server-debian-9-stretch-apache-bind-dovecot-ispconfig-3-1/">The Perfect Server - Debian 9 (Stretch) with Apache, BIND, Dovecot, PureFTPD and ISPConfig 3.1</a></li>
+<li><hr></li>
+<li><a href="https://www.howtoforge.com/tutorial/how-to-install-and-use-encryptpad-on-ubuntu-1604/">How to Install and Use Encryptpad on Ubuntu 16.04</a></li>
+<li><hr></li>
+<li><a href="https://www.howtoforge.com/tutorial/linux-grep-command/">How to use grep to search for strings in files on the shell</a></li>
+<li><hr></li>
+<li><a href="https://www.howtoforge.com/tutorial/install-apache-with-php-and-mysql-on-ubuntu-16-04-lamp/">Ubuntu 16.04 (LTS) LAMP server tutorial with Apache, PHP 7, and MySQL</a></li>
+<li><hr></li>
+<li><a href="https://www.howtoforge.com/tutorial/how-to-use-ftp-on-the-linux-shell/">How to use the Linux ftp command to up- and download files on the shell</a></li>
+<li><hr></li>
+<li><a href="https://www.howtoforge.com/tutorial/how-to-install-laravel-5-with-nginx-on-ubuntu-1604/">How to Install Laravel 5 PHP Framework with Nginx on Ubuntu 16.04 LTS</a></li>
+<li><hr></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</div><iframe id="google_osd_static_frame_9283299193201" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./Install and Configure ISC DHCP Server in Debian 9_files/saved_resource(3).html"></iframe>
+<footer>
+<div class="footer">
+<div class="pageWidth">
+<div class="pageContent">
+<div class="skin_branding"><a href="http://www.xenfocus.com/" rel="nofollow">Xenforo skin</a><span> by <a href="http://www.xenfocus.com/" rel="nofollow">Xenfocus</a></span></div>
+<ul class="footerLinks">
+<li><a href="https://www.howtoforge.com/contribute/">Contribute</a></li>
+<li><a href="https://www.howtoforge.com/community/misc/contact">Contact</a></li>
+ <li><a href="https://www.howtoforge.com/community/help/">Help</a></li>
+<li><a href="https://www.howtoforge.com/imprint/">Imprint</a></li>
+<li><a href="https://www.howtoforge.com/" class="homeLink">Tutorials</a></li>
+<li><a href="https://www.howtoforge.com/tutorial/install-and-configure-isc-dhcp-server-in-debian-9/#navigation" class="topLink">Top</a></li>
+<li><a href="https://www.howtoforge.com/feed" rel="alternate" class="globalFeed" target="_blank" title="RSS-Feed for Howtoforge">RSS-Feed</a></li>
+</ul>
+<span class="helper"></span>
+</div>
+</div>
+</div>
+<div class="footerLegal">
+<div class="pageWidth">
+<div class="pageContent">
+<ul id="legal">
+<li><a href="https://www.howtoforge.com/community/help/terms">Terms</a></li>
+</ul>
+<div id="copyright"><a href="https://www.howtoforge.com/" class="concealed">Howtoforge <span>© projektfarm GmbH.</span></a></div>
+<span class="helper"></span>
+</div>
+</div>
+</div>
+</footer>
+<div style="height:100px;"></div>
+<script>
+
+jQuery.extend(true, XenForo,
+{
+	visitor: { user_id: 0 },
+	serverTimeInfo:
+	{
+		now: 1409831907,
+		today: 1409781600,
+		todayDow: 4
+	},
+	_lightBoxUniversal: "0",
+	_enableOverlays: "1",
+	_animationSpeedMultiplier: "1",
+	_overlayConfig:
+	{
+		top: "10%",
+		speed: 200,
+		closeSpeed: 100,
+		mask:
+		{
+			color: "rgb(0, 0, 0)",
+			opacity: "0.6",
+			loadSpeed: 200,
+			closeSpeed: 100
+		}
+	},
+	_ignoredUsers: [],
+	_loadedScripts: {"node_list":true,"node_category":true,"node_forum":true,"sidebar_share_page":true,"wf_default":true,"bbm_buttons":true,"login_bar":true,"twitter":true},
+	_cookieConfig: { path: "/", domain: "", prefix: "xf_"},
+	_csrfToken: "",
+	_csrfRefreshUrl: "/community/login/csrf-token-refresh",
+	_jsVersion: "303ae0ca"
+});
+jQuery.extend(XenForo.phrases,
+{
+	cancel: "Cancel",
+
+	a_moment_ago:    "A moment ago",
+	one_minute_ago:  "1 minute ago",
+	x_minutes_ago:   "%minutes% minutes ago",
+	today_at_x:      "Today at %time%",
+	yesterday_at_x:  "Yesterday at %time%",
+	day_x_at_time_y: "%day% at %time%",
+
+	day0: "Sunday",
+	day1: "Monday",
+	day2: "Tuesday",
+	day3: "Wednesday",
+	day4: "Thursday",
+	day5: "Friday",
+	day6: "Saturday",
+
+	_months: "January,February,March,April,May,June,July,August,September,October,November,December",
+	_daysShort: "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
+
+	following_error_occurred: "The following error occurred",
+	server_did_not_respond_in_time_try_again: "The server did not respond in time. Please try again.",
+	logging_in: "Logging in",
+	click_image_show_full_size_version: "Click this image to show the full-size version.",
+	show_hidden_content_by_x: "Show hidden content by {names}"
+});
+
+// Facebook Javascript SDK
+XenForo.Facebook.appId = "";
+XenForo.Facebook.forceInit = true;
+
+/*
+document.addEventListener('DOMContentLoaded', function(event) {
+  cookieChoices.showCookieConsentBar('Cookies erleichtern die Bereitstellung unserer Dienste. Mit der Nutzung unserer Dienste erklären Sie sich damit einverstanden, dass wir Cookies verwenden.',
+  'OK');
+});
+*/
+
+$(document).ready(function() {
+	$("a.fancybox").fancybox();
+});
+
+</script>
+<script async="" type="text/javascript" src="./Install and Configure ISC DHCP Server in Debian 9_files/fancybar.js" id="_fancybar_js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-2155872-1', 'auto');
+  ga('set', 'anonymizeIp', true);
+  ga('send', 'pageview');
+
+</script>
+
+</body></html>

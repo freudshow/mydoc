@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<!-- saved from url=(0073)http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source -->
+<html lang="en" dir="ltr" class="client-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>HowTo use the CDT to navigate Linux kernel source - Eclipsepedia</title>
+<script type="text/javascript" async="" src="./HowTo use the CDT to navigate Linux kernel source - Eclipsepedia_files/ga.js"></script><script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>window.RLQ = window.RLQ || []; window.RLQ.push( function () {
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"HowTo_use_the_CDT_to_navigate_Linux_kernel_source","wgTitle":"HowTo use the CDT to navigate Linux kernel source","wgCurRevisionId":423316,"wgRevisionId":423316,"wgArticleId":22423,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":!1,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"HowTo_use_the_CDT_to_navigate_Linux_kernel_source","wgRelevantArticleId":22423,"wgIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[],
+"wgWikiEditorEnabledModules":{"toolbar":!1,"dialogs":!1,"preview":!1,"publish":!1},"wgCategoryTreePageCategoryOptions":"{\"mode\":0,\"hideprefix\":20,\"showcount\":true,\"namespaces\":false}"});mw.loader.implement("user.options",function($,jQuery){mw.user.options.set({"variant":"en"});});mw.loader.implement("user.tokens",function($,jQuery){mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\"});});mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits"]);
+} );</script>
+<link rel="stylesheet" href="./HowTo use the CDT to navigate Linux kernel source - Eclipsepedia_files/load.php">
+<link rel="stylesheet" href="./HowTo use the CDT to navigate Linux kernel source - Eclipsepedia_files/styles.min.css" media="screen, print">
+<style>
+.mw-collapsible-toggle{float:right;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}  .mw-content-ltr .mw-collapsible-toggle,.mw-content-rtl .mw-content-ltr .mw-collapsible-toggle{float:right} .mw-content-rtl .mw-collapsible-toggle,.mw-content-ltr .mw-content-rtl .mw-collapsible-toggle{float:left}.mw-customtoggle,.mw-collapsible-toggle{cursor:pointer} caption .mw-collapsible-toggle,.mw-content-ltr caption .mw-collapsible-toggle,.mw-content-rtl caption .mw-collapsible-toggle,.mw-content-rtl .mw-content-ltr caption .mw-collapsible-toggle,.mw-content-ltr .mw-content-rtl caption .mw-collapsible-toggle{float:none} li .mw-collapsible-toggle,.mw-content-ltr li .mw-collapsible-toggle,.mw-content-rtl li .mw-collapsible-toggle,.mw-content-rtl .mw-content-ltr li .mw-collapsible-toggle,.mw-content-ltr .mw-content-rtl li .mw-collapsible-toggle{float:none} .mw-collapsible-toggle-li{list-style:none}
+.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:none;z-index:1099;padding:0;margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0}.suggestions-result{color:black;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left; overflow:hidden;-o-text-overflow:ellipsis; text-overflow:ellipsis;white-space:nowrap}.suggestions-result-current{background-color:#4C59A6;color:white}.suggestions-special .special-label{color:gray;text-align:left}.suggestions-special .special-query{color:black;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:silver}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:white}.highlight{font-weight:bold}
+.postedit-container{margin:0 auto;position:fixed;top:0;height:0;left:50%;z-index:1000;font-size:13px}.postedit-container:hover{cursor:pointer}.postedit{position:relative;top:0.6em;left:-50%;padding:.6em 3.6em .6em 1.1em;line-height:1.5625em;color:#626465;background-color:#f4f4f4;border:1px solid #dcd9d9;text-shadow:0 0.0625em 0 rgba(255,255,255,0.5);border-radius:5px;box-shadow:0 2px 5px 0 #ccc;-webkit-transition:all 0.25s ease-in-out;-moz-transition:all 0.25s ease-in-out;-ms-transition:all 0.25s ease-in-out;-o-transition:all 0.25s ease-in-out;transition:all 0.25s ease-in-out}.skin-monobook .postedit{top:6em !important}.postedit-faded{opacity:0}.postedit-icon{padding-left:41px;  line-height:25px;background-repeat:no-repeat;background-position:8px 50%}.postedit-icon-checkmark{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABblBMVEUAAAD///////9PfTf///80aRdTgjn///9Feij///////////9Rfzf///////////9PfjZRgDh1o1xOfTb///////+bwYqLtnj///////9PfTa82K////9WhT6YxIL///9QgDdTgzr////////j7uDl7eLq8efi693k7OH///////9UhjuBr2rp9uRUhjr///9YljVKgir///9WiTlYjT3////9/v57vFlbkT5PjC9dlD/5/fhuq09stUTs9uhxuElctCpfnT1huDFloEZloUZmpENmvDZpvDxpvTxqvjxrvT5rvT9rwTxsqktswD5uwkBvuUdxw0NztFBztU9ztVBzwkp0tlJ1xkd2t1R3uVR4w1F4xk54x014yE15uVZ5v1R5xVB6v1R7yFJ8wVh9xVl9yFR9yVd9ylN+xVh+yFd/x1l/yFeAylmEx1+Ny2uY0Hqe04Wj1Ymv3Ze33qLD47TJ5L3O6cPU7Mrq9eb2+/Q4j37OAAAAQHRSTlMAAQIEBAUFBQwPFB4fJCUoKiosQEhJS01RUlZZXmdydXaChYuSlJSWmJmoq6uur8LExcvM19fg5ejt8fX2+Pr7SljgewAAAKpJREFUGBkFwQNCAwAAAMDLtl3LtrG4rWXbtvX77gAgZ6grFwC0bhwNVgKgdPZx8b0dgLi+s7Wn0VoAqpfOI9+BNADZI7fLrz2pSEwGHZuH+78lSK8ZLkLezF3ooyUG3VPXq2USei9WngeyoG195yBYWDF3E/2pAhl1e9Gr8bGT+bfOFCC2fnvh4X7rcqIAQNNu+HT6sxkAjceTL/2ZAIhv+PorBwBJxfkA//dFHSCBy/UTAAAAAElFTkSuQmCC);background-image:url(/resources/src/mediawiki.action/images/green-checkmark.png?9048a)!ie;background-position:left}.postedit-close{position:absolute;padding:0 .8em;right:0;top:0;font-size:1.25em;font-weight:bold;line-height:2.3em;color:black;text-shadow:0 0.0625em 0 white;text-decoration:none;opacity:0.2;filter:alpha(opacity=20)}.postedit-close:hover{color:black;text-decoration:none;opacity:0.4;filter:alpha(opacity=40)}</style><style>
+.suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:hover,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSuggest-link:focus{color:black;text-decoration:none}.suggestions-result-current a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-link:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.suggestions-result-current a.mw-searchSuggest-link:focus{color:white}.suggestions a.mw-searchSuggest-link .special-query{ overflow:hidden;-o-text-overflow:ellipsis; text-overflow:ellipsis;white-space:nowrap}</style><meta name="ResourceLoaderDynamicStyles" content="">
+<style>a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}</style>
+<script async="" src="./HowTo use the CDT to navigate Linux kernel source - Eclipsepedia_files/load(1).php"></script>
+<meta name="generator" content="MediaWiki 1.26.4">
+<link rel="shortcut icon" href="http://wiki.eclipse.org/eclipse.org-common/themes/solstice/public/images/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="http://wiki.eclipse.org/opensearch_desc.php" title="Eclipsepedia (en)">
+<link rel="EditURI" type="application/rsd+xml" href="http://wiki.eclipse.org/api.php?action=rsd">
+<link rel="alternate" type="application/atom+xml" title="Eclipsepedia Atom feed" href="http://wiki.eclipse.org/index.php?title=Special:RecentChanges&amp;feed=atom">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="./HowTo use the CDT to navigate Linux kernel source - Eclipsepedia_files/load(2).php"></script></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-HowTo_use_the_CDT_to_navigate_Linux_kernel_source skin-solstice action-view" id="solstice">
+<a class="sr-only" href="http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source#content">Skip to main content</a>
+<header role="banner" class="thin-header hidden-print" id="header-wrapper">
+  <div class="container-fluid reset">
+    <div class="row-fluid" id="header-row">
+      <div class="col-sm-6 col-md-6 col-lg-5" id="header-left">
+        <div class="wrapper-logo-default"><a href="https://www.eclipse.org/"><img class="logo-eclipse-default img-responsive hidden-xs padding-top-10" alt="logo" src="./HowTo use the CDT to navigate Linux kernel source - Eclipsepedia_files/eclipse-426x100.png"></a></div>
+      </div>
+      <div class="col-sm-18 col-md-18 col-lg-19" id="main-menu-wrapper">
+        <div class="navbar yamm navbar-right" id="main-menu">
+          <div id="navbar-collapse-1" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="visible-thin"><a href="https://www.eclipse.org/downloads/" target="_self">Download</a></li>
+              <li><a href="https://www.eclipse.org/users/" target="_self">Getting Started</a></li>
+              <li><a href="https://www.eclipse.org/membership/" target="_self">Members</a></li>
+              <li><a href="https://www.eclipse.org/projects/" target="_self">Projects</a></li>
+              <li class="dropdown visible-xs">
+                <a href="http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source#" data-toggle="dropdown" class="dropdown-toggle">Community <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://marketplace.eclipse.org/">Marketplace</a></li>
+                  <li><a href="http://events.eclipse.org/">Events</a></li>
+                  <li><a href="http://www.planeteclipse.org/">Planet Eclipse</a></li>
+                  <li><a href="https://www.eclipse.org/community/eclipse_newsletter/">Newsletter</a></li>
+                  <li><a href="https://www.youtube.com/user/EclipseFdn">Videos</a></li>
+                </ul>
+              </li>
+              <li class="dropdown visible-xs">
+                <a href="http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source#" data-toggle="dropdown" class="dropdown-toggle">Participate <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="https://bugs.eclipse.org/bugs/">Report a Bug</a></li>
+                  <li><a href="https://www.eclipse.org/forums/">Forums</a></li>
+                  <li><a href="https://www.eclipse.org/mail/">Mailing Lists</a></li>
+                  <li><a href="https://wiki.eclipse.org/">Wiki</a></li>
+                  <li><a href="https://wiki.eclipse.org/IRC">IRC</a></li>
+                  <li><a href="https://www.eclipse.org/contribute/">How to Contribute</a></li>
+                </ul>
+              </li>
+              <li class="dropdown visible-xs">
+                <a href="http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source#" data-toggle="dropdown" class="dropdown-toggle">Working Groups <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="http://wiki.eclipse.org/Auto_IWG">Automotive</a></li>
+                  <li><a href="http://iot.eclipse.org/">Internet of Things</a></li>
+                  <li><a href="http://locationtech.org/">LocationTech</a></li>
+                  <li><a href="http://lts.eclipse.org/">Long-Term Support</a></li>
+                  <li><a href="http://polarsys.org/">PolarSys</a></li>
+                  <li><a href="http://science.eclipse.org/">Science</a></li>
+                  <li><a href="http://www.openmdm.org/">OpenMDM</a></li>
+                </ul>
+              </li>
+              <!-- More -->
+              <li class="dropdown eclipse-more hidden-xs">
+                <a data-toggle="dropdown" class="dropdown-toggle">More<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <!-- Content container to add padding -->
+                    <div class="yamm-content">
+                      <div class="row">
+                        <ul class="col-sm-8 list-unstyled">
+                          <li>
+                            <p><strong>Community</strong></p>
+                          </li>
+                          <li><a href="http://marketplace.eclipse.org/">Marketplace</a></li>
+                          <li><a href="http://events.eclipse.org/">Events</a></li>
+                          <li><a href="http://www.planeteclipse.org/">Planet Eclipse</a></li>
+                          <li><a href="https://www.eclipse.org/community/eclipse_newsletter/">Newsletter</a></li>
+                          <li><a href="https://www.youtube.com/user/EclipseFdn">Videos</a></li>
+                        </ul>
+                        <ul class="col-sm-8 list-unstyled">
+                          <li>
+                            <p><strong>Participate</strong></p>
+                          </li>
+                          <li><a href="https://bugs.eclipse.org/bugs/">Report a Bug</a></li>
+                          <li><a href="https://www.eclipse.org/forums/">Forums</a></li>
+                          <li><a href="https://www.eclipse.org/mail/">Mailing Lists</a></li>
+                          <li><a href="https://wiki.eclipse.org/">Wiki</a></li>
+                          <li><a href="https://wiki.eclipse.org/IRC">IRC</a></li>
+                          <li><a href="https://www.eclipse.org/contribute/">How to Contribute</a></li>
+                        </ul>
+                        <ul class="col-sm-8 list-unstyled">
+                          <li>
+                            <p><strong>Working Groups</strong></p>
+                          </li>
+                          <li><a href="http://wiki.eclipse.org/Auto_IWG">Automotive</a></li>
+                          <li><a href="http://iot.eclipse.org/">Internet of Things</a></li>
+                          <li><a href="http://locationtech.org/">LocationTech</a></li>
+                          <li><a href="http://lts.eclipse.org/">Long-Term Support</a></li>
+                          <li><a href="http://polarsys.org/">PolarSys</a></li>
+                          <li><a href="http://science.eclipse.org/">Science</a></li>
+                          <li><a href="http://www.openmdm.org/">OpenMDM</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <div class="wrapper-logo-mobile"><a class="navbar-brand visible-xs" href="https://www.eclipse.org/"><img class="logo-eclipse-default-mobile img-responsive" alt="logo" src="./HowTo use the CDT to navigate Linux kernel source - Eclipsepedia_files/eclipse-800x188.png"></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<section class="hidden-print default-breadcrumbs" id="breadcrumb">
+  <div class="container-fluid">
+    <h3 class="sr-only">Breadcrumbs</h3>
+    <div class="row-fluid">
+      <div class="col-xs-24">
+        <ol class="breadcrumb">
+          <li><a href="https://www.eclipse.org/">Home</a></li>
+          <li><a href="http://wiki.eclipse.org/Main_Page">Eclipse Wiki</a></li>
+          <li class="active">HowTo use the CDT to navigate Linux kernel source</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /#breadcrumb -->
+<div class="toolbar-menu breadcrumbs-offset noprint hidden-print margin-bottom-0 clearfix">
+  <div class="col-md-24">
+          <ol class="breadcrumb" role="navigation">
+                  <li id="pt-login">
+            <a href="http://wiki.eclipse.org/index.php?title=Special:UserLogin&amp;returnto=HowTo+use+the+CDT+to+navigate+Linux+kernel+source">
+              <i class="fa fa-sign-in fa-fw orange"></i> Log in            </a>
+          </li>
+              
+      </ol></div>
+</div>
+<main role="main" class="background-grey no-promo">
+<div class="container-full">
+
+    
+    
+    <!-- content -->
+    <section id="content" class="mw-body container-full clearfix 0">
+      <div id="mw-js-message" style="display:none;"></div>
+
+      
+      <!-- bodyContent -->
+      <div id="bodyContent">
+
+        
+                <!-- jumpto -->
+        <div id="jump-to-nav" class="mw-jump">
+          Jump to: <a href="http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source#mw-head">navigation</a>,
+          <a href="http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source#p-search">search</a>
+        </div>
+        <!-- /jumpto -->
+        
+          <!-- leftcol -->
+          <aside class="col-md-4 noprint hidden-print" id="leftcol">
+                      <form class="input-group" role="form" id="form-eclipse-search" action="http://wiki.eclipse.org/index.php">
+              <input id="searchInput" class="search-query form-control" type="search" accesskey="f" title="Special:Search [alt-shift-f]" placeholder="Search" name="search" value="" autocomplete="off">
+
+              <span class="input-group-btn">
+                <button value="search" id="mw-searchButton" type="submit" class="btn btn-default" title="Search the pages for this text" name="fulltext">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </form>
+                      <select class="form-control margin-top-10 margin-bottom-10 visible-xs visible-sm" onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);"><option class="fw-700 ">---Navigation---</option><option value="/Main_Page">Main Page</option><option value="/Eclipsepedia:Community_portal">Community portal</option><option value="/Eclipsepedia:Current_events">Current events</option><option value="/Special:RecentChanges">Recent changes</option><option value="/Special:Random">Random page</option><option value="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents">Help</option></select><ul class="ul-left-nav fa-ul hidden-print leftnav hidden-xs hidden-sm"><li class="separator"><span class="separator">Navigation</span></li>                <li class=""><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/Main_Page" id="n-mainpage" title="Visit the main page [alt-shift-z]" accesskey="z">Main Page</a></li>                <li class=""><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/Eclipsepedia:Community_portal" id="n-portal" title="About the project, what you can do, where to find things">Community portal</a></li>                <li class=""><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/Eclipsepedia:Current_events" id="n-currentevents" title="Find background information on current events">Current events</a></li>                <li class=""><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/Special:RecentChanges" id="n-recentchanges" title="A list of recent changes in the wiki [alt-shift-r]" accesskey="r">Recent changes</a></li>                <li class=""><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/Special:Random" id="n-randompage" title="Load a random page [alt-shift-x]" accesskey="x">Random page</a></li>                <li class=""><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" id="n-help" title="The place to find out">Help</a></li></ul>            <select class="form-control margin-top-10 margin-bottom-10 visible-xs visible-sm" onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);"><option class="fw-700 ">---Toolbox---</option><option value="/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;action=info">Page information</option><option value="/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;oldid=423316">Permanent link</option><option value="/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;printable=yes">Printable version</option><option value="/Special:SpecialPages">Special pages</option><option value="/Special:RecentChangesLinked/HowTo_use_the_CDT_to_navigate_Linux_kernel_source">Related changes</option><option value="/Special:WhatLinksHere/HowTo_use_the_CDT_to_navigate_Linux_kernel_source">What links here</option></select><ul class="ul-left-nav fa-ul hidden-print leftnav hidden-xs hidden-sm"><li class="separator"><span class="separator">Toolbox</span></li><li><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;action=info" id="t-info" title="More information about this page">Page information</a></li><li><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;oldid=423316" id="t-permalink" title="Permanent link to this revision of the page">Permanent link</a></li><li><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;printable=yes" id="t-print" rel="alternate" title="Printable version of this page [alt-shift-p]" accesskey="p">Printable version</a></li><li><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/Special:SpecialPages" id="t-specialpages" title="A list of all special pages [alt-shift-q]" accesskey="q">Special pages</a></li><li><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/Special:RecentChangesLinked/HowTo_use_the_CDT_to_navigate_Linux_kernel_source" id="t-recentchangeslinked" title="Recent changes in pages linked from this page [alt-shift-k]" accesskey="k">Related changes</a></li><li><i class="fa fa-angle-double-right orange fa-fw"></i> <a href="http://wiki.eclipse.org/Special:WhatLinksHere/HowTo_use_the_CDT_to_navigate_Linux_kernel_source" id="t-whatlinkshere" title="A list of all wiki pages that link here [alt-shift-j]" accesskey="j">What links here</a></li></ul>                                  </aside>
+          <!-- /leftcol -->
+
+          <!-- mainContent -->
+          <div id="mainContent" class="col-md-20">
+                      <ul class="nav nav-tabs noprint hidden-print" role="tablist">
+                       <li id="ca-nstab-main" class="active"><a href="http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source" title="View the content page [alt-shift-c]" accesskey="c" tabindex="-1">Page</a></li>
+                        <li id="ca-talk"><a href="http://wiki.eclipse.org/Talk:HowTo_use_the_CDT_to_navigate_Linux_kernel_source" title="Discussion about the content page [alt-shift-t]" accesskey="t" tabindex="-1">Discussion</a></li>
+                        <li id="ca-viewsource"><a href="http://wiki.eclipse.org/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;action=edit" title="This page is protected.
+You can view its source [alt-shift-e]" accesskey="e" tabindex="-1">View source</a></li>
+                        <li id="ca-history" class="collapsible"><a href="http://wiki.eclipse.org/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;action=history" title="Past revisions of this page [alt-shift-h]" accesskey="h" tabindex="-1">History</a></li>
+                      </ul>            <div class="tab-content background-white">
+              <div id="tab-pane-main-page-content" class="tab-pane active">
+
+                
+                <h1 id="firstHeading" class="firstHeading page-header">
+                  <span dir="auto">HowTo use the CDT to navigate Linux kernel source</span>
+                </h1>
+                <div id="main-page-content">
+                                    
+                  
+                  <div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><p>Here are some steps that I've found to get the CDT to work well with the Linux kernel source. If you exclude some of these steps, it may still work to a large degree, but some things may not work exactly right; for example it may find the wrong include file for a C file.
+</p><p>Anyway, as you do these steps, I think you may understand how they assist the indexer to do a good job for the Linux kernel source.
+</p><p><i>Disclaimer: these steps were last updated for Eclipse Oxygen 4.7.2 + CDT 9.4.0, and originally developed for Eclipse 3.5.1 + CDT 6.0.0</i>
+</p>
+<ol><li>Download and install Eclipse plus the CDT. </li>
+<li>Configure and build your kernel to define CONFIG_* and generate autoconf.h. This can be done before or after downloading and installing Eclipse.</li>
+<li>Ensure that you have the right kernel source (e.g. make sure you are on the right git branch).  If you check out another branch later, that's ok, but you will need to re-index the source, and that takes about 20 minutes.</li>
+<li>Start up Eclipse. </li>
+<li>Click <b>File</b>-&gt;<b>New</b>-&gt;<b>C Project</b> </li>
+<li>Fill in a project name like <i>my_kernel</i> </li>
+<li>Uncheck the <b>Use default location</b> box and type in the root directory of your kernel into the <b>Location</b> box. </li>
+<li>In the <b>Project type:</b> pane, click the <b>Makefile project</b> and select <b>Empty Project</b> </li>
+<li>On the right side, select <b>Linux GCC</b> </li>
+<li>Click <b>Advanced settings...</b> and a Properties dialog will pop up.</li>
+<li> Note: At this point, latest Eclipse versions (e.g. Oxygen) will aggressively start indexing your project, which can make Eclipse painfully slow for the rest of the configuration steps below -- especially if the desire is to only index a small relevant part of the kernel. To mitigate that, temporarily disable indexing now by opening <b>C/C++ General</b> section, click on <b>Indexer</b>, click on <b>Enable project-specific settings</b>, then unmark the <b>Enable indexer</b> option.  </li>
+<li>Open the <b>C/C++ General</b> selection on the left.</li>
+<li>Click on <b>Preprocessor Include Paths</b></li>
+<li>Select <b>GNU C</b> in the <b>Languages</b> list</li>
+<li>Select <b>CDT User Setting Entries</b> in the <b>Setting Entries</b> list</li>
+<li>Click on <b>Add...</b>. Choose <b>Preprocessor Macros File</b> from the top left dropdown, <b>Project Path</b> from the top right dropdown, and enter "<span style="font-family:monospace;">include/linux/kconfig.h</span>" into the <b>File</b> text box. Note 1: For older kernels (e.g. 4.1.12, 4.2.7, or less), selecting "<span style="font-family:monospace;">include/generated/autoconf.h</span>" works better. In newer kernels, selecting <span style="font-family:monospace;">kconfig.h</span> is better as this file includes &lt;generated/autoconf.h&gt; and also makes sure that tests such as IS_ENABLED(option) are correctly expanded by the CDT scanner. Note 2: For kernels older than 2.6.33, the location of autoconf.h is <span style="font-family:monospace;">include/linux/autoconf.h</span></li>
+<li>Also add any other macros files you are using. </li>
+<li>Click on <b>Indexer</b></li>
+<li>Checkmark the <b>Enable project specific setttings</b> box.</li>
+<li>Uncheck <b>Index source files not included in the build</b></li>
+<li>Click on <b>Paths and Symbols</b> on the left. </li>
+<li>Select the <b>Includes</b> tab and then select <b>GNU C</b> </li>
+<li>Click <b>Add...</b> </li>
+<li>Click <b>Workspace...</b> then select your kernel's <span style="font-family:monospace;">include</span>, and <span style="font-family:monospace;">include/uapi</span> directories </li>
+<li>Do another Add, Workspace and add both <span style="font-family:monospace;">arch/</span><i>architecture</i><span style="font-family:monospace;">/include</span>, and <span style="font-family:monospace;">arch/</span><i>architecture</i><span style="font-family:monospace;">/include/uapi</span> directories. e.g., <span style="font-family:monospace;">arch/powerpc/include</span> and <span style="font-family:monospace;">arch/powerpc/include/uapi</span> (The UAPI directories are due to the kernel's user/kernel header split covered <a rel="nofollow" class="external text" href="http://lwn.net/Articles/507794/">here</a> in-detail)</li>
+<li>Click the <b># Symbols</b> tab </li>
+<li>Click <b>Add...</b> </li>
+<li>Set the name to <span style="font-family:monospace;">__KERNEL__</span></li>
+<li>Set the value to <span style="font-family:monospace;">1</span> and click <b>OK</b> </li>
+<li>Click the <b>Source Location</b> tab </li>
+<li>Click the plus sign next to your project name.</li>
+<li>Select the <b>Filter</b> item and click <b>Edit Filter...</b> </li>
+<li>Click <b>Add Multiple...</b> and then select all of the <span style="font-family:monospace;">arch/*</span> directories in your kernel source that will not be used (i.e. all the ones that are not for the architecture you are using) </li>
+<li>Click <b>OK</b> and <b>OK</b> again to dismiss that dialog. </li>
+<li>Under <b>C/C++ General</b>, select <b>Preprocessor Include Paths, Macros etc.</b></li>
+<li>Click the <b>Providers</b> tab and select <b>CDT GCC Built-in Compiler Settings</b></li>
+<li>Uncheck <b>Use global provider shared between projects</b></li>
+<li>Append <span style="font-family:monospace;">-nostdinc</span> to the curretly-existing <b>Command to get compiler specs</b>. The kernel is a <i>free-standing</i> environment by ISO C99 definition. That is, it does not want to be polluted, and obviously cannot work with, the "host" header files and libraries.</li>
+<li>Also append <span style="font-family:monospace;">-iwithprefix include</span> to the <b>Command to get compiler specs</b> above. Rationale is, <span style="font-family:monospace;">-nostdinc</span> above asked gcc to <i>not</i> search the standard system directories for header files. But the Linux Kernel depends on GCC-provided "freestanding environment" headers like <i>stdarg.h</i>, <i>stdbool.h</i>, etc., and which are typically hosted by GCC under <i>/lib/gcc/&lt;arch&gt;/&lt;version&gt;/include</i>. Thus the append.</li>
+<li>Check <b>Allocate console in the Console View</b> so you can see that this is working</li>
+<li>Click <b>OK</b> on the Properties dialog.</li>
+<li>Note: If you temporarily disabled indexing as earlier recommended. This is the right time to re-enable it. Under <b>C/C++ General</b>, click on <b>Indexer</b>, and mark the <b>Enable indexer</b> option.</li>
+<li>Click <b>Finish</b> on the C Project dialog.</li>
+<li>The Project will index automatically. </li>
+<li>On a platter drive indexing will take upwards of 20 minutes to complete, on a SSD indexing will take about 5 minutes to complete.</li></ol>
+<p>Notes:
+</p>
+<ol><li> Adding <span style="font-family:monospace;">include</span> and <span style="font-family:monospace;">arch/</span><i>architecture</i><span style="font-family:monospace;">/include</span> only gets you a couple of the common include paths.  To fully index all of the kernel, you would have to add dozens of paths, unfortunately.  For this reason, I advise against using PTP's remote indexing capability for the linux kernel, because what happens is that it will report thousands of errors in locating header files, and the process of reporting those errors over a possibly long-latency link, will cause the indexing to take many hours.</li>
+<li> If you change any of your CONFIG_* settings, in order for Eclipse to recognize those changes, you may need to do a "build" from within Eclipse.  Note, this does <i>not</i> mean to re-build the index; this means to build the kernel, by having Eclipse invoke make (this is normally bound to the Ctrl-B key in Eclipse).  Eclipse should automatically detect changes to include/generated/autoconf.h, reread the compilation #defines it uses, and reindex.</li>
+<li> The background color of "Quick Context View" will be dark if the Ambiance theme in Ubuntu is selected.</li>
+<li>For some people, Eclipse may fail to index the kernel with a out of memory error.  The fix seems to be to start eclipse with the arguments: eclipse  -vmargs -Xmx650M  </li></ol>
+<p>Corey Ashford <a rel="nofollow" class="external text" href="mailto:cjashfor@us.ibm.com">cjashfor@us.ibm.com</a>
+</p><p>Updated by Adam Duskett <a rel="nofollow" class="external text" href="mailto:Aduskett@gmail.com">Aduskett@gmail.com</a>
+</p><p>Continuous kernel-related updates (from <i>v2.6.33</i> up to <i>v4.15</i>) by Ahmed S. Darwish <a rel="nofollow" class="external text" href="mailto:darwish.07@gmail.com">darwish.07@gmail.com</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20180319213419
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.040 seconds
+Real time usage: 0.037 seconds
+Preprocessor visited node count: 106/1000000
+Preprocessor generated node count: 432/1000000
+Post‐expand include size: 1178/2097152 bytes
+Template argument size: 254/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- 
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   19.244      1 - -total
+ 58.05%   11.171     21 - Template:Code
+-->
+
+<!-- Saved in parser cache with key my_wiki:pcache:idhash:22423-0!*!*!*!*!*!* and timestamp 20180319213419 and revision id 423316
+ -->
+</div>
+                                      <!-- catlinks -->
+                    <div id="catlinks" class="catlinks catlinks-allhidden"></div>                     <!-- /catlinks -->
+                                  </div>
+              </div>
+            </div>
+          </div>
+        <!-- /maincontent -->
+
+                <!-- printfooter -->
+        <div class="printfooter">
+        Retrieved from "<a dir="ltr" href="http://wiki.eclipse.org/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;oldid=423316">http://wiki.eclipse.org/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;oldid=423316</a>"        </div>
+        <!-- /printfooter -->
+        
+        
+        <!-- debughtml -->
+                <!-- /debughtml -->
+
+      </div>
+      <!-- /bodyContent -->
+    </section>
+    <!-- /content -->
+
+    <!-- footer -->
+    </div>
+<section id="footer-contribution-info" style="border-top:1px solid #ccc;" class="footer-offset background-white margin-top-25"><div class="container text-center padding-top-10 padding-bottom-10"><p id="footercredit">This page was last modified 01:45, 27 February 2018 by <a href="http://wiki.eclipse.org/index.php?title=User:Darwish.07.gmail.com&amp;action=edit&amp;redlink=1" class="new" title="User:Darwish.07.gmail.com (page does not exist)">Ahmed S. Darwish</a>. Based on work by <a href="http://wiki.eclipse.org/index.php?title=User:Nfd.zurich.ibm.com&amp;action=edit&amp;redlink=1" class="new" title="User:Nfd.zurich.ibm.com (page does not exist)">Fredy Neeser</a>, <a href="http://wiki.eclipse.org/index.php?title=User:Aduskett.gmail.com&amp;action=edit&amp;redlink=1" class="new" title="User:Aduskett.gmail.com (page does not exist)">Adam Duskett</a> and <a href="http://wiki.eclipse.org/index.php?title=User:Ramon.fried.gmail.com&amp;action=edit&amp;redlink=1" class="new" title="User:Ramon.fried.gmail.com (page does not exist)">Ramon Fried</a> and <a href="http://wiki.eclipse.org/index.php?title=HowTo_use_the_CDT_to_navigate_Linux_kernel_source&amp;action=credits" title="HowTo use the CDT to navigate Linux kernel source">others</a>.</p><p id="footerviews"></p></div></section></main> <!-- /#main-content-container-row -->
+<p id="back-to-top" class="noprint hidden-print">
+  <a class="visible-xs" href="http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source#top">Back to the top</a>
+</p>
+<footer role="contentinfo" id="solstice-footer" class="noprint hidden-print">
+  <div class="container">
+    <div class="row">
+      <section class="col-sm-offset-1 col-xs-11 col-sm-7 col-md-6 col-md-offset-0 hidden-print" id="footer-eclipse-foundation">
+        <h2 class="section-title">Eclipse Foundation</h2>
+        <ul class="nav">
+          <li><a href="https://www.eclipse.org/org/">About us</a></li>
+          <li><a href="https://www.eclipse.org/org/foundation/contact.php">Contact Us</a></li>
+          <li><a href="https://www.eclipse.org/donate">Donate</a></li>
+          <li><a href="https://www.eclipse.org/org/documents/">Governance</a></li>
+          <li><a href="https://www.eclipse.org/artwork/">Logo and Artwork</a></li>
+          <li><a href="https://www.eclipse.org/org/foundation/directors.php">Board of Directors</a></li>
+        </ul>
+      </section>
+      <section class="col-sm-offset-1 col-xs-11 col-sm-7 col-md-6 col-md-offset-0 hidden-print" id="footer-legal">
+        <h2 class="section-title">Legal</h2>
+        <ul class="nav">
+          <li><a href="https://www.eclipse.org/legal/privacy.php">Privacy Policy</a></li>
+          <li><a href="https://www.eclipse.org/legal/termsofuse.php">Terms of Use</a></li>
+          <li><a href="https://www.eclipse.org/legal/copyright.php">Copyright Agent</a></li>
+          <li><a href="https://www.eclipse.org/legal/epl-2.0/">Eclipse Public License</a></li>
+          <li><a href="https://www.eclipse.org/legal/">Legal Resources </a></li>
+        </ul>
+      </section>
+      <section class="col-sm-offset-1 col-xs-11 col-sm-7 col-md-6 col-md-offset-0 hidden-print" id="footer-useful-links">
+        <h2 class="section-title">Useful Links</h2>
+        <ul class="nav">
+          <li><a href="https://bugs.eclipse.org/bugs/">Report a Bug</a></li>
+          <li><a href="http://help.eclipse.org/">Documentation</a></li>
+          <li><a href="https://www.eclipse.org/contribute/">How to Contribute</a></li>
+          <li><a href="https://www.eclipse.org/mail/">Mailing Lists</a></li>
+          <li><a href="https://www.eclipse.org/forums/">Forums</a></li>
+          <li><a href="http://marketplace.eclipse.org/">Marketplace</a></li>
+        </ul>
+      </section>
+      <section class="col-sm-offset-1 col-xs-11 col-sm-7 col-md-6 col-md-offset-0 hidden-print" id="footer-other">
+        <h2 class="section-title">Other</h2>
+        <ul class="nav">
+          <li><a href="https://www.eclipse.org/ide/">IDE and Tools</a></li>
+          <li><a href="https://www.eclipse.org/projects">Community of Projects</a></li>
+          <li><a href="https://www.eclipse.org/org/workinggroups/">Working Groups</a></li>
+          <li><a href="https://www.eclipse.org/org/research/">Research@Eclipse</a></li>
+          <li><a href="https://status.eclipse.org/">Service Status</a></li>
+        </ul>
+        <ul class="list-inline social-media">
+          <li><a href="https://twitter.com/EclipseFdn"><i class="fa fa-twitter-square"></i></a></li>
+          <li><a href="https://plus.google.com/+Eclipse"><i class="fa fa-google-plus-square"></i></a></li>
+          <li><a href="https://www.facebook.com/eclipse.org"><i class="fa fa-facebook-square"></i> </a></li>
+          <li><a href="https://www.youtube.com/user/EclipseFdn"><i class="fa fa-youtube-square"></i></a></li>
+        </ul>
+      </section>
+      <div id="copyright" class="col-sm-offset-1 col-sm-14 col-md-24 col-md-offset-0">
+        <span class="hidden-print">
+          <div class="wrapper-logo-eclipse-white"><a href="https://www.eclipse.org/"><img class="logo-eclipse-white img-responsive" alt="logo" src="./HowTo use the CDT to navigate Linux kernel source - Eclipsepedia_files/eclipse-logo-bw-332x78.png"></a></div>
+        </span>
+        <p id="copyright-text">Copyright © Eclipse Foundation, Inc. All Rights Reserved.</p>
+      </div>
+      <a href="http://wiki.eclipse.org/HowTo_use_the_CDT_to_navigate_Linux_kernel_source#" class="scrollup" style="display: block;">Back to the top</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-910670-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+    <!-- /footer -->
+    <script>window.RLQ = window.RLQ || []; window.RLQ.push( function () {
+mw.loader.state({"skins.solstice":"loading","user":"ready","user.groups":"ready"});mw.loader.load("/load.php?debug=false\u0026lang=en\u0026modules=skins.solstice\u0026only=scripts\u0026skin=solstice");mw.loader.load(["mediawiki.action.view.postEdit","site","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest"]);
+} );</script><script>window.RLQ = window.RLQ || []; window.RLQ.push( function () {
+mw.config.set({"wgBackendResponseTime":418});
+} );</script>  
+
+<div class="suggestions" style="display: none; font-size: 14px;"><div class="suggestions-results"></div><div class="suggestions-special"></div></div></body></html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)http://www.alexeyshmalko.com/2014/using-vim-as-c-cpp-ide/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        
+            <title>Using Vim as C/C++ IDE | Alexey Shmalko's Personal Blog</title>
+        
+        
+            <meta name="description" content="How to turn Vim into a powerful C/C++ IDE.">
+        
+        
+            <meta name="keywords" content="vim,ide,c,c++,java,clang,configuration">
+        
+        <link rel="canonical" href="http://www.alexeyshmalko.com/2014/using-vim-as-c-cpp-ide/">
+
+        <link rel="alternate" href="http://www.alexeyshmalko.com/rss.xml" title="Alexey Shmalko&#39;s Personal Blog" type="application/rss+xml">
+        <link rel="alternate" href="http://www.alexeyshmalko.com/atom.xml" title="Alexey Shmalko&#39;s Personal Blog" type="application/atom+xml">
+
+        <link rel="stylesheet" type="text/css" href="./Using Vim as C_C++ IDE _ Alexey Shmalko&#39;s Personal Blog_files/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="./Using Vim as C_C++ IDE _ Alexey Shmalko&#39;s Personal Blog_files/default.css">
+    <script type="text/javascript" async="" src="./Using Vim as C_C++ IDE _ Alexey Shmalko&#39;s Personal Blog_files/linkid.js"></script><script async="" src="./Using Vim as C_C++ IDE _ Alexey Shmalko&#39;s Personal Blog_files/analytics.js"></script><script type="text/javascript" async="" src="http://alexeyshmalko.disqus.com/embed.js"></script></head>
+
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://www.alexeyshmalko.com/">Alexey Shmalko's Personal Blog</a>
+                </div>
+                <div class="collapse navbar-collapse" id="menu-collapse">
+                    <ul class="navbar-right nav navbar-nav">
+                        <li><a href="http://www.alexeyshmalko.com/">Home</a></li>
+                        <li><a href="http://www.alexeyshmalko.com/reviews/">Reviews</a></li>
+                        <li><a href="http://www.alexeyshmalko.com/about-me/">About</a></li>
+                        <li><a href="http://www.alexeyshmalko.com/contact/">Contact</a></li>
+                        <li><a href="http://www.alexeyshmalko.com/archive/">Archive</a></li>
+                        <li class="dropdown">
+                            <a href="http://www.alexeyshmalko.com/2014/using-vim-as-c-cpp-ide/#" "="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Feed <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://www.alexeyshmalko.com/rss.xml">RSS</a></li>
+                                <li><a href="http://www.alexeyshmalko.com/atom.xml">Atom</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div id="content">
+                <h1 id="page-title">Using Vim as C/C++ IDE</h1>
+<div class="info">
+    April  2, 2014
+    
+        by Alexey Shmalko
+    
+    <br>
+    
+    Tags: <a href="http://www.alexeyshmalko.com/tags/C/">C</a>, <a href="http://www.alexeyshmalko.com/tags/clang/">clang</a>, <a href="http://www.alexeyshmalko.com/tags/Vim/">Vim</a>
+    
+</div>
+
+<p>I’m an embedded operating system developer and I do all my development tasks solely in the terminal.</p>
+<p>The primary tool, which helps me to accomplish this, is Vim. Today, I will describe how to turn Vim into a powerful IDE for C/C++ projects. I will not recommend you any plugin for project management since vanilla Vim already has all the power to cope with this task.</p>
+<p>Despite the fact that I use Vim as a C IDE, the part of following recommendations are pretty general and may be applied to any kind of project.</p>
+<!--more-->
+<h1 id="prerequirements">Prerequirements</h1>
+<p>First of all, you want to enable <b>exrc</b> option. This option forces Vim to source .vimrc file if it present in working directory, thus providing a place to store project-specific configuration.</p>
+<p>Since Vim will source .vimrc from any directory you run Vim from, this is a potential security hole; so, you should consider setting <b>secure</b> option. This option will restrict usage of some commands in non-default .vimrc files; commands that write to file or execute shell commands are not allowed and map commands are displayed.</p>
+<p>So, you should add these two lines to your main .vimrc file.</p>
+<pre><code>set exrc
+set secure</code></pre>
+<h1 id="project-specific-options">Project-specific options</h1>
+<p>After you managed to store Vim settings on a per-directory basis, you should place all your project-specific settings in the .vimrc file at top directory of your project.</p>
+<p>First of all, you want to set indentation rules for your project (I suppose, your project has kind of style guide).</p>
+<pre><code>set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set noexpandtab</code></pre>
+<p>I also try to keep my lines 110 chars at most. But I don’t trust Vim such an important task as line breaking because it depends on context too much. So, the thing I want is to see exactly how much space is left, so I highlight column number 110 with color.</p>
+<pre><code>set colorcolumn=110
+highlight ColorColumn ctermbg=darkgray</code></pre>
+<h1 id="filetype-detection">Filetype detection</h1>
+<p>By default, Vim assumes all .h files to be C++ files. However, I work with pure C and want filetype to be c. Since project also comes with doxygen documentation, I want to set subtype to doxygen to enable very nice doxygen highlighting.</p>
+<p>Add lines like these to your local .vimrc file:</p>
+<pre><code>augroup project
+    autocmd!
+    autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
+augroup END</code></pre>
+<h1 id="setting-path-variable">Setting path variable</h1>
+<p>Vim has a <b>gf</b> command (and related, &lt;C-W&gt;&lt;C-F&gt; to open in new tab) which open file whose name is under or after the cursor. This feature is extremely useful for browsing header files.</p>
+<p>By default, Vim searches file in working directory. However, most projects have separated directory for include files. Thus, you should set Vim’s <b>path</b> option to contain a comma-separated list of directories to look for the file.</p>
+<pre><code>let &amp;path.="src/include,/usr/include/AL,"</code></pre>
+<h3 id="note">Note</h3>
+<p>Java users should pay attention to <b>includeexpr</b> option. It holds expression which will be used to transform a string to a file name. The following line changes all “.” to “/” for <b>gf</b> command (and related):</p>
+<pre><code>set includeexpr=substitute(v:fname,'\\.','/','g')</code></pre>
+<h1 id="autocomplete">Autocomplete</h1>
+<p><del>The best</del> (Outdated. Now I use YouCompleteMe. See <a href="http://www.alexeyshmalko.com/2014/youcompleteme-ultimate-autocomplete-plugin-for-vim/">my post</a> for details) Good autocomplete plugin for C/C++ language I found is a <a href="https://github.com/Rip-Rip/clang_complete">clang_complete</a> (refer to plugin page for installation instructions).</p>
+<p>It uses clang to generate a list of suggestions and works fine for both C and C++.</p>
+<p>To let clang know about your include directories custom defines, you should place your <code>-I</code> and <code>-D</code> compiler flags into the .clang_complete file at the root of your project.</p>
+<h3 id="tip">Tip</h3>
+<p>If you already populated <b>path</b> option with include directories, you may use the following command to insert list of compiler options:</p>
+<pre><code>"='-I'.substitute(&amp;path, ',', '\n-I', 'g')&lt;cr&gt;p</code></pre>
+<p>(After that, you should review generated list for inconsistency because it’s okay to put several commas in row or end line with one in <b>path</b> option)</p>
+<h1 id="project-drawer">Project drawer</h1>
+<p>To display a project tree, you can use either custom plugins (<a href="https://github.com/scrooloose/nerdtree">NERD Tree</a>), or built-in netrw plugin.</p>
+<p>I don’t use any of them as project drawer because I’m pretty comfortable with selecting files directly from command mode.</p>
+<p><a href="http://vimcasts.org/blog/2013/01/oil-and-vinegar-split-windows-and-project-drawer/">One interesting article about project drawer and Vim.</a></p>
+<h1 id="configure-build-system">Configure build system</h1>
+<p>After you’re done with file editing and navigation, you want to configure Vim to compile your project. Vim has a <b>make</b> command which, by default, executes make in current directory and parses output for errors.</p>
+<p>The actual command to execute is stored in <b>makeprg</b> option. If you build your project out-of-source, with custom make arguments or even a different build command, just change <b>makeprg</b> to reflect this.</p>
+<pre><code>set makeprg=make\ -C\ ../build\ -j9</code></pre>
+<p>After that, you can compile your project as quickly as typing “:make.” You may go further and bind this command to one of the keys. For example:</p>
+<pre><code>nnoremap &lt;F4&gt; :make!&lt;cr&gt;</code></pre>
+<p>(<code>!</code> mark prevents Vim from jumping to location of first error found)</p>
+<h1 id="configure-launch-system">Configure launch system</h1>
+<p>After you build your project, it’s expected to run it. You can execute any shell command from Vim’s command mode if you prepend it with <code>!</code>. So, to run your great program, you just type <code>:!./my_great_program</code>.</p>
+<p>Of course, you want to bind it to something simpler:</p>
+<pre><code>nnoremap &lt;F5&gt; :!./my_great_program&lt;cr&gt;</code></pre>
+<h1 id="version-control-support">Version control support</h1>
+<p>Since Vim provides access to the shell, I don’t actually use any special plugin for this task and manage git tree completely from the shell.</p>
+<p>But I should mention that there are powerful Vim plugins for version control systems. For example, <a href="https://github.com/tpope/vim-fugitive">fugitive</a>. If you work with git, you absolutely must look at <a href="http://vimcasts.org/episodes/fugitive-vim---a-complement-to-command-line-git/">fugitive vimcasts</a>.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>After a couple of simple operations, we added and uncovered a lot of Vim features and built a completely Integrated Development Environment.</p>
+<p>I would be glad to hear how you combined your tools together. So, go ahead and drop down a comment.</p>
+
+<div id="sharing">
+<script type="text/javascript">
+  reddit_url = "http://www.alexeyshmalko.com/2014/using-vim-as-c-cpp-ide/";
+  reddit_title = "Using Vim as C/C++ IDE | Alexey Shmalko's Personal Blog";
+</script>
+<script type="text/javascript" src="./Using Vim as C_C++ IDE _ Alexey Shmalko&#39;s Personal Blog_files/button1.js"></script><iframe src="./Using Vim as C_C++ IDE _ Alexey Shmalko&#39;s Personal Blog_files/button1.html" height="22" width="120" scrolling="no" frameborder="0"></iframe>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'alexeyshmalko';
+    var disqus_url = 'http://www.alexeyshmalko.com/2014/using-vim-as-c-cpp-ide/';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the &lt;a href="https://disqus.com/?ref_noscript" rel="nofollow"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+
+
+
+            </div>
+
+            <div id="footer">
+                Powered by
+                <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+            </div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="./Using Vim as C_C++ IDE _ Alexey Shmalko&#39;s Personal Blog_files/bootstrap.min.js"></script>
+
+        <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-49556972-1', 'auto');
+    ga('require', 'linkid', 'linkid.js');
+    ga('send', 'pageview');
+</script>
+
+    
+
+</body></html>

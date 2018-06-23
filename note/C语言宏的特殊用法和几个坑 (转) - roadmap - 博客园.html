@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://www.cnblogs.com/roadmap99/p/6868930.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/bundle-BlackLowKey.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/bundle-BlackLowKey-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/roadmap99/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/roadmap99/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/roadmap99/wlwmanifest.xml">
+<script async="" src="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/analytics.js"></script><script src="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'roadmap99', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/roadmap99/"><img id="blogLogo" src="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/roadmap99/">roadmap</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/roadmap99/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/roadmap">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/roadmap99/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/roadmap99/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 32&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 0</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/roadmap99/p/6868930.html">C语言宏的特殊用法和几个坑 (转)</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><h2 class="p-name entry-title blog-post-title">总结一下C语言中宏的一些特殊用法和几个容易踩的坑。由于本文主要参考GCC文档，某些细节（如宏参数中的空格是否处理之类）在别的编译器可能有细微差别，请参考相应文档。</h2>
+<div class="e-content entry-content">
+<h3>宏基础</h3>
+<p>宏仅仅是在C预处理阶段的一种文本替换工具，编译完之后对二进制代码不可见。基本用法如下：</p>
+<h4>1. 标示符别名</h4>
+<pre class="code literal-block"><span class="cp">#define BUFFER_SIZE 1024
+</span></pre>
+<p>预处理阶段，<code>foo = (char *) malloc (BUFFER_SIZE);</code>会被替换成<code>foo = (char *) malloc (1024);</code></p>
+<p>宏体换行需要在行末加反斜杠\</p>
+<pre class="code literal-block"><span class="cp">#define NUMBERS 1, \
+<span class="cp">                2, \
+<span class="cp">                3
+</span></span></span></pre>
+<p>预处理阶段<code>int x[] = { NUMBERS };</code>会被扩展成<code>int x[] = { 1, 2, 3 };</code></p>
+<h4>2. 宏函数</h4>
+<p>宏名之后带括号的宏被认为是宏函数。用法和普通函数一样，只不过在预处理阶段，宏函数会被展开。优点是没有普通函数保存寄存器和参数传递的开销，展开后的代码有利于CPU cache的利用和指令预测，速度快。缺点是可执行代码体积大。</p>
+<pre class="code literal-block"><span class="cp">#define min(X, Y)  ((X) &lt; (Y) ? (X) : (Y))
+</span></pre>
+<p><code>y = min(1, 2);</code>会被扩展成<code>y = ((1) &lt; (2) ? (1) : (2));</code></p>
+<hr>
+<h3>宏特殊用法</h3>
+<h4>1. 字符串化(Stringification)</h4>
+<p>在宏体中，如果宏参数前加个<code>#</code>，那么在宏体扩展的时候，宏参数会被扩展成字符串的形式。如：</p>
+<pre class="code literal-block"><span class="cp">#define WARN_IF(EXP) \
+<span class="cp">     do { if (EXP) \
+<span class="cp">             fprintf (stderr, "Warning: " #EXP "\n"); } \
+<span class="cp">     while (0)
+</span></span></span></span></pre>
+<p><code>WARN_IF (x == 0);</code>会被扩展成：</p>
+<pre class="code literal-block"><span class="k">do <span class="p">{ <span class="k">if <span class="p">(<span class="n">x <span class="o">== <span class="mi">0<span class="p">)
+    <span class="n">fprintf <span class="p">(<span class="n">stderr<span class="p">, <span class="s">"Warning: " <span class="s">"x == 0" <span class="s">"<span class="se">\n<span class="s">"<span class="p">); <span class="p">}
+<span class="k">while <span class="p">(<span class="mi">0<span class="p">);
+</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+<p>这种用法可以用在assert中，如果断言失败，可以将失败的语句输出到反馈信息中</p>
+<h4>2. 连接(Concatenation)</h4>
+<p>在宏体中，如果宏体所在标示符中有<code>##</code>，那么在宏体扩展的时候，宏参数会被直接替换到标示符中。如：</p>
+<pre class="code literal-block"><span class="cp">#define COMMAND(NAME)  { #NAME, NAME ## _command }
+
+<span class="k">struct <span class="n">command
+<span class="p">{
+    <span class="kt">char <span class="o">*<span class="n">name<span class="p">;
+    <span class="kt">void <span class="p">(<span class="o">*<span class="n">function<span class="p">) <span class="p">(<span class="kt">void<span class="p">);
+<span class="p">};
+</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+<p>在宏扩展的时候</p>
+<pre class="code literal-block"><span class="k">struct <span class="n">command <span class="n">commands<span class="p">[] <span class="o">=
+<span class="p">{
+    <span class="n">COMMAND <span class="p">(<span class="n">quit<span class="p">),
+    <span class="n">COMMAND <span class="p">(<span class="n">help<span class="p">),
+    <span class="p">...
+<span class="p">};
+</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+<p>会被扩展成：</p>
+<pre class="code literal-block"><span class="k">struct <span class="n">command <span class="n">commands<span class="p">[] <span class="o">=
+<span class="p">{
+    <span class="p">{ <span class="s">"quit"<span class="p">, <span class="n">quit_command <span class="p">},
+    <span class="p">{ <span class="s">"help"<span class="p">, <span class="n">help_command <span class="p">},
+    <span class="p">...
+<span class="p">};
+</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+<p>这样就节省了大量时间，提高效率。</p>
+<hr>
+<h3>几个坑</h3>
+<h4>1. 语法问题</h4>
+<p>由于是纯文本替换，C预处理器不对宏体做任何语法检查，像缺个括号、少个分号神马的预处理器是不管的。这里要格外小心，由此可能引出各种奇葩的问题，一下还很难找到根源。</p>
+<h4>2. 算符优先级问题</h4>
+<p>不仅宏体是纯文本替换，宏参数也是纯文本替换。有以下一段简单的宏，实现乘法：</p>
+<pre class="code literal-block"><span class="cp">#define MULTIPLY(x, y) x * y
+</span></pre>
+<p><code>MULTIPLY(1, 2)</code>没问题，会正常展开成<code>1 * 2</code>。有问题的是这种表达式<code>MULTIPLY(1+2, 3)</code>，展开后成了<code>1+2 * 3</code>，显然优先级错了。</p>
+<p>在宏体中，给引用的参数加个括号就能避免这问题。</p>
+<pre class="code literal-block"><span class="cp">#define MULTIPLY(x, y) (x) * (y)
+</span></pre>
+<p><code>MULTIPLY(1+2, 3)</code>就会被展开成<code>(1+2) * (3)</code>，优先级正常了。</p>
+<p>其实这个问题和下面要说到的某些问题都属于由于纯文本替换而导致的语义破坏问题，要格外小心。</p>
+<h4>3. 分号吞噬问题</h4>
+<p>有如下宏定义：</p>
+<pre class="code literal-block"><span class="cp">#define SKIP_SPACES(p, limit)  \
+<span class="cp">     { char *lim = (limit);         \
+<span class="cp">       while (p &lt; lim) {            \
+<span class="cp">         if (*p++ != ' ') {         \
+<span class="cp">           p--; break; }}}
+</span></span></span></span></span></pre>
+<p>假设有如下一段代码：</p>
+<pre class="code literal-block"><span class="k">if <span class="p">(<span class="o">*<span class="n">p <span class="o">!= <span class="mi">0<span class="p">)
+   <span class="n">SKIP_SPACES <span class="p">(<span class="n">p<span class="p">, <span class="n">lim<span class="p">);
+<span class="k">else <span class="p">...
+</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+<p>一编译，GCC报<code>error: ‘else’ without a previous ‘if’</code>。原来这个看似是一个函数的宏被展开后是一段大括号括起来的代码块，加上分号之后这个if逻辑块就结束了，所以编译器发现这个else没有对应的if。</p>
+<p>这个问题一般用<code>do ... while(0)</code>的形式来解决：</p>
+<pre class="code literal-block"><span class="cp">#define SKIP_SPACES(p, limit)     \
+<span class="cp">     do { char *lim = (limit);         \
+<span class="cp">          while (p &lt; lim) {            \
+<span class="cp">            if (*p++ != ' ') {         \
+<span class="cp">              p--; break; }}}          \
+<span class="cp">     while (0)
+</span></span></span></span></span></span></pre>
+<p>展开后就成了</p>
+<pre class="code literal-block"><span class="k">if <span class="p">(<span class="o">*<span class="n">p <span class="o">!= <span class="mi">0<span class="p">)
+    <span class="k">do <span class="p">... <span class="k">while<span class="p">(<span class="mi">0<span class="p">);
+<span class="k">else <span class="p">...
+</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+<p>这样就消除了分号吞噬问题。</p>
+<p>这个技巧在Linux内核源码里很常见，比如这个置位宏<code>#define SET_REG_BIT(reg, bit) do { (reg |= (1 &lt;&lt; (bit))); } while (0)</code>(位于arch/mips/include/asm/mach-pnx833x/gpio.h)</p>
+<h4>4. 宏参数重复调用</h4>
+<p>有如下宏定义：</p>
+<pre class="code literal-block"><span class="cp">#define min(X, Y)  ((X) &lt; (Y) ? (X) : (Y))
+</span></pre>
+<p>当有如下调用时<code>next = min (x + y, foo (z));</code>，宏体被展开成<code>next = ((x + y) &lt; (foo (z)) ? (x + y) : (foo (z)));</code>，可以看到，<code>foo(z)</code>被重复调用了两次，做了重复计算。更严重的是，如果foo是不可重入的(foo内修改了全局或静态变量)，程序会产生逻辑错误。</p>
+<p>所以，尽量不要在宏参数中传入函数调用。</p>
+<h4>5. 对自身的递归引用</h4>
+<p>有如下宏定义：</p>
+<pre class="code literal-block"><span class="cp">#define foo (4 + foo)
+</span></pre>
+<p>按前面的理解，<code>(4 + foo)</code>会展开成<code>(4 + (4 + foo))</code>，然后一直展开下去，直至内存耗尽。但是，预处理器采取的策略是<strong><em>只展开一次</em></strong>。也就是说，<code>foo</code>只会展开成<code>(4 + foo)</code>，而展开之后<code>foo</code>的含义就要根据上下文来确定了。</p>
+<p>对于以下的交叉引用，宏体也只会展开一次。</p>
+<pre class="code literal-block"><span class="cp">#define x (4 + y)
+<span class="cp">#define y (2 * x)
+</span></span></pre>
+<p><code>x</code>展开成<code>(4 + y) -&gt; (4 + (2 * x))</code>，<code>y</code>展开成<code>(2 * x) -&gt; (2 * (4 + y))</code>。</p>
+<p><strong>注意，这是极不推荐的写法，程序可读性极差。</strong></p>
+<h4>6. 宏参数预处理</h4>
+<p>宏参数中若包含另外的宏，那么宏参数在被代入到宏体之前会做一次完全的展开，除非宏体中含有<code>#</code>或<code>##</code>。</p>
+<p>有如下宏定义：</p>
+<pre class="code literal-block"><span class="cp">#define AFTERX(x) X_ ## x
+<span class="cp">#define XAFTERX(x) AFTERX(x)
+<span class="cp">#define TABLESIZE 1024
+<span class="cp">#define BUFSIZE TABLESIZE
+</span></span></span></span></pre>
+<ul>
+<li><code>AFTERX(BUFSIZE)</code>会被展开成<code>X_BUFSIZE</code>。因为宏体中含有<code>##</code>，宏参数直接代入宏体。</li>
+<li><code>XAFTERX(BUFSIZE)</code>会被展开成<code>X_1024</code>。因为<code>XAFTERX(x)</code>的宏体是<code>AFTERX(x)</code>，并没有<code>#</code>或<code>##</code>，所以<code>BUFSIZE</code>在代入前会被完全展开成<code>1024</code>，然后才代入宏体，变成<code>X_1024</code>。</li>
+</ul>
+<p>-EOF-</p>
+</div></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/roadmap99/category/983091.html" target="_blank">C</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(6868930,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;df18f7f2-271f-e711-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/roadmap99/" target="_blank"><img src="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/roadmap99/">roadmap</a><br>
+            <a href="http://home.cnblogs.com/u/roadmap99/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/roadmap99/followers">粉丝 - 0</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;df18f7f2-271f-e711-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(6868930,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(6868930,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/roadmap99/p/6868881.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/roadmap99/p/6868881.html" title="发布于2017-05-17 18:16">C宏定义的简单总结 (转)</a><br><a href="http://www.cnblogs.com/roadmap99/p/6868946.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/roadmap99/p/6868946.html" title="发布于2017-05-17 18:26">死锁,活锁,饿死,优先级反转,护航现象 (转)</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-05-17 18:23</span> <a href="http://www.cnblogs.com/roadmap99/">roadmap</a> 阅读(<span id="post_view_count">341</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=6868930" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/roadmap99/p/6868930.html#" onclick="AddToWz(6868930);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=347994,cb_entryId=6868930,cb_blogApp=currentBlogApp,cb_blogUserGuid='df18f7f2-271f-e711-9fc1-ac853d9f53cc',cb_entryCreatedDate='2017/5/17 18:23:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/roadmap99/p/6868930.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/roadmap99/p/6868930.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型工控、组态\仿真、建模CAD源码2018！</a><br><a href="https://www.cnblogs.com/cmt/p/8462669.html" target="_blank">【活动】杭州云栖·2050大会-追逐早上七八点钟的太阳-源点</a><br><a href="https://cloud.tencent.com/solution/la?fromSource=gwzcw.766790.766790.766790" target="_blank">【推荐】微信小程序一站式部署 多场景模板定制</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="http://www.gcpowertools.com.cn/products/spreadjs/?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS2&amp;utm_campaign=community" target="_blank"><img width="300" height="250" src="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/24442-20171206093644566-325426505.png" alt="SpreadJS2_1206"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/590387/" target="_blank">马斯克的星链计划并不是让你蹭网，而是抢占频段资源</a><br> ·  <a href="https://news.cnblogs.com/n/590388/" target="_blank">被指山寨旅行青蛙 腾讯称已屏蔽熊孩子旅行小游戏</a><br> ·  <a href="https://news.cnblogs.com/n/590386/" target="_blank">库克纪念乔布斯63周年诞辰日：苹果要用创新改变世界</a><br> ·  <a href="https://news.cnblogs.com/n/590385/" target="_blank">春节返乡看共享单车：牛皮藓大煞风景</a><br> ·  <a href="https://news.cnblogs.com/n/590384/" target="_blank">Dropbox汲取Snap IPO教训 仍面临监管和财务担忧</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/34770/" target="_blank"><img width="468" height="60" src="./C语言宏的特殊用法和几个坑 (转) - roadmap - 博客园_files/24442-20171208101900738-116140477.jpg" alt="阿里云C2-1208"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/588938/" target="_blank">优秀技术人的管理陷阱</a><br> ·  <a href="http://kb.cnblogs.com/page/590141/" target="_blank">作为一个程序员，数学对你到底有多重要</a><br> ·  <a href="http://kb.cnblogs.com/page/586236/" target="_blank">领域驱动设计在互联网业务开发中的实践</a><br> ·  <a href="http://kb.cnblogs.com/page/585502/" target="_blank">步入云计算</a><br> ·  <a href="http://kb.cnblogs.com/page/531409/" target="_blank">以操作系统的角度述说线程与进程</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/roadmap99/">roadmap</a><br>园龄：<a href="https://home.cnblogs.com/u/roadmap99/" title="入园时间：2017-04-12">10个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/roadmap99/followers/">0</a><br>关注：<a href="https://home.cnblogs.com/u/roadmap99/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;df18f7f2-271f-e711-9fc1-ac853d9f53cc&#39;)">+加关注</a></div><script>getFollowStatus('df18f7f2-271f-e711-9fc1-ac853d9f53cc')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/01/01&#39;);return false;">&lt;</a></td><td align="center">2018年2月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/03/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td align="center">2</td><td class="CalWeekendDay" align="center">3</td></tr><tr><td class="CalWeekendDay" align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td align="center">9</td><td class="CalWeekendDay" align="center">10</td></tr><tr><td class="CalWeekendDay" align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td align="center">16</td><td class="CalWeekendDay" align="center">17</td></tr><tr><td class="CalWeekendDay" align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td align="center">23</td><td class="CalWeekendDay" align="center">24</td></tr><tr><td class="CalTodayDay" align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td></tr><tr><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td><td class="CalOtherMonthDay" align="center">10</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/roadmap99/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/roadmap99/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/roadmap99/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/roadmap99/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/roadmap99/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/roadmap99/category/983100.html">AI/DL</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/roadmap99/category/983086.html">Algorithm(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/roadmap99/category/983090.html">Architecture</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/roadmap99/category/983099.html">Block Chain</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/roadmap99/category/983091.html">C(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/roadmap99/category/983092.html">C++(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/roadmap99/category/983095.html">CloudComputing</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/roadmap99/category/983094.html">Java</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/roadmap99/category/983444.html">Linux Application Programming(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/roadmap99/category/983445.html">Linux Kernel, Driver</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="http://www.cnblogs.com/roadmap99/category/983096.html">Networking</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="http://www.cnblogs.com/roadmap99/category/983098.html">SDN/NFV</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="http://www.cnblogs.com/roadmap99/category/983097.html">Virtualization</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="http://www.cnblogs.com/roadmap99/category/983093.html">Win32/MFC/.NET</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="http://www.cnblogs.com/roadmap99/archive/2017/05.html">2017年5月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="http://www.cnblogs.com/roadmap99/archive/2017/04.html">2017年4月 (27)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_articlecategory" class="catListArticleCategory sidebar-block">
+<h3 class="catListTitle">文章分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_2_Link_0" href="http://www.cnblogs.com/roadmap99/category/983087.html">Architecture</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap" style="display: none;">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"></div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/roadmap99/p/6868930.html">1. C语言宏的特殊用法和几个坑 (转)(341)</a></li><li><a href="http://www.cnblogs.com/roadmap99/p/6878280.html">2. 那些永不消逝的进程 （转）(61)</a></li><li><a href="http://www.cnblogs.com/roadmap99/p/6868946.html">3. 死锁,活锁,饿死,优先级反转,护航现象 (转)(28)</a></li><li><a href="http://www.cnblogs.com/roadmap99/p/6752772.html">4. rbtree search, insert, delete(12)</a></li><li><a href="http://www.cnblogs.com/roadmap99/p/6860687.html">5. KMP 算法(11)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap" style="display: none;">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap" style="display: none;">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 roadmap
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)https://en.wikipedia.org/wiki/Parsing_expression_grammar -->
+<html class="client-js ve-not-available" lang="en" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Parsing expression grammar - Wikipedia</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Parsing_expression_grammar","wgTitle":"Parsing expression grammar","wgCurRevisionId":818074593,"wgRevisionId":818074593,"wgArticleId":892899,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Formal languages"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Parsing_expression_grammar","wgRelevantArticleId":892899,"wgRequestId":"WltXUQpAIC4AAH0jidUAAACN","wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgFlaggedRevsParams":{"tags":{}},"wgStableRevisionId":null,"wgWikiEditorEnabledModules":{"toolbar":true,"preview":false,"publish":false},"wgBetaFeaturesFeatures":[],"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true,"wgPopupsShouldSendModuleToUser":true,"wgPopupsConflictsWithNavPopupGadget":false,"wgVisualEditor":{"pageLanguageCode":"en","pageLanguageDir":"ltr","pageVariantFallbacks":"en","usePageImages":true,"usePageDescriptions":true},"wgPreferredVariant":"en","wgMFExpandAllSectionsUserOption":false,"wgMFDisplayWikibaseDescriptions":{"search":true,"nearby":true,"watchlist":true,"tagline":false},"wgRelatedArticles":null,"wgRelatedArticlesUseCirrusSearch":true,"wgRelatedArticlesOnlyUseCirrusSearch":false,"wgULSCurrentAutonym":"English","wgNoticeProject":"wikipedia","wgCentralNoticeCookiesToDelete":[],"wgCentralNoticeCategoriesUsingLegacy":["Fundraising","fundraising"],"wgCategoryTreePageCategoryOptions":"{\"mode\":0,\"hideprefix\":20,\"showcount\":true,\"namespaces\":false}","wgWikibaseItemId":"Q32271","wgCentralAuthMobileDomain":false,"wgCodeMirrorEnabled":false,"wgVisualEditorToolbarScrollOffset":0,"wgVisualEditorUnsupportedEditParams":["undo","undoafter","veswitched"],"wgEditSubmitButtonLabelPublish":true});mw.loader.state({"ext.gadget.charinsert-styles":"ready","ext.globalCssJs.user.styles":"ready","ext.globalCssJs.site.styles":"ready","site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","ext.cite.styles":"ready","ext.math.styles":"ready","wikibase.client.init":"ready","ext.visualEditor.desktopArticleTarget.noscript":"ready","ext.uls.interlanguage":"ready","ext.wikimediaBadges":"ready","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready","ext.globalCssJs.user":"ready","ext.globalCssJs.site":"ready"});mw.loader.implement("user.tokens@1dqfd7l",function ( $, jQuery, require, module ) {
+mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});/*@nomin*/
+
+});mw.loader.load(["ext.cite.a11y","ext.math.scripts","site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","ext.gadget.teahouse","ext.gadget.ReferenceTooltips","ext.gadget.watchlist-notice","ext.gadget.DRN-wizard","ext.gadget.charinsert","ext.gadget.refToolbar","ext.gadget.extra-toolbar-buttons","ext.gadget.switcher","ext.centralauth.centralautologin","ext.popups","ext.visualEditor.desktopArticleTarget.init","ext.visualEditor.targetLoader","ext.eventLogging.subscriber","ext.wikimediaEvents","ext.navigationTiming","ext.uls.eventlogger","ext.uls.init","ext.uls.interface","ext.centralNotice.geoIP","ext.centralNotice.startUp","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="./Parsing expression grammar - Wikipedia_files/load.php">
+<script async="" src="./Parsing expression grammar - Wikipedia_files/load(1).php"></script>
+<style>
+.cite-accessibility-label{ top:-99999px;clip:rect( 1px 1px 1px 1px ); clip:rect( 1px,1px,1px,1px ); position:absolute !important;padding:0 !important;border:0 !important;height:1px !important;width:1px !important; overflow:hidden}
+@media screen {
+	.tochidden,.toctoggle{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}.toctoggle{font-size:94%}}
+@media print {
+	#toc.tochidden,.toc.tochidden,.toctoggle{display:none}}
+.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:0;z-index:1099;padding:0;margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:#fff;cursor:pointer;border:1px solid #a2a9b1;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:#fff;cursor:pointer;border:1px solid #a2a9b1;padding:0;margin:0}.suggestions-result{color:#000;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left; overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.suggestions-result-current{background-color:#2a4b8d;color:#fff}.suggestions-special .special-label{color:#72777d;text-align:left}.suggestions-special .special-query{color:#000;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:#c8ccd1}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:#fff}.highlight{font-weight:bold}
+.wp-teahouse-question-form{position:absolute;margin-left:auto;margin-right:auto;background-color:#f4f3f0;border:1px solid #a7d7f9;padding:1em}#wp-th-question-ask{float:right}.wp-teahouse-ask a.external{background-image:none !important}.wp-teahouse-respond-form{position:absolute;margin-left:auto;margin-right:auto;background-color:#f4f3f0;border:1px solid #a7d7f9;padding:1em}.wp-th-respond{float:right}.wp-teahouse-respond a.external{background-image:none !important}
+.referencetooltip{position:absolute;list-style:none;list-style-image:none;opacity:0;font-size:10px;margin:0;z-index:5;padding:0}.referencetooltip li{border:#080086 2px solid;max-width:260px;padding:10px 8px 13px 8px;margin:0px;background-color:#F7F7F7;-webkit-box-shadow:2px 4px 2px rgba(0,0,0,0.3);-moz-box-shadow:2px 4px 2px rgba(0,0,0,0.3);box-shadow:2px 4px 2px rgba(0,0,0,0.3)}.referencetooltip li+li{margin-left:7px;margin-top:-2px;border:0;padding:0;height:3px;width:0px;background-color:transparent;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;border-top:12px #080086 solid;border-right:7px transparent solid;border-left:7px transparent solid}.referencetooltip>li+li::after{content:'';border-top:8px #F7F7F7 solid;border-right:5px transparent solid;border-left:5px transparent solid;margin-top:-12px;margin-left:-5px;z-index:1;height:0px;width:0px;display:block}.client-js body .referencetooltip li li{border:none;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;height:auto;width:auto;margin:auto;padding:0;position:static}.RTflipped{padding-top:13px}.referencetooltip.RTflipped li+li{position:absolute;top:2px;border-top:0;border-bottom:12px #080086 solid}.referencetooltip.RTflipped li+li::after{border-top:0;border-bottom:8px #F7F7F7 solid;position:absolute;margin-top:7px}.RTsettings{float:right;height:24px;width:24px;cursor:pointer;background-image:url(//upload.wikimedia.org/wikipedia/commons/thumb/0/05/OOjs_UI_icon_advanced.svg/24px-OOjs_UI_icon_advanced.svg.png);background-image:linear-gradient(transparent,transparent),url(//upload.wikimedia.org/wikipedia/commons/0/05/OOjs_UI_icon_advanced.svg);margin-top:-9px;margin-right:-7px;-webkit-transition:opacity 0.15s;-moz-transition:opacity 0.15s;-ms-transition:opacity 0.15s;-o-transition:opacity 0.15s;transition:opacity 0.15s;opacity:0.6;filter:alpha(opacity=60)}.RTsettings:hover{opacity:1;filter:alpha(opacity=100)}.RTTarget{border:#080086 2px solid}
+@-webkit-keyframes centralAuthPPersonalAnimation{0%{opacity:0;-webkit-transform:translateY( -20px )}100%{opacity:1;-webkit-transform:translateY( 0 )}}@-moz-keyframes centralAuthPPersonalAnimation{0%{opacity:0;-moz-transform:translateY( -20px )}100%{opacity:1;-moz-transform:translateY( 0 )}}@-o-keyframes centralAuthPPersonalAnimation{0%{opacity:0;-o-transform:translateY( -20px )}100%{opacity:1;-o-transform:translateY( 0 )}}@keyframes centralAuthPPersonalAnimation{0%{opacity:0;transform:translateY( -20px )}100%{opacity:1;transform:translateY( 0 )}}.centralAuthPPersonalAnimation{-webkit-animation-duration:1s;-moz-animation-duration:1s;-o-animation-duration:1s;animation-duration:1s;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both;-webkit-animation-name:centralAuthPPersonalAnimation;-moz-animation-name:centralAuthPPersonalAnimation;-o-animation-name:centralAuthPPersonalAnimation;animation-name:centralAuthPPersonalAnimation}
+.mw-ui-icon-popups-settings:before{background-image:url(/w/load.php?modules=ext.popups.images&image=popups-settings&format=rasterized&lang=en&skin=vector&version=1tba42a);background-image:linear-gradient(transparent,transparent),url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E %3Cpath fill=%22%2354595d%22 d=%22M20 14.5v-2.9l-1.8-.3c-.1-.4-.3-.8-.6-1.4l1.1-1.5-2.1-2.1-1.5 1.1c-.5-.3-1-.5-1.4-.6L13.5 5h-2.9l-.3 1.8c-.5.1-.9.3-1.4.6L7.4 6.3 5.3 8.4l1 1.5c-.3.5-.4.9-.6 1.4l-1.7.2v2.9l1.8.3c.1.5.3.9.6 1.4l-1 1.5 2.1 2.1 1.5-1c.4.2.9.4 1.4.6l.3 1.8h3l.3-1.8c.5-.1.9-.3 1.4-.6l1.5 1.1 2.1-2.1-1.1-1.5c.3-.5.5-1 .6-1.4l1.5-.3zM12 16c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z%22/%3E %3C/svg%3E")}.mw-ui-icon-popups-close:before{background-image:url(/w/load.php?modules=ext.popups.images&image=popups-close&format=rasterized&lang=en&skin=vector&version=1tba42a);background-image:linear-gradient(transparent,transparent),url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22%3E %3Cpath d=%22M3.636 2.222l14.142 14.142-1.414 1.414L2.222 3.636z%22/%3E %3Cpath d=%22M17.778 3.636L3.636 17.778l-1.414-1.414L16.364 2.222z%22/%3E %3C/svg%3E")}
+.mw-ui-button{font-family:inherit;font-size:1em;display:inline-block;min-width:4em;max-width:28.75em;padding:0.546875em 1em;line-height:1.286;margin:0;border-radius:2px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-appearance:none;*display:inline; zoom:1;vertical-align:middle;background-color:#f8f9fa;color:#222222;border:1px solid #a2a9b1;text-align:center;font-weight:bold;cursor:pointer}.mw-ui-button:visited{color:#222222}.mw-ui-button:hover{background-color:#ffffff;color:#444444;border-color:#a2a9b1}.mw-ui-button:focus{background-color:#ffffff;color:#222222;border-color:#3366cc;box-shadow:inset 0 0 0 1px #3366cc,inset 0 0 0 2px #ffffff}.mw-ui-button:active,.mw-ui-button.is-on,.mw-ui-button.mw-ui-checked{background-color:#d9d9d9;color:#000000;border-color:#72777d;box-shadow:none}.mw-ui-button:disabled{background-color:#c8ccd1;color:#fff;border-color:#c8ccd1}.mw-ui-button:disabled:hover,.mw-ui-button:disabled:active{background-color:#c8ccd1;color:#fff;box-shadow:none;border-color:#c8ccd1}.mw-ui-button:focus{outline-width:0}.mw-ui-button:focus::-moz-focus-inner{border-color:transparent;padding:0}.mw-ui-button:not( :disabled ){-webkit-transition:background-color 100ms,color 100ms,border-color 100ms,box-shadow 100ms;-moz-transition:background-color 100ms,color 100ms,border-color 100ms,box-shadow 100ms;transition:background-color 100ms,color 100ms,border-color 100ms,box-shadow 100ms}.mw-ui-button:disabled{text-shadow:none;cursor:default}.mw-ui-button.mw-ui-big{font-size:1.3em}.mw-ui-button.mw-ui-block{display:block;width:100%;margin-left:auto;margin-right:auto}.mw-ui-button.mw-ui-progressive{background-color:#3366cc;color:#fff;border:1px solid #3366cc}.mw-ui-button.mw-ui-progressive:hover{background-color:#447ff5;border-color:#447ff5}.mw-ui-button.mw-ui-progressive:focus{box-shadow:inset 0 0 0 1px #3366cc,inset 0 0 0 2px #ffffff}.mw-ui-button.mw-ui-progressive:active,.mw-ui-button.mw-ui-progressive.is-on,.mw-ui-button.mw-ui-progressive.mw-ui-checked{background-color:#2a4b8d;border-color:#2a4b8d;box-shadow:none}.mw-ui-button.mw-ui-progressive:disabled{background-color:#c8ccd1;color:#fff;border-color:#c8ccd1}.mw-ui-button.mw-ui-progressive:disabled:hover,.mw-ui-button.mw-ui-progressive:disabled:active,.mw-ui-button.mw-ui-progressive:disabled.mw-ui-checked{background-color:#c8ccd1;color:#fff;border-color:#c8ccd1;box-shadow:none}.mw-ui-button.mw-ui-progressive.mw-ui-quiet{color:#222222}.mw-ui-button.mw-ui-progressive.mw-ui-quiet:hover{background-color:transparent;color:#447ff5}.mw-ui-button.mw-ui-progressive.mw-ui-quiet:active,.mw-ui-button.mw-ui-progressive.mw-ui-quiet.mw-ui-checked{color:#2a4b8d}.mw-ui-button.mw-ui-progressive.mw-ui-quiet:focus{background-color:transparent;color:#3366cc}.mw-ui-button.mw-ui-progressive.mw-ui-quiet:disabled{color:#c8ccd1}.mw-ui-button.mw-ui-destructive{background-color:#dd3333;color:#fff;border:1px solid #dd3333}.mw-ui-button.mw-ui-destructive:hover{background-color:#ff4242;border-color:#ff4242}.mw-ui-button.mw-ui-destructive:focus{box-shadow:inset 0 0 0 1px #dd3333,inset 0 0 0 2px #ffffff}.mw-ui-button.mw-ui-destructive:active,.mw-ui-button.mw-ui-destructive.is-on,.mw-ui-button.mw-ui-destructive.mw-ui-checked{background-color:#b32424;border-color:#b32424;box-shadow:none}.mw-ui-button.mw-ui-destructive:disabled{background-color:#c8ccd1;color:#fff;border-color:#c8ccd1}.mw-ui-button.mw-ui-destructive:disabled:hover,.mw-ui-button.mw-ui-destructive:disabled:active,.mw-ui-button.mw-ui-destructive:disabled.mw-ui-checked{background-color:#c8ccd1;color:#fff;border-color:#c8ccd1;box-shadow:none}.mw-ui-button.mw-ui-destructive.mw-ui-quiet{color:#222222}.mw-ui-button.mw-ui-destructive.mw-ui-quiet:hover{background-color:transparent;color:#ff4242}.mw-ui-button.mw-ui-destructive.mw-ui-quiet:active,.mw-ui-button.mw-ui-destructive.mw-ui-quiet.mw-ui-checked{color:#b32424}.mw-ui-button.mw-ui-destructive.mw-ui-quiet:focus{background-color:transparent;color:#dd3333}.mw-ui-button.mw-ui-destructive.mw-ui-quiet:disabled{color:#c8ccd1}.mw-ui-button.mw-ui-quiet{background:transparent;border:0;text-shadow:none;color:#222222}.mw-ui-button.mw-ui-quiet:hover{background-color:transparent;color:#444444}.mw-ui-button.mw-ui-quiet:active,.mw-ui-button.mw-ui-quiet.mw-ui-checked{color:#000000}.mw-ui-button.mw-ui-quiet:focus{background-color:transparent;color:#222222}.mw-ui-button.mw-ui-quiet:disabled{color:#c8ccd1}.mw-ui-button.mw-ui-quiet:hover,.mw-ui-button.mw-ui-quiet:focus{box-shadow:none}.mw-ui-button.mw-ui-quiet:active,.mw-ui-button.mw-ui-quiet:disabled{background:transparent}input.mw-ui-button::-moz-focus-inner,button.mw-ui-button::-moz-focus-inner{margin-top:-1px;margin-bottom:-1px}a.mw-ui-button{text-decoration:none}a.mw-ui-button:hover,a.mw-ui-button:focus{text-decoration:none}.mw-ui-button-group > *{min-width:48px;border-radius:0;float:left}.mw-ui-button-group > *:first-child{border-top-left-radius:2px;border-bottom-left-radius:2px}.mw-ui-button-group > *:not( :first-child ){border-left:0}.mw-ui-button-group > *:last-child{border-top-right-radius:2px;border-bottom-right-radius:2px}.mw-ui-button-group .is-on .button{cursor:default}
+.mw-ui-icon{position:relative;line-height:1.5em;min-height:1.5em;min-width:1.5em}.mw-ui-icon.mw-ui-icon-element{text-indent:-999px;overflow:hidden;width:3.5em;min-width:3.5em;max-width:3.5em}.mw-ui-icon.mw-ui-icon-element:before{left:0;right:0;position:absolute;margin:0 1em}.mw-ui-icon.mw-ui-icon-element.mw-ui-icon-large{width:4.625em;min-width:4.625em;max-width:4.625em;line-height:4.625em;min-height:4.625em}.mw-ui-icon.mw-ui-icon-element.mw-ui-icon-large:before{min-height:4.625em}.mw-ui-icon.mw-ui-icon-before:before,.mw-ui-icon.mw-ui-icon-element:before{background-position:50% 50%;background-repeat:no-repeat;background-size:100% auto;float:left;display:block;min-height:1.5em;content:''}.mw-ui-icon.mw-ui-icon-before:before{position:relative;width:1.5em;margin-right:1em}.mw-ui-icon.mw-ui-icon-small:before{background-size:66.67% auto}
+.mw-editfont-monospace{font-family:monospace,monospace}.mw-editfont-sans-serif{font-family:sans-serif}.mw-editfont-serif{font-family:serif} .mw-editfont-monospace,.mw-editfont-sans-serif,.mw-editfont-serif{font-size:13px}
+.uls-menu{border-radius:2px; font-size:medium}.uls-search,.uls-language-settings-close-block{border-top-right-radius:2px;border-top-left-radius:2px}.uls-language-list{border-bottom-right-radius:2px;border-bottom-left-radius:2px}.uls-menu.callout:before,.uls-menu.callout:after{border-top:10px solid transparent;border-bottom:10px solid transparent;display:inline-block; top:17px;position:absolute;content:''}.uls-menu.callout.selector-right:before{ border-left:10px solid #c8ccd1; right:-11px}.uls-menu.callout.selector-right:after{ border-left:10px solid #f8f9fa; right:-10px}.uls-menu.callout.selector-left:before{ border-right:10px solid #c8ccd1; left:-11px}.uls-menu.callout.selector-left:after{ border-right:10px solid #f8f9fa; left:-10px}.uls-ui-languages button{margin:5px 15px 5px 0;white-space:nowrap;overflow:hidden}.uls-search-wrapper-wrapper{position:relative;padding-left:40px;margin-top:5px;margin-bottom:5px}.uls-icon-back{background:transparent url(/w/extensions/UniversalLanguageSelector/resources/images/back-grey-ltr.png?90e9b) no-repeat scroll center center;background-image:-webkit-linear-gradient(transparent,transparent),url(/w/extensions/UniversalLanguageSelector/resources/images/back-grey-ltr.svg?e226b);background-image:linear-gradient(transparent,transparent),url("data:image/svg+xml,%3C%3Fxml version=%221.0%22 encoding=%22UTF-8%22%3F%3E%0A%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22%3E%0A%09%3Cpath fill=%22%2354595d%22 d=%22M7 13.1l8.9 8.9c.8-.8.8-2 0-2.8l-6.1-6.1 6-6.1c.8-.8.8-2 0-2.8L7 13.1z%22/%3E%0A%3C/svg%3E%0A");background-size:28px;background-position:center center;height:32px;width:40px;display:block;position:absolute;left:0;border-right:1px solid #c8ccd1;opacity:0.8}.uls-icon-back:hover{opacity:1;cursor:pointer}  .skin-vector .uls-menu{border-color:#c8ccd1;-webkit-box-shadow:0 2px 2px 0 rgba(0,0,0,0.25);box-shadow:0 2px 2px 0 rgba(0,0,0,0.25);font-size:0.875em}.skin-vector .uls-search{border-bottom-color:#c8ccd1}.skin-vector .uls-filtersuggestion{color:#72777d}.skin-vector .uls-lcd-region-title{color:#54595d}
+@media print{#centralNotice{display:none}}.cn-closeButton{display:inline-block;zoom:1;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAACeklEQVR4Aa1UM3jkcRBN6qS//tTFttPHqmI359VZ5dm2L1zFtr02YlRx5sX2ft/7ed7O/w1M5ufnt8NZQjCBQXhG+IYZe5zjfju7xcHc3NzEzMwM6xOEqNnZ2ZeVlZW827dv1ycmJnbGx8d3Yr5582Z9eXk5D/d4h/empqYm+K0nw3yKcF4sFmdzOJzGgIAAhb29vc7Ozk6/Atrr/fz8lCwWq6m3tzcb72G3nmzFo/NNTU354eHhIltbW72Tk5M2IyND9P79+8ZPnz7VvXnzpoHBYPS4uLhobGxsDMHBwaLa2tp82MF+PVmUUqnMioiI6LOysjLQLCcPS2ZmZn7Ozc39oPtFYG80GgWpqakSS0tLY1hYmEgikWTBfoXsLD16BT3gUWhoqEKtVheREZ+Qu0IEjI+PZ2k0GqFer+cnJSWJra2tDWw2u2FqauoVeEAW3NzcnBcYGCh3dHTUtba2ltNjLvRJSEiQEQEPRENDQzkMBqPXwsKiXyqVFsFDNzc3LWmoqKmp4YIHZIyHDx9WOzg46GJiYmTk5e/h4eHstLQ0CX2ykXST4JPJ8y7sSVM5/QGMf9y4caMHf3r//v1a8IDsGRm04/D58+dtpNFPPNRqtflXrlzpI8G15IEGc2xsrFSlUglwD+Tk5NRBmuTk5A7wgOxbXFxcF8iysrIa1mskEolKvL29Ne7u7mpXV1dNaWlp9fr7X79+VYMMeQieY/dsv5p1r2g2Nja2vWZ7RXNiYuIA0dwlzwYGBjbkGXmURXeLeUa1ul2ebV8BEH+7CiAiASTYvgJ2qc3MzMzF2vz8+XPd27dvG5hMZg+CsV1tHmfXOP5+dqyddgHOI7v1srTdcwAAAABJRU5ErkJggg==);background:url(/w/extensions/CentralNotice/resources/subscribing/CloseWindow19x19.png?7596b)!ie;width:19px;height:19px;text-indent:19px;white-space:nowrap;overflow:hidden}</style><style>
+.suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:hover,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSuggest-link:focus{color:#000;text-decoration:none}.suggestions-result-current a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-link:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.suggestions-result-current a.mw-searchSuggest-link:focus{color:#fff}.suggestions a.mw-searchSuggest-link .special-query{ overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#mwe-popups-svg{position:absolute;top:-1000px}.mwe-popups-settings-icon{border-radius:2px;font-size:16px; margin-right:-0.75em}.mwe-popups-settings-icon:hover{background-color:#eaecf0}.mwe-popups-settings-icon:active{background-color:#c8ccd1}.mwe-popups-sade-face-icon{display:block;width:37px;height:27px;margin:16px 16px 0;background-position:center center;background-repeat:no-repeat;background-image:url(/w/extensions/Popups/resources/ext.popups/images/sad-face.png?3984d);background-image:linear-gradient(transparent,transparent),url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2237%22 height=%2227%22 viewBox=%220 0 37 27%22%3E %3Ctitle%3Esad face%3C/title%3E %3Cpath fill=%22%23c8ccd1%22 fill-rule=%22evenodd%22 d=%22M5.475.7v20.075L0 26.25h31.025c3.102 0 5.475-2.372 5.475-5.475V.7H5.475zm20.44 4.562c1.277 0 2.19 1.095 2.19 2.19 0 1.096-.913 2.373-2.19 2.373-1.278 0-2.19-1.095-2.19-2.19s1.095-2.373 2.19-2.373zm-9.855 0c1.277 0 2.19 1.095 2.19 2.19 0 1.096-1.095 2.373-2.19 2.373s-2.19-1.095-2.19-2.19.913-2.373 2.19-2.373zm4.928 8.213c-7.153 0-8.415 7.012-8.415 7.012s2.805-1.403 8.415-1.403c5.61 0 8.414 1.403 8.414 1.403S28 13.475 20.988 13.475z%22/%3E %3C/svg%3E")}.mwe-popups{background:#fff;position:absolute;z-index:110;-webkit-box-shadow:0 30px 90px -20px rgba(0,0,0,0.3),0 0 1px #a2a9b1;box-shadow:0 30px 90px -20px rgba(0,0,0,0.3),0 0 1px #a2a9b1;padding:0;display:none;font-size:14px;line-height:20px;min-width:300px;border-radius:2px; }.mwe-popups .mwe-popups-container{color:#222222;margin-top:-9px;padding-top:9px;text-decoration:none}.mwe-popups .mwe-popups-container footer{padding:16px;margin:0;font-size:10px;position:absolute;bottom:0; left:0}.mwe-popups .mwe-popups-container footer .mwe-popups-settings-icon{float:right}.mwe-popups .mwe-popups-extract{margin:16px;display:block;color:#222222;text-decoration:none;position:relative;   }.mwe-popups .mwe-popups-extract:hover{text-decoration:none}.mwe-popups .mwe-popups-extract:after{content:' ';position:absolute;bottom:0;width:25%;height:20px;background-color:transparent}.mwe-popups .mwe-popups-extract[dir='ltr']:after{ right:0; background-image:-webkit-linear-gradient(to right,rgba(255,255,255,0),#ffffff 50%); background-image:-moz-linear-gradient(to right,rgba(255,255,255,0),#ffffff 50%); background-image:-o-linear-gradient(to right,rgba(255,255,255,0),#ffffff 50%); background-image:linear-gradient(to right,rgba(255,255,255,0),#ffffff 50%)}.mwe-popups .mwe-popups-extract[dir='rtl']:after{ left:0; background-image:-webkit-linear-gradient(to left,rgba(255,255,255,0),#ffffff 50%); background-image:-moz-linear-gradient(to left,rgba(255,255,255,0),#ffffff 50%); background-image:-o-linear-gradient(to left,rgba(255,255,255,0),#ffffff 50%); background-image:linear-gradient(to left,rgba(255,255,255,0),#ffffff 50%)}.mwe-popups .mwe-popups-extract p{margin:0}.mwe-popups .mwe-popups-extract ul,.mwe-popups .mwe-popups-extract ol,.mwe-popups .mwe-popups-extract li,.mwe-popups .mwe-popups-extract dl,.mwe-popups .mwe-popups-extract dd,.mwe-popups .mwe-popups-extract dt{margin-top:0;margin-bottom:0}.mwe-popups svg{overflow:hidden}.mwe-popups.mwe-popups-is-tall{width:450px}.mwe-popups.mwe-popups-is-tall > div > a > svg{vertical-align:middle}.mwe-popups.mwe-popups-is-tall .mwe-popups-extract{width:215px;height:180px;overflow:hidden; float:left}.mwe-popups.mwe-popups-is-tall footer{width:215px}.mwe-popups.mwe-popups-is-not-tall{width:320px}.mwe-popups.mwe-popups-is-not-tall .mwe-popups-extract{max-height:140px;overflow:hidden;margin-bottom:47px;padding-bottom:0}.mwe-popups.mwe-popups-is-not-tall footer{width:290px}.mwe-popups.mwe-popups-is-empty .mwe-popups-extract{padding-top:4px;margin-bottom:60px}.mwe-popups.mwe-popups-is-empty .mwe-popups-read-link{font-weight:bold;font-size:12px}.mwe-popups.mwe-popups-is-empty .mwe-popups-extract:hover + footer .mwe-popups-read-link{text-decoration:underline}.mwe-popups.mwe-popups-no-image-tri:after{content:'';position:absolute;border:11px solid transparent;border-top:0;border-bottom:11px solid #ffffff;top:-7px; left:7px}.mwe-popups.mwe-popups-no-image-tri:before{content:'';position:absolute;border:8px solid transparent;border-top:0;border-bottom:8px solid #a2a9b1;top:-8px; left:10px}.mwe-popups.flipped_x.mwe-popups-no-image-tri:after{ left:auto; right:7px}.mwe-popups.flipped_x.mwe-popups-no-image-tri:before{ left:auto; right:10px}.mwe-popups.mwe-popups-image-tri:before{z-index:111;content:'';position:absolute;border:9px solid transparent;border-top:0;border-bottom:9px solid #a2a9b1;top:-9px; left:9px}.mwe-popups.mwe-popups-image-tri:after{content:'';position:absolute;border:12px solid transparent;border-top:0;border-bottom:12px solid #ffffff;top:-8px; left:6px;z-index:112}.mwe-popups.mwe-popups-image-tri.flipped_x:before{z-index:111;content:'';position:absolute;border:9px solid transparent;border-top:0;border-bottom:9px solid #a2a9b1;top:-9px; left:273px}.mwe-popups.mwe-popups-image-tri.flipped_x:after{content:'';position:absolute;border:12px solid transparent;border-top:0;border-bottom:12px solid #ffffff;top:-8px; left:269px;z-index:112}.mwe-popups.mwe-popups-image-tri .mwe-popups-extract{padding-top:32px;margin-top:190px}.mwe-popups.mwe-popups-image-tri > div > a > svg{margin-top:-8px;position:absolute;z-index:113; left:0}.mwe-popups.flipped_x.mwe-popups-is-tall{min-height:242px}.mwe-popups.flipped_x.mwe-popups-is-tall:before{z-index:111;content:'';position:absolute;border:9px solid transparent;border-top:0;border-bottom:9px solid #a2a9b1;top:-9px; left:420px}.mwe-popups.flipped_x.mwe-popups-is-tall > div > a > svg{margin:0;margin-top:-8px;margin-bottom:-7px;position:absolute;z-index:113; right:0}.mwe-popups.flipped_x_y:before{z-index:111;content:'';position:absolute;border:9px solid transparent;border-bottom:0;border-top:9px solid #a2a9b1;bottom:-9px; left:272px}.mwe-popups.flipped_x_y:after{content:'';position:absolute;border:12px solid transparent;border-bottom:0;border-top:12px solid #ffffff;bottom:-8px; left:269px;z-index:112}.mwe-popups.flipped_x_y.mwe-popups-is-tall{min-height:242px}.mwe-popups.flipped_x_y.mwe-popups-is-tall:after{z-index:112;content:'';position:absolute;border:12px solid transparent;border-bottom:0;border-top:12px solid #ffffff;bottom:-8px; left:417px}.mwe-popups.flipped_x_y.mwe-popups-is-tall:before{z-index:111;content:'';position:absolute;border:9px solid transparent;border-bottom:0;border-top:9px solid #a2a9b1;bottom:-9px; left:420px}.mwe-popups.flipped_x_y.mwe-popups-is-tall > div > a > svg{position:absolute;z-index:113;margin:0;margin-bottom:-9px; right:0}.mwe-popups.flipped_y:after{content:'';position:absolute;border:11px solid transparent;border-bottom:0;border-top:11px solid #ffffff;bottom:-7px; left:7px}.mwe-popups.flipped_y:before{content:'';position:absolute;border:8px solid transparent;border-bottom:0;border-top:8px solid #a2a9b1;bottom:-8px; left:10px} @-webkit-keyframes mwe-popups-fade-in-up{0%{opacity:0;-webkit-transform:translate(0,20px);-moz-transform:translate(0,20px);-ms-transform:translate(0,20px);transform:translate(0,20px)}100%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}}@-moz-keyframes mwe-popups-fade-in-up{0%{opacity:0;-webkit-transform:translate(0,20px);-moz-transform:translate(0,20px);-ms-transform:translate(0,20px);transform:translate(0,20px)}100%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}}@keyframes mwe-popups-fade-in-up{0%{opacity:0;-webkit-transform:translate(0,20px);-moz-transform:translate(0,20px);-ms-transform:translate(0,20px);transform:translate(0,20px)}100%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}}@-webkit-keyframes mwe-popups-fade-in-down{0%{opacity:0;-webkit-transform:translate(0,-20px);-moz-transform:translate(0,-20px);-ms-transform:translate(0,-20px);transform:translate(0,-20px)}100%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}}@-moz-keyframes mwe-popups-fade-in-down{0%{opacity:0;-webkit-transform:translate(0,-20px);-moz-transform:translate(0,-20px);-ms-transform:translate(0,-20px);transform:translate(0,-20px)}100%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}}@keyframes mwe-popups-fade-in-down{0%{opacity:0;-webkit-transform:translate(0,-20px);-moz-transform:translate(0,-20px);-ms-transform:translate(0,-20px);transform:translate(0,-20px)}100%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}}@-webkit-keyframes mwe-popups-fade-out-down{0%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}100%{opacity:0;-webkit-transform:translate(0,20px);-moz-transform:translate(0,20px);-ms-transform:translate(0,20px);transform:translate(0,20px)}}@-moz-keyframes mwe-popups-fade-out-down{0%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}100%{opacity:0;-webkit-transform:translate(0,20px);-moz-transform:translate(0,20px);-ms-transform:translate(0,20px);transform:translate(0,20px)}}@keyframes mwe-popups-fade-out-down{0%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}100%{opacity:0;-webkit-transform:translate(0,20px);-moz-transform:translate(0,20px);-ms-transform:translate(0,20px);transform:translate(0,20px)}}@-webkit-keyframes mwe-popups-fade-out-up{0%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}100%{opacity:0;-webkit-transform:translate(0,-20px);-moz-transform:translate(0,-20px);-ms-transform:translate(0,-20px);transform:translate(0,-20px)}}@-moz-keyframes mwe-popups-fade-out-up{0%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}100%{opacity:0;-webkit-transform:translate(0,-20px);-moz-transform:translate(0,-20px);-ms-transform:translate(0,-20px);transform:translate(0,-20px)}}@keyframes mwe-popups-fade-out-up{0%{opacity:1;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}100%{opacity:0;-webkit-transform:translate(0,-20px);-moz-transform:translate(0,-20px);-ms-transform:translate(0,-20px);transform:translate(0,-20px)}}.mwe-popups-fade-in-up{-webkit-animation:mwe-popups-fade-in-up 0.2s ease forwards;-moz-animation:mwe-popups-fade-in-up 0.2s ease forwards;animation:mwe-popups-fade-in-up 0.2s ease forwards}.mwe-popups-fade-in-down{-webkit-animation:mwe-popups-fade-in-down 0.2s ease forwards;-moz-animation:mwe-popups-fade-in-down 0.2s ease forwards;animation:mwe-popups-fade-in-down 0.2s ease forwards}.mwe-popups-fade-out-down{-webkit-animation:mwe-popups-fade-out-down 0.2s ease forwards;-moz-animation:mwe-popups-fade-out-down 0.2s ease forwards;animation:mwe-popups-fade-out-down 0.2s ease forwards}.mwe-popups-fade-out-up{-webkit-animation:mwe-popups-fade-out-up 0.2s ease forwards;-moz-animation:mwe-popups-fade-out-up 0.2s ease forwards;animation:mwe-popups-fade-out-up 0.2s ease forwards}  #mwe-popups-settings{position:fixed;z-index:1000;background:#fff;width:420px;border:1px solid #a2a9b1;box-shadow:0 2px 2px 0 rgba(0,0,0,0.25);border-radius:2px}#mwe-popups-settings header{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;border-bottom:1px solid #c8ccd1;position:relative;display:table;width:100%;padding:5px 7px 5px 0}#mwe-popups-settings header > div{display:table-cell;width:3.5em;vertical-align:middle;cursor:pointer}#mwe-popups-settings header h1{border:0;width:100%;font-family:sans-serif;font-size:18px;font-weight:bold;text-align:center}#mwe-popups-settings .mwe-ui-icon-popups-close{opacity:0.87;-webkit-transition:opacity 100ms;-moz-transition:opacity 100ms;transition:opacity 100ms}#mwe-popups-settings .mwe-ui-icon-popups-close:hover{opacity:0.73}#mwe-popups-settings .mwe-ui-icon-popups-close:active{opacity:1}#mwe-popups-settings main{display:block;width:350px;padding:32px 0 24px;margin:0 auto}#mwe-popups-settings main p{color:#54595d;font-size:17px;margin:16px 0 0}#mwe-popups-settings main p:first-child{margin-top:0}#mwe-popups-settings main form img,#mwe-popups-settings main form input,#mwe-popups-settings main form label{vertical-align:top}#mwe-popups-settings main form img{margin-right:60px}#mwe-popups-settings main form input{display:inline-block;margin:0 10px 0 0;padding:0}#mwe-popups-settings main form label{font-size:13px;display:inline-block;line-height:16px;width:300px}#mwe-popups-settings main form label > span{color:#000;font-size:18px;font-weight:bold;display:block;margin-bottom:5px;line-height:18px}.mwe-popups-settings-help{background-image:url(/w/extensions/Popups/resources/ext.popups/images/footer-ltr.png?3533c);background-image:linear-gradient(transparent,transparent),url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22230%22 height=%22179%22 xmlns:xlink=%22http://www.w3.org/1999/xlink%22 viewBox=%220 0 230 179%22%3E %3Cdefs%3E %3Crect id=%22a%22 width=%22201%22 height=%2213%22 rx=%222%22/%3E %3Crect id=%22b%22 width=%22201%22 height=%22169%22 y=%2210%22 rx=%222%22/%3E %3Crect id=%22c%22 width=%2230%22 height=%222%22 x=%22135%22 y=%22158%22 rx=%221%22/%3E %3C/defs%3E %3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E %3Cg transform=%22matrix%281 0 0 -1 0 13%29%22%3E %3Cuse fill=%22%23f8f9fa%22 xlink:href=%22%23a%22/%3E %3Crect width=%22199%22 height=%2211%22 x=%221%22 y=%221%22 stroke=%22%23a2a9b1%22 stroke-width=%222%22 rx=%222%22/%3E %3C/g%3E %3Cuse fill=%22%23fff%22 xlink:href=%22%23b%22/%3E %3Crect width=%22199%22 height=%22167%22 x=%221%22 y=%2211%22 stroke=%22%23a2a9b1%22 stroke-width=%222%22 rx=%222%22/%3E %3Cg opacity=%22.4%22 transform=%22translate%2867 35%29%22%3E %3Crect width=%2273%22 height=%222%22 y=%227%22 fill=%22%23c8ccd1%22 rx=%221%22/%3E %3Crect width=%2281%22 height=%222%22 y=%2231%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2232%22 height=%222%22 y=%2285%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2273%22 height=%222%22 x=%2235%22 y=%2285%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2217%22 height=%222%22 y=%2245%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2217%22 height=%222%22 x=%2291%22 y=%2245%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2268%22 height=%222%22 x=%2220%22 y=%2245%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2217%22 height=%222%22 y=%2278%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2237%22 height=%222%22 x=%2272%22 y=%2278%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2249%22 height=%222%22 x=%2220%22 y=%2278%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2224%22 height=%222%22 x=%2284%22 y=%2231%22 fill=%22%2372777d%22 rx=%221%22 transform=%22matrix%28-1 0 0 1 192 0%29%22/%3E %3Crect width=%2281%22 height=%222%22 y=%2266%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2214%22 height=%222%22 x=%2254%22 y=%2224%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2237%22 height=%222%22 x=%2271%22 y=%2224%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2251%22 height=%222%22 y=%2224%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%22108%22 height=%222%22 y=%2259%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%22108%22 height=%222%22 y=%2252%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%22108%22 height=%222%22 y=%2292%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%22108%22 height=%222%22 y=%2238%22 fill=%22%2372777d%22 rx=%221%22/%3E %3Crect width=%2251%22 height=%222%22 fill=%22%2372777d%22 rx=%221%22/%3E %3C/g%3E %3Crect width=%2230%22 height=%222%22 x=%2267%22 y=%22158%22 fill=%22%2372777d%22 opacity=%22.4%22 rx=%221%22/%3E %3Crect width=%2230%22 height=%222%22 x=%2299%22 y=%22158%22 fill=%22%2372777d%22 opacity=%22.4%22 rx=%221%22/%3E %3Cuse fill=%22%2336c%22 xlink:href=%22%23c%22/%3E %3Crect width=%2233%22 height=%225%22 x=%22133.5%22 y=%22156.5%22 stroke=%22%23ffc057%22 stroke-opacity=%22.447%22 stroke-width=%223%22 rx=%222.5%22/%3E %3Ccircle cx=%2234%22 cy=%2249%22 r=%2219%22 fill=%22%23eaecf0%22/%3E %3Cg fill=%22%23a2a9b1%22 transform=%22translate%285 5%29%22%3E %3Ccircle cx=%221.5%22 cy=%221.5%22 r=%221.5%22/%3E %3Ccircle cx=%226%22 cy=%221.5%22 r=%221.5%22/%3E %3Ccircle cx=%2210.5%22 cy=%221.5%22 r=%221.5%22/%3E %3C/g%3E %3Cpath stroke=%22%23ff00af%22 d=%22M174.5 159.5h54.01%22 stroke-linecap=%22square%22/%3E %3C/g%3E %3C/svg%3E");background-position:top left;background-repeat:no-repeat;background-size:180px 140px;font-size:13px;font-weight:800;height:140px;margin:40px;position:relative}.mwe-popups-settings-help p{left:180px;bottom:20px;position:absolute}.mwe-popups-overlay{background-color:rgba(255,255,255,0.9);z-index:999;position:fixed;height:100%;width:100%;top:0;bottom:0;left:0;right:0}#mwe-popups-settings{font-size:0.875em}
+.ve-init-mw-tempWikitextEditorWidget{border:0;padding:0;color:inherit;line-height:1.5em; }.ve-init-mw-tempWikitextEditorWidget:focus{outline:0;padding:0}.ve-init-mw-tempWikitextEditorWidget::selection{background:rgba(109,169,247,0.5); }
+#uls-settings-block{background-color:#f8f9fa;border-top:1px solid #c8ccd1;padding-left:10px;line-height:1.2em;border-radius:0 0 2px 2px}#uls-settings-block div.display-settings-block,#uls-settings-block div.input-settings-block{display:inline-block;margin:8px 15px;color:#54595d}#uls-settings-block div.display-settings-block:hover,#uls-settings-block div.input-settings-block:hover{color:#222}</style><style>
+.ve-activated #toc,.ve-activated #siteNotice,.ve-activated .mw-indicators,.ve-activated #t-print,.ve-activated #t-permalink,.ve-activated #p-coll-print_export,.ve-activated #t-cite,.ve-deactivating .ve-ui-surface,.ve-active .ve-init-mw-desktopArticleTarget-editableContent,.ve-active .ve-init-mw-tempWikitextEditorWidget{display:none} .ve-activating .ve-ui-surface{height:0;padding:0 !important; overflow:hidden} .ve-loading #content > :not( .ve-init-mw-desktopArticleTarget-loading-overlay ), .ve-activated .ve-init-mw-desktopArticleTarget-uneditableContent{ pointer-events:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;opacity:0.5}.ve-activated #catlinks{cursor:pointer}.ve-activated #catlinks a{opacity:1} .ve-activated #content{position:relative} .ve-init-mw-desktopArticleTarget-loading-overlay{position:absolute;top:1.25em;left:0;right:0;z-index:1;margin-top:-0.5em}.ve-init-mw-desktopArticleTarget-progress{height:1em;overflow:hidden;margin:0 25%}.ve-init-mw-desktopArticleTarget-progress-bar{height:1em;width:0}.ve-init-mw-desktopArticleTarget-toolbarPlaceholder{transition:height 250ms ease;height:0; } .oo-ui-element-hidden{display:none !important; } .mw-editsection{white-space:nowrap; unicode-bidi:-moz-isolate;unicode-bidi:-webkit-isolate;unicode-bidi:isolate}.mw-editsection-divider{color:#54595d} .ve-init-mw-desktopArticleTarget-progress{height:0.75em;border:1px solid #36c;background:#fff;border-radius:2px;box-shadow:0 0.1em 0 0 rgba( 0,0,0,0.15 )}.ve-init-mw-desktopArticleTarget-progress-bar{height:0.75em;background:#36c}.ve-init-mw-desktopArticleTarget-toolbar,.ve-init-mw-desktopArticleTarget-toolbarPlaceholder{font-size:0.8em; margin:-1.25em -1.25em 1.25em -1.25em; }@media screen and ( min-width:982px ){.ve-init-mw-desktopArticleTarget-toolbar,.ve-init-mw-desktopArticleTarget-toolbarPlaceholder{ margin:-1.5625em -1.875em 1.5265em -1.875em}}.ve-init-mw-desktopArticleTarget-toolbarPlaceholder{border-bottom:1px solid #c8ccd1;box-shadow:0 1px 1px 0 rgba( 0,0,0,0.1 )}.ve-init-mw-desktopArticleTarget-toolbarPlaceholder-open{height:40px}</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="./Parsing expression grammar - Wikipedia_files/load(2).php">
+<link rel="stylesheet" href="./Parsing expression grammar - Wikipedia_files/load(3).php">
+<meta name="generator" content="MediaWiki 1.31.0-wmf.15">
+<meta name="referrer" content="origin-when-cross-origin">
+<link rel="alternate" href="android-app://org.wikipedia/http/en.m.wikipedia.org/wiki/Parsing_expression_grammar">
+<link rel="alternate" type="application/x-wiki" title="Edit this page" href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit">
+<link rel="edit" title="Edit this page" href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit">
+<link rel="apple-touch-icon" href="https://en.wikipedia.org/static/apple-touch/wikipedia.png">
+<link rel="shortcut icon" href="https://en.wikipedia.org/static/favicon/wikipedia.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://en.wikipedia.org/w/opensearch_desc.php" title="Wikipedia (en)">
+<link rel="EditURI" type="application/rsd+xml" href="https://en.wikipedia.org/w/api.php?action=rsd">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">
+<link rel="canonical" href="https://en.wikipedia.org/wiki/Parsing_expression_grammar">
+<link rel="dns-prefetch" href="https://login.wikimedia.org/">
+<link rel="dns-prefetch" href="https://meta.wikimedia.org/">
+<!--[if lt IE 9]><script src="/w/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=vector&amp;sync=1"></script><![endif]-->
+<script src="./Parsing expression grammar - Wikipedia_files/load(4).php"></script></head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Parsing_expression_grammar rootpage-Parsing_expression_grammar skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="centralNotice"></div><!-- CentralNotice --></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Parsing expression grammar</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Wikipedia, the free encyclopedia</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#mw-head">navigation</a>, 					<a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>In <a href="https://en.wikipedia.org/wiki/Computer_science" title="Computer science">computer science</a>, a <b>parsing expression grammar</b>, or <b>PEG</b>, is a type of <a href="https://en.wikipedia.org/wiki/Formal_grammar#Analytic_grammars" title="Formal grammar">analytic</a> <a href="https://en.wikipedia.org/wiki/Formal_grammar" title="Formal grammar">formal grammar</a>, i.e. it describes a <a href="https://en.wikipedia.org/wiki/Formal_language" title="Formal language">formal language</a> in terms of a set of rules for recognizing <a href="https://en.wikipedia.org/wiki/String_(computer_science)" title="String (computer science)">strings</a> in the language. The formalism was introduced by Bryan Ford in 2004<sup id="cite_ref-For04_1-0" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-For04-1">[1]</a></sup> and is closely related to the family of <a href="https://en.wikipedia.org/wiki/Top-down_parsing_language" title="Top-down parsing language">top-down parsing languages</a> introduced in the early 1970s. Syntactically, PEGs also look similar to <a href="https://en.wikipedia.org/wiki/Context-free_grammar" title="Context-free grammar">context-free grammars</a> (CFGs), but they have a different interpretation: the choice operator selects the first match in PEG, while it is ambiguous in CFG. This is closer to how string recognition tends to be done in practice, e.g. by a <a href="https://en.wikipedia.org/wiki/Recursive_descent_parser" title="Recursive descent parser">recursive descent parser</a>.</p>
+<p>Unlike CFGs, PEGs cannot be <a href="https://en.wikipedia.org/wiki/Ambiguous_grammar" title="Ambiguous grammar">ambiguous</a>; if a string parses, it has exactly one valid <a href="https://en.wikipedia.org/wiki/Parse_tree" title="Parse tree">parse tree</a>. It is conjectured that there exist context-free languages that cannot be recognized by a PEG, but this is not yet proven.<sup id="cite_ref-For04_1-1" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-For04-1">[1]</a></sup> PEGs are well-suited to parsing computer languages (and artificial human languages such as <a href="https://en.wikipedia.org/wiki/Lojban" title="Lojban">Lojban</a>), but not <a href="https://en.wikipedia.org/wiki/Natural_language" title="Natural language">natural languages</a> where the performance of PEG algorithms is comparable to general CFG algorithms such as the <a href="https://en.wikipedia.org/wiki/Earley_algorithm" class="mw-redirect" title="Earley algorithm">Earley algorithm</a>.<sup id="cite_ref-pegs_2-0" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-pegs-2">[2]</a></sup></p>
+<p></p>
+<div id="toc" class="toc">
+<div class="toctitle" lang="en" dir="ltr" xml:lang="en">
+<h2>Contents</h2>
+<span class="toctoggle">&nbsp;[<a role="button" tabindex="0" class="togglelink">hide</a>]&nbsp;</span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Definition"><span class="tocnumber">1</span> <span class="toctext">Definition</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Syntax"><span class="tocnumber">1.1</span> <span class="toctext">Syntax</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Semantics"><span class="tocnumber">1.2</span> <span class="toctext">Semantics</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Operational_interpretation_of_parsing_expressions"><span class="tocnumber">1.3</span> <span class="toctext">Operational interpretation of parsing expressions</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Examples"><span class="tocnumber">1.4</span> <span class="toctext">Examples</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Implementing_parsers_from_parsing_expression_grammars"><span class="tocnumber">2</span> <span class="toctext">Implementing parsers from parsing expression grammars</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Advantages"><span class="tocnumber">3</span> <span class="toctext">Advantages</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Disadvantages"><span class="tocnumber">4</span> <span class="toctext">Disadvantages</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Memory_consumption"><span class="tocnumber">4.1</span> <span class="toctext">Memory consumption</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Indirect_left_recursion"><span class="tocnumber">4.2</span> <span class="toctext">Indirect left recursion</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Expressive_power"><span class="tocnumber">4.3</span> <span class="toctext">Expressive power</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#Ambiguity_Detection"><span class="tocnumber">4.4</span> <span class="toctext">Ambiguity Detection</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#See_also"><span class="tocnumber">5</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#External_links"><span class="tocnumber">7</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+<p></p>
+<h2><span class="mw-headline" id="Definition">Definition</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=1" title="Edit section: Definition">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Syntax">Syntax</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=2" title="Edit section: Syntax">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Formally, a parsing expression grammar consists of:</p>
+<ul>
+<li>A finite set <i>N</i> of <i><a href="https://en.wikipedia.org/wiki/Nonterminal_symbol" class="mw-redirect" title="Nonterminal symbol">nonterminal symbols</a></i>.</li>
+<li>A finite set Σ of <i><a href="https://en.wikipedia.org/wiki/Terminal_symbol" class="mw-redirect" title="Terminal symbol">terminal symbols</a></i> that is disjoint from <i>N</i>.</li>
+<li>A finite set <i>P</i> of <i>parsing rules</i>.</li>
+<li>An expression <i>e<sub>S</sub></i> termed the <i>starting expression</i>.</li>
+</ul>
+<p>Each parsing rule in <i>P</i> has the form <i>A</i> ← <i>e</i>, where <i>A</i> is a nonterminal symbol and <i>e</i> is a <i>parsing expression</i>. A parsing expression is a hierarchical <a href="https://en.wikipedia.org/wiki/Expression_(mathematics)" title="Expression (mathematics)">expression</a> similar to a <a href="https://en.wikipedia.org/wiki/Regular_expression" title="Regular expression">regular expression</a>, which is constructed in the following fashion:</p>
+<ol>
+<li>An <i>atomic parsing expression</i> consists of:
+<ul>
+<li>any terminal symbol,</li>
+<li>any nonterminal symbol, or</li>
+<li>the empty string ε.</li>
+</ul>
+</li>
+<li>Given any existing parsing expressions <i>e</i>, <i>e</i><sub>1</sub>, and <i>e</i><sub>2</sub>, a new parsing expression can be constructed using the following operators:
+<ul>
+<li><i>Sequence</i>: <i>e</i><sub>1</sub> <i>e</i><sub>2</sub></li>
+<li><i>Ordered choice</i>: <i>e</i><sub>1</sub> / <i>e</i><sub>2</sub></li>
+<li><i>Zero-or-more</i>: <i>e</i>*</li>
+<li><i>One-or-more</i>: <i>e</i>+</li>
+<li><i>Optional</i>: <i>e</i>?</li>
+<li><i>And-predicate</i>: &amp;<i>e</i></li>
+<li><i>Not-predicate</i>:&nbsp;!<i>e</i></li>
+</ul>
+</li>
+</ol>
+<h3><span class="mw-headline" id="Semantics">Semantics</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=3" title="Edit section: Semantics">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The fundamental difference between <a href="https://en.wikipedia.org/wiki/Context-free_grammars" class="mw-redirect" title="Context-free grammars">context-free grammars</a> and parsing expression grammars is that the PEG's choice operator is <i>ordered</i>. If the first alternative succeeds, the second alternative is ignored. Thus ordered choice is not <a href="https://en.wikipedia.org/wiki/Commutativity" class="mw-redirect" title="Commutativity">commutative</a>, unlike unordered choice as in context-free grammars. Ordered choice is analogous to <a href="https://en.wikipedia.org/wiki/Cut_(logic_programming)" title="Cut (logic programming)">soft cut</a> operators available in some <a href="https://en.wikipedia.org/wiki/Logic_programming" title="Logic programming">logic programming</a> languages.</p>
+<p>The consequence is that if a CFG is transliterated directly to a PEG, any ambiguity in the former is resolved by deterministically picking one parse tree from the possible parses. By carefully choosing the order in which the grammar alternatives are specified, a programmer has a great deal of control over which parse tree is selected.</p>
+<p>Like <a href="https://en.wikipedia.org/wiki/Boolean_grammar" title="Boolean grammar">boolean context-free grammars</a>, parsing expression grammars also add the and- and not- <a href="https://en.wikipedia.org/wiki/Syntactic_predicate" title="Syntactic predicate">syntactic predicates</a>. Because they can use an arbitrarily complex sub-expression to "look ahead" into the input string without actually consuming it, they provide a powerful syntactic <a href="https://en.wikipedia.org/wiki/Parsing#Lookahead" title="Parsing">lookahead</a> and disambiguation facility, in particular when reordering the alternatives cannot specify the exact parse tree desired.</p>
+<h3><span class="mw-headline" id="Operational_interpretation_of_parsing_expressions">Operational interpretation of parsing expressions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=4" title="Edit section: Operational interpretation of parsing expressions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Each nonterminal in a parsing expression grammar essentially represents a parsing <a href="https://en.wikipedia.org/wiki/Function_(mathematics)" title="Function (mathematics)">function</a> in a <a href="https://en.wikipedia.org/wiki/Recursive_descent_parser" title="Recursive descent parser">recursive descent parser</a>, and the corresponding parsing expression represents the "code" comprising the function. Each parsing function conceptually takes an input string as its argument, and yields one of the following results:</p>
+<ul>
+<li><i>success</i>, in which the function may optionally move forward or <i>consume</i> one or more characters of the input string supplied to it, or</li>
+<li><i>failure</i>, in which case no input is consumed.</li>
+</ul>
+<p>An atomic parsing expression consisting of a single <b>terminal</b> (i.e. literal) succeeds if the first character of the input string matches that terminal, and in that case consumes the input character; otherwise the expression yields a failure result. An atomic parsing expression consisting of the empty string always trivially succeeds without consuming any input.</p>
+<p>An atomic parsing expression consisting of a <b>nonterminal</b> <i>A</i> represents a <a href="https://en.wikipedia.org/wiki/Recursion" title="Recursion">recursive</a> call to the nonterminal-function <i>A</i>. A nonterminal may succeed without actually consuming any input, and this is considered an outcome distinct from failure.</p>
+<p>The <b>sequence</b> operator <i>e</i><sub>1</sub> <i>e</i><sub>2</sub> first invokes <i>e</i><sub>1</sub>, and if <i>e</i><sub>1</sub> succeeds, subsequently invokes <i>e</i><sub>2</sub> on the remainder of the input string left unconsumed by <i>e</i><sub>1</sub>, and returns the result. If either <i>e</i><sub>1</sub> or <i>e</i><sub>2</sub> fails, then the sequence expression <i>e</i><sub>1</sub> <i>e</i><sub>2</sub> fails.</p>
+<p>The <b>choice</b> operator <i>e</i><sub>1</sub> / <i>e</i><sub>2</sub> first invokes <i>e</i><sub>1</sub>, and if <i>e</i><sub>1</sub> succeeds, returns its result immediately. Otherwise, if <i>e</i><sub>1</sub> fails, then the choice operator <a href="https://en.wikipedia.org/wiki/Backtracking" title="Backtracking">backtracks</a> to the original input position at which it invoked <i>e</i><sub>1</sub>, but then calls <i>e</i><sub>2</sub> instead, returning <i>e</i><sub>2</sub>'s result.</p>
+<p>The <b>zero-or-more</b>, <b>one-or-more</b>, and <b>optional</b> operators consume zero or more, one or more, or zero or one consecutive repetitions of their sub-expression <i>e</i>, respectively. Unlike in <a href="https://en.wikipedia.org/wiki/Context-free_grammar" title="Context-free grammar">context-free grammars</a> and <a href="https://en.wikipedia.org/wiki/Regular_expression" title="Regular expression">regular expressions</a>, however, these operators <i>always</i> behave <a href="https://en.wikipedia.org/wiki/Greedy_algorithm" title="Greedy algorithm">greedily</a>, consuming as much input as possible and never backtracking. (Regular expression matchers may start by matching greedily, but will then backtrack and try shorter matches if they fail to match.) For example, the expression a* will always consume as many a's as are consecutively available in the input string, and the expression (a* a) will always fail because the first part (a*) will never leave any a's for the second part to match.</p>
+<p>The <b>and-predicate</b> expression &amp;<i>e</i> invokes the sub-expression <i>e</i>, and then succeeds if <i>e</i> succeeds and fails if <i>e</i> fails, but in either case <i>never consumes any input</i>.</p>
+<p>The <b>not-predicate</b> expression&nbsp;!<i>e</i> succeeds if <i>e</i> fails and fails if <i>e</i> succeeds, again consuming no input in either case.</p>
+<h3><span class="mw-headline" id="Examples">Examples</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=5" title="Edit section: Examples">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This is a PEG that recognizes mathematical formulas that apply the basic four operations to non-negative integers.</p>
+<pre>Expr    ← Sum
+Sum     ← Product (('+' / '-') Product)*
+Product ← Value (('*' / '/') Value)*
+Value   ← [0-9]+ / '(' Expr ')'
+</pre>
+<p>In the above example, the terminal symbols are characters of text, represented by characters in single quotes, such as <code>'('</code> and <code>')'</code>. The range <b><code>[0-9]</code></b> is also a shortcut for ten characters, indicating any one of the digits 0 through 9. (This range syntax is the same as the syntax used by <a href="https://en.wikipedia.org/wiki/Regular_expression" title="Regular expression">regular expressions</a>.) The nonterminal symbols are the ones that expand to other rules: <i>Value</i>, <i>Product</i>, <i>Sum</i>, and <i>Expr</i>.</p>
+<p>The following recursive rule matches standard C-style if/then/else statements in such a way that the optional "else" clause always binds to the innermost "if", because of the implicit prioritization of the '/' operator. (In a <a href="https://en.wikipedia.org/wiki/Context-free_grammar" title="Context-free grammar">context-free grammar</a>, this construct yields the classic <a href="https://en.wikipedia.org/wiki/Dangling_else" title="Dangling else">dangling else</a> <a href="https://en.wikipedia.org/wiki/Ambiguous" class="mw-redirect" title="Ambiguous">ambiguity</a>.)</p>
+<pre>S ← 'if' C 'then' S 'else' S / 'if' C 'then' S
+</pre>
+<p>The following recursive rule matches Pascal-style nested comment syntax, (* which can (* nest *) like this *). The comment symbols appear in single quotes to distinguish them from PEG operators.</p>
+<pre>Begin ← '(*'
+End   ← '*)'
+C     ← Begin N* End
+N     ← C / (!Begin !End Z)
+Z     ← any single character
+</pre>
+<p>The parsing expression <b>foo &amp;(bar)</b> matches and consumes the text "foo" but only if it is followed by the text "bar". The parsing expression <b>foo&nbsp;!(bar)</b> matches the text "foo" but only if it is <i>not</i> followed by the text "bar". The expression <b>!(a+ b) a</b> matches a single "a" but only if it is not part of an arbitrarily long sequence of a's followed by a b.</p>
+<p>The parsing expression <b>('a'/'b')*</b> matches and consumes an arbitrary-length sequence of a's and b's. The <a href="https://en.wikipedia.org/wiki/Formal_grammar#The_syntax_of_grammars" title="Formal grammar">production rule</a> <span class="nowrap"><b><i>S</i> ← 'a' <i>S</i>? 'b'</b></span> describes the simple <a href="https://en.wikipedia.org/wiki/Context-free_language" title="Context-free language">context-free</a> "matching language" <span class="mwe-math-element"><span class="mwe-math-mathml-inline mwe-math-mathml-a11y" style="display: none;"><math xmlns="http://www.w3.org/1998/Math/MathML" alttext="{\displaystyle \{a^{n}b^{n}:n\geq 1\}}">
+  <semantics>
+    <mrow class="MJX-TeXAtom-ORD">
+      <mstyle displaystyle="true" scriptlevel="0">
+        <mo fence="false" stretchy="false">{</mo>
+        <msup>
+          <mi>a</mi>
+          <mrow class="MJX-TeXAtom-ORD">
+            <mi>n</mi>
+          </mrow>
+        </msup>
+        <msup>
+          <mi>b</mi>
+          <mrow class="MJX-TeXAtom-ORD">
+            <mi>n</mi>
+          </mrow>
+        </msup>
+        <mo>:</mo>
+        <mi>n</mi>
+        <mo>≥<!-- ≥ --></mo>
+        <mn>1</mn>
+        <mo fence="false" stretchy="false">}</mo>
+      </mstyle>
+    </mrow>
+    <annotation encoding="application/x-tex">{\displaystyle \{a^{n}b^{n}:n\geq 1\}}</annotation>
+  </semantics>
+</math></span><img src="./Parsing expression grammar - Wikipedia_files/5dae75c188a2c5c897ef0751e4a7af45d452f73a" class="mwe-math-fallback-image-inline" aria-hidden="true" style="vertical-align: -0.838ex; width:14.582ex; height:2.843ex;" alt="\{a^{n}b^{n}:n\geq 1\}"></span>. The following parsing expression grammar describes the classic non-context-free language <span class="mwe-math-element"><span class="mwe-math-mathml-inline mwe-math-mathml-a11y" style="display: none;"><math xmlns="http://www.w3.org/1998/Math/MathML" alttext="{\displaystyle \{a^{n}b^{n}c^{n}:n\geq 1\}}">
+  <semantics>
+    <mrow class="MJX-TeXAtom-ORD">
+      <mstyle displaystyle="true" scriptlevel="0">
+        <mo fence="false" stretchy="false">{</mo>
+        <msup>
+          <mi>a</mi>
+          <mrow class="MJX-TeXAtom-ORD">
+            <mi>n</mi>
+          </mrow>
+        </msup>
+        <msup>
+          <mi>b</mi>
+          <mrow class="MJX-TeXAtom-ORD">
+            <mi>n</mi>
+          </mrow>
+        </msup>
+        <msup>
+          <mi>c</mi>
+          <mrow class="MJX-TeXAtom-ORD">
+            <mi>n</mi>
+          </mrow>
+        </msup>
+        <mo>:</mo>
+        <mi>n</mi>
+        <mo>≥<!-- ≥ --></mo>
+        <mn>1</mn>
+        <mo fence="false" stretchy="false">}</mo>
+      </mstyle>
+    </mrow>
+    <annotation encoding="application/x-tex">{\displaystyle \{a^{n}b^{n}c^{n}:n\geq 1\}}</annotation>
+  </semantics>
+</math></span><img src="./Parsing expression grammar - Wikipedia_files/cec0925de623cbcbf8e0bff42f7b51a1a36ca280" class="mwe-math-fallback-image-inline" aria-hidden="true" style="vertical-align: -0.838ex; width:16.807ex; height:2.843ex;" alt=" \{ a^n b^n c^n : n \ge 1 \} "></span>:</p>
+<pre>S ← &amp;(A 'c') 'a'+ B !.
+A ← 'a' A? 'b'
+B ← 'b' B? 'c'
+</pre>
+<h2><span class="mw-headline" id="Implementing_parsers_from_parsing_expression_grammars">Implementing parsers from parsing expression grammars</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=6" title="Edit section: Implementing parsers from parsing expression grammars">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Any parsing expression grammar can be converted directly into a <a href="https://en.wikipedia.org/wiki/Recursive_descent_parser" title="Recursive descent parser">recursive descent parser</a>.<sup id="cite_ref-ford02_3-0" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-ford02-3">[3]</a></sup> Due to the unlimited <a href="https://en.wikipedia.org/wiki/Parsing#Lookahead" title="Parsing">lookahead</a> capability that the grammar formalism provides, however, the resulting parser could exhibit <a href="https://en.wikipedia.org/wiki/Exponential_time" class="mw-redirect" title="Exponential time">exponential time</a> performance in the worst case.</p>
+<p>It is possible to obtain better performance for any parsing expression grammar by converting its recursive descent parser into a <i>packrat parser</i>, which always runs in <a href="https://en.wikipedia.org/wiki/Linear_time" class="mw-redirect" title="Linear time">linear time</a>, at the cost of substantially greater storage space requirements. A packrat parser<sup id="cite_ref-ford02_3-1" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-ford02-3">[3]</a></sup> is a form of <a href="https://en.wikipedia.org/wiki/Parsing" title="Parsing">parser</a> similar to a recursive descent parser in construction, except that during the parsing process it <a href="https://en.wikipedia.org/wiki/Memoization" title="Memoization">memoizes</a> the intermediate results of all invocations of the <a href="https://en.wikipedia.org/wiki/Mutual_recursion" title="Mutual recursion">mutually recursive</a> parsing functions, ensuring that each parsing function is only invoked at most once at a given input position. Because of this memoization, a packrat parser has the ability to parse many <a href="https://en.wikipedia.org/wiki/Context-free_grammar" title="Context-free grammar">context-free grammars</a> and <i>any</i> parsing expression grammar (including some that do not represent context-free languages) in linear time. Examples of memoized recursive descent parsers are known from at least as early as 1993.<sup id="cite_ref-merritt01_4-0" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-merritt01-4">[4]</a></sup> Note that this analysis of the performance of a packrat parser assumes that enough memory is available to hold all of the memoized results; in practice, if there were not enough memory, some parsing functions might have to be invoked more than once at the same input position, and consequently the parser could take more than linear time.</p>
+<p>It is also possible to build <a href="https://en.wikipedia.org/wiki/LL_parser" title="LL parser">LL parsers</a> and <a href="https://en.wikipedia.org/wiki/LR_parser" title="LR parser">LR parsers</a> from parsing expression grammars, with better worst-case performance than a recursive descent parser, but the unlimited lookahead capability of the grammar formalism is then lost. Therefore, not all languages that can be expressed using parsing expression grammars can be parsed by LL or LR parsers.</p>
+<h2><span class="mw-headline" id="Advantages">Advantages</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=7" title="Edit section: Advantages">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Compared to pure <a href="https://en.wikipedia.org/wiki/Regular_expressions" class="mw-redirect" title="Regular expressions">regular expressions</a> (i.e. without back-references), PEGs are strictly more powerful, but require significantly more memory. For example, a regular expression inherently cannot find an arbitrary number of matched pairs of parentheses, because it is not recursive, but a PEG can. However, a PEG will require an amount of memory proportional to the length of the input, while a regular expression matcher will require only a constant amount of memory.</p>
+<p>Any PEG can be parsed in linear time by using a packrat parser, as described above.</p>
+<p>Many CFGs contain ambiguities, even when they're intended to describe unambiguous languages. The "<a href="https://en.wikipedia.org/wiki/Dangling_else" title="Dangling else">dangling else</a>" problem in C, C++, and Java is one example. These problems are often resolved by applying a rule outside of the grammar. In a PEG, these ambiguities never arise, because of prioritization.</p>
+<h2><span class="mw-headline" id="Disadvantages">Disadvantages</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=8" title="Edit section: Disadvantages">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Memory_consumption">Memory consumption</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=9" title="Edit section: Memory consumption">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>PEG parsing is typically carried out via <i>packrat parsing</i>, which uses <a href="https://en.wikipedia.org/wiki/Memoization" title="Memoization">memoization</a><sup id="cite_ref-5" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-5">[5]</a></sup><sup id="cite_ref-6" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-6">[6]</a></sup> to eliminate redundant parsing steps. Packrat parsing requires storage proportional to the total input size, rather than the depth of the parse tree as with LR parsers. This is a significant difference in many domains: for example, hand-written source code has an effectively constant expression nesting depth independent of the length of the program—expressions nested beyond a certain depth tend to get refactored.</p>
+<p>For some grammars and some inputs, the depth of the parse tree can be proportional to the input size,<sup id="cite_ref-7" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-7">[7]</a></sup> so both an LR parser and a packrat parser will appear to have the same worst-case asymptotic performance. A more accurate analysis would take the depth of the parse tree into account separately from the input size. This is similar to a situation which arises in <a href="https://en.wikipedia.org/wiki/Graph_algorithms" class="mw-redirect" title="Graph algorithms">graph algorithms</a>: the <a href="https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm" title="Bellman–Ford algorithm">Bellman–Ford algorithm</a> and <a href="https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm" title="Floyd–Warshall algorithm">Floyd–Warshall algorithm</a> appear to have the same running time (<span class="mwe-math-element"><span class="mwe-math-mathml-inline mwe-math-mathml-a11y" style="display: none;"><math xmlns="http://www.w3.org/1998/Math/MathML" alttext="{\displaystyle O(|V|^{3})}">
+  <semantics>
+    <mrow class="MJX-TeXAtom-ORD">
+      <mstyle displaystyle="true" scriptlevel="0">
+        <mi>O</mi>
+        <mo stretchy="false">(</mo>
+        <mrow class="MJX-TeXAtom-ORD">
+          <mo stretchy="false">|</mo>
+        </mrow>
+        <mi>V</mi>
+        <msup>
+          <mrow class="MJX-TeXAtom-ORD">
+            <mo stretchy="false">|</mo>
+          </mrow>
+          <mrow class="MJX-TeXAtom-ORD">
+            <mn>3</mn>
+          </mrow>
+        </msup>
+        <mo stretchy="false">)</mo>
+      </mstyle>
+    </mrow>
+    <annotation encoding="application/x-tex">{\displaystyle O(|V|^{3})}</annotation>
+  </semantics>
+</math></span><img src="./Parsing expression grammar - Wikipedia_files/04ad8b53a2cea864c6d746895cc7397971f72912" class="mwe-math-fallback-image-inline" aria-hidden="true" style="vertical-align: -0.838ex; width:7.718ex; height:3.343ex;" alt="O(|V|^{3})"></span>) if only the number of vertices is considered. However, a more precise analysis which accounts for the number of edges as a separate parameter assigns the <a href="https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm" title="Bellman–Ford algorithm">Bellman–Ford algorithm</a> a time of <span class="mwe-math-element"><span class="mwe-math-mathml-inline mwe-math-mathml-a11y" style="display: none;"><math xmlns="http://www.w3.org/1998/Math/MathML" alttext="{\displaystyle O(|V|*|E|)}">
+  <semantics>
+    <mrow class="MJX-TeXAtom-ORD">
+      <mstyle displaystyle="true" scriptlevel="0">
+        <mi>O</mi>
+        <mo stretchy="false">(</mo>
+        <mrow class="MJX-TeXAtom-ORD">
+          <mo stretchy="false">|</mo>
+        </mrow>
+        <mi>V</mi>
+        <mrow class="MJX-TeXAtom-ORD">
+          <mo stretchy="false">|</mo>
+        </mrow>
+        <mo>∗<!-- ∗ --></mo>
+        <mrow class="MJX-TeXAtom-ORD">
+          <mo stretchy="false">|</mo>
+        </mrow>
+        <mi>E</mi>
+        <mrow class="MJX-TeXAtom-ORD">
+          <mo stretchy="false">|</mo>
+        </mrow>
+        <mo stretchy="false">)</mo>
+      </mstyle>
+    </mrow>
+    <annotation encoding="application/x-tex">{\displaystyle O(|V|*|E|)}</annotation>
+  </semantics>
+</math></span><img src="./Parsing expression grammar - Wikipedia_files/6a4bbdb7c1037fe2c9ce73f21f48508438e8fdd9" class="mwe-math-fallback-image-inline" aria-hidden="true" style="vertical-align: -0.838ex; width:11.928ex; height:2.843ex;" alt="O(|V|*|E|)"></span>, which is quadratic for sparse graphs with <span class="mwe-math-element"><span class="mwe-math-mathml-inline mwe-math-mathml-a11y" style="display: none;"><math xmlns="http://www.w3.org/1998/Math/MathML" alttext="{\displaystyle |E|\in O(|V|)}">
+  <semantics>
+    <mrow class="MJX-TeXAtom-ORD">
+      <mstyle displaystyle="true" scriptlevel="0">
+        <mrow class="MJX-TeXAtom-ORD">
+          <mo stretchy="false">|</mo>
+        </mrow>
+        <mi>E</mi>
+        <mrow class="MJX-TeXAtom-ORD">
+          <mo stretchy="false">|</mo>
+        </mrow>
+        <mo>∈<!-- ∈ --></mo>
+        <mi>O</mi>
+        <mo stretchy="false">(</mo>
+        <mrow class="MJX-TeXAtom-ORD">
+          <mo stretchy="false">|</mo>
+        </mrow>
+        <mi>V</mi>
+        <mrow class="MJX-TeXAtom-ORD">
+          <mo stretchy="false">|</mo>
+        </mrow>
+        <mo stretchy="false">)</mo>
+      </mstyle>
+    </mrow>
+    <annotation encoding="application/x-tex">{\displaystyle |E|\in O(|V|)}</annotation>
+  </semantics>
+</math></span><img src="./Parsing expression grammar - Wikipedia_files/dd72d26408256c583a5a7f9aa4c91eac7d786ef9" class="mwe-math-fallback-image-inline" aria-hidden="true" style="vertical-align: -0.838ex; width:12.573ex; height:2.843ex;" alt="{\displaystyle |E|\in O(|V|)}"></span>.</p>
+<h3><span class="mw-headline" id="Indirect_left_recursion">Indirect left recursion</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=10" title="Edit section: Indirect left recursion">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A PEG is called <i>well-formed</i><sup id="cite_ref-For04_1-2" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-For04-1">[1]</a></sup> if it contains no <i><a href="https://en.wikipedia.org/wiki/Left_recursion" title="Left recursion">left-recursive</a></i> rules, i.e., rules that allow a nonterminal to expand to an expression in which the same nonterminal occurs as the leftmost symbol. For a left-to-right top-down parser, such rules cause infinite regress: parsing will continually expand the same nonterminal without moving forward in the string.</p>
+<p>Therefore, to allow packrat parsing, left recursion must be eliminated. For example, in the arithmetic grammar above, it would be tempting to move some rules around so that the precedence order of products and sums could be expressed in one line:</p>
+<pre>Value   ← [0-9.]+ / '(' Expr ')'
+Product ← Expr (('*' / '/') Expr)*
+Sum     ← Expr (('+' / '-') Expr)*
+Expr    ← Product / Sum / Value
+</pre>
+<p>In this new grammar, matching an <tt>Expr</tt> requires testing if a <tt>Product</tt> matches while matching a <tt>Product</tt> requires testing if an <tt>Expr</tt> matches. Because the term appears in the leftmost position, these rules make up a <a href="https://en.wikipedia.org/wiki/Circular_definition" title="Circular definition">circular definition</a> that cannot be resolved. (Circular definitions that can be resolved exist—such as in the original formulation from the first example—but such definitions are required not to exhibit pathological recursion.) However, left-recursive rules can always be rewritten to eliminate left-recursion.<sup id="cite_ref-pegs_2-1" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-pegs-2">[2]</a></sup><sup id="cite_ref-AhoSethiUllman_1986_8-0" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-AhoSethiUllman_1986-8">[8]</a></sup> For example, the following left-recursive CFG rule:</p>
+<pre>string-of-a ← string-of-a 'a' | 'a'
+</pre>
+<p>can be rewritten in a PEG using the plus operator:</p>
+<pre>string-of-a ← 'a'+
+</pre>
+<p>The process of rewriting <a href="https://en.wikipedia.org/wiki/Left_recursion#Indirect_left_recursion" title="Left recursion"><i>indirectly</i> left-recursive</a> rules is complex in some packrat parsers, especially when semantic actions are involved.</p>
+<p>With some modification, traditional packrat parsing can support direct left recursion,<sup id="cite_ref-ford02_3-2" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-ford02-3">[3]</a></sup><sup id="cite_ref-warth08_9-0" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-warth08-9">[9]</a></sup><sup id="cite_ref-ruediste09_10-0" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-ruediste09-10">[10]</a></sup> but doing so results in a loss of the linear-time parsing property<sup id="cite_ref-warth08_9-1" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-warth08-9">[9]</a></sup> which is generally the justification for using PEGs and packrat parsing in the first place. Only the <a href="https://en.wikipedia.org/wiki/OMeta" title="OMeta">OMeta</a> parsing algorithm<sup id="cite_ref-ometa08_11-0" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-ometa08-11">[11]</a></sup> supports full direct and indirect left recursion without additional attendant complexity (but again, at a loss of the linear time complexity), whereas all <a href="https://en.wikipedia.org/wiki/GLR_parser" title="GLR parser">GLR parsers</a> support left recursion.</p>
+<h3><span class="mw-headline" id="Expressive_power">Expressive power</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=11" title="Edit section: Expressive power">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>PEG packrat parsers cannot recognize some unambiguous nondeterministic CFG rules, such as the following:<sup id="cite_ref-pegs_2-2" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-pegs-2">[2]</a></sup></p>
+<pre>S ← 'x' S 'x' | 'x'
+</pre>
+<p>Neither <a href="https://en.wikipedia.org/wiki/LL(k)" class="mw-redirect" title="LL(k)">LL(k)</a> nor LR(k) parsing algorithms are capable of recognizing this example. However, this grammar can be used by a general CFG parser like the <a href="https://en.wikipedia.org/wiki/CYK_algorithm" title="CYK algorithm">CYK algorithm</a>. Note however that the <i>language</i> in question can be recognised by all these types of parser, since it is in fact a regular language (that of strings of an odd number of x's).</p>
+<p>It is an open problem to give a concrete example of a context-free language which cannot be recognized by a parsing expression grammar.<sup id="cite_ref-For04_1-3" class="reference"><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_note-For04-1">[1]</a></sup></p>
+<h3><span class="mw-headline" id="Ambiguity_Detection">Ambiguity Detection</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=12" title="Edit section: Ambiguity Detection">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>LL(k) and LR(k) parser generators will fail to complete when the input grammar is ambiguous. This is a feature in the common case that the grammar is intended to be unambiguous but is defective. A PEG parser generator will resolve unintended ambiguities earliest-match-first, which may be arbitrary and lead to surprising parses.</p>
+<h2><span class="mw-headline" id="See_also">See also</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=13" title="Edit section: See also">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Compiler_Description_Language" title="Compiler Description Language">Compiler Description Language</a> (CDL)</li>
+<li><a href="https://en.wikipedia.org/wiki/Formal_grammar" title="Formal grammar">Formal grammar</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Regular_expression" title="Regular expression">Regular expression</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Top-down_parsing_language" title="Top-down parsing language">Top-down parsing language</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Comparison_of_parser_generators" title="Comparison of parser generators">Comparison of parser generators</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Parser_combinator" title="Parser combinator">Parser combinator</a></li>
+</ul>
+<h2><span class="mw-headline" id="References">References</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=14" title="Edit section: References">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<div class="reflist" style="list-style-type: decimal;">
+<div class="mw-references-wrap mw-references-columns">
+<ol class="references">
+<li id="cite_note-For04-1"><span class="mw-cite-backlink">^ <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-For04_1-0"><span class="cite-accessibility-label">Jump up to: </span><sup><i><b>a</b></i></sup></a> <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-For04_1-1"><sup><i><b>b</b></i></sup></a> <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-For04_1-2"><sup><i><b>c</b></i></sup></a> <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-For04_1-3"><sup><i><b>d</b></i></sup></a></span> <span class="reference-text"><cite id="&quot;pegs&quot;" class="citation conference">Ford, Bryan p (2004). <a rel="nofollow" class="external text" href="http://portal.acm.org/citation.cfm?id=964001.964011">"Parsing Expression Grammars: A Recognition Based Syntactic Foundation"</a>. <i>Proceedings of the 31st ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages</i>. <a href="https://en.wikipedia.org/wiki/Association_for_Computing_Machinery" title="Association for Computing Machinery">ACM</a>. <a href="https://en.wikipedia.org/wiki/Digital_object_identifier" title="Digital object identifier">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1145%2F964001.964011">10.1145/964001.964011</a>. <a href="https://en.wikipedia.org/wiki/International_Standard_Book_Number" title="International Standard Book Number">ISBN</a>&nbsp;<a href="https://en.wikipedia.org/wiki/Special:BookSources/1-58113-729-X" title="Special:BookSources/1-58113-729-X">1-58113-729-X</a><span class="reference-accessdate">. Retrieved <span class="nowrap">2010-07-30</span></span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=conference&amp;rft.atitle=Parsing+Expression+Grammars%3A+A+Recognition+Based+Syntactic+Foundation&amp;rft.btitle=Proceedings+of+the+31st+ACM+SIGPLAN-SIGACT+Symposium+on+Principles+of+Programming+Languages&amp;rft.pub=ACM&amp;rft.date=2004&amp;rft_id=info%3Adoi%2F10.1145%2F964001.964011&amp;rft.isbn=1-58113-729-X&amp;rft.aulast=Ford&amp;rft.aufirst=Bryan+p&amp;rft_id=http%3A%2F%2Fportal.acm.org%2Fcitation.cfm%3Fid%3D964001.964011&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AParsing+expression+grammar" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-pegs-2"><span class="mw-cite-backlink">^ <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-pegs_2-0"><span class="cite-accessibility-label">Jump up to: </span><sup><i><b>a</b></i></sup></a> <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-pegs_2-1"><sup><i><b>b</b></i></sup></a> <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-pegs_2-2"><sup><i><b>c</b></i></sup></a></span> <span class="reference-text"><cite class="citation journal">Bryan Ford (2002). <a rel="nofollow" class="external text" href="http://pdos.csail.mit.edu/~baford/packrat/icfp02/packrat-icfp02.pdf">"Functional Pearl: Packrat Parsing: Simple, Powerful, Lazy, Linear Time"</a> <span style="font-size:85%;">(<a href="https://en.wikipedia.org/wiki/Portable_Document_Format" title="Portable Document Format">PDF</a>)</span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.atitle=Functional+Pearl%3A+Packrat+Parsing%3A+Simple%2C+Powerful%2C+Lazy%2C+Linear+Time&amp;rft.date=2002&amp;rft.au=Bryan+Ford&amp;rft_id=http%3A%2F%2Fpdos.csail.mit.edu%2F~baford%2Fpackrat%2Ficfp02%2Fpackrat-icfp02.pdf&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AParsing+expression+grammar" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-ford02-3"><span class="mw-cite-backlink">^ <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-ford02_3-0"><span class="cite-accessibility-label">Jump up to: </span><sup><i><b>a</b></i></sup></a> <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-ford02_3-1"><sup><i><b>b</b></i></sup></a> <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-ford02_3-2"><sup><i><b>c</b></i></sup></a></span> <span class="reference-text"><cite class="citation web">Ford, Bryan (September 2002). <a rel="nofollow" class="external text" href="http://pdos.csail.mit.edu/~baford/packrat/thesis">"Packrat Parsing: a Practical Linear-Time Algorithm with Backtracking"</a>. Massachusetts Institute of Technology<span class="reference-accessdate">. Retrieved <span class="nowrap">2007-07-27</span></span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=Packrat+Parsing%3A+a+Practical+Linear-Time+Algorithm+with+Backtracking&amp;rft.pub=Massachusetts+Institute+of+Technology&amp;rft.date=2002-09&amp;rft.aulast=Ford&amp;rft.aufirst=Bryan&amp;rft_id=http%3A%2F%2Fpdos.csail.mit.edu%2F~baford%2Fpackrat%2Fthesis&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AParsing+expression+grammar" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-merritt01-4"><span class="mw-cite-backlink"><b><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-merritt01_4-0"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><cite class="citation web">Merritt, Doug (November 1993). <a rel="nofollow" class="external text" href="http://compilers.iecc.com/comparch/article/93-11-012">"Transparent Recursive Descent"</a>. Usenet group comp.compilers<span class="reference-accessdate">. Retrieved <span class="nowrap">2009-09-04</span></span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=Transparent+Recursive+Descent&amp;rft.pub=Usenet+group+comp.compilers&amp;rft.date=1993-11&amp;rft.aulast=Merritt&amp;rft.aufirst=Doug&amp;rft_id=http%3A%2F%2Fcompilers.iecc.com%2Fcomparch%2Farticle%2F93-11-012&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AParsing+expression+grammar" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-5"><span class="mw-cite-backlink"><b><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-5"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><cite class="citation web">Bryan Ford. <a rel="nofollow" class="external text" href="http://pdos.csail.mit.edu/~baford/packrat/">"The Packrat Parsing and Parsing Expression Grammars Page"</a><span class="reference-accessdate">. Retrieved <span class="nowrap">23 Nov</span> 2010</span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=The+Packrat+Parsing+and+Parsing+Expression+Grammars+Page&amp;rft.au=Bryan+Ford&amp;rft_id=http%3A%2F%2Fpdos.csail.mit.edu%2F~baford%2Fpackrat%2F&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AParsing+expression+grammar" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-6"><span class="mw-cite-backlink"><b><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-6"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><cite class="citation web">Rick Jelliffe. <a rel="nofollow" class="external text" href="http://broadcast.oreilly.com/2010/03/what-is-a-packrat-parser-what.html">"What is a Packrat Parser? What are Brzozowski Derivatives?"</a><span class="reference-accessdate">. Retrieved <span class="nowrap">23 Nov</span> 2010</span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=What+is+a+Packrat+Parser%3F+What+are+Brzozowski+Derivatives%3F&amp;rft.au=Rick+Jelliffe&amp;rft_id=http%3A%2F%2Fbroadcast.oreilly.com%2F2010%2F03%2Fwhat-is-a-packrat-parser-what.html&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AParsing+expression+grammar" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-7"><span class="mw-cite-backlink"><b><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-7"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text">for example, the LISP expression (x (x (x (x ....))))</span></li>
+<li id="cite_note-AhoSethiUllman_1986-8"><span class="mw-cite-backlink"><b><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-AhoSethiUllman_1986_8-0"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text">Aho, A.V., Sethi, R. and Ullman, J.D. (1986) "Compilers: principles, techniques, and tools." <i><a href="https://en.wikipedia.org/wiki/Addison-Wesley_Longman" class="mw-redirect" title="Addison-Wesley Longman">Addison-Wesley Longman</a> Publishing Co., Inc. Boston, MA, USA.</i></span></li>
+<li id="cite_note-warth08-9"><span class="mw-cite-backlink">^ <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-warth08_9-0"><span class="cite-accessibility-label">Jump up to: </span><sup><i><b>a</b></i></sup></a> <a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-warth08_9-1"><sup><i><b>b</b></i></sup></a></span> <span class="reference-text"><cite class="citation journal">Alessandro Warth; James R. Douglass; Todd Millstein (January 2008). <a rel="nofollow" class="external text" href="http://www.vpri.org/pdf/tr2007002_packrat.pdf">"Packrat Parsers Can Support Left Recursion"</a> <span style="font-size:85%;">(<a href="https://en.wikipedia.org/wiki/Portable_Document_Format" title="Portable Document Format">PDF</a>)</span>. Viewpoints Research Institute<span class="reference-accessdate">. Retrieved <span class="nowrap">2008-10-02</span></span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.atitle=Packrat+Parsers+Can+Support+Left+Recursion&amp;rft.date=2008-01&amp;rft.au=Alessandro+Warth&amp;rft.au=James+R.+Douglass&amp;rft.au=Todd+Millstein&amp;rft_id=http%3A%2F%2Fwww.vpri.org%2Fpdf%2Ftr2007002_packrat.pdf&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AParsing+expression+grammar" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-ruediste09-10"><span class="mw-cite-backlink"><b><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-ruediste09_10-0"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><cite class="citation journal">Ruedi Steinmann (March 2009). <a rel="nofollow" class="external text" href="http://n.ethz.ch/~ruediste/packrat.pdf">"Handling Left Recursion in Packrat Parsers"</a> <span style="font-size:85%;">(<a href="https://en.wikipedia.org/wiki/Portable_Document_Format" title="Portable Document Format">PDF</a>)</span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.atitle=Handling+Left+Recursion+in+Packrat+Parsers&amp;rft.date=2009-03&amp;rft.au=Ruedi+Steinmann&amp;rft_id=http%3A%2F%2Fn.ethz.ch%2F~ruediste%2Fpackrat.pdf&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AParsing+expression+grammar" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-ometa08-11"><span class="mw-cite-backlink"><b><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#cite_ref-ometa08_11-0"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><cite class="citation web"><a rel="nofollow" class="external text" href="http://www.vpri.org/pdf/tr2007002_packrat.pdf">"Packrat Parsers Can Support Left Recursion"</a> <span style="font-size:85%;">(PDF)</span>. PEPM '08. January 2008<span class="reference-accessdate">. Retrieved <span class="nowrap">2009-08-04</span></span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=Packrat+Parsers+Can+Support+Left+Recursion&amp;rft.pub=PEPM+%2708&amp;rft.date=2008-01&amp;rft_id=http%3A%2F%2Fwww.vpri.org%2Fpdf%2Ftr2007002_packrat.pdf&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AParsing+expression+grammar" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+</ol>
+</div>
+</div>
+<h2><span class="mw-headline" id="External_links">External links</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit&amp;section=15" title="Edit section: External links">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul>
+<li><a rel="nofollow" class="external text" href="http://mathosproject.com/updates/convert-a-string-expression-into-a-lambda-expression/">Converting a string expression into a lambda expression using an expression parser</a></li>
+<li><a rel="nofollow" class="external text" href="http://bford.info/packrat/">The Packrat Parsing and Parsing Expression Grammars Page</a></li>
+<li>The <a href="https://en.wikipedia.org/wiki/Constructed_language" title="Constructed language">constructed language</a> <a href="https://en.wikipedia.org/wiki/Lojban" title="Lojban">Lojban</a> has a <a rel="nofollow" class="external text" href="http://www.digitalkingdom.org/~rlpowell/hobbies/lojban/grammar/">fairly large PEG grammar</a> allowing unambiguous parsing of Lojban text.</li>
+</ul>
+<div role="navigation" class="navbox" aria-labelledby="Parsing_algorithms" style="padding:3px">
+<table class="nowraplinks collapsible autocollapse navbox-inner" style="border-spacing:0;background:transparent;color:inherit" id="collapsibleTable0">
+<tbody><tr>
+<th scope="col" class="navbox-title" colspan="2"><span class="collapseButton">[<a id="collapseButton0" href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#">hide</a>]</span>
+<div class="plainlinks hlist navbar mini">
+<ul>
+<li class="nv-view"><a href="https://en.wikipedia.org/wiki/Template:Parsers" title="Template:Parsers"><abbr title="View this template" style=";;background:none transparent;border:none;-moz-box-shadow:none;-webkit-box-shadow:none;box-shadow:none;">v</abbr></a></li>
+<li class="nv-talk"><a href="https://en.wikipedia.org/w/index.php?title=Template_talk:Parsers&amp;action=edit&amp;redlink=1" class="new" title="Template talk:Parsers (page does not exist)"><abbr title="Discuss this template" style=";;background:none transparent;border:none;-moz-box-shadow:none;-webkit-box-shadow:none;box-shadow:none;">t</abbr></a></li>
+<li class="nv-edit"><a class="external text" href="https://en.wikipedia.org/w/index.php?title=Template:Parsers&amp;action=edit"><abbr title="Edit this template" style=";;background:none transparent;border:none;-moz-box-shadow:none;-webkit-box-shadow:none;box-shadow:none;">e</abbr></a></li>
+</ul>
+</div>
+<div id="Parsing_algorithms" style="font-size:114%;margin:0 4em"><a href="https://en.wikipedia.org/wiki/Parsing" title="Parsing">Parsing algorithms</a></div>
+</th>
+</tr>
+<tr>
+<th scope="row" class="navbox-group" style="width:1%"><a href="https://en.wikipedia.org/wiki/Top-down_parsing" title="Top-down parsing">Top-down</a></th>
+<td class="navbox-list navbox-odd hlist" style="text-align:left;border-left-width:2px;border-left-style:solid;width:100%;padding:0px">
+<div style="padding:0em 0.25em">
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/LL_parser" title="LL parser">LL</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Recursive_descent_parser" title="Recursive descent parser">Recursive descent</a>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Tail_recursive_parser" title="Tail recursive parser">Tail recursive</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+<tr>
+<th scope="row" class="navbox-group" style="width:1%"><a href="https://en.wikipedia.org/wiki/Bottom-up_parsing" title="Bottom-up parsing">Bottom-up</a></th>
+<td class="navbox-list navbox-even hlist" style="text-align:left;border-left-width:2px;border-left-style:solid;width:100%;padding:0px">
+<div style="padding:0em 0.25em">
+<ul>
+<li>Precedence
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Simple_precedence_parser" title="Simple precedence parser">Simple</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Operator-precedence_parser" title="Operator-precedence parser">Operator</a>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Shunting-yard_algorithm" title="Shunting-yard algorithm">Shunting-yard</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Bounded-context</li>
+<li><a href="https://en.wikipedia.org/wiki/LR_parser" title="LR parser">LR</a>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Simple_LR_parser" title="Simple LR parser">Simple</a></li>
+<li><a href="https://en.wikipedia.org/wiki/LALR_parser" title="LALR parser">Look-ahead</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Canonical_LR_parser" title="Canonical LR parser">Canonical</a></li>
+<li><a href="https://en.wikipedia.org/wiki/GLR_parser" title="GLR parser">Generalized</a></li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/CYK_algorithm" title="CYK algorithm">CYK</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Recursive_ascent_parser" title="Recursive ascent parser">Recursive ascent</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Shift-reduce_parser" title="Shift-reduce parser">Shift-reduce</a></li>
+</ul>
+</div>
+</td>
+</tr>
+<tr>
+<th scope="row" class="navbox-group" style="width:1%">Mixed/Other</th>
+<td class="navbox-list navbox-odd hlist" style="text-align:left;border-left-width:2px;border-left-style:solid;width:100%;padding:0px">
+<div style="padding:0em 0.25em">
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Parser_combinator" title="Parser combinator">Combinator</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Chart_parser" title="Chart parser">Chart</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Earley_parser" title="Earley parser">Earley</a></li>
+</ul>
+</div>
+</td>
+</tr>
+<tr>
+<th scope="row" class="navbox-group" style="width:1%">Related topics</th>
+<td class="navbox-list navbox-even hlist" style="text-align:left;border-left-width:2px;border-left-style:solid;width:100%;padding:0px">
+<div style="padding:0em 0.25em">
+<ul>
+<li><a class="mw-selflink selflink">PEG</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Dynamic_programming" title="Dynamic programming">Dynamic programming</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Memoization" title="Memoization">Memoization</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Recursive_descent_parser" title="Recursive descent parser">Backtracking</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Compiler-compiler" title="Compiler-compiler">Parser generator</a>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/LALR_parser_generator" title="LALR parser generator">LALR</a></li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/Metacompiler" title="Metacompiler">Metacompiler</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Parse_tree" title="Parse tree">Parse tree</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree" title="Abstract syntax tree">AST</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Scannerless_parsing" title="Scannerless parsing">Scannerless parsing</a></li>
+<li><a href="https://en.wikipedia.org/wiki/History_of_compiler_construction" title="History of compiler construction">History of compiler construction</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Comparison_of_parser_generators" title="Comparison of parser generators">Comparison of parser generators</a></li>
+</ul>
+</div>
+</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<!-- 
+NewPP limit report
+Parsed by mw1320
+Cached time: 20180114101557
+Cache expiry: 1900800
+Dynamic content: false
+CPU time usage: 0.128 seconds
+Real time usage: 0.209 seconds
+Preprocessor visited node count: 680/1000000
+Preprocessor generated node count: 0/1500000
+Post‐expand include size: 23674/2097152 bytes
+Template argument size: 120/2097152 bytes
+Highest expansion depth: 7/40
+Expensive parser function count: 0/500
+Lua time usage: 0.046/10.000 seconds
+Lua memory usage: 2.64 MB/50 MB
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  114.064      1 -total
+ 78.73%   89.800      1 Template:Reflist
+ 38.40%   43.803      1 Template:Cite_conference
+ 13.97%   15.938      5 Template:Cite_web
+ 11.92%   13.598      1 Template:Parsers
+ 10.40%   11.862      1 Template:Navbox
+  9.97%   11.367      3 Template:Cite_journal
+  1.75%    2.001      1 Template:Main_other
+  1.04%    1.188      1 Template:Nowrap
+-->
+</div>
+<!-- Saved in parser cache with key enwiki:pcache:idhash:892899-0!canonical!math=5 and timestamp 20180114101557 and revision id 818074593
+ -->
+<noscript>&lt;img src="//en.wikipedia.org/wiki/Special:CentralAutoLogin/start?type=1x1" alt="" title="" width="1" height="1" style="border: none; position: absolute;" /&gt;</noscript></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;oldid=818074593">https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;oldid=818074593</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="https://en.wikipedia.org/wiki/Help:Category" title="Help:Category">Categories</a>: <ul><li><a href="https://en.wikipedia.org/wiki/Category:Formal_languages" title="Category:Formal languages">Formal languages</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-anonuserpage">Not logged in</li><li id="pt-anontalk"><a href="https://en.wikipedia.org/wiki/Special:MyTalk" title="Discussion about edits from this IP address [alt-shift-n]" accesskey="n">Talk</a></li><li id="pt-anoncontribs"><a href="https://en.wikipedia.org/wiki/Special:MyContributions" title="A list of edits made from this IP address [alt-shift-y]" accesskey="y">Contributions</a></li><li id="pt-createaccount"><a href="https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&amp;returnto=Parsing+expression+grammar" title="You are encouraged to create an account and log in; however, it is not mandatory">Create account</a></li><li id="pt-login"><a href="https://en.wikipedia.org/w/index.php?title=Special:UserLogin&amp;returnto=Parsing+expression+grammar" title="You&#39;re encouraged to log in; however, it&#39;s not mandatory. [alt-shift-o]" accesskey="o">Log in</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar" title="View the content page [alt-shift-c]" accesskey="c">Article</a></span></li><li id="ca-talk"><span><a href="https://en.wikipedia.org/wiki/Talk:Parsing_expression_grammar" rel="discussion" title="Discussion about the content page [alt-shift-t]" accesskey="t">Talk</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<h3 id="p-variants-label" tabindex="0">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar">Read</a></span></li><li id="ca-edit" class="collapsible"><span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=edit" title="Edit this page [alt-shift-e]" accesskey="e">Edit</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=history" title="Past revisions of this page [alt-shift-h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label" style="">
+						<h3 id="p-cactions-label" tabindex="0"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://en.wikipedia.org/w/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Wikipedia" title="Search Wikipedia [alt-shift-f]" accesskey="f" id="searchInput" tabindex="1" autocomplete="off"><input type="hidden" value="Special:Search" name="title"><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton">							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="https://en.wikipedia.org/wiki/Main_Page" title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage-description"><a href="https://en.wikipedia.org/wiki/Main_Page" title="Visit the main page [alt-shift-z]" accesskey="z">Main page</a></li><li id="n-contents"><a href="https://en.wikipedia.org/wiki/Portal:Contents" title="Guides to browsing Wikipedia">Contents</a></li><li id="n-featuredcontent"><a href="https://en.wikipedia.org/wiki/Portal:Featured_content" title="Featured content – the best of Wikipedia">Featured content</a></li><li id="n-currentevents"><a href="https://en.wikipedia.org/wiki/Portal:Current_events" title="Find background information on current events">Current events</a></li><li id="n-randompage"><a href="https://en.wikipedia.org/wiki/Special:Random" title="Load a random article [alt-shift-x]" accesskey="x">Random article</a></li><li id="n-sitesupport"><a href="https://donate.wikimedia.org/wiki/Special:FundraiserRedirector?utm_source=donate&amp;utm_medium=sidebar&amp;utm_campaign=C13_en.wikipedia.org&amp;uselang=en" title="Support us">Donate to Wikipedia</a></li><li id="n-shoplink"><a href="https://shop.wikimedia.org/" title="Visit the Wikipedia store">Wikipedia store</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-interaction" aria-labelledby="p-interaction-label">
+			<h3 id="p-interaction-label">Interaction</h3>
+			<div class="body">
+								<ul>
+					<li id="n-help"><a href="https://en.wikipedia.org/wiki/Help:Contents" title="Guidance on how to use and edit Wikipedia">Help</a></li><li id="n-aboutsite"><a href="https://en.wikipedia.org/wiki/Wikipedia:About" title="Find out about Wikipedia">About Wikipedia</a></li><li id="n-portal"><a href="https://en.wikipedia.org/wiki/Wikipedia:Community_portal" title="About the project, what you can do, where to find things">Community portal</a></li><li id="n-recentchanges"><a href="https://en.wikipedia.org/wiki/Special:RecentChanges" title="A list of recent changes in the wiki [alt-shift-r]" accesskey="r">Recent changes</a></li><li id="n-contactpage"><a href="https://en.wikipedia.org/wiki/Wikipedia:Contact_us" title="How to contact Wikipedia">Contact page</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Tools</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="https://en.wikipedia.org/wiki/Special:WhatLinksHere/Parsing_expression_grammar" title="List of all English Wikipedia pages containing links to this page [alt-shift-j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="https://en.wikipedia.org/wiki/Special:RecentChangesLinked/Parsing_expression_grammar" rel="nofollow" title="Recent changes in pages linked from this page [alt-shift-k]" accesskey="k">Related changes</a></li><li id="t-upload"><a href="https://en.wikipedia.org/wiki/Wikipedia:File_Upload_Wizard" title="Upload files [alt-shift-u]" accesskey="u">Upload file</a></li><li id="t-specialpages"><a href="https://en.wikipedia.org/wiki/Special:SpecialPages" title="A list of all special pages [alt-shift-q]" accesskey="q">Special pages</a></li><li id="t-permalink"><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;oldid=818074593" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;action=info" title="More information about this page">Page information</a></li><li id="t-wikibase"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q32271" title="Link to connected data repository item [alt-shift-g]" accesskey="g">Wikidata item</a></li><li id="t-cite"><a href="https://en.wikipedia.org/w/index.php?title=Special:CiteThisPage&amp;page=Parsing_expression_grammar&amp;id=818074593" title="Information on how to cite this page">Cite this page</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-coll-print_export" aria-labelledby="p-coll-print_export-label">
+			<h3 id="p-coll-print_export-label">Print/export</h3>
+			<div class="body">
+								<ul>
+					<li id="coll-create_a_book"><a href="https://en.wikipedia.org/w/index.php?title=Special:Book&amp;bookcmd=book_creator&amp;referer=Parsing+expression+grammar">Create a book</a></li><li id="coll-download-as-rdf2latex"><a href="https://en.wikipedia.org/w/index.php?title=Special:ElectronPdf&amp;page=Parsing+expression+grammar&amp;action=show-download-screen">Download as PDF</a></li><li id="t-print"><a href="https://en.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;printable=yes" title="Printable version of this page [alt-shift-p]" accesskey="p">Printable version</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-lang" aria-labelledby="p-lang-label"><span class="uls-settings-trigger" title="Language settings" tabindex="0" role="button" aria-haspopup="true"></span>
+			<h3 id="p-lang-label">Languages</h3>
+			<div class="body">
+								<ul>
+					<li class="interlanguage-link interwiki-fa"><a href="https://fa.wikipedia.org/wiki/%D9%BE%D8%A7%D8%B1%D8%B3%D9%86%DA%AF_%D8%A7%DA%A9%D8%B3%D9%BE%D8%B1%D8%B4%D9%86_%DA%AF%D8%B1%D8%A7%D9%85%D8%B1" title="پارسنگ اکسپرشن گرامر – Persian" lang="fa" hreflang="fa" class="interlanguage-link-target">فارسی</a></li><li class="interlanguage-link interwiki-fr"><a href="https://fr.wikipedia.org/wiki/Parser_packrat" title="Parser packrat – French" lang="fr" hreflang="fr" class="interlanguage-link-target">Français</a></li><li class="interlanguage-link interwiki-ja"><a href="https://ja.wikipedia.org/wiki/Parsing_Expression_Grammar" title="Parsing Expression Grammar – Japanese" lang="ja" hreflang="ja" class="interlanguage-link-target">日本語</a></li><li class="interlanguage-link interwiki-pt"><a href="https://pt.wikipedia.org/wiki/Gram%C3%A1tica_de_an%C3%A1lise_sint%C3%A1tica_de_express%C3%A3o" title="Gramática de análise sintática de expressão – Portuguese" lang="pt" hreflang="pt" class="interlanguage-link-target">Português</a></li><li class="interlanguage-link interwiki-ru"><a href="https://ru.wikipedia.org/wiki/%D0%93%D1%80%D0%B0%D0%BC%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B0,_%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D1%8E%D1%89%D0%B0%D1%8F_%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5" title="Грамматика, разбирающая выражение – Russian" lang="ru" hreflang="ru" class="interlanguage-link-target">Русский</a></li><li class="interlanguage-link interwiki-zh"><a href="https://zh.wikipedia.org/wiki/%E8%A7%A3%E6%9E%90%E8%A1%A8%E8%BE%BE%E6%96%87%E6%B3%95" title="解析表达文法 – Chinese" lang="zh" hreflang="zh" class="interlanguage-link-target">中文</a></li>				</ul>
+				<div class="after-portlet after-portlet-lang"><span class="wb-langlinks-edit wb-langlinks-link"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q32271#sitelinks-wikipedia" title="Edit interlanguage links" class="wbc-editpage">Edit links</a></span></div>			</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 1 January 2018, at 10:59.</li>
+								<li id="footer-info-copyright">Text is available under the <a rel="license" href="https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License">Creative Commons Attribution-ShareAlike License</a><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/" style="display:none;"></a>;
+additional terms may apply.  By using this site, you agree to the <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">Terms of Use</a> and <a href="https://wikimediafoundation.org/wiki/Privacy_policy">Privacy Policy</a>. Wikipedia® is a registered trademark of the <a href="https://www.wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, a non-profit organization.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="https://wikimediafoundation.org/wiki/Privacy_policy" class="extiw" title="wmf:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="https://en.wikipedia.org/wiki/Wikipedia:About" title="Wikipedia:About">About Wikipedia</a></li>
+								<li id="footer-places-disclaimer"><a href="https://en.wikipedia.org/wiki/Wikipedia:General_disclaimer" title="Wikipedia:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-contact"><a href="https://en.wikipedia.org/wiki/Wikipedia:Contact_us">Contact Wikipedia</a></li>
+								<li id="footer-places-developers"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/How_to_contribute">Developers</a></li>
+								<li id="footer-places-cookiestatement"><a href="https://wikimediafoundation.org/wiki/Cookie_statement">Cookie statement</a></li>
+								<li id="footer-places-mobileview"><a href="https://en.m.wikipedia.org/w/index.php?title=Parsing_expression_grammar&amp;mobileaction=toggle_view_mobile" class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+							<li style=""><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar#">Enable previews</a></li></ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="https://wikimediafoundation.org/"><img src="./Parsing expression grammar - Wikipedia_files/wikimedia-button.png" srcset="/static/images/wikimedia-button-1.5x.png 1.5x, /static/images/wikimedia-button-2x.png 2x" width="88" height="31" alt="Wikimedia Foundation"></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="https://www.mediawiki.org/"><img src="./Parsing expression grammar - Wikipedia_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/static/images/poweredby_mediawiki_132x47.png 1.5x, /static/images/poweredby_mediawiki_176x62.png 2x" width="88" height="31"></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.128","walltime":"0.209","ppvisitednodes":{"value":680,"limit":1000000},"ppgeneratednodes":{"value":0,"limit":1500000},"postexpandincludesize":{"value":23674,"limit":2097152},"templateargumentsize":{"value":120,"limit":2097152},"expansiondepth":{"value":7,"limit":40},"expensivefunctioncount":{"value":0,"limit":500},"entityaccesscount":{"value":0,"limit":400},"timingprofile":["100.00%  114.064      1 -total"," 78.73%   89.800      1 Template:Reflist"," 38.40%   43.803      1 Template:Cite_conference"," 13.97%   15.938      5 Template:Cite_web"," 11.92%   13.598      1 Template:Parsers"," 10.40%   11.862      1 Template:Navbox","  9.97%   11.367      3 Template:Cite_journal","  1.75%    2.001      1 Template:Main_other","  1.04%    1.188      1 Template:Nowrap"]},"scribunto":{"limitreport-timeusage":{"value":"0.046","limit":"10.000"},"limitreport-memusage":{"value":2767369,"limit":52428800}},"cachereport":{"origin":"mw1320","timestamp":"20180114101557","ttl":1900800,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":75,"wgHostname":"mw1325"});});</script>
+	
+
+<div class="suggestions" style="display: none; font-size: 13px;"><div class="suggestions-results"></div><div class="suggestions-special"></div></div><a accesskey="v" href="https://en.wikipedia.org/wiki/Parsing_expression_grammar?action=edit" class="oo-ui-element-hidden"></a><div id="mwe-popups-svg"><svg width="0" height="0"><defs><clippath id="mwe-popups-mask"><polygon points="0 8, 10 8, 18 0, 26 8, 1000 8, 1000 1000, 0 1000"></polygon></clippath><clippath id="mwe-popups-mask-flip"><polygon points="0 8, 274 8, 282 0, 290 8, 1000 8, 1000 1000, 0 1000"></polygon></clippath><clippath id="mwe-popups-landscape-mask"><polygon points="0 8, 174 8, 182 0, 190 8, 1000 8, 1000 1000, 0 1000"></polygon></clippath><clippath id="mwe-popups-landscape-mask-flip"><polygon points="0 0, 1000 0, 1000 242, 190 242, 182 250, 174 242, 0 242"></polygon></clippath></defs></svg></div></body></html>
