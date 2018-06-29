@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://www.cnblogs.com/edver/p/7260696.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linux中断机制 - Edver - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./Linux中断机制 - Edver - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./Linux中断机制 - Edver - 博客园_files/bundle-SimpleMemory.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./Linux中断机制 - Edver - 博客园_files/bundle-SimpleMemory-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/edver/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/edver/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/edver/wlwmanifest.xml">
+<script async="" src="./Linux中断机制 - Edver - 博客园_files/analytics.js"></script><script type="text/javascript" src="./Linux中断机制 - Edver - 博客园_files/encoder.js"></script><script src="./Linux中断机制 - Edver - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'edver', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./Linux中断机制 - Edver - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/edver/"><img id="blogLogo" src="./Linux中断机制 - Edver - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/edver/">Edver</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/edver/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/Edver">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/edver/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/edver/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 47&nbsp; </span>
+<span id="stats_article_count">文章 - 1&nbsp; </span>
+<span id="stats-comment_count">评论 - 1</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/edver/p/7260696.html">Linux中断机制</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><h1>1.中断概念</h1>
+<p style="text-indent: 2em">中断是指在CPU正常运行期间，由于<span style="color: #0000ff">内外部事件</span>或由<span style="color: #0000ff">程序预先安排的事件</span>引起的CPU暂时停止正在运行的程序，转而为该内部或外部事件或预先安排的事件服务的程序中去，服务完毕后再返回去继续运行被暂时中断的程序。Linux中通常分为<span style="color: #0000ff">外部中断</span>（又叫硬件中断）和<span style="color: #0000ff">内部中断</span>（又叫异常）。</p>
+<p style="text-indent: 2em">在实地址模式中，CPU把内存中<span style="color: #0000ff">从0开始的1KB空间</span>作为一个中断向量表。表中的每一项占4个字节。但是在保护模式中，有这4个字节的表项构成的中断向量表不满足实际需求，于是根据反映模式切换的信息和偏移量的足够使得中断向量表的表项由8个字节组成，而中断向量表也叫做了中断描述符表（IDT）。在CPU中增加了一个用来描述中断描述符表寄存器（IDTR），用来保存中断描述符表的起始地址。</p>
+<h1>2. Linux中断处理</h1>
+<h2>　　2.1 系统中断号</h2>
+<p>　　由上述中断定义可知，系统中断向量表中共可保存256个中断向量入口，<span style="font-size: 15px">即IDT中包含的256个中断描述符（对应256个中断向量）。</span></p>
+<p><span style="font-size: 15px">　　<span style="font-size: 15px">而0-31号中断向量被intel公司保留用来处理异常事件，不能另作它用。对这 0-31号中断向量，操作系统只需提供异常的处理程序，当产生一个异常时，处理机就会自动把控制转移到相应的处理程序的入口，运行相应的处理程序；而事实 上，对于这32个处理异常的中断向量，<span style="font-size: 15px"><span style="font-size: 15px">2.6</span></span>版本的 Linux只提供了0-17号中断向量的处理程序，其对应处理程序参见下表、中断向量和异常事件对应表；也就是说，17-31号中断向量是空着未用的。</span></span></p>
+<p>&nbsp;</p>
+<table border="1" cellspacing="1" cellpadding="7" align="center">
+<tbody>
+<tr>
+<td width="17%" height="34"><span style="font-size: 15px">中断向量号</span></td>
+<td width="30%" height="34"><span style="font-size: 15px">异常事件</span></td>
+<td width="53%" height="34"><span style="font-size: 15px">Linux的处理程序</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">0</span></td>
+<td width="30%"><span style="font-size: 15px">除法错误</span></td>
+<td width="53%"><span style="font-size: 15px">Divide_error</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">1</span></td>
+<td width="30%"><span style="font-size: 15px">调试异常</span></td>
+<td width="53%"><span style="font-size: 15px">Debug</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">2</span></td>
+<td width="30%"><span style="font-size: 15px">NMI中断</span></td>
+<td width="53%"><span style="font-size: 15px">Nmi</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">3</span></td>
+<td width="30%"><span style="font-size: 15px">单字节，int 3</span></td>
+<td width="53%"><span style="font-size: 15px">Int3</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">4</span></td>
+<td width="30%"><span style="font-size: 15px">溢出</span></td>
+<td width="53%"><span style="font-size: 15px">Overflow</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">5</span></td>
+<td width="30%"><span style="font-size: 15px">边界监测中断</span></td>
+<td width="53%"><span style="font-size: 15px">Bounds</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">6</span></td>
+<td width="30%"><span style="font-size: 15px">无效操作码</span></td>
+<td width="53%"><span style="font-size: 15px">Invalid_op</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">7</span></td>
+<td width="30%"><span style="font-size: 15px">设备不可用</span></td>
+<td width="53%"><span style="font-size: 15px">Device_not_available</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">8</span></td>
+<td width="30%"><span style="font-size: 15px">双重故障</span></td>
+<td width="53%"><span style="font-size: 15px">Double_fault</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">9</span></td>
+<td width="30%"><span style="font-size: 15px">协处理器段溢出</span></td>
+<td width="53%"><span style="font-size: 15px">Coprocessor_segment_overrun</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">10</span></td>
+<td width="30%"><span style="font-size: 15px">无效TSS</span></td>
+<td width="53%"><span style="font-size: 15px">Incalid_tss</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">11</span></td>
+<td width="30%"><span style="font-size: 15px">缺段中断</span></td>
+<td width="53%"><span style="font-size: 15px">Segment_not_present</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">12</span></td>
+<td width="30%"><span style="font-size: 15px">堆栈异常</span></td>
+<td width="53%"><span style="font-size: 15px">Stack_segment</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">13</span></td>
+<td width="30%"><span style="font-size: 15px">一般保护异常</span></td>
+<td width="53%"><span style="font-size: 15px">General_protection</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">14</span></td>
+<td width="30%"><span style="font-size: 15px">页异常</span></td>
+<td width="53%"><span style="font-size: 15px">Page_fault</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">15</span></td>
+<td width="30%"><span style="font-size: 15px">&nbsp;（intel保留）</span></td>
+<td width="53%"><span style="font-size: 15px">Spurious_interrupt_bug</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">16</span></td>
+<td width="30%"><span style="font-size: 15px">协处理器出错</span></td>
+<td width="53%"><span style="font-size: 15px">Coprocessor_error</span></td>
+</tr>
+<tr>
+<td width="17%"><span style="font-size: 15px">17</span></td>
+<td width="30%"><span style="font-size: 15px">对齐检查中断</span></td>
+<td width="53%"><span style="font-size: 15px">Alignment_check</span></td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p><span style="font-size: 15px"><span style="font-size: 15px"><span style="font-size: 15px">　　0-31号中断向量已被保留，那么剩下32-255共224个中断向量可用。 这224个中断向量又是怎么分配的呢？<span style="font-size: 15px"><span style="font-size: 15px"><span style="font-size: 15px"><span style="font-size: 15px">2.6版本</span></span></span></span>的Linux中，除了<span style="color: #0000ff">0x80</span> (SYSCALL_VECTOR)用作<span style="color: #0000ff">系统调用</span>总入口之外，其他都用在外部硬件中断源上，其中包括可编程中断控制器8259A的15个irq；事实上，当 没有定义CONFIG_X86_IO_APIC时，其他223(除0x80外)个中断向量，只利用了从32号开始的15个，其它208个空着未用。</span></span></span></p>
+<h2>　2.2 中断请求<span style="font-size: 15px"><span style="font-size: 15px"><br></span></span></h2>
+<h3><span style="font-size: 15px"><span style="font-size: 15px">　　2.2.1 中断请求概述<br></span></span></h3>
+<p><span style="font-size: 15px"><span style="font-size: 15px">　　外部设备当需要操作系统做相关的事情的时候，会产生相应的中断。</span></span></p>
+<p><span style="font-size: 15px"><span style="font-size: 15px">　　设备通过相应的中断线向中断控制器发送高电平以产生中断信号，而操作系统则会从中断控制器的状态位取得那根中断线上产生的中断。而且只有在设备在对某一条中断线拥有控制权，才可以向这条中断线上发送信号。也由于现在的外设越来越多，中断线又是很宝贵的资源不可能被一一对应。因此在使用中断线前，就得对相应的中断线进行申请。无论采用共享中断方式还是独占一个中断，申请过程都是先讲所有的中断线进行扫描，得出哪些没有别占用，从其中选择一个作为该设备的IRQ。其次，通过中断申请函数申请相应的IRQ。最后，根据申请结果查看中断是否能够被执行。</span></span></p>
+<h3><span style="font-size: 15px"><span style="font-size: 15px">　　2.2.2 中断相关结构<br></span></span></h3>
+<p><span style="font-size: 15px"><span style="font-size: 15px">　　中断中核心处理数据结构为irq_desc，它完整的描述了一条中断线，Linux 2.6。22.6中源码如下。<br></span></span></p>
+<p><span style="font-size: 15px"><span style="font-size: 15px">　　<span style="font-size: 15px"><span style="font-size: 15px">irq_desc</span></span>定义在include/linux/irq.h中<br></span></span></p>
+<div class="cnblogs_code"><img id="code_img_closed_79b690db-86b7-43e5-a007-f8317a637345" class="code_img_closed" src="./Linux中断机制 - Edver - 博客园_files/ContractedBlock.gif" alt=""><img id="code_img_opened_79b690db-86b7-43e5-a007-f8317a637345" class="code_img_opened" style="display: none" src="./Linux中断机制 - Edver - 博客园_files/ExpandedBlockStart.gif" alt="">
+<div id="cnblogs_code_open_79b690db-86b7-43e5-a007-f8317a637345" class="cnblogs_code_hide">
+<pre><span style="color: #008000">/*</span><span style="color: #008000">*
+ * struct irq_desc - interrupt descriptor
+ *
+ * @handle_irq:        highlevel irq-events handler [if NULL, __do_IRQ()]
+ * @chip:        low level interrupt hardware access
+ * @msi_desc:        MSI descriptor
+ * @handler_data:    per-IRQ data for the irq_chip methods
+ * @chip_data:        platform-specific per-chip private data for the chip
+ *            methods, to allow shared chip implementations
+ * @action:        the irq action chain
+ * @status:        status information
+ * @depth:        disable-depth, for nested irq_disable() calls
+ * @wake_depth:        enable depth, for multiple set_irq_wake() callers
+ * @irq_count:        stats field to detect stalled irqs
+ * @irqs_unhandled:    stats field for spurious unhandled interrupts
+ * @lock:        locking for SMP
+ * @affinity:        IRQ affinity on SMP
+ * @cpu:        cpu index useful for balancing
+ * @pending_mask:    pending rebalanced interrupts
+ * @dir:        /proc/irq/ procfs entry
+ * @affinity_entry:    /proc/irq/smp_affinity procfs entry on SMP
+ * @name:        flow handler name for /proc/interrupts output
+ </span><span style="color: #008000">*/</span>
+<span style="color: #0000ff">struct</span><span style="color: #000000"> irq_desc {
+    irq_flow_handler_t    handle_irq;
+    </span><span style="color: #0000ff">struct</span> irq_chip        *<span style="color: #000000">chip;
+    </span><span style="color: #0000ff">struct</span> msi_desc        *<span style="color: #000000">msi_desc;
+    </span><span style="color: #0000ff">void</span>            *<span style="color: #000000">handler_data;
+    </span><span style="color: #0000ff">void</span>            *<span style="color: #000000">chip_data;
+    </span><span style="color: #0000ff">struct</span> irqaction    *action;    <span style="color: #008000">/*</span><span style="color: #008000"> IRQ action list </span><span style="color: #008000">*/</span><span style="color: #000000">
+    unsigned </span><span style="color: #0000ff">int</span>        status;        <span style="color: #008000">/*</span><span style="color: #008000"> IRQ status </span><span style="color: #008000">*/</span><span style="color: #000000">
+
+    unsigned </span><span style="color: #0000ff">int</span>        depth;        <span style="color: #008000">/*</span><span style="color: #008000"> nested irq disables </span><span style="color: #008000">*/</span><span style="color: #000000">
+    unsigned </span><span style="color: #0000ff">int</span>        wake_depth;    <span style="color: #008000">/*</span><span style="color: #008000"> nested wake enables </span><span style="color: #008000">*/</span><span style="color: #000000">
+    unsigned </span><span style="color: #0000ff">int</span>        irq_count;    <span style="color: #008000">/*</span><span style="color: #008000"> For detecting broken IRQs </span><span style="color: #008000">*/</span><span style="color: #000000">
+    unsigned </span><span style="color: #0000ff">int</span><span style="color: #000000">        irqs_unhandled;
+    spinlock_t        </span><span style="color: #0000ff">lock</span><span style="color: #000000">;
+#ifdef CONFIG_SMP
+    cpumask_t        affinity;
+    unsigned </span><span style="color: #0000ff">int</span><span style="color: #000000">        cpu;
+</span><span style="color: #0000ff">#endif</span>
+<span style="color: #0000ff">#if</span> defined(CONFIG_GENERIC_PENDING_IRQ) || defined(CONFIG_IRQBALANCE)<span style="color: #000000">
+    cpumask_t        pending_mask;
+</span><span style="color: #0000ff">#endif</span><span style="color: #000000">
+#ifdef CONFIG_PROC_FS
+    </span><span style="color: #0000ff">struct</span> proc_dir_entry    *<span style="color: #000000">dir;
+</span><span style="color: #0000ff">#endif</span>
+    <span style="color: #0000ff">const</span> <span style="color: #0000ff">char</span>        *<span style="color: #000000">name;
+} ____cacheline_internodealigned_in_smp;</span></pre>
+</div>
+<span class="cnblogs_code_collapse">irq_desc</span></div>
+<p>&nbsp;　　其相关联的几个结构体如下：</p>
+<p>　　<span style="font-size: 15px">定义在include/linux/ interrupt.h中的中断行动结构体：struct </span>irqaction</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Linux中断机制 - Edver - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff">struct</span><span style="color: #000000"> irqaction {
+    irq_handler_t handler;
+    unsigned </span><span style="color: #0000ff">long</span><span style="color: #000000"> flags;
+    cpumask_t mask;
+    </span><span style="color: #0000ff">const</span> <span style="color: #0000ff">char</span> *<span style="color: #000000">name;
+    </span><span style="color: #0000ff">void</span> *<span style="color: #000000">dev_id;
+    </span><span style="color: #0000ff">struct</span> irqaction *<span style="color: #000000">next;
+    </span><span style="color: #0000ff">int</span><span style="color: #000000"> irq;
+    </span><span style="color: #0000ff">struct</span> proc_dir_entry *<span style="color: #000000">dir;
+};</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Linux中断机制 - Edver - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　定义在include/linux 中的：irq_chip 芯片相关的处理函数集合</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Linux中断机制 - Edver - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008000">/*</span><span style="color: #008000">*
+ * struct irq_chip - hardware interrupt chip descriptor
+ *
+ * @name:        name for /proc/interrupts
+ * @startup:        start up the interrupt (defaults to -&gt;enable if NULL)
+ * @shutdown:        shut down the interrupt (defaults to -&gt;disable if NULL)
+ * @enable:        enable the interrupt (defaults to chip-&gt;unmask if NULL)
+ * @disable:        disable the interrupt (defaults to chip-&gt;mask if NULL)
+ * @ack:        start of a new interrupt
+ * @mask:        mask an interrupt source
+ * @mask_ack:        ack and mask an interrupt source
+ * @unmask:        unmask an interrupt source
+ * @eoi:        end of interrupt - chip level
+ * @end:        end of interrupt - flow level
+ * @set_affinity:    set the CPU affinity on SMP machines
+ * @retrigger:        resend an IRQ to the CPU
+ * @set_type:        set the flow type (IRQ_TYPE_LEVEL/etc.) of an IRQ
+ * @set_wake:        enable/disable power-management wake-on of an IRQ
+ *
+ * @release:        release function solely used by UML
+ * @typename:        obsoleted by name, kept as migration helper
+ </span><span style="color: #008000">*/</span>
+<span style="color: #0000ff">struct</span><span style="color: #000000"> irq_chip {
+    </span><span style="color: #0000ff">const</span> <span style="color: #0000ff">char</span>    *<span style="color: #000000">name;
+    unsigned </span><span style="color: #0000ff">int</span>    (*startup)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);　　//中断开始
+    </span><span style="color: #0000ff">void</span>        (*shutdown)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);　　　　//中断关闭
+    </span><span style="color: #0000ff">void</span>        (*enable)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);　　　　　　//中断使能
+    </span><span style="color: #0000ff">void</span>        (*disable)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);　　　　//中断禁用
+
+    </span><span style="color: #0000ff">void</span>        (*ack)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);
+    </span><span style="color: #0000ff">void</span>        (*mask)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);
+    </span><span style="color: #0000ff">void</span>        (*mask_ack)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);
+    </span><span style="color: #0000ff">void</span>        (*unmask)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);
+    </span><span style="color: #0000ff">void</span>        (*eoi)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);
+
+    </span><span style="color: #0000ff">void</span>        (*end)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);
+    </span><span style="color: #0000ff">void</span>        (*set_affinity)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq, cpumask_t dest);
+    </span><span style="color: #0000ff">int</span>        (*retrigger)(unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> irq);
+    </span><span style="color: #0000ff">int</span>        (*set_type)(unsigned <span style="color: #0000ff">int</span> irq, unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> flow_type);
+    </span><span style="color: #0000ff">int</span>        (*set_wake)(unsigned <span style="color: #0000ff">int</span> irq, unsigned <span style="color: #0000ff">int</span><span style="color: #000000"> on);
+
+    </span><span style="color: #008000">/*</span><span style="color: #008000"> Currently used only by UML, might disappear one day.</span><span style="color: #008000">*/</span><span style="color: #000000">
+#ifdef CONFIG_IRQ_RELEASE_METHOD
+    </span><span style="color: #0000ff">void</span>        (*release)(unsigned <span style="color: #0000ff">int</span> irq, <span style="color: #0000ff">void</span> *<span style="color: #000000">dev_id);
+</span><span style="color: #0000ff">#endif</span>
+    <span style="color: #008000">/*</span><span style="color: #008000">
+     * For compatibility, -&gt;typename is copied into -&gt;name.
+     * Will disappear.
+     </span><span style="color: #008000">*/</span>
+    <span style="color: #0000ff">const</span> <span style="color: #0000ff">char</span>    *<span style="color: #000000">typename;
+};</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Linux中断机制 - Edver - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h3>　　2.2.3 中断请求实现</h3>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h3><strong><span style="color: red">上下半部机制</span></strong></h3>
+<p><span style="color: #333333">　　我们期望让中断处理程序运行得快，并想让它完成的工作量多，这两个目标相互制约，如何解决<span style="color: #333333">——<span style="color: #333333"><span style="color: #0000ff">上下半部机制</span>。</span></span></span></p>
+<p><span style="color: #333333">　　我们把中断处理切为两半。中断处理程序是上半部——<span style="color: #0000ff">接受中断</span>，他就立即开始执行，但只有做严格时限的工作。能够被允许稍后完成的工作会推迟到下半部去，此后，在合适的时机，下半部会被开终端执行。上半部简单快速，<span style="color: #0000ff">执行时禁止一些或者全部中断</span>。</span></p>
+<p><span style="color: #333333">　　下半部稍后执行，而且<span style="color: #0000ff">执行期间可以响应所有的中断</span>。这种设计可以使系统处于中断屏蔽状态的时间尽可能的短，以此来提高系统的响应能力。上半部只有中断处理程序机制，而下半部的实现有软中断实现，<span style="color: #333333">tasklet<span style="color: #333333">实现和工作队列实现。</span></span></span></p>
+<p><span style="color: #333333">　　我们用网卡来解释一下这两半。当网卡接受到数据包时，通知内核，触发中断，所谓的上半部就是，及时读取数据包到内存，防止因为延迟导致丢失，这是很急迫的工作。读到内存后，对这些数据的处理不再紧迫，此时内核可以去执行中断前运行的程序，而对网络数据包的处理则交给下半部处理。</span></p>
+<h3><strong>上下半部划分原则</strong></h3>
+<p><span style="color: #333333">　　1） <span style="color: #333333">如果一个任务对时间非常敏感，将其放在中断处理程序中执行；</span></span></p>
+<p><span style="color: #333333">　　2） <span style="color: #333333">如果一个任务和硬件有关，将其放在中断处理程序中执行；</span></span></p>
+<p><span style="color: #333333">　　3） <span style="color: #333333">如果一个任务要保证不被其他中断打断，将其放在中断处理程序中执行；</span></span></p>
+<p><span style="color: #333333">　　4） <span style="color: #333333">其他所有任务，考虑放置在下半部执行。</span></span></p>
+<h3><strong><span style="color: #ff0000">下半部实现机制之软中断</span></strong></h3>
+<p><span style="color: #333333">　　软中断作为下半部机制的代表，是随着<span style="color: #333333">SMP<span style="color: #333333">（<span style="color: #333333">share memory processor<span style="color: #333333">）的出现应运而生的，它也是<span style="color: #333333">tasklet<span style="color: #333333">实现的基础（<span style="color: #333333">tasklet<span style="color: #333333">实际上只是在软中断的基础上添加了一定的机制）。软中断一般是<span style="color: #333333">“<span style="color: #333333">可延迟函数<span style="color: #333333">”<span style="color: #333333">的总称，有时候也包括了<span style="color: #333333">tasklet<span style="color: #333333">（请读者在遇到的时候根据上下文推断是否包含<span style="color: #333333">tasklet<span style="color: #333333">）。它的出现就是因为要满足上面所提出的上半部和下半部的区别，使得对时间不敏感的任务延后执行，软中断执行中断处理程序留给它去完成的剩余任务，而且可以在多个<span style="color: #333333">CPU<span style="color: #333333">上并行执行，使得总的系统效率可以更高。它的特性包括：</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span style="color: #333333">　　a<span style="color: #333333">）产生后并不是马上可以执行，必须要等待内核的调度才能执行。软中断不能被自己打断，只能被硬件中断打断（上半部）。</span></span></p>
+<p><span style="color: #333333">　　b<span style="color: #333333">）可以并发运行在多个<span style="color: #333333">CPU<span style="color: #333333">上（即使同一类型的也可以）。所以软中断必须设计为可重入的函数（允许多个<span style="color: #333333">CPU<span style="color: #333333">同时操作），因此也需要使用自旋锁来保护其数据结构。</span></span></span></span></span></span></p>
+<h3><strong><span style="color: #ff0000">下半部实现机制之tasklet</span></strong></h3>
+<p><span style="color: #333333">　　tasklet<span style="color: #333333">是通过软中断实现的，所以它本身也是软中断。</span></span></p>
+<p><span style="color: #333333">　　软中断用轮询的方式处理。假如正好是最后一种中断，则必须循环完所有的中断类型，才能最终执行对应的处理函数。显然当年开发人员为了保证轮询的效率，于是限制中断个数为<span style="color: #333333">32<span style="color: #333333">个。</span></span></span></p>
+<p><span style="color: #333333">　　为了提高中断处理数量，顺道改进处理效率，于是产生了<span style="color: #333333">tasklet<span style="color: #333333">机制。</span></span></span></p>
+<p><span style="color: #333333">　　Tasklet<span style="color: #333333">采用无差别的队列机制，有中断时才执行，免去了循环查表之苦。<span style="color: #333333">Tasklet<span style="color: #333333">作为一种新机制，显然可以承担更多的优点。正好这时候<span style="color: #333333">SMP<span style="color: #333333">越来越火了，因此又在<span style="color: #333333">tasklet<span style="color: #333333">中加入了<span style="color: #333333">SMP<span style="color: #333333">机制，保证同种中断只能在一个<span style="color: #333333">cpu<span style="color: #333333">上执行。在软中断时代，显然没有这种考虑。因此同一种软中断可以在两个<span style="color: #333333">cpu<span style="color: #333333">上同时执行，很可能造成冲突。</span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span style="color: #333333">　　总结下<span style="color: #333333">tasklet<span style="color: #333333">的优点：</span></span></span></p>
+<p><span style="color: #333333">　　（<span style="color: #333333">1<span style="color: #333333">）无类型数量限制；</span></span></span></p>
+<p><span style="color: #333333">　　（<span style="color: #333333">2<span style="color: #333333">）效率高，无需循环查表；</span></span></span></p>
+<p><span style="color: #333333">　　（<span style="color: #333333">3<span style="color: #333333">）支持<span style="color: #333333">SMP<span style="color: #333333">机制；</span></span></span></span></span></p>
+<p><span style="color: #333333">　　它的特性如下：</span></p>
+<p><span style="color: #333333">　　1<span style="color: #333333">）一种特定类型的<span style="color: #333333">tasklet<span style="color: #333333">只能运行在一个<span style="color: #333333">CPU<span style="color: #333333">上，不能并行，只能串行执行。</span></span></span></span></span></span></p>
+<p><span style="color: #333333">　　2<span style="color: #333333">）多个不同类型的<span style="color: #333333">tasklet<span style="color: #333333">可以并行在多个<span style="color: #333333">CPU<span style="color: #333333">上。</span></span></span></span></span></span></p>
+<p><span style="color: #333333">　　3<span style="color: #333333">）软中断是静态分配的，在内核编译好之后，就不能改变。但<span style="color: #333333">tasklet<span style="color: #333333">就灵活许多，可以在运行时改变（比如添加模块时）。</span></span></span></span></p>
+<h3><strong><span style="color: #ff0000">下半部实现机制之工作队列（work queue）</span></strong></h3>
+<p><span style="color: #333333">　　上面我们介绍的可延迟函数运行在中断上下文中（软中断的一个检查点就是<span style="color: #333333">do_IRQ<span style="color: #333333">退出的时候），于是导致了一些问题：软中断不能睡眠、不能阻塞。由于中断上下文出于内核态，没有进程切换，所以如果软中断一旦睡眠或者阻塞，将无法退出这种状态，导致内核会整个僵死。但可阻塞函数不能用在中断上下文中实现，必须要运行在进程上下文中，例如访问磁盘数据块的函数。因此，可阻塞函数不能用软中断来实现。但是它们往往又具有可延迟的特性。</span></span></span></p>
+<p><span style="color: #333333">　　上面我们介绍的可延迟函数运行在中断上下文中，于是导致了一些问题，说明它们不可挂起，也就是说软中断不能睡眠、不能阻塞，原因是由于中断上下文出于内核态，没有进程切换，所以如果软中断一旦睡眠或者阻塞，将无法退出这种状态，导致内核会整个僵死。因此，可阻塞函数不能用软中断来实现。但是它们往往又具有可延迟的特性。而且由于是串行执行，因此只要有一个处理时间较长，则会导致其他中断响应的延迟。为了完成这些不可能完成的任务，于是出现了工作队列，它能够在不同的进程间切换，以完成不同的工作。</span></p>
+<p><span style="color: #333333">　　如果推后执行的任务需要睡眠，那么就选择工作队列，如果不需要睡眠，那么就选择软中断或<span style="color: #333333">tasklet<span style="color: #333333">。工作队列能运行在进程上下文，它将工作托付给一个内核线程。工作队列说白了就是一组内核线程，作为中断守护线程来使用。多个中断可以放在一个线程中，也可以每个中断分配一个线程。我们用结构体<span style="color: #333333">workqueue_struct<span style="color: #333333">表示工作者线程，工作者线程是用内核线程实现的。而工作者线程是如何执行被推后的工作<span style="color: #333333">——<span style="color: #333333">有这样一个链表，它由结构体<span style="color: #333333">work_struct<span style="color: #333333">组成，而这个<span style="color: #333333">work_struct<span style="color: #333333">则描述了一个工作，一旦这个工作被执行完，相应的<span style="color: #333333">work_struct<span style="color: #333333">对象就从链表上移去，当链表上不再有对象时，工作者线程就会继续休眠。因为工作队列是线程，所以我们可以使用所有可以在线程中使用的方法。</span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<h3><strong><span style="color: #ff0000">Linux软中断和工作队列的作用是什么</span></strong></h3>
+<p><span style="color: #333333">　　Linux<span style="color: #333333">中的软中断和工作队列是中断上下部机制中的下半部实现机制。</span></span></p>
+<p><span style="color: #333333">　　1.<span style="color: #333333">软中断一般是<span style="color: #333333">“<span style="color: #333333">可延迟函数<span style="color: #333333">”<span style="color: #333333">的总称，它不能睡眠，不能阻塞，它处于中断上下文，不能进城切换，软中断不能被自己打断，只能被硬件中断打断（上半部），可以并发的运行在多个<span style="color: #333333">CPU<span style="color: #333333">上。所以软中断必须设计成可重入的函数，因此也需要自旋锁来保护其数据结构。</span></span></span></span></span></span></span></span></p>
+<p><span style="color: #333333">　　2.<span style="color: #333333">工作队列中的函数处在进程上下文中，它可以睡眠，也能被阻塞，能够在不同的进程间切换，以完成不同的工作。</span></span></p>
+<p><span style="color: #333333">可延迟函数和工作队列都不能访问用户的进程空间，可延时函数在执行时不可能有任何正在运行的进程，工作队列的函数有内核进程执行，他不能访问用户空间地址。</span></p>
+<p>&nbsp;</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/edver/category/1033498.html" target="_blank">Linux info</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(7260696,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;60e03b40-0711-e511-b908-9dcfd8948a71&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./Linux中断机制 - Edver - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./Linux中断机制 - Edver - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/edver/" target="_blank"><img src="./Linux中断机制 - Edver - 博客园_files/20150613211015.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/edver/">Edver</a><br>
+            <a href="http://home.cnblogs.com/u/edver/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/edver/followers">粉丝 - 0</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;60e03b40-0711-e511-b908-9dcfd8948a71&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(7260696,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(7260696,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/edver/p/7257659.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/edver/p/7257659.html" title="发布于2017-07-29 23:07">Linux内核知识杂记</a><br><a href="http://www.cnblogs.com/edver/p/7284727.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/edver/p/7284727.html" title="发布于2017-08-04 14:01">[转]现代Linux系统上的栈溢出攻击</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-07-30 22:07</span> <a href="http://www.cnblogs.com/edver/">Edver</a> 阅读(<span id="post_view_count">513</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=7260696" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/edver/p/7260696.html#" onclick="AddToWz(7260696);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=231619,cb_entryId=7260696,cb_blogApp=currentBlogApp,cb_blogUserGuid='60e03b40-0711-e511-b908-9dcfd8948a71',cb_entryCreatedDate='2017/7/30 22:07:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/edver/p/7260696.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/edver/p/7260696.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="https://dnspod.cloud.tencent.com/act/yearendsales?from=IT&amp;fromSource=gwzcw.951778.951778.951778" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-腾讯云&#39;)">【推荐】腾讯云新注册用户域名抢购1元起</a><br><a href="http://clickc.admaster.com.cn/c/a105960,b2436453,c1705,i0,m101,8a1,8b2,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-华为云&#39;)">【活动】华为云7大明星产品0元免费使用！</a><br><a href="https://www.upyun.com/products/prismcdn?utm_source=cnblogs&amp;utm_medium=banner&amp;utm_campaign=prismcdn&amp;utm_content=0614" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-upyun&#39;)">【推荐】又拍云强势推出超低价、低延时、超强兼容的 P2P-CDN！</a><br><a href="http://challenge.xfyun.cn/?ch=bk" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-xfyun&#39;)">【大赛】2018首届“顶天立地”AI开发者大赛</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/freetier?fromSource=gwzcw.1027255.1027255.1027255" target="_blank"><img width="300" height="250" src="./Linux中断机制 - Edver - 博客园_files/24442-20180611171134854-1629599186.jpg" alt="腾讯云0611" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/600183/" target="_blank">优信今晚要在美国上市了，二手车互联网平台真有机会吗？</a><br> ·  <a href="https://news.cnblogs.com/n/600182/" target="_blank">马斯克公布特斯拉皮卡更多细节：内置特殊传感器，可自动侧方停车</a><br> ·  <a href="https://news.cnblogs.com/n/600181/" target="_blank">刘强东和王兴背后的男人包凡，和他的资本帝国</a><br> ·  <a href="https://news.cnblogs.com/n/600180/" target="_blank">苹果开始在印度生产iPhone 6s 以抢占当地市场份额</a><br> ·  <a href="https://news.cnblogs.com/n/600179/" target="_blank">恒大投资FF背后：许家印的算盘和贾跃亭的最后一搏</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/9667/" target="_blank"><img src="./Linux中断机制 - Edver - 博客园_files/TB1iQKbhqmWBuNjy1XaXXXCbXXa-468-60.jpg" alt="" style="width: 468px; height: 60px;"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/522513/" target="_blank">如何提升你的能力？给年轻程序员的几条建议</a><br> ·  <a href="http://kb.cnblogs.com/page/553361/" target="_blank">程序员的那些反模式</a><br> ·  <a href="http://kb.cnblogs.com/page/598335/" target="_blank">程序员的宇宙时间线</a><br> ·  <a href="http://kb.cnblogs.com/page/597877/" target="_blank">突破程序员思维</a><br> ·  <a href="http://kb.cnblogs.com/page/597631/" target="_blank">云、雾和霭计算如何一起工作</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/edver/">Edver</a><br>园龄：<a href="https://home.cnblogs.com/u/edver/" title="入园时间：2015-06-12">3年</a><br>粉丝：<a href="https://home.cnblogs.com/u/edver/followers/">0</a><br>关注：<a href="https://home.cnblogs.com/u/edver/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;60e03b40-0711-e511-b908-9dcfd8948a71&#39;)">+加关注</a></div><script>getFollowStatus('60e03b40-0711-e511-b908-9dcfd8948a71')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/05/01&#39;);return false;">&lt;</a></td><td align="center">2018年6月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/07/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center"><a href="http://www.cnblogs.com/edver/archive/2018/06/01.html"><u>1</u></a></td><td class="CalWeekendDay" align="center">2</td></tr><tr><td class="CalWeekendDay" align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td class="CalWeekendDay" align="center">9</td></tr><tr><td class="CalWeekendDay" align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center"><a href="http://www.cnblogs.com/edver/archive/2018/06/15.html"><u>15</u></a></td><td class="CalWeekendDay" align="center">16</td></tr><tr><td class="CalWeekendDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td class="CalWeekendDay" align="center">23</td></tr><tr><td class="CalWeekendDay" align="center">24</td><td align="center">25</td><td align="center">26</td><td class="CalTodayDay" align="center">27</td><td align="center">28</td><td align="center">29</td><td class="CalWeekendDay" align="center">30</td></tr><tr><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/edver/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/edver/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/edver/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/edver/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/edver/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/edver/tag/java/">java</a>(1)</li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/edver/category/1033313.html">C/C++(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/edver/category/1105188.html">FFmpeg(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/edver/category/1033498.html">Linux info(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/edver/category/779449.html">opencv(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/edver/category/1033494.html">Python(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/edver/category/1062588.html">TCP/IP协议栈(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/edver/category/1105187.html">V4L2(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/edver/category/1040558.html">安全领域杂记(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/edver/category/900547.html">嵌入式(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/edver/category/1044002.html">数据结构(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/edver/category/1033301.html">网络编程(4)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/edver/archive/2018/06.html">2018年6月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/edver/archive/2018/05.html">2018年5月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/edver/archive/2018/02.html">2018年2月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/edver/archive/2018/01.html">2018年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/edver/archive/2017/10.html">2017年10月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/edver/archive/2017/09.html">2017年9月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/edver/archive/2017/08.html">2017年8月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/edver/archive/2017/07.html">2017年7月 (14)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/edver/archive/2016/11.html">2016年11月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/edver/archive/2016/10.html">2016年10月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/edver/archive/2016/04.html">2016年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/edver/archive/2016/02.html">2016年2月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/edver/archive/2016/01.html">2016年1月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/edver/archive/2015/07.html">2015年7月 (1)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/edver/p/6001786.html#3846929">1. Re:Ubuntu下qemu环境搭建</a></li>
+        <li class="recent_comment_body">感激不尽课程原因虚拟机几个月没用，今天再拿出来安装qemu时，各种方法都安装不了，提示网站找不到，404 not fuond。网上的各大教程也都只有个下载代码，大半晚上都没有解决。感谢博主指出需要对u......</li>
+        <li class="recent_comment_author">--黑潮庞克</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/edver/p/5187190.html">1. opencv3.0之后IPLimage转换成MAT的问题(9346)</a></li><li><a href="https://www.cnblogs.com/edver/p/4645916.html">2. 用java打开一个本地文件(4720)</a></li><li><a href="https://www.cnblogs.com/edver/p/6001786.html">3. Ubuntu下qemu环境搭建(2411)</a></li><li><a href="https://www.cnblogs.com/edver/p/5135579.html">4. opencv打开摄像头并新建窗口显示(1647)</a></li><li><a href="https://www.cnblogs.com/edver/p/7260696.html">5. Linux中断机制(513)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/edver/p/6001786.html">1. Ubuntu下qemu环境搭建(1)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/edver/p/5187190.html">1. opencv3.0之后IPLimage转换成MAT的问题(1)</a></li><li><a href="https://www.cnblogs.com/edver/p/6001786.html">2. Ubuntu下qemu环境搭建(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 Edver
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>

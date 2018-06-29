@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://www.cnblogs.com/imapla/p/4234258.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linux线程优先级 - Imapla - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./Linux线程优先级 - Imapla - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./Linux线程优先级 - Imapla - 博客园_files/bundle-BlueSky.css">
+<link type="text/css" rel="stylesheet" href="./Linux线程优先级 - Imapla - 博客园_files/121934.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./Linux线程优先级 - Imapla - 博客园_files/bundle-BlueSky-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/imapla/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/imapla/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/imapla/wlwmanifest.xml">
+<script async="" src="./Linux线程优先级 - Imapla - 博客园_files/analytics.js"></script><script type="text/javascript" src="./Linux线程优先级 - Imapla - 博客园_files/encoder.js"></script><script src="./Linux线程优先级 - Imapla - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'imapla', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./Linux线程优先级 - Imapla - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/imapla/"><img id="blogLogo" src="./Linux线程优先级 - Imapla - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/imapla/"></a><p><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/imapla/"></a><a href="http://flyoob.com/">Long's Blog</a></p></h1>
+<h2><div><span style="font-size: 12.7273px; color: #ffffff;">联系我：hihuanglong艾特foxmail.com
+欢迎加入 TI DSP 技术交流 QQ 群：652563558</span></div></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/imapla/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/Imapla">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/imapla/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/imapla/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 49&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 81</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/imapla/p/4234258.html">Linux线程优先级</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p><span style="color: #0000ff; font-size: 14px; font-family: 宋体;"><strong>Linux内核的三种调度策略：</strong></span></p>
+<p><span style="font-size: 14px; font-family: 宋体;">&nbsp; &nbsp; 1.SCHED_OTHER 分时调度策略</span></p>
+<p><span style="font-size: 14px; font-family: 宋体;">&nbsp; &nbsp; 2.SCHED_FIFO &nbsp;实时调度策略，先到先服务。一旦占用cpu则一直运行。一直运行直到有更高优先级任务到达或自己放弃</span></p>
+<p><span style="font-size: 14px; font-family: 宋体;">&nbsp; &nbsp; 3.SCHED_RR实 &nbsp;时调度策略，时间片轮转。当进程的时间片用完，系统将重新分配时间片，并置于就绪队列尾。放在队列尾保证了所有具有相同优先级的RR任务的调度公平</span></p>
+<p><span style="color: #0000ff; font-size: 14px; font-family: 宋体;"><strong>Linux线程优先级设置：</strong></span></p>
+<p><span style="font-size: 14px; font-family: 宋体;">&nbsp; &nbsp; 首先，可以通过以下两个函数来获得线程可以设置的最高和最低优先级，函数中的策略即上述三种策略的宏定义：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 14px; font-family: 宋体;">　　<span style="color: #0000ff;">int</span> sched_get_priority_max(<span style="color: #0000ff;">int</span><span style="color: #000000;"> policy);
+　　</span><span style="color: #0000ff;">int</span> sched_get_priority_min(<span style="color: #0000ff;">int</span> policy);</span></pre>
+</div>
+<p><span style="color: #ff0000; font-size: 14px; font-family: 宋体;">注意：SCHED_OTHER 是不支持优先级使用的，而 SCHED_FIFO 和 SCHED_RR 支持优先级的使用，他们分别为1和99，数值越大优先级越高。</span></p>
+<p><span style="color: #000000; font-size: 14px; font-family: 宋体;">&nbsp; &nbsp; 设置和获取优先级通过以下两个函数：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 14px; font-family: 宋体;"><span style="color: #0000ff;">int</span> pthread_attr_setschedparam(pthread_attr_t *attr, <span style="color: #0000ff;">const</span> <span style="color: #0000ff;">struct</span> sched_param *<span style="color: #000000;">param);
+</span><span style="color: #0000ff;">int</span> pthread_attr_getschedparam(<span style="color: #0000ff;">const</span> pthread_attr_t *attr, <span style="color: #0000ff;">struct</span> sched_param *<span style="color: #000000;">param);
+  param.sched_priority </span>= <span style="color: #800080;">51</span>; <span style="color: #008000;">//</span><span style="color: #008000;">设置优先级</span></span></pre>
+</div>
+<p><span style="font-size: 14px; font-family: 宋体;"><span>&nbsp; &nbsp;&nbsp;<strong style="color: #0000ff;">系统创建线程时，默认的线程是 SCHED_OTHER。所以如果我们要改变线程的调度策略的话，可以通过下面的这个函数实现。</strong></span></span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 14px; font-family: 宋体;"><span style="color: #0000ff;">int</span> pthread_attr_setschedpolicy(pthread_attr_t *attr, <span style="color: #0000ff;">int</span> policy);</span></pre>
+</div>
+<p><span style="font-size: 14px; font-family: 宋体;">&nbsp; &nbsp; 上面的param使用了下面的这个数据结构：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 14px; font-family: 宋体;"><span style="color: #0000ff;">struct</span><span style="color: #000000;"> sched_param
+{
+    </span><span style="color: #0000ff;">int</span> __sched_priority; <span style="color: #008000;">// </span><span style="color: #008000;">所要设定的线程优先级</span>
+};</span></pre>
+</div>
+<p><span style="font-size: 14px; font-family: 宋体;">&nbsp; &nbsp; 我们可以通过下面的测试程序来说明，我们自己使用的系统的支持的优先级：</span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Linux线程优先级 - Imapla - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="font-size: 14px; font-family: 宋体;">#include &lt;stdio.h&gt;<span style="color: #000000;">
+#include </span>&lt;pthread.h&gt;<span style="color: #000000;">
+#include </span>&lt;sched.h&gt;<span style="color: #000000;">
+#include </span>&lt;assert.h&gt;
+
+<span style="color: #0000ff;">static</span> <span style="color: #0000ff;">int</span> api_get_thread_policy (pthread_attr_t *<span style="color: #000000;">attr)
+{
+    </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> policy;
+    </span><span style="color: #0000ff;">int</span> rs = pthread_attr_getschedpolicy (attr, &amp;<span style="color: #000000;">policy);
+    assert (rs </span>== <span style="color: #800080;">0</span><span style="color: #000000;">);
+
+    </span><span style="color: #0000ff;">switch</span><span style="color: #000000;"> (policy)
+    {
+        </span><span style="color: #0000ff;">case</span><span style="color: #000000;"> SCHED_FIFO:
+            printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">policy = SCHED_FIFO\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+        </span><span style="color: #0000ff;">case</span><span style="color: #000000;"> SCHED_RR:
+            printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">policy = SCHED_RR</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+        </span><span style="color: #0000ff;">case</span><span style="color: #000000;"> SCHED_OTHER:
+            printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">policy = SCHED_OTHER\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+        </span><span style="color: #0000ff;">default</span><span style="color: #000000;">:
+            printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">policy = UNKNOWN\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">break</span><span style="color: #000000;">; 
+    }
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> policy;
+}
+
+</span><span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span> api_show_thread_priority (pthread_attr_t *attr,<span style="color: #0000ff;">int</span><span style="color: #000000;"> policy)
+{
+    </span><span style="color: #0000ff;">int</span> priority =<span style="color: #000000;"> sched_get_priority_max (policy);
+    assert (priority </span>!= -<span style="color: #800080;">1</span><span style="color: #000000;">);
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">max_priority = %d\n</span><span style="color: #800000;">"</span><span style="color: #000000;">, priority);
+    priority </span>=<span style="color: #000000;"> sched_get_priority_min (policy);
+    assert (priority </span>!= -<span style="color: #800080;">1</span><span style="color: #000000;">);
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">min_priority = %d\n</span><span style="color: #800000;">"</span><span style="color: #000000;">, priority);
+}
+
+</span><span style="color: #0000ff;">static</span> <span style="color: #0000ff;">int</span> api_get_thread_priority (pthread_attr_t *<span style="color: #000000;">attr)
+{
+    </span><span style="color: #0000ff;">struct</span><span style="color: #000000;"> sched_param param;
+    </span><span style="color: #0000ff;">int</span> rs = pthread_attr_getschedparam (attr, &amp;<span style="color: #000000;">param);
+    assert (rs </span>== <span style="color: #800080;">0</span><span style="color: #000000;">);
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">priority = %d\n</span><span style="color: #800000;">"</span><span style="color: #000000;">, param.__sched_priority);
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> param.__sched_priority;
+}
+
+</span><span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span> api_set_thread_policy (pthread_attr_t *attr,<span style="color: #0000ff;">int</span><span style="color: #000000;"> policy)
+{
+    </span><span style="color: #0000ff;">int</span> rs =<span style="color: #000000;"> pthread_attr_setschedpolicy (attr, policy);
+    assert (rs </span>== <span style="color: #800080;">0</span><span style="color: #000000;">);
+    api_get_thread_policy (attr);
+}
+    
+</span><span style="color: #0000ff;">int</span> main(<span style="color: #0000ff;">void</span><span style="color: #000000;">)
+{
+    pthread_attr_t attr;       </span><span style="color: #008000;">//</span><span style="color: #008000;"> 线程属性</span>
+    <span style="color: #0000ff;">struct</span> sched_param sched;  <span style="color: #008000;">//</span><span style="color: #008000;"> 调度策略</span>
+    <span style="color: #0000ff;">int</span><span style="color: #000000;"> rs;
+
+    </span><span style="color: #008000;">/*</span><span style="color: #008000;"> 
+     * 对线程属性初始化
+     * 初始化完成以后，pthread_attr_t 结构所包含的结构体
+     * 就是操作系统实现支持的所有线程属性的默认值
+     </span><span style="color: #008000;">*/</span><span style="color: #000000;">
+    rs </span>= pthread_attr_init (&amp;<span style="color: #000000;">attr);
+    assert (rs </span>== <span style="color: #800080;">0</span>);     <span style="color: #008000;">//</span><span style="color: #008000;"> 如果 rs 不等于 0，程序 abort() 退出</span>
+
+    <span style="color: #008000;">/*</span><span style="color: #008000;"> 获得当前调度策略 </span><span style="color: #008000;">*/</span>
+    <span style="color: #0000ff;">int</span> policy = api_get_thread_policy (&amp;<span style="color: #000000;">attr);
+
+    </span><span style="color: #008000;">/*</span><span style="color: #008000;"> 显示当前调度策略的线程优先级范围 </span><span style="color: #008000;">*/</span><span style="color: #000000;">
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">Show current configuration of priority\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    api_show_thread_priority(</span>&amp;<span style="color: #000000;">attr, policy);
+
+    </span><span style="color: #008000;">/*</span><span style="color: #008000;"> 获取 SCHED_FIFO 策略下的线程优先级范围 </span><span style="color: #008000;">*/</span><span style="color: #000000;">
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">show SCHED_FIFO of priority\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    api_show_thread_priority(</span>&amp;<span style="color: #000000;">attr, SCHED_FIFO);
+
+    </span><span style="color: #008000;">/*</span><span style="color: #008000;"> 获取 SCHED_RR 策略下的线程优先级范围 </span><span style="color: #008000;">*/</span><span style="color: #000000;">
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">show SCHED_RR of priority\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    api_show_thread_priority(</span>&amp;<span style="color: #000000;">attr, SCHED_RR);
+
+    </span><span style="color: #008000;">/*</span><span style="color: #008000;"> 显示当前线程的优先级 </span><span style="color: #008000;">*/</span><span style="color: #000000;">
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">show priority of current thread\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    </span><span style="color: #0000ff;">int</span> priority = api_get_thread_priority (&amp;<span style="color: #000000;">attr);
+
+    </span><span style="color: #008000;">/*</span><span style="color: #008000;"> 手动设置调度策略 </span><span style="color: #008000;">*/</span><span style="color: #000000;">
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">Set thread policy\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">set SCHED_FIFO policy\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    api_set_thread_policy(</span>&amp;<span style="color: #000000;">attr, SCHED_FIFO);
+
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">set SCHED_RR policy\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    api_set_thread_policy(</span>&amp;<span style="color: #000000;">attr, SCHED_RR);
+
+    </span><span style="color: #008000;">/*</span><span style="color: #008000;"> 还原之前的策略 </span><span style="color: #008000;">*/</span><span style="color: #000000;">
+    printf (</span><span style="color: #800000;">"</span><span style="color: #800000;">Restore current policy\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    api_set_thread_policy (</span>&amp;<span style="color: #000000;">attr, policy);
+
+    </span><span style="color: #008000;">/*</span><span style="color: #008000;"> 
+     * 反初始化 pthread_attr_t 结构
+     * 如果 pthread_attr_init 的实现对属性对象的内存空间是动态分配的，
+     * phread_attr_destory 就会释放该内存空间
+     </span><span style="color: #008000;">*/</span><span style="color: #000000;">
+    rs </span>= pthread_attr_destroy (&amp;<span style="color: #000000;">attr);
+    assert (rs </span>== <span style="color: #800080;">0</span><span style="color: #000000;">);
+
+    </span><span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+}</span></span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Linux线程优先级 - Imapla - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><span style="font-size: 14px; font-family: 宋体;">&nbsp;</span></p>
+<p><span style="font-size: 14px; font-family: 宋体;"><strong>下面是测试程序的运行结果：</strong></span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Linux线程优先级 - Imapla - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="font-size: 14px; font-family: 宋体;">policy=<span style="color: #000000;">SCHED_OTHER
+Show current configuration of priority
+max_priority</span>=<span style="color: #800080;">0</span><span style="color: #000000;">
+min_priority</span>=<span style="color: #800080;">0</span><span style="color: #000000;">
+show SCHED_FIFO of priority
+max_priority</span>=<span style="color: #800080;">99</span><span style="color: #000000;">
+min_priority</span>=<span style="color: #800080;">1</span><span style="color: #000000;">
+show SCHED_RR of priority
+max_priority</span>=<span style="color: #800080;">99</span><span style="color: #000000;">
+min_priority</span>=<span style="color: #800080;">1</span><span style="color: #000000;">
+show priority of current thread
+priority</span>=<span style="color: #000000;">0Set thread policy
+</span><span style="color: #0000ff;">set</span><span style="color: #000000;"> SCHED_FIFO policy
+policy</span>=<span style="color: #000000;"> SCHED_FIFO
+</span><span style="color: #0000ff;">set</span><span style="color: #000000;"> SCHED_RR policy
+policy</span>=<span style="color: #000000;"> SCHED_RRRestore current policy
+policy</span>=SCHED_OTHER</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Linux线程优先级 - Imapla - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><span style="font-size: 14px; font-family: 宋体;">&nbsp;</span></p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/imapla/category/450996.html" target="_blank">Linux笔记</a></div>
+<div id="EntryTag">标签: <a href="http://www.cnblogs.com/imapla/tag/Linux/">Linux</a>, <a href="http://www.cnblogs.com/imapla/tag/Linux%E6%8A%80%E5%B7%A7/">Linux技巧</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(4234258,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;f9a986fb-c4c8-e111-aa3f-842b2b196315&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./Linux线程优先级 - Imapla - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./Linux线程优先级 - Imapla - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/imapla/" target="_blank"><img src="./Linux线程优先级 - Imapla - 博客园_files/u425452.jpg" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/imapla/">Imapla</a><br>
+            <a href="http://home.cnblogs.com/u/imapla/followees">关注 - 5</a><br>
+            <a href="http://home.cnblogs.com/u/imapla/followers">粉丝 - 48</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;f9a986fb-c4c8-e111-aa3f-842b2b196315&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(4234258,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(4234258,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/imapla/p/4226017.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/imapla/p/4226017.html" title="发布于2015-01-15 13:03">Linux再谈互斥锁与条件变量</a><br><a href="http://www.cnblogs.com/imapla/p/4249059.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/imapla/p/4249059.html" title="发布于2015-01-25 22:00">Sublime Text 2 中文乱码</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2015-01-19 17:18</span> <a href="http://www.cnblogs.com/imapla/">Imapla</a> 阅读(<span id="post_view_count">17164</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=4234258" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/imapla/p/4234258.html#" onclick="AddToWz(4234258);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=121934,cb_entryId=4234258,cb_blogApp=currentBlogApp,cb_blogUserGuid='f9a986fb-c4c8-e111-aa3f-842b2b196315',cb_entryCreatedDate='2015/1/19 17:18:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/imapla/p/4234258.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/imapla/p/4234258.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="https://dnspod.cloud.tencent.com/act/yearendsales?from=IT&amp;fromSource=gwzcw.951778.951778.951778" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-腾讯云&#39;)">【推荐】腾讯云新注册用户域名抢购1元起</a><br><a href="http://clickc.admaster.com.cn/c/a105960,b2436453,c1705,i0,m101,8a1,8b2,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-华为云&#39;)">【活动】华为云7大明星产品0元免费使用！</a><br><a href="https://www.upyun.com/products/prismcdn?utm_source=cnblogs&amp;utm_medium=banner&amp;utm_campaign=prismcdn&amp;utm_content=0614" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-upyun&#39;)">【推荐】又拍云强势推出超低价、低延时、超强兼容的 P2P-CDN！</a><br><a href="http://challenge.xfyun.cn/?ch=bk" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-xfyun&#39;)">【大赛】2018首届“顶天立地”AI开发者大赛</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/freetier?fromSource=gwzcw.1027255.1027255.1027255" target="_blank"><img width="300" height="250" src="./Linux线程优先级 - Imapla - 博客园_files/24442-20180611171134854-1629599186.jpg" alt="腾讯云0611" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/600183/" target="_blank">优信今晚要在美国上市了，二手车互联网平台真有机会吗？</a><br> ·  <a href="https://news.cnblogs.com/n/600182/" target="_blank">马斯克公布特斯拉皮卡更多细节：内置特殊传感器，可自动侧方停车</a><br> ·  <a href="https://news.cnblogs.com/n/600181/" target="_blank">刘强东和王兴背后的男人包凡，和他的资本帝国</a><br> ·  <a href="https://news.cnblogs.com/n/600180/" target="_blank">苹果开始在印度生产iPhone 6s 以抢占当地市场份额</a><br> ·  <a href="https://news.cnblogs.com/n/600179/" target="_blank">恒大投资FF背后：许家印的算盘和贾跃亭的最后一搏</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/34770/" target="_blank"><img src="./Linux线程优先级 - Imapla - 博客园_files/TB1gBPhgZLJ8KJjy0FnXXcFDpXa-468-60.jpg" alt="" style="width: 468px; height: 60px;"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/522513/" target="_blank">如何提升你的能力？给年轻程序员的几条建议</a><br> ·  <a href="http://kb.cnblogs.com/page/553361/" target="_blank">程序员的那些反模式</a><br> ·  <a href="http://kb.cnblogs.com/page/598335/" target="_blank">程序员的宇宙时间线</a><br> ·  <a href="http://kb.cnblogs.com/page/597877/" target="_blank">突破程序员思维</a><br> ·  <a href="http://kb.cnblogs.com/page/597631/" target="_blank">云、雾和霭计算如何一起工作</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news">合作请使用邮件交流，暂时不接受 QQ 好友申请。
+欢迎加入 TI DSP 技术交流 QQ 群：652563558<div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/imapla/">Imapla</a><br>园龄：<a href="https://home.cnblogs.com/u/imapla/" title="入园时间：2012-07-08">5年11个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/imapla/followers/">48</a><br>关注：<a href="https://home.cnblogs.com/u/imapla/followees/">5</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;f9a986fb-c4c8-e111-aa3f-842b2b196315&#39;)">+加关注</a></div><script>getFollowStatus('f9a986fb-c4c8-e111-aa3f-842b2b196315')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/05/01&#39;);return false;">&lt;</a></td><td align="center">2018年6月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/07/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td class="CalWeekendDay" align="center">2</td></tr><tr><td class="CalWeekendDay" align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td class="CalWeekendDay" align="center">9</td></tr><tr><td class="CalWeekendDay" align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td class="CalWeekendDay" align="center">16</td></tr><tr><td class="CalWeekendDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td class="CalWeekendDay" align="center">23</td></tr><tr><td class="CalWeekendDay" align="center">24</td><td align="center">25</td><td align="center">26</td><td class="CalTodayDay" align="center">27</td><td align="center">28</td><td align="center">29</td><td class="CalWeekendDay" align="center">30</td></tr><tr><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/imapla/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/imapla/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/imapla/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/imapla/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/imapla/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/imapla/tag/Linux/">Linux</a>(13)</li><li><a href="http://www.cnblogs.com/imapla/tag/Linux%E6%8A%80%E5%B7%A7/">Linux技巧</a>(6)</li><li><a href="http://www.cnblogs.com/imapla/tag/DM8168/">DM8168</a>(4)</li><li><a href="http://www.cnblogs.com/imapla/tag/%E8%BE%BE%E8%8A%AC%E5%A5%87DSP/">达芬奇DSP</a>(4)</li><li><a href="http://www.cnblogs.com/imapla/tag/LabVIEW/">LabVIEW</a>(2)</li><li><a href="http://www.cnblogs.com/imapla/tag/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">博客搭建</a>(2)</li><li><a href="http://www.cnblogs.com/imapla/tag/EDMA/">EDMA</a>(1)</li><li><a href="http://www.cnblogs.com/imapla/tag/GPMC/">GPMC</a>(1)</li><li><a href="http://www.cnblogs.com/imapla/tag/RT-Thread/">RT-Thread</a>(1)</li><li><a href="http://www.cnblogs.com/imapla/tag/Web%E7%9F%A5%E8%AF%86/">Web知识</a>(1)</li><li><a href="http://www.cnblogs.com/imapla/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/imapla/category/558629.html">DSP笔记(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/imapla/category/826174.html">Flyoob.com(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/imapla/category/450996.html">Linux笔记(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/imapla/category/735362.html">Qt笔记</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/imapla/category/406377.html">程序设计(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/imapla/category/823413.html">高级语言(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/imapla/category/406378.html">嵌入式系统(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/imapla/category/459071.html">通信工程(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/imapla/category/451399.html">硬件电路(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/imapla/category/454214.html">杂烩集合(2)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/imapla/archive/2017/08.html">2017年8月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/imapla/archive/2016/12.html">2016年12月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/imapla/archive/2016/05.html">2016年5月 (9)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/imapla/archive/2015/06.html">2015年6月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/imapla/archive/2015/04.html">2015年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/imapla/archive/2015/03.html">2015年3月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/imapla/archive/2015/01.html">2015年1月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/imapla/archive/2014/12.html">2014年12月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/imapla/archive/2014/11.html">2014年11月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/imapla/archive/2014/08.html">2014年8月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/imapla/archive/2014/03.html">2014年3月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/imapla/archive/2013/07.html">2013年7月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/imapla/archive/2013/06.html">2013年6月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/imapla/archive/2013/04.html">2013年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="https://www.cnblogs.com/imapla/archive/2013/03.html">2013年3月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="https://www.cnblogs.com/imapla/archive/2013/02.html">2013年2月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="https://www.cnblogs.com/imapla/archive/2013/01.html">2013年1月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="https://www.cnblogs.com/imapla/archive/2012/09.html">2012年9月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="https://www.cnblogs.com/imapla/archive/2012/08.html">2012年8月 (1)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_imagecategory" class="catListImageCategory sidebar-block">
+<h3 class="catListTitle">相册</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_2_Link_0" href="https://www.cnblogs.com/imapla/gallery/826111.html" rel="nofollow">Flyoob.com(21)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_1" href="https://www.cnblogs.com/imapla/gallery/448836.html" rel="nofollow">MOV立即数寻址范围(4)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_scorerank" class="sidebar-block">
+<div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	100557
+	</li>
+	<li class="liRank">
+		排名 -	3424
+	</li>
+</ul>
+</div>
+
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/imapla/p/7454973.html#3951577">1. Re:AM5728通过GPMC接口与FPGA高速数据通信实现</a></li>
+        <li class="recent_comment_body">你好，请问一下GPMC设备节点内容是添加到哪一个设备树文件中，能否分享一下完整的格式，我看截图好像不完整。</li>
+        <li class="recent_comment_author">--CrazyNong</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/imapla/archive/2012/09/07/2674788.html#3886826">2. Re:C语言实现DES算法</a></li>
+        <li class="recent_comment_body">“想取个昵称真多重复的”这位大佬修改的加密算法基本没问题，感兴趣的可以研究一下这个项目里所有数组长度的问题。不过大佬没有修改KickDes()这个解密函数，而且少提供了两个函数。23楼楼主已经给出了H......</li>
+        <li class="recent_comment_author">--唯美式梓默</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/imapla/p/4127142.html#3854185">3. Re:[DM8168]Linux下控制GPIO控制12864液晶屏（ST7565控制器）</a></li>
+        <li class="recent_comment_body">@宋波波不，是 insmod lcd12864.ko 生成的...</li>
+        <li class="recent_comment_author">--Imapla</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/imapla/p/4127142.html#3854031">4. Re:[DM8168]Linux下控制GPIO控制12864液晶屏（ST7565控制器）</a></li>
+        <li class="recent_comment_body">你好,问下/dev/lcd12864这个文件是配置设备树出现的吗?具体是怎么配置的呢?谢谢!</li>
+        <li class="recent_comment_author">--宋波波</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/imapla/archive/2012/09/07/2674788.html#3853210">5. Re:C语言实现DES算法</a></li>
+        <li class="recent_comment_body">@想取个昵称真多重复的你的加密是正确的，但是你没有完善解密算法。解密算法也有问题。问题函数为：/*--------------------------------------------- 十六进制字......</li>
+        <li class="recent_comment_author">--索克斯</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/imapla/archive/2012/09/10/2678814.html">1. Quartus II 12.0 下载、安装和破解(83074)</a></li><li><a href="https://www.cnblogs.com/imapla/p/4186603.html">2. 电脑显卡4种接口类型：VGA、DVI、HDMI、DP(50787)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2013/01/08/2851195.html">3. LabVIEW2012下载、破解(49645)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2012/09/07/2674788.html">4. C语言实现DES算法(42862)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2013/01/09/2852171.html">5. LabVIEW串口通信的一个例子-串口"示波器"(28049)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/imapla/archive/2012/09/07/2674788.html">1. C语言实现DES算法(24)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2012/09/10/2678814.html">2. Quartus II 12.0 下载、安装和破解(20)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2013/01/09/2852171.html">3. LabVIEW串口通信的一个例子-串口"示波器"(13)</a></li><li><a href="https://www.cnblogs.com/imapla/p/6195564.html">4. 2016年 我在浙大计算机学院在职研究生学习经历(11)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2013/03/12/2955931.html">5. 集线器、交换机、路由器、网桥、网关之间的区别(6)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/imapla/archive/2013/01/09/2852171.html">1. LabVIEW串口通信的一个例子-串口"示波器"(4)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2013/01/22/2872050.html">2. ADS1.2下使用J-LinkV8调试友善之臂mini2440的记录(2)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2013/03/12/2955931.html">3. 集线器、交换机、路由器、网桥、网关之间的区别(2)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2013/02/24/2923363.html">4. AVR汇编初探之一《AVR单片机的CPU内部结构》(1)</a></li><li><a href="https://www.cnblogs.com/imapla/archive/2013/02/15/2912752.html">5. Linux的free命令详解(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 Imapla
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>
