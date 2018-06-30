@@ -1,0 +1,1528 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0070)https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Type Theory in Swift</title> 
+ 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)"> 
+<!-- html --> 
+<meta name="src" content="TypeTheoryInSwift.tex"> 
+<link rel="stylesheet" type="text/css" href="./Type Theory in Swift_files/TypeTheoryInSwift.css"> 
+</head><body>
+   <div class="maketitle">
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+
+<h2 class="titleHead">Type Theory in Swift</h2>
+ <div class="author"><span class="cmr-12">Keith</span></div><br>
+<div class="date"><span class="cmr-12">July 16, 2017</span></div>
+   </div>
+   <h3 class="likesectionHead"><a id="x1-1000"></a>Contents</h3>
+   <div class="tableofcontents">
+   <span class="sectionToc">1 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-20001" id="QQ2-1-2">Abstract</a></span>
+<br>   <span class="sectionToc">2 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-30002" id="QQ2-1-3">General Setup for Programming Language</a></span>
+<br>   <span class="sectionToc">3 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-40003" id="QQ2-1-4">Computational Trinitarianism</a></span>
+<br>   <span class="sectionToc">4 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-50004" id="QQ2-1-5">Type Forms</a></span>
+<br>   <span class="sectionToc">5 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-60005" id="QQ2-1-6">Product</a></span>
+<br>   <span class="sectionToc">6 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-120006" id="QQ2-1-12">Sum</a></span>
+<br>   <span class="sectionToc">7 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-210007" id="QQ2-1-21">Duality<sup><span class="cmr-7">[7]</span></sup></a></span>
+<br>   <span class="sectionToc">8 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-220008" id="QQ2-1-22">Function</a></span>
+<br>   <span class="sectionToc">9 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-280009" id="QQ2-1-28">Type Algebras</a></span>
+<br>   <span class="sectionToc">10 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-2900010" id="QQ2-1-29">Algebraic Data Types</a></span>
+<br>   <span class="sectionToc">11 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-3000011" id="QQ2-1-30">Recursive Types</a></span>
+<br>   <span class="sectionToc">12 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-3700012" id="QQ2-1-37">Universal</a></span>
+<br>   <span class="sectionToc">13 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-3900013" id="QQ2-1-39">Existential</a></span>
+<br>   <span class="sectionToc">14 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-4100014" id="QQ2-1-41">Summary</a></span>
+<br>   <span class="sectionToc">15 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-4200015" id="QQ2-1-42">References</a></span>
+<br>   <span class="sectionToc">16 <a href="https://keithpitsui.github.io/TypeTheoryInSwift/TypeTheoryInSwift.html#x1-4300016" id="QQ2-1-43">Terms and Conventions</a></span>
+   </div>
+<!--l. 29--><p class="indent">
+                                                                  
+
+                                                                  
+   </p><h3 class="sectionHead"><span class="titlemark">1   </span> <a id="x1-20001"></a>Abstract</h3>
+<!--l. 32--><p class="noindent">The article is based on my understanding of type theory, and another related
+theories, such as category theory and proof theory. After I had studied for months on
+those subjects, and for the purpose of make theories more practical in Swift, I love to
+exploit those theoretical notions in Swift, to see how theories can lead me to write
+code with properties that are guaranteed by theories, moreover, to reason
+computation on program more neatly, clearly and rigorously.
+<!--l. 34--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">2   </span> <a id="x1-30002"></a>General Setup for Programming Language</h3>
+<!--l. 35--><p class="noindent">We, as programmer, write programs in some programming languages all the days.
+Have we reflected a bit about why need programs, why we use programming
+languages, what is programming language, and how it runs? Moreover, functional
+programming is a trending programming paradigm these days, what is functional
+programming? Haskell, Scalar or so? Here, I am going to share my opinions about
+those questions based on my understanding of type theory and relate some concepts
+of type theory in Swift.
+<!--l. 38--></p><p class="indent">   Why do we need programs? All activities of human is to create values, tangible or
+intangible. How efficient do we create values is called productivity. Then the reason
+for why we need programs is to improve our productivity, in other words, to solve
+problems by programs. We model problems in reality as a collection of concepts and
+their relations in our mind, and then we reason based on that model to figure out
+how to solve those problems step by step, means we can make algorithms
+to solve problems. Afterward we can implement those algorithms in some
+programming language then complied into programs that will be executed on a
+computer.
+     </p><div class="quote">
+     <!--l. 40--><p class="noindent">Therefore  programming  languages  are  languages,  a  means  of
+     expressing computations in a form comprehensible to both people
+     and machines.<sup><span class="cmr-7">[1]</span></sup></p></div>
+<!--l. 42--><p class="noindent">What is computation? Computation is to take next step based on current state. It allows
+termination and non-termination. For instance of algorithm, we know an algorithm
+specifying a series steps to solve a problem. The next step is determined by the
+current state just right before that step. And after that step, the state will transit to
+another state. So we can regard algorithm is a series computations that solve
+problem.
+<!--l. 45--></p><p class="indent">   Now we know why we need programs and programming languages. And it is time
+to ask what is programming languages. Based on lectures <sup><span class="cmr-7">[2]</span></sup> from Robert Harper and
+his book<sup><span class="cmr-7">[1]</span></sup>, programming language consists of two major parts, statics and
+dynamics. Statics includes concrete syntax, abstract syntax and context
+                                                                  
+
+                                                                  
+sensitive conditions which means type formation rules and typing judgment for
+expression.
+<!--l. 48--></p><p class="indent">   Dynamics includes specifications of values and expression transitions ( expression
+evaluation )
+<!--l. 51--></p><p class="indent">   These two parts are coherent, and together implying type safety, means
+well-typed programs will well behave when it is executed, in other words, well-typed
+programs never get stuck.
+<!--l. 54--></p><p class="indent">   The concrete syntax of a programming language specifies how people write
+programs on the editor, and how programs are represented in character strings. In
+other words, the concrete syntax determines how the source codes look like. After
+source code being parsed into compiler, compiler would construct a structure
+representing the structure of programs which will be called abstract syntax trees and
+abstract binding trees which enrich abstract syntax trees by additional variable
+bindings and scooping. They are tree structures with nodes as operators and leaves as
+variables or values. They also specify what are expressions and how to construct
+expressions from expressions. Here variables are placeholders which are different from
+the notion of variable in programming language, they much like constant in swift,
+immutable after initialization, whereas variable in programming language should be
+called assignable which is mutable after initialization, according to Robert
+Harper.
+<!--l. 57--></p><p class="indent">   Next thing is the type formation rules and expression typing judgments. They
+specify what identifiers are types, and what types expression are. From documents of
+The Swift Programming Language Reference [3], we can see there are sections named
+Types, Expressions, Statements, and Declarations. Those sections told us something
+about how to create types and construct expressions in Swift. Declarations section
+told us how to create types, variables and some other flavors. Type section told
+us what means type in Swift, it is a little bit divergent from what I mean
+type in this article. Expressions and Statements sections told us how to
+construct expression in Swift. They all fit together to represent statics of
+Swift.
+<!--l. 60--></p><p class="indent">   Turning to Dynamics. Dynamics means how program runs. Informally,
+that means how to evaluate a given expression. Dynamics specifies rules
+to identify what expressions are values, and how to evaluate expressions
+to values. It looks like a transition system, specifying initial states (any
+expression), final states (values), and the transitions between states (expression
+evaluation).
+<!--l. 63--></p><p class="indent">   Dynamics transition doesnt care about types and it neednt. Because the
+coherence (Type safety) of Statics and Dynamics ensure that well-typed program will
+well behave when it runs. In other words, type is preserved by transition
+(Preservation) and if an expression is well typed, then it will be a value or can
+transition to another expression (Progress). So Well-behaved means from the
+transition system, every expression will be either value or have next step to
+move on. That is for all expressions e, there exist at most one value v, such
+that the expression e can be eventually evaluated to v by multiple steps.
+This property of program defines it is functional, which means program
+is deterministic.[2] One more thing, type is not set, because type allows
+                                                                  
+
+                                                                  
+partial function (divergent) and total function (non-divergent), whereas set
+only allows total function. We will see in concrete example in Recursive
+Types.
+<!--l. 66--></p><p class="indent">   Type is behavioral specification of its expression. That means the type of an
+expression specifies what can that expression behave. Moreover, in a function, what
+information can be used inside that function is from the type of its arguments,
+nothing else. That ensure the ability of abstraction and composition of program. So
+different types and different classes of types can codify different behavioral
+description, which can ensure how program runs. Moreover, features of a
+programming language are determined by its type structures. Therefore
+let us exam type structures illustrated in Type theory and relate them in
+Swift.
+<!--l. 69--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">3   </span> <a id="x1-40003"></a>Computational Trinitarianism</h3>
+<!--l. 72--><p class="noindent">Before we get into type structures, I want to show a very cool idea here, the
+computational trinitarianism which was advocated by Robert Harper in his
+post<sup><span class="cmr-7">[4]</span></sup>.
+     </p><div class="quote">
+     <!--l. 74--><p class="noindent">The central dogma of computational trinitarianism holds that Logic,
+     Languages, and Categories are but three manifestations of one divine
+     notion of computation. There is no preferred route to enlightenment:
+     each  aspect  provides  insights  that  comprise  the  experience  of
+     computation in our lives.
+     <!--l. 77--></p><p class="noindent">Computational trinitarianism entails that any concept arising in one
+     aspect should have meaning from the perspective of the other two.
+     If you arrive at an insight that has importance for logic, languages,
+     and categories, then you may feel sure that you have elucidated
+     an  essential  concept  of  computationyou  have  made  an  enduring
+     scientific discovery. By Robert Harper<sup><span class="cmr-7">[5]</span></sup></p></div>
+<!--l. 81--><p class="indent">   Basically, you can regard a proposition as a type, a proof of a proposition as a
+program of a type, entailments in logic as function in type theory, then we can see
+the deep connection between Logic and Type theory. Furthermore, for type theory
+and category theory, you can regard type as object and function as morphism in
+category theory. Now with connections between Logic and Type theory, and
+connections between Type theory and Category theory, we have flavor how those
+three things related to each other to manifest of the notion of computation. For more
+detail, you can check in relation between type theory and category theory <sup><span class="cmr-7">[6]</span></sup>, which
+states that
+                                                                  
+
+                                                                  
+</p><table class="align-star">
+<tbody><tr><td class="align-odd"><span class="cmmi-10">computational</span><span style="margin-left:2.22198pt" class="tmspace"></span><span class="cmmi-10">trinitarianism</span></td><td class="align-even"> = <span class="cmmi-10">propositions</span><span class="cmmi-10">&nbsp;as</span><span class="cmmi-10">&nbsp;types</span></td>                          <td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>                         <td class="align-even"> + <span class="cmmi-10">programs</span><span class="cmmi-10">&nbsp;as</span><span class="cmmi-10">&nbsp;proofs</span></td>                           <td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>                         <td class="align-even"> + <span class="cmmi-10">relation</span><span class="cmmi-10">&nbsp;between</span><span class="cmmi-10">&nbsp;type</span><span class="cmmi-10">&nbsp;theory</span><span class="cmmi-10">&nbsp;and</span><span class="cmmi-10">&nbsp;category</span><span class="cmmi-10">&nbsp;theory.</span></td><td class="align-label"></td><td class="align-label"></td></tr></tbody></table>
+<!--l. 87--><p class="indent">   According this setup, I will try to exam type structure in this framework,
+manifest type structure into those three fields to see how the notions connected in
+those three fields.
+<!--l. 89--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">4   </span> <a id="x1-50004"></a>Type Forms</h3>
+<!--l. 90--><p class="noindent">There different type forms in a programming language which recognize some common
+patterns of types. Therefore we can group types in a programming language into
+different type forms, because the types with the same type forms have common
+pattern of their type structure. Thus sometimes type forms are also called type
+structures, or compound types.
+<!--l. 93--></p><p class="indent">   To describe a type forms, we have four aspects, namely by type formation
+rules, typing rules which have introductory rules and elimination rules, value
+rules and evaluations rules. The former two aspects are also called statics,
+whereas the latter two are called dynamics. Type formations rules tell us
+how to derive the new type of a particular type form from existing types.
+Typing rules tell us what would be the expression of type of a particular type
+form, where introductory rules show us how to construct its expression and
+elimination rules show us how to use an expression of that type. Moreover, to see
+Elimination rules and Introductory rules are in harmony, we use concepts of local
+soundness witnessed by local reduction and local completeness witnessed by local
+expansion, which will be explained in later sections. Value rules tell us when the
+expression of that type is value. And last one, evaluation rule, tell us how
+to do step-evaluation on an expression of that type, and eventually to be
+                                                                  
+
+                                                                  
+evaluated as value of that type (if not divergent). Because if some language
+has recursive type, it allows non-termination expression, which is called
+divergent.
+<!--l. 96--></p><p class="indent">   In the following sections, the type forms we will talk about include product, sum,
+exponential, recursive, universal, and existential, which has its corresponding type
+structure in Swift to some extent. Tuple and struct in Swift as product,
+enumeration in Swift as sum, function and closure in Swift as exponential, indirect
+enumeration in Swift as recursive, generic in Swift as universal, protocol in Swift as
+existential.
+<!--l. 98--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">5   </span> <a id="x1-60005"></a>Product</h3>
+<!--l. 99--><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-70005"></a>Product in Type Theory</h4>
+<!--l. 100--><p class="noindent">Type:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift0x.png" alt="τ1 × τ2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 103--><p class="nopar">
+Expression:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift1x.png" alt="&lt; e1,e2 &gt;
+" class="math-display"></center></td></tr></tbody></table>
+                                                                  
+
+                                                                  
+<!--l. 107--><p class="nopar">
+Type Formation:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift2x.png" alt="Γ-⊢ τ1type-Γ ⊢-τ2type
+   Γ ⊢ τ1 × τ2type
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 112--><p class="nopar">
+Typing Judgments:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift3x.png" alt=" Γ ⊢ e : τ Γ ⊢ e : τ
+-----1--1------2---2×I              (Introduction Form )
+Γ ⊢ &lt; e1,e2 &gt; : τ1 × τ2
+" class="math-display"><a id="x1-7001r0"></a></center></td></tr></tbody></table>
+<!--l. 117--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift4x.png" alt="Γ-⊢ e-: τ1 ×-τ2     Γ-⊢ e-: τ1 ×-τ2
+ Γ ⊢ e.1 : τ1 ×E1     Γ ⊢ e.2 : τ2 ×E2      (Elimination Form )
+" class="math-display"><a id="x1-7002r0"></a></center></td></tr></tbody></table>
+<!--l. 125--><p class="nopar">
+Values:
+                                                                  
+
+                                                                  
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift5x.png" alt="e1value--e2value
+ &lt; e1,e2 &gt; value
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 130--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift6x.png" alt="evalue      evalue
+-------    -------
+e.1value    e.2value
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 137--><p class="nopar">
+Transitions (Evaluations):
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift7x.png" alt="-------e1-↦→-e′1-------
+&lt; e1,e2 &gt; ↦→  &lt; e′1,e2 &gt;
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 142--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift8x.png" alt="       e  ↦→ e′
+--------2----2----′--
+&lt; e1,e2 &gt; ↦→  &lt; e1,e2 &gt;
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 146--><p class="nopar">
+<!--l. 148--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-80005"></a>Product in Logic</h4>
+<!--l. 149--><p class="noindent">Connectives:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift9x.png" alt="A ∧ B true
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 152--><p class="nopar">
+Forms:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift10x.png" alt="A--true--B-true
+  A ∧ B true  ∧I                 (Introduction Form )
+" class="math-display"><a id="x1-8001r0"></a></center></td></tr></tbody></table>
+<!--l. 157--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift11x.png" alt="A ∧ B true        A ∧ B true
+----------∧E1     ----------∧E2         (Elimination Form )
+  A true            B true
+" class="math-display"><a id="x1-8002r0"></a></center></td></tr></tbody></table>
+<!--l. 165--><p class="nopar">
+<!--l. 167--></p><p class="noindent">
+   </p><h5 class="likesubsubsectionHead"><a id="x1-90005"></a>Soundness and Completeness<sup><span class="cmr-7">[8]</span></sup></h5>
+<!--l. 168--><p class="noindent">Local Soundness of Elimination rules are witnessed by local reduction, which is to
+apply elimination rules after introduction rules.Whereas local Completeness of
+Elimination rules are witnessed by local expansion, which is to apply introduction
+rules after elimination rules. Introduction rules and Elimination rules should be
+harmonic.
+<!--l. 171--></p><p class="indent">   Informally, it can be thought of introduction rules as packing information into a
+compound types, and elimination rules as unpacking information back from a
+compound types. Therefore, being harmonic means both packing after unpacking
+(Local Completeness) and unpacking after packing (Local Soundness) do not lose
+anything information
+<!--l. 174--></p><p class="indent">   Soundness is witnessed by local reduction whereas Completeness is witnessed by
+local expansion:
+   </p><center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift12x.png" alt="                                 -A-true----B--true--∧I
+                                    -A-∧B-true-∧E1
+Local  Reduction                       A true
+
+                                 -A-truAe∧B-tBruetrue--∧I
+                                    ---A-true---∧E2
+
+
+Local  Expansion           A-∧-B-true-∧E1   -A-∧B--true- ∧E2
+                            -A-true------------B-true- ∧I
+                                    A ∧ B true
+" class="math-display"></center>
+<!--l. 207--><p class="nopar">
+                                                                  
+
+                                                                  
+<!--l. 209--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-100005"></a>Product in Category Theory</h4>
+<!--l. 210--><p class="noindent">Given types <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> and <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>, we can define the product of those two types as
+<span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">× </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub> with its projects <span class="cmmi-10">p</span><sub><span class="cmr-7">1</span></sub> : <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">× </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub> <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> and <span class="cmmi-10">p</span><sub><span class="cmr-7">2</span></sub> : <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">× </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub> <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>. Depicted as
+following:
+</p><div class="diagrams">
+   <img src="./Type Theory in Swift_files/TypeTheoryInSwift13x.png" alt="                   e2
+           Γ|-------------
+            |
+          e |
+            |
+     p1 e1        p2
+τ1 -------τ1 ×-τ2------τ2
+">
+</div>
+<!--l. 221--><p class="indent">   By universal mapping property of product, we know that for all type Γ having
+mappings Γ <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> and Γ <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>, there exists an unique-up-to-isomorphism mapping
+<span class="cmmi-10">e </span>: Γ <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">× </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>, such that <span class="cmmi-10">e</span><sub><span class="cmr-7">1</span></sub> = <span class="cmmi-10">p</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">∘ </span><span class="cmmi-10">e </span>and <span class="cmmi-10">e</span><sub><span class="cmr-7">2</span></sub> = <span class="cmmi-10">p</span><sub><span class="cmr-7">2</span></sub> <span class="cmsy-10">∘ </span><span class="cmmi-10">e</span>.
+<!--l. 223--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-110005"></a>Product in Swift</h4>
+<!--l. 224--><p class="noindent">In Swift, product can be constructed by tuple or struct, which can pair up two types
+together, and even more types for n-ary product. See the following code to taste the
+flavor of product in Swift.
+   <!--l. 227-->
+   </p><div class="lstlisting" id="listing-1"><span class="label"><a id="x1-11001r1"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">function</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">composition</span>&nbsp;<br><span class="label"><a id="x1-11002r2"></a></span><span class="cmbx-10">func</span>&nbsp;composition&nbsp;<span class="cmmi-10">&lt;</span>A,&nbsp;B,&nbsp;C<span class="cmmi-10">&gt;</span>&nbsp;<br><span class="label"><a id="x1-11003r3"></a></span>&nbsp;&nbsp;(f:&nbsp;@escaping&nbsp;(B)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;C,&nbsp;g:&nbsp;@escaping&nbsp;(A)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;B&nbsp;)&nbsp;<br><span class="label"><a id="x1-11004r4"></a></span>&nbsp;&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;(A)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;C&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-11005r5"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;f(g($0))&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-11006r6"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-11007r7"></a></span>&nbsp;<br><span class="label"><a id="x1-11008r8"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Tuple</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">as</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">product</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">in</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Swift</span>&nbsp;<br><span class="label"><a id="x1-11009r9"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Speed</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">in</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">2</span><span class="cmti-10">D</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">plate</span><span class="cmti-10">,</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">represented</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">by</span>&nbsp;<br><span class="label"><a id="x1-11010r10"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">absolute</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">speed</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">kmph</span>&nbsp;<br><span class="label"><a id="x1-11011r11"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">and</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">its</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">horizontal</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">angle</span>&nbsp;<br><span class="label"><a id="x1-11012r12"></a></span><span class="cmbx-10">struct</span>&nbsp;Speed&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-11013r13"></a></span>&nbsp;&nbsp;<span class="cmbx-10">let</span>&nbsp;kmph:&nbsp;Double&nbsp;<br><span class="label"><a id="x1-11014r14"></a></span>&nbsp;&nbsp;<span class="cmbx-10">let</span>&nbsp;horizontalAngle:&nbsp;Double&nbsp;<br><span class="label"><a id="x1-11015r15"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-11016r16"></a></span>&nbsp;<br><span class="label"><a id="x1-11017r17"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Represent</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">speed</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">in</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">2</span><span class="cmti-10">D</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">plate</span>&nbsp;<br><span class="label"><a id="x1-11018r18"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">by</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">record</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">its</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">horizontal</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">speed</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">and</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">vertical</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">speed</span>&nbsp;<br><span class="label"><a id="x1-11019r19"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">with</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">its</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">projection</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">functions</span>&nbsp;<br><span class="label"><a id="x1-11020r20"></a></span><span class="cmbx-10">typealias</span>&nbsp;hSpeed&nbsp;=&nbsp;Double&nbsp;<br><span class="label"><a id="x1-11021r21"></a></span><span class="cmbx-10">typealias</span>&nbsp;vSpeed&nbsp;=&nbsp;Double&nbsp;<br><span class="label"><a id="x1-11022r22"></a></span><span class="cmbx-10">typealias</span>&nbsp;PairedSpeed&nbsp;<br><span class="label"><a id="x1-11023r23"></a></span>&nbsp;&nbsp;=&nbsp;(horizontalSpeed:&nbsp;hSpeed,&nbsp;verticalSpeed:&nbsp;vSpeed)&nbsp;<br><span class="label"><a id="x1-11024r24"></a></span><span class="cmbx-10">func</span>&nbsp;p1&nbsp;(p:&nbsp;PairedSpeed)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;hSpeed&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-11025r25"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;p.horizontalSpeed&nbsp;<br><span class="label"><a id="x1-11026r26"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-11027r27"></a></span><span class="cmbx-10">func</span>&nbsp;p2&nbsp;(p:&nbsp;PairedSpeed)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;vSpeed&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-11028r28"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;p.verticalSpeed&nbsp;<br><span class="label"><a id="x1-11029r29"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-11030r30"></a></span>&nbsp;<br><span class="label"><a id="x1-11031r31"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Given</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">mapping</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">from</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Speed</span>&nbsp;<br><span class="label"><a id="x1-11032r32"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">to</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">components</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">of</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">PairedSpeed</span>&nbsp;<br><span class="label"><a id="x1-11033r33"></a></span><span class="cmbx-10">func</span>&nbsp;e1&nbsp;(_&nbsp;v:&nbsp;Speed)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;vSpeed&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-11034r34"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;v.kmph&nbsp;<span class="cmsy-10">*</span>&nbsp;sin(v.kmph)&nbsp;<br><span class="label"><a id="x1-11035r35"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-11036r36"></a></span><span class="cmbx-10">func</span>&nbsp;e2&nbsp;(_&nbsp;v:&nbsp;Speed)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;hSpeed&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-11037r37"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;v.kmph&nbsp;<span class="cmsy-10">*</span>&nbsp;cos(v.kmph)&nbsp;<br><span class="label"><a id="x1-11038r38"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-11039r39"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">we</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">can</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">construct</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">the</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">unique</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">mapping</span>&nbsp;<br><span class="label"><a id="x1-11040r40"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">from</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Speed</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">to</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">PairedSpeed</span>&nbsp;<br><span class="label"><a id="x1-11041r41"></a></span><span class="cmbx-10">func</span>&nbsp;e&nbsp;(v:&nbsp;Speed)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;PairedSpeed&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-11042r42"></a></span>&nbsp;&nbsp;<span class="cmbx-10">let</span>&nbsp;v1&nbsp;=&nbsp;e1(v)&nbsp;<br><span class="label"><a id="x1-11043r43"></a></span>&nbsp;&nbsp;<span class="cmbx-10">let</span>&nbsp;v2&nbsp;=&nbsp;e2(v)&nbsp;<br><span class="label"><a id="x1-11044r44"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;(v1,&nbsp;v2)&nbsp;<br><span class="label"><a id="x1-11045r45"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-11046r46"></a></span>&nbsp;<br><span class="label"><a id="x1-11047r47"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">by</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">function</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">e</span><span class="cmti-10">,</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">we</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">can</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">construct</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">e1</span><span class="cmti-10">,</span>&nbsp;<br><span class="label"><a id="x1-11048r48"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">and</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">e2</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">by</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">function</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">composition</span>&nbsp;<br><span class="label"><a id="x1-11049r49"></a></span><span class="cmbx-10">let</span>&nbsp;e1x&nbsp;=&nbsp;composition(f:&nbsp;p1,&nbsp;g:&nbsp;e)&nbsp;<br><span class="label"><a id="x1-11050r50"></a></span><span class="cmbx-10">let</span>&nbsp;e2x&nbsp;=&nbsp;composition(f:&nbsp;p2,&nbsp;g:&nbsp;e)&nbsp;<br><span class="label"><a id="x1-11051r51"></a></span>&nbsp;<br><span class="label"><a id="x1-11052r52"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">then</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">we</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">can</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">e1</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">=</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">e1x</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">and</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">e2</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">=</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">e2x</span>&nbsp;<br><span class="label"><a id="x1-11053r53"></a></span><span class="cmbx-10">let</span>&nbsp;v&nbsp;=&nbsp;Speed(kmph:&nbsp;100,&nbsp;horizontalAngle:&nbsp;1/6)&nbsp;<br><span class="label"><a id="x1-11054r54"></a></span><span class="cmbx-10">let</span>&nbsp;vertialV&nbsp;=&nbsp;e1(v)&nbsp;<br><span class="label"><a id="x1-11055r55"></a></span><span class="cmbx-10">let</span>&nbsp;vertialVx&nbsp;=&nbsp;e1x(v)&nbsp;<br><span class="label"><a id="x1-11056r56"></a></span><span class="cmbx-10">let</span>&nbsp;horizontalV&nbsp;=&nbsp;e2(v)&nbsp;<br><span class="label"><a id="x1-11057r57"></a></span><span class="cmbx-10">let</span>&nbsp;horizontalVx&nbsp;=&nbsp;e2x(v)&nbsp;<br><span class="label"><a id="x1-11058r58"></a></span>&nbsp;<br><span class="label"><a id="x1-11059r59"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">By</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">the</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">way</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">we</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">can</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">see</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">tuple</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">is</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">the</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">same</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">struct</span>&nbsp;<br><span class="label"><a id="x1-11060r60"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">up</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">to</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">isomorphism</span><span class="cmti-10">,</span><span class="cmti-10">that</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">is</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">given</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">a</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">tuple</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">T</span><span class="cmti-10">,</span>&nbsp;<br><span class="label"><a id="x1-11061r61"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">we</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">can</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">construct</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">a</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">struct</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">S</span><span class="cmti-10">,</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">such</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">that</span>&nbsp;<br><span class="label"><a id="x1-11062r62"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">there</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">are</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">two</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">functions</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">f</span><span class="cmti-10">:</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">T</span><span class="cmti-10">&nbsp;</span><span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">S</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">and</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">g</span><span class="cmti-10">:</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">S</span><span class="cmti-10">&nbsp;</span><span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">T</span><span class="cmti-10">,</span>&nbsp;<br><span class="label"><a id="x1-11063r63"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">which</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">are</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">mutual</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">inverted</span><span class="cmti-10">.</span>&nbsp;<br><span class="label"><a id="x1-11064r64"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">And</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">given</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">a</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">struct</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">to</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">construct</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">a</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">tuple</span>&nbsp;<br><span class="label"><a id="x1-11065r65"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">has</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">the</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">same</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">property</span><span class="cmti-10">.</span>
+   
+   </div>
+<!--l. 295--><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">6   </span> <a id="x1-120006"></a>Sum</h3>
+<!--l. 296--><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-130006"></a>Sum in Type Theory</h4>
+<!--l. 297--><p class="noindent">Type:
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift14x.png" alt="τ1 + τ2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 300--><p class="nopar">
+Expression:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift15x.png" alt="in .e     in .e                 (injections)
+  1 1     2  2
+" class="math-display"><a id="x1-13001r0"></a></center></td></tr></tbody></table>
+<!--l. 304--><p class="nopar">
+Type Formation:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift16x.png" alt="Γ-⊢ τ1type-Γ ⊢-τ2type
+   Γ ⊢ τ1 + τ2type
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 309--><p class="nopar">
+Typing Judgments:
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift17x.png" alt="    Γ ⊢ e : τ               Γ ⊢ e : τ
+--------1---1--- +I1    --------2--2----+I2
+Γ ⊢ in1.e1 : τ1 + τ2     Γ ⊢ in2.e2 : τ1 + τ2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 317--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift18x.png" alt="Γ ⊢-e :-τ1-+-τ2--Γ ,x-: τ1 ⊢-e1 : τ-Γ ,x-: τ2-⊢ e2-: τ+
+      Γ ⊢ case{e}{in1.x `→ e1|in2.x `→ e2} : τ       E
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 324--><p class="nopar">
+Values:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift19x.png" alt="--e value-    -e-value---
+in1.e value    in2.e value
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 332--><p class="nopar">
+Transitions (Evaluations):
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift20x.png" alt="                          e ↦→ e′
+case{e}{in-.x-`→-e-|in-.x-`→-e-} ↦→-case{e′}{in-.x-`→-e-|in-.x `→-e-}
+         1     1   2     2              1     1  2      2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 337--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift21x.png" alt="                 e value
+case{in1.e}{in1.x `→-e1|in2.x `→-e2} ↦→-[e∕x]e1
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 341--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift22x.png" alt="-----------------e value----------------
+case{in2.e}{in1.x `→ e1|in2.x `→ e2} ↦→ [e∕x]e2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 345--><p class="nopar">
+                                                                  
+
+                                                                  
+<!--l. 347--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-140006"></a>Sum in Logic</h4>
+<!--l. 348--><p class="noindent">Connectives:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift23x.png" alt="A ∨ B true
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 351--><p class="nopar">
+Forms:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift24x.png" alt="  A true            B true
+----------∨I1    ----------∨I1
+A ∨B  true        A ∨ B true
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 359--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift25x.png" alt="A-∨-B-true--A-true-→-C-true--B-true →-C-true ∨
+                   C true                    E
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 363--><p class="nopar">
+                                                                  
+
+                                                                  
+<!--l. 365--></p><p class="noindent">
+   </p><h5 class="likesubsubsectionHead"><a id="x1-150006"></a>Soundness and Completeness</h5>
+   <center class="par-math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift26x.png" alt="                                 -A-true----B--true--∧I
+                                    -A-∧B-true-∧E1
+Local  Reduction                       A true
+
+                                 -A-true----B--true--∧I
+                                    -A-∧B-true-∧E2
+                                       A true
+
+Local  Expansion           A-∧-B-true-∧E1   -A-∧B--true- ∧E2
+                            -A-true------------B-true- ∧I
+                                    A ∧ B true
+" class="par-math-display"></center>
+<!--l. 399--><p class="nopar">
+<!--l. 401--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-160006"></a>Sum in Category Theory</h4>
+<!--l. 402--><p class="noindent">Given types <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> and <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>, we can define the sum of those two types as <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> + <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>
+with its injections <span class="cmmi-10">i</span><sub><span class="cmr-7">1</span></sub> : <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> + <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub> and <span class="cmmi-10">i</span><sub><span class="cmr-7">2</span></sub> : <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub> <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> + <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>. Depicted as
+following:
+</p><div class="diagrams">
+   <img src="./Type Theory in Swift_files/TypeTheoryInSwift27x.png" alt="                    g
+           σ| -------------
+            |
+            |
+       [f,g]|
+     i  f        i
+τ1 ----1--τ1 +-τ2--2---τ2
+">
+</div>
+<!--l. 413--><p class="indent">   By universal mapping property of sum, we know that for all type <span class="cmmi-10">σ </span>having
+mappings <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">→ </span><span class="cmmi-10">σ </span>and <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub> <span class="cmsy-10">→ </span><span class="cmmi-10">σ</span>, there exists an unique-up-to-isomorphism mapping
+[<span class="cmmi-10">f,g</span>] : <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> + <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub> <span class="cmsy-10">→ </span><span class="cmmi-10">σ</span>, such that <span class="cmmi-10">f </span>= [<span class="cmmi-10">f,g</span>] <span class="cmsy-10">∘ </span><span class="cmmi-10">i</span><sub><span class="cmr-7">1</span></sub> and <span class="cmmi-10">g </span>= [<span class="cmmi-10">f,g</span>] <span class="cmsy-10">∘ </span><span class="cmmi-10">i</span><sub><span class="cmr-7">2</span></sub>.
+<!--l. 415--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-170006"></a>Sum in Swift</h4>
+                                                                  
+
+                                                                  
+<!--l. 416--><p class="noindent">In Swift, sum can be constructed by enumeration, which can construct tagged union
+for different cases and each case can contain different types, up to two cases for
+binary sum, and more cases for n-ary sum. See the following code to taste the flavor
+of sum in Swift. <!--l. 418-->
+   </p><div class="lstlisting" id="listing-2"><span class="label"><a id="x1-17001r1"></a></span><span class="cmbx-10">enum</span>&nbsp;MyOptional<span class="cmmi-10">&lt;</span>T<span class="cmmi-10">&gt;</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-17002r2"></a></span>&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;nothing&nbsp;<br><span class="label"><a id="x1-17003r3"></a></span>&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;Just(T)&nbsp;<br><span class="label"><a id="x1-17004r4"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-17005r5"></a></span>&nbsp;<br><span class="label"><a id="x1-17006r6"></a></span><span class="cmbx-10">let</span>&nbsp;x:&nbsp;MyOptional<span class="cmmi-10">&lt;</span>String<span class="cmmi-10">&gt;</span>&nbsp;=&nbsp;MyOptional.nothing&nbsp;<br><span class="label"><a id="x1-17007r7"></a></span><span class="cmbx-10">let</span>&nbsp;xs:&nbsp;MyOptional<span class="cmmi-10">&lt;</span>String<span class="cmmi-10">&gt;</span>&nbsp;=&nbsp;MyOptional.Just(”Hello_world”)&nbsp;<br><span class="label"><a id="x1-17008r8"></a></span>&nbsp;<br><span class="label"><a id="x1-17009r9"></a></span><span class="cmbx-10">func</span>&nbsp;countS(s:&nbsp;String)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;Int&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-17010r10"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;s.count&nbsp;<br><span class="label"><a id="x1-17011r11"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-17012r12"></a></span>&nbsp;<br><span class="label"><a id="x1-17013r13"></a></span><span class="cmbx-10">func</span>&nbsp;countX(x:&nbsp;())&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;Int&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-17014r14"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;0&nbsp;<br><span class="label"><a id="x1-17015r15"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-17016r16"></a></span>&nbsp;<br><span class="label"><a id="x1-17017r17"></a></span><span class="cmbx-10">func</span>&nbsp;countOpt(x:&nbsp;MyOptional<span class="cmmi-10">&lt;</span>String<span class="cmmi-10">&gt;</span>)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;Int&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-17018r18"></a></span>&nbsp;&nbsp;<span class="cmbx-10">switch</span>&nbsp;x&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-17019r19"></a></span>&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;.nothing:&nbsp;<br><span class="label"><a id="x1-17020r20"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;0&nbsp;<br><span class="label"><a id="x1-17021r21"></a></span>&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;.Just(<span class="cmbx-10">let</span>&nbsp;xs):&nbsp;<br><span class="label"><a id="x1-17022r22"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;xs.count&nbsp;<br><span class="label"><a id="x1-17023r23"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-17024r24"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-17025r25"></a></span>&nbsp;<br><span class="label"><a id="x1-17026r26"></a></span><span class="cmbx-10">func</span>&nbsp;injectOne(x:&nbsp;())&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;MyOptional<span class="cmmi-10">&lt;</span>String<span class="cmmi-10">&gt;</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-17027r27"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;.nothing&nbsp;<br><span class="label"><a id="x1-17028r28"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-17029r29"></a></span>&nbsp;<br><span class="label"><a id="x1-17030r30"></a></span><span class="cmbx-10">func</span>&nbsp;injectTwo(s:&nbsp;String)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;MyOptional<span class="cmmi-10">&lt;</span>String<span class="cmmi-10">&gt;</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-17031r31"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;.Just(s)&nbsp;<br><span class="label"><a id="x1-17032r32"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-17033r33"></a></span>&nbsp;<br><span class="label"><a id="x1-17034r34"></a></span><span class="cmbx-10">let</span>&nbsp;cts&nbsp;=&nbsp;composition(f:&nbsp;countOpt,&nbsp;g:&nbsp;injectTwo)&nbsp;<br><span class="label"><a id="x1-17035r35"></a></span><span class="cmbx-10">let</span>&nbsp;ctx&nbsp;=&nbsp;composition(f:&nbsp;countOpt,&nbsp;g:&nbsp;injectOne)&nbsp;<br><span class="label"><a id="x1-17036r36"></a></span>&nbsp;<br><span class="label"><a id="x1-17037r37"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">then</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">we</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">can</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">see</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">cts</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">==</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">countS</span>&nbsp;<br><span class="label"><a id="x1-17038r38"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">and</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">ctx</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">==</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">countX</span>
+   
+   </div>
+<!--l. 458--><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-180006"></a>Exhaustiveness ensures Progress</h4>
+<!--l. 459--><p class="noindent">Sum is paired with case analysis which shows us how to use an expression of sum.
+Moreover if we do not want our program to get stuck during evaluation, we should let
+the case analysis be exhaustive, means every case is handled properly by an
+expression that takes the value from case analysis binder and return value of a type.
+The type of returned value of each expression should be the same, which is enforced
+by the universal mapping property of sum. Then the exhaustiveness of case
+analysis ensures that program will not get stuck during evaluation of using
+sum.
+<!--l. 461--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-190006"></a>Boolean represented as sum</h4>
+<!--l. 462--><p class="noindent">We all know value of type Boolean only can have value true or false. Therefore we
+can see boolean as 1 + 1, that is the value of Boolean can be <span class="cmmi-10">in</span><sub><span class="cmr-7">1</span></sub><span class="cmmi-10">.</span>() as <span class="cmmi-10">true </span>or <span class="cmmi-10">in</span><sub><span class="cmr-7">2</span></sub><span class="cmmi-10">.</span>()
+as <span class="cmmi-10">false</span>. When we do branching based on boolean condition by using if-else,
+actually we do the case analysis on Boolean. In other words, the conditional
+branching of if-else can be exactly replaced by case analysis of Boolean, and vice
+versa.
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift28x.png" alt="if b {e1} else {e2} ~= case{b}{in1.() `→ e1|in2.() `→ e2}
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 465--><p class="nopar">
+                                                                  
+
+                                                                  
+<!--l. 467--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-200006"></a>Boolean Blindness<sup><span class="cmr-7">[2]</span></sup></h4>
+<!--l. 468--><p class="noindent">There is an issue of null pointer checking called boolean blindness, means we have a
+variable a of type A, and that variable can become nil or null, as a variable holding
+an instance of a class, before we use variable a we should check variable a is not nil.
+Then the expression to use that variable would be <span class="cmmi-10">if</span><span class="cmmi-10">&nbsp;a</span><span class="cmmi-10">&nbsp; </span>== <span class="cmmi-10">&nbsp;nil</span><span class="cmmi-10">&nbsp;</span><span class="cmsy-10">{</span><span class="cmmi-10">e</span><sub><span class="cmr-7">1</span></sub><span class="cmsy-10">}</span><span class="cmmi-10">else</span><span class="cmsy-10">{</span><span class="cmmi-10">e</span><sub><span class="cmr-7">2</span></sub><span class="cmsy-10">}</span>, and
+variable a will be used in <span class="cmmi-10">e</span><sub><span class="cmr-7">1</span></sub> and <span class="cmmi-10">e</span><sub><span class="cmr-7">2</span></sub> which is still can be nil because it can not
+be ensured by compiler or our type system. In other words, the execution
+of <span class="cmmi-10">e</span><sub><span class="cmr-7">1</span></sub> or <span class="cmmi-10">e</span><sub><span class="cmr-7">2</span></sub> should depend on the variable a, not the boolean condition of
+<span class="cmmi-10">a</span><span style="margin-left:0.3em" class="thinspace"></span> == <span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">nil</span>.
+<!--l. 471--></p><p class="indent">   Thus the better solution is that we can see in different way that the type of that
+variable is no longer type A, it should be type Optional A, which means that variable
+may have a value of type A or have not any value at all, nil. When we use
+variable a, we use case analysis to check if it is nil, then invoke different
+expressions for nil case and having value case. Therefore in the nil case, expression
+can not use variable a, whereas in the having value case, expression can
+confidently use the value of corresponding type A, which is enforced by our type
+system, no room for null pointer error. That is one insightful application of
+sum.
+<!--l. 473--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">7   </span> <a id="x1-210007"></a>Duality<sup><span class="cmr-7">[7]</span></sup></h3>
+<!--l. 474--><p class="noindent">There are some concepts that occur as couples, like sum and product. Thus sum
+sometimes is called coproduct. You can see from the properties of sum and product,
+they look symmetric, you have one property in sum, then you can get corresponding
+property in product. When you see the diagram of product and sum in Category
+Theory context, you may find out the objects in those two diagrams are the
+same, the difference is in arrows, that is the arrows in product diagram is
+reverted exactly in sum diagram. If you know more about category theory,
+there are only objects and arrows which connect two objects at each end
+of an arrow in categorical diagram, and there are some rules restrict the
+diagram to become a category, said identity rule, associativity rule, and
+composition rule. After you construct a category which has objects and
+arrows as well as follows those three rules, then you can construct a dual
+category called opposite category by reverting the directions of all arrows.
+Therefore when you have a product in a category, then you can get the
+corresponding sum in the opposite category of original category. You can check the
+opposite category also follows the rules to be a category. That is what duality
+mean.
+<!--l. 477--></p><p class="indent">   A structure in a category C has its dual structure in the opposite category of C
+named <span class="cmmi-10">C</span><sup><span class="cmmi-7">op</span></sup>.
+<!--l. 480--></p><p class="indent">   Moreover a structure in a category is identified by mapping a pattern category to
+the category you want to find structure inside by functor, which is a mapping
+between categories. The diagrams of product and sum are patterns categories that
+                                                                  
+
+                                                                  
+you can map them to identify product and sum in a more complex category (means
+more objects and arrows). Furthermore, you can freely to construct pattern category
+by giving objects and arrows which will follow the rule of category, and then map the
+created pattern category to another category to identify the wanted structure
+inside. Therefore, we have a name for those pattern category as limit due
+to the universal mapping property of the structures identified by pattern
+category in a category. Always, there is a colimit as the dual of limit. Universal
+mapping property tells us that by different functors between pattern category to
+another category, we can identify all structures which have that pattern in
+a category, moreover, among them there is an unique-up-to-isomorphism
+structure to which other structures have an arrow from theirselves. Then
+we call the unique structure as limit. And colimit as limit in the opposite
+category.
+<!--l. 482--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">8   </span> <a id="x1-220008"></a>Function</h3>
+<!--l. 484--><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-230008"></a>Function in Type Theory</h4>
+<!--l. 485--><p class="noindent">Type:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift29x.png" alt="τ1 → τ2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 488--><p class="nopar">
+Expression:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift30x.png" alt="λx.e
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 492--><p class="nopar">
+Type Formation:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift31x.png" alt="Γ ⊢ τ type Γ ⊢ τ type
+----1----------2----
+   Γ ⊢ τ1 → τ2type
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 497--><p class="nopar">
+Typing Judgments:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift32x.png" alt="-Γ ,x : τ1-⊢ e-: τ2
+Γ ⊢ λx.e : τ1 → τ2 →I
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 502--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift33x.png" alt="Γ ⊢-e : τ1-→-τ2-Γ ⊢-e1 : τ1-→E
+      Γ ⊢ e(e1) : τ2
+                                                                  
+
+                                                                  
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 508--><p class="nopar">
+Values:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift34x.png" alt="---------
+λx.e value
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 513--><p class="nopar">
+Transitions (Evaluations):
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift35x.png" alt="---e ↦→-e′---
+e(e1) ↦→ e′(e1)
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 518--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift36x.png" alt="              ′
+e-value-e1-↦→-e1
+  e(e1) ↦→ e(e′1)
+" class="math-display"></center></td></tr></tbody></table>
+                                                                  
+
+                                                                  
+<!--l. 522--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift37x.png" alt="Γ ,x-: τ1 ⊢-e : τ2-Γ ⊢-e1 :-τ1-
+     Γ ⊢ [e1∕x]e : τ2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 526--><p class="nopar">
+<!--l. 528--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-240008"></a>Function in Logic</h4>
+<!--l. 529--><p class="noindent">Connectives:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift38x.png" alt="A  → B true
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 532--><p class="nopar">
+Forms:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift39x.png" alt="A-true-⊢--B-true-→
+  A →  B true     I
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 537--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift40x.png" alt="A →  B true  A true
+------B-true-------→E
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 541--><p class="nopar">
+<!--l. 543--></p><p class="noindent">
+   </p><h5 class="likesubsubsectionHead"><a id="x1-250008"></a>Soundness and Completeness</h5>
+   <center class="par-math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift41x.png" alt="Local  Reduction          -A-true--⊢-B-true-→I
+                            -A-→--B-true---------A-true-→E
+                                       B true
+
+                              A →  B true   -A-true-x
+Local  Expansion             --------B--true---------→E
+                                  -A-→--B-true-→I
+" class="par-math-display"></center>
+<!--l. 568--><p class="nopar">
+<!--l. 570--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-260008"></a>Function in Category Theory</h4>
+<!--l. 571--><p class="noindent">Function in Category Theory has different names as exponential, morphism and
+mapping. They means the same thing in different context. Function is mostly used in
+the context of category Set, morphism is mostly used in the context of general
+                                                                  
+
+                                                                  
+category as arrow, exponential is used mostly when people need a more
+compact form or see it in algebraic way, and mapping is alias for them in their
+context.
+<!--l. 574--></p><p class="indent">   Given types <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> and <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>, we can define the function of those two types as
+<span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>, or written as exponential form <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub><sup><span class="cmmi-7">τ</span><sub><span class="cmr-5">1</span></sub></sup> with its evaluation function
+<span class="cmmi-10">eval </span>: <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub><sup><span class="cmmi-7">τ</span><sub><span class="cmr-5">1</span></sub></sup> <span class="cmsy-10">× </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>. Depicted as following:
+</p><div class="diagrams">
+   <img src="./Type Theory in Swift_files/TypeTheoryInSwift42x.png" alt="  B        B     eval--
+C|        C  × B        C
+-|     --    |
+f|     f × 1B|
+ |           |
+               ------f------
+ A        A × B
+">
+</div>
+<!--l. 583--><p class="indent">   By universal mapping property of function, given a function <span class="cmmi-10">f</span><span style="margin-left:0.3em" class="thinspace"></span> : <span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">A</span><span class="cmsy-10">×</span><span class="cmmi-10">B </span><span class="cmsy-10">→ </span><span class="cmmi-10">C </span>which
+takes two arguments of type A and type B and return a value of type B. There exist
+a uniquely corresponding function <span class="overline"><span class="cmmi-10">f</span></span><span style="margin-left:0.3em" class="thinspace"></span> : <span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">A </span><span class="cmsy-10">→ </span><span class="cmmi-10">C</span><sup><span class="cmmi-7">B</span></sup>, such that <span class="cmmi-10">f </span>= <span class="cmmi-10">eval </span><span class="cmsy-10">∘ </span>(<span class="overline"><span class="cmmi-10">f</span></span> <span class="cmsy-10">× </span>1<sub><span class="cmmi-7">B</span></sub>) as
+depicted in above diagram.
+<!--l. 585--></p><p class="indent">   As you may know, from function <span class="cmmi-10">f</span><span style="margin-left:0.3em" class="thinspace"></span> : <span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">A </span><span class="cmsy-10">× </span><span class="cmmi-10">B </span><span class="cmsy-10">→ </span><span class="cmmi-10">C </span>transform to function
+<span class="overline"><span class="cmmi-10">f</span></span><span style="margin-left:0.3em" class="thinspace"></span> : <span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">A </span><span class="cmsy-10">→ </span><span class="cmmi-10">C</span><sup><span class="cmmi-7">B</span></sup> is called currying, and reverted one from function <span class="overline"><span class="cmmi-10">f</span></span><span style="margin-left:0.3em" class="thinspace"></span> : <span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">A </span><span class="cmsy-10">→ </span><span class="cmmi-10">C</span><sup><span class="cmmi-7">B</span></sup> to
+function <span class="cmmi-10">f</span><span style="margin-left:0.3em" class="thinspace"></span> : <span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">A </span><span class="cmsy-10">× </span><span class="cmmi-10">B </span><span class="cmsy-10">→ </span><span class="cmmi-10">C </span>is called uncurrying.
+<!--l. 587--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-270008"></a>Function in Swift</h4>
+<!--l. 588--><p class="noindent">In Swift, exponential can be constructed by function, which can takes arguments of
+types and return values of types. See the following code to taste the flavor of
+exponential in Swift by currying and uncurrying. <!--l. 589-->
+   </p><div class="lstlisting" id="listing-3"><span class="label"><a id="x1-27001r1"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">curry</span>&nbsp;<br><span class="label"><a id="x1-27002r2"></a></span><span class="cmbx-10">func</span>&nbsp;curry<span class="cmmi-10">&lt;</span>A,B,C<span class="cmmi-10">&gt;</span>(f:&nbsp;@escaping&nbsp;(A,B)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;C&nbsp;)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;(A)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;(B)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;C&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-27003r3"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;a&nbsp;<span class="cmbx-10">in</span>&nbsp;<br><span class="label"><a id="x1-27004r4"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;b&nbsp;<span class="cmbx-10">in</span>&nbsp;f(a,b)&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-27005r5"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-27006r6"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-27007r7"></a></span>&nbsp;<br><span class="label"><a id="x1-27008r8"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">uncurry</span>&nbsp;<br><span class="label"><a id="x1-27009r9"></a></span><span class="cmbx-10">func</span>&nbsp;uncurry<span class="cmmi-10">&lt;</span>A,&nbsp;B,&nbsp;C<span class="cmmi-10">&gt;</span>&nbsp;(f:&nbsp;@escaping&nbsp;(A)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;(B)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;C)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;(A,&nbsp;B)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;C&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-27010r10"></a></span>&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;a,&nbsp;b&nbsp;<span class="cmbx-10">in</span>&nbsp;f(a)(b)<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-27011r11"></a></span><span class="cmsy-10">}</span>
+   
+   </div>
+<!--l. 603--><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">9   </span> <a id="x1-280009"></a>Type Algebras</h3>
+<!--l. 604--><p class="noindent">The interesting part of the above type structure is that they have algebraic properties
+depicted as following equations. Given A, B, C are types, 1 is nullary product called
+unit and 0 is nullary sum called void, the sum, product and exponential among them
+will have algebraic properties.
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift43x.png" alt="     ~                  ~                     ~
+A × 1= A     A× (B × C) = (A × B )× C    A × B = B × A
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 611--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift44x.png" alt="     ~                  ~                     ~
+A + 0= A     A+ (B + C) = (A + B )+ C    A + B = B + A
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 618--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift45x.png" alt="           ~
+A× (B + C) = A × B + A × B
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 621--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift46x.png" alt="A → (B × C) ~= (A →  B)× (A →  C)    A → 1 ~= 1
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 626--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift47x.png" alt="            ~                           ~
+(A+ B ) → C = (A →  C)× (B →  C)    0 → A= 1
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 631--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift48x.png" alt="(A × B ) → C ~= A → B → C
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 634--><p class="nopar">
+The left side equaling to the right side in an above equation means that given a
+compound type on one side, we can construct a function that returns the
+corresponding type on the other side without losing any information, and vice versa.
+In category theory, it is called isomorphism between sides, means they are the same
+up to isomorphism.
+                                                                  
+
+                                                                  
+<!--l. 637--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">10   </span> <a id="x1-2900010"></a>Algebraic Data Types</h3>
+<!--l. 638--><p class="noindent">Algebraic data types are types constructed by using sum, product, and exponential,
+just like polynomial can be made by using plus, times, and exponential. For example,
+given type Int, we can get a new type by using sum, product and exponent on type
+Int, like <span class="cmmi-10">Int</span><span class="cmsy-10">×</span><span class="cmmi-10">Int</span>, <span class="cmmi-10">Int </span>+ <span class="cmmi-10">Int</span>, <span class="cmmi-10">Int </span><span class="cmsy-10">→ </span><span class="cmmi-10">Int </span>and/or <span class="cmmi-10">Int</span><span class="cmsy-10">×</span><span class="cmmi-10">Int </span>+ <span class="cmmi-10">Int </span><span class="cmsy-10">→ </span><span class="cmmi-10">Int </span>+ <span class="cmmi-10">Int</span><span class="cmsy-10">×</span><span class="cmmi-10">Int</span>.
+That means you can see <span class="cmmi-10">Int </span>or other type as numbers as well as sum, product and
+exponential as operators in polynomial to create a new type by arbitrarily combining
+numbers with operators.
+<!--l. 640--></p><p class="indent">   Therefore in Swift, we can implement sum, product, and exponential by using
+enumeration, tuple, struct, function. Then we can create algebraic data types as we
+want.
+<!--l. 642--></p><p class="indent">   Interesting, right? In category theory, if a category has product and exponential,
+that category is Cartesian Closed Category (CCC). And you can see by regarding
+type as object and function between types as morphism, our type system can form a
+category Type. Moreover it is a Cartesian closed category.
+<!--l. 716--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">11   </span> <a id="x1-3000011"></a>Recursive Types</h3>
+<!--l. 717--><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-3100011"></a>General Recursion</h4>
+<!--l. 718--><p class="noindent">The key of general recursion is to identify the recursive call in a set of recursion
+equations.
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift49x.png" alt="( fix f : τ is F(f) : τ ) : τ
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 721--><p class="nopar">
+where <span class="cmmi-10">f </span>is recursive call of type <span class="cmmi-10">τ</span>, <span class="cmmi-10">F</span>(<span class="cmmi-10">f</span>) is an expression of type <span class="cmmi-10">τ </span>which will
+occasionally use <span class="cmmi-10">f </span>with some arguments, and the whole <span class="cmmi-10">fix </span>expression is of type
+<span class="cmmi-10">τ</span>
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift50x.png" alt="   Γ ,f : τ ⊢ F : τ
+------------------
+Γ ⊢ fix f is F(f) : τ
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 725--><p class="nopar">
+Moreover, we can see that
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift51x.png" alt="F(f) = f = fix(F)   and   f ix(F ) = F(fix(F))
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 729--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift52x.png" alt="f = (fix f is F (f ))
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 732--><p class="nopar">
+where <span class="cmmi-10">f </span>is the recursive call in general recursion which refers to general recursion
+itself and <span class="cmmi-10">F</span>(<span class="cmmi-10">f</span>) is the body of general recursion which will occasionally call <span class="cmmi-10">f</span>.
+Then we get the step evaluation for general recursion called unwinding the
+recursion.
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift53x.png" alt="fix f-is F-(f) ↦→-F-[fix-f-is-F(f)-∕f]
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 737--><p class="nopar">
+<!--l. 739--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-3200011"></a>Primitive Recursion</h4>
+<!--l. 740--><p class="noindent">Before we move on to recursive type which apply general recursion on type level
+instead of on expression level as above, we have close look at primitive recursion
+(structural recursion) and its concise version, iteration.
+<!--l. 743--></p><p class="indent">   Informally, the reason why primitive recursion is also called structural
+recursion is because the recursion is act on the structure of a given type and to
+make that structure smaller and smaller. For example of natural number, we
+know the structure of natural number is either zero or successor of natural
+number.
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift54x.png" alt="N  = Zero+ Successor(N )
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 746--><p class="nopar">
+Then primitive recursion on a natural number would recursively call a function which
+acts on its predecessor and its resulted of predecessor, when that natural number is
+eventually reduced to zero, it will call another function which acts on zero. The
+notation looks like as following:
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift55x.png" alt="Γ ⊢ e : N   Γ ⊢ e : τ  Γ ,x : N, y : τ ⊢ e : τ
+----------------0--------------------1---
+            Γ ⊢ rec(e, e0, x.y.e1)
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 751--><p class="nopar">
+The semantics of this notation is given by following evaluation rules:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift56x.png" alt="-----------------------
+rec(Zero, e0, x.y.e1) ↦→ e0
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 756--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift57x.png" alt="-------------------------------------------------------
+rec(Successor(n), e0, x.y.e1) ↦→ [(n,rec(n, e0, x.y.e1))∕(x,y)]e1
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 760--><p class="nopar">
+Now we know how recursion expression runs on the structure of natural number, by
+each recursive call, the structure of given argument of natural number becomes
+smaller, and the recursion stops at <span class="cmmi-10">Zero</span>.
+<!--l. 764--></p><p class="indent">   Iteration, the concise version of primitive recursion, is similar but do not need the
+argument of predecessor, therefore the introduction and evaluation rules would look
+like as following:
+                                                                  
+
+                                                                  
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift58x.png" alt="Γ-⊢ e-: N--Γ-⊢-e0 : τ--Γ ,y-: τ ⊢-e1 : τ
+         Γ ⊢ rec(e, e0, y.e1)
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 768--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift59x.png" alt="rec(Zero, e-, y.e-) ↦→-e
+          0    1    0
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 772--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift60x.png" alt="---------------------------------------------
+rec(Successor(n), e0, y.e1) ↦→ [rec(n, e0, y.e1)∕y]e1
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 776--><p class="nopar">
+<!--l. 779--></p><p class="indent">   Moreover, by given zero-test expression
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift61x.png" alt="ifz(e,e0,x.e1)
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 782--><p class="nopar">
+we can construct primitive recursion and iteration by using general recursion.
+</p><table class="align-star">
+                      <tbody><tr><td class="align-odd"><span class="cmmi-10">fix</span><span class="cmmi-10">&nbsp;f</span></td>                      <td class="align-even"> : <span class="cmmi-10">nat </span><span class="cmsy-10">→ </span><span class="cmmi-10">τ </span><span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><span class="cmmi-10">&nbsp;is</span></td>                        <td class="align-label"></td>                      <td class="align-label">
+                      </td></tr><tr><td class="align-odd"><span class="cmmi-10">λn</span></td>                         <td class="align-even"> : <span class="cmmi-10">nat.</span><span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">λt </span>: <span class="cmmi-10">τ.</span></td>                             <td class="align-label"></td>                      <td class="align-label">
+                      </td></tr><tr><td class="align-odd"></td>                           <td class="align-even"><span class="cmmi-10">ifz</span>(<span class="cmmi-10">n,e</span><sub><span class="cmr-7">0</span></sub><span class="cmmi-10">,x.F</span>(<span class="cmmi-10">f</span>)(<span class="cmmi-10">t</span>))</td>                      <td class="align-label"></td>                      <td class="align-label"></td></tr></tbody></table>
+<!--l. 791--><p class="indent">   Notice that, with general recursion, our expression is not guaranteed to terminate.
+Because we can use general recursion to create infinite loop. The reason is general
+recursion stops at the condition specified inside the body <span class="cmmi-10">F</span>(<span class="cmmi-10">f</span>) of general recursion,
+whereas primitive recursion stops at the smallest structure of the type of given
+argument. Therefore the proof of termination of a program is ensured by
+programmer, not the language.
+                                                                  
+
+                                                                  
+<!--l. 793--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-3300011"></a>Recursive type</h4>
+<!--l. 794--><p class="noindent">In the previous section, we have seen how recursion is used in expression level to be a
+solution for expression equation. An example of that is how to define a function to
+calculation the GCD (Greatest common dividend) of two natural number. We may
+express that function as following<sup><span class="cmr-7">[2]</span></sup>:
+</p><table class="align-star">
+                <tbody><tr><td class="align-odd"><span class="cmmi-10">gcd</span><span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">m</span><span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">n </span>= <span class="cmmi-10">&nbsp;</span></td>                <td class="align-even"><span class="cmmi-10">case</span><span class="cmmi-10">&nbsp;compare</span>(<span class="cmmi-10">m,n</span>)<span class="cmmi-10">&nbsp;of</span></td>                      <td class="align-label"></td>                <td class="align-label">
+                </td></tr><tr><td class="align-odd"></td>                         <td class="align-even"><span class="cmmi-10">EQAUL </span><span class="cmsy-10">⇒ </span><span class="cmmi-10">m</span></td>                              <td class="align-label"></td>                <td class="align-label">
+                </td></tr><tr><td class="align-odd"></td>                         <td class="align-even"><span class="cmmi-10">LESS </span><span class="cmsy-10">⇒ </span><span class="cmmi-10">gcd</span><span class="cmmi-10">&nbsp;m</span><span class="cmmi-10">&nbsp;</span>(<span class="cmmi-10">n </span><span class="cmsy-10">- </span><span class="cmmi-10">m</span>)</td>                     <td class="align-label"></td>                <td class="align-label">
+                </td></tr><tr><td class="align-odd"></td>                         <td class="align-even"><span class="cmmi-10">GREATER </span><span class="cmsy-10">⇒ </span><span class="cmmi-10">gcd</span><span class="cmmi-10">&nbsp;</span>(<span class="cmmi-10">m </span><span class="cmsy-10">- </span><span class="cmmi-10">n</span>)<span class="cmmi-10">&nbsp;n</span></td>                <td class="align-label"></td>                <td class="align-label"></td></tr></tbody></table>
+<!--l. 801--><p class="indent">   Then we can abstract the right hand side of the above equation as <span class="cmmi-10">F</span>(<span class="cmmi-10">gcd</span>), and we
+get <span class="cmmi-10">gcd </span>= <span class="cmmi-10">F</span>(<span class="cmmi-10">gcd</span>). Therefore the solution for this equation <span class="cmmi-10">gcd </span>= <span class="cmmi-10">F</span>(<span class="cmmi-10">gcd</span>) is the fixed
+point of <span class="cmmi-10">F</span>.
+<!--l. 804--></p><p class="indent">   Applying the same idea to type isomorphism equation, we get recursive type, the
+fixed point of type operators, as solution for type isomorphism equation. The
+followings are some examples of type isomorphism equation.
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift62x.png" alt="N at ~= 1 + Nat
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 807--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift63x.png" alt="List ~= 1+ (Nat ×List)
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 810--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift64x.png" alt="       ~
+Stream = N at× Stream
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 813--><p class="nopar">
+Now we can see the pattern of those equation would be <span class="cmmi-10">t</span><img src="./Type Theory in Swift_files/TypeTheoryInSwift65x.png" alt="~=" class="cong"><span class="cmmi-10">τ</span>(<span class="cmmi-10">t</span>), where <span class="cmmi-10">t </span>is self
+referential type and <span class="cmmi-10">τ </span>is type expression depending on <span class="cmmi-10">t</span>. Therefore, generally we can
+define notation for recursive type as:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift66x.png" alt="μt.τ
+" class="math-display"></center></td></tr></tbody></table>
+                                                                  
+
+                                                                  
+<!--l. 817--><p class="nopar">
+where <span class="cmmi-10">t </span>is type variable, <span class="cmmi-10">τ </span>is an type expression which depends on type <span class="cmmi-10">t </span>and <span class="cmmi-10">μ</span>
+means the whole thing is recursive type.
+<!--l. 821--></p><p class="indent">   The isomorphism in type isomorphism equation means there are two mutually
+inverted function, named <span class="cmmi-10">fold </span>and <span class="cmmi-10">unfold</span>, transferring between two types on each
+side. <span class="cmmi-10">unfold </span>maps the left hand side t right hand side, whereas <span class="cmmi-10">fold </span>maps the right
+hand side to the left hand side. Moreover, given
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift67x.png" alt="A ~= B
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 824--><p class="nopar">
+and element <span class="cmmi-10">a </span><span class="cmsy-10">∈ </span><span class="cmmi-10">A</span>, we get
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift68x.png" alt="fold(unfold(a)) = a
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 828--><p class="nopar">
+and vice versa for elements in <span class="cmmi-10">B</span>. Generally, we get
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift69x.png" alt="fold ∘unfold = 1A     unfold ∘fold = 1B
+                                                                  
+
+                                                                  
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 832--><p class="nopar">
+<!--l. 835--></p><p class="indent">   Bearing this idea in mind, let us exam an example of inductive type,
+<br class="newline"><span class="cmmi-10">NaturalNumber </span>and another example of coinductive type, <span class="cmmi-10">Stream</span>, in terms of
+Swift. The inductive type and coinductive type are two important forms of
+recursive type which are solution for type isomorphism equation of different
+forms.
+<!--l. 837--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-3400011"></a>Natural Number in Swift</h4>
+<!--l. 838--><p class="noindent">By the equation of natural number isomorphism, <span class="cmmi-10">Nat</span><img src="./Type Theory in Swift_files/TypeTheoryInSwift70x.png" alt="~
+=" class="cong">1 + <span class="cmmi-10">Nat</span>, we can know the
+definition of <span class="cmmi-10">Nat </span>as following:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift71x.png" alt="N at = μ(α.1+ α)
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 841--><p class="nopar">
+Then we get by substitute the definition of <span class="cmmi-10">Nat</span>
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift72x.png" alt="μ(α.1 + α) = 1 + μ(α.1 +α )
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 845--><p class="nopar">
+where <span class="cmmi-10">α </span>is the self referential type and 1 + <span class="cmmi-10">α </span>is the body of recursive type
+which is a type operator or type abstraction taking <span class="cmmi-10">α </span>as type argument.
+Now, when we unfold an expression <span class="cmmi-10">e </span>of type <span class="cmmi-10">μ</span>(<span class="cmmi-10">α.</span>1 + <span class="cmmi-10">α</span>), we will get as
+following:
+                                                                  
+
+                                                                  
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift73x.png" alt="--------Γ-⊢-e : μ(α.1+-α)-------
+Γ ⊢ unf old(e) : [μ(α.1 + α)∕α](1+ α )
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 850--><p class="nopar">
+which is:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift74x.png" alt="-----Γ-⊢-e : μ(α.1+-α)----
+Γ ⊢ unf old(e) : 1 +μ (α.1+ α )
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 854--><p class="nopar">
+<!--l. 857--></p><p class="indent">   In another way around, when we fold an expression <span class="cmmi-10">e </span>of type [<span class="cmmi-10">μ</span>(<span class="cmmi-10">α.</span>1 + <span class="cmmi-10">α</span>)<span class="cmmi-10">∕α</span>](1 + <span class="cmmi-10">α</span>),
+we will get as following:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift75x.png" alt="Γ ⊢ e : [μ(α.1+ α)∕α](1 + α)
+--Γ ⊢-fold(e)-: μ(α.1-+-α)-
+" class="math-display"></center></td></tr></tbody></table>
+                                                                  
+
+                                                                  
+<!--l. 860--><p class="nopar">
+It shows the isomorphism between types <span class="cmmi-10">μ</span>(<span class="cmmi-10">α.</span>1 + <span class="cmmi-10">α</span>) and 1 + <span class="cmmi-10">μ</span>(<span class="cmmi-10">α.</span>1 + <span class="cmmi-10">α</span>) by <span class="cmmi-10">fold </span>and
+<span class="cmmi-10">unfold </span>functions.
+   <!--l. 863-->
+   </p><div class="lstlisting" id="listing-4"><span class="label"><a id="x1-34001r1"></a></span><span class="cmti-10">/</span><span class="cmsy-10">*</span><span class="cmsy-10">*</span>&nbsp;<br><span class="label"><a id="x1-34002r2"></a></span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Using</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">indirect</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">enumeration</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">to</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">implement</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">church</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">coding</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">of</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">natural</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">number</span>&nbsp;<br><span class="label"><a id="x1-34003r3"></a></span><span class="cmti-10">&nbsp;</span><span class="cmsy-10">*</span><span class="cmti-10">/</span>&nbsp;<br><span class="label"><a id="x1-34004r4"></a></span>&nbsp;<br><span class="label"><a id="x1-34005r5"></a></span><span class="cmbx-10">enum</span>&nbsp;NaturalNumber&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34006r6"></a></span>&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;zero&nbsp;<br><span class="label"><a id="x1-34007r7"></a></span>&nbsp;&nbsp;<span class="cmbx-10">indirect</span>&nbsp;<span class="cmbx-10">case</span>&nbsp;successor(NaturalNumber)&nbsp;<br><span class="label"><a id="x1-34008r8"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34009r9"></a></span><span class="cmbx-10">extension</span>&nbsp;NaturalNumber&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34010r10"></a></span>&nbsp;&nbsp;<span class="cmbx-10">var</span>&nbsp;next:&nbsp;NaturalNumber&nbsp;<span class="cmsy-10">{</span>&nbsp;<span class="cmbx-10">return</span>&nbsp;.successor(<span class="cmbx-10">self</span>)&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34011r11"></a></span>&nbsp;&nbsp;<span class="cmbx-10">var</span>&nbsp;previous:&nbsp;NaturalNumber&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34012r12"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">if</span>&nbsp;<span class="cmbx-10">case</span>&nbsp;<span class="cmbx-10">let</span>&nbsp;NaturalNumber.successor(n)&nbsp;=&nbsp;<span class="cmbx-10">self</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34013r13"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;n&nbsp;<br><span class="label"><a id="x1-34014r14"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<span class="cmbx-10">else</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<span class="cmbx-10">return</span>&nbsp;<span class="cmbx-10">self</span>&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34015r15"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34016r16"></a></span>&nbsp;<br><span class="label"><a id="x1-34017r17"></a></span>&nbsp;&nbsp;<span class="cmbx-10">static</span>&nbsp;<span class="cmbx-10">func</span>&nbsp;+&nbsp;(lhs:&nbsp;NaturalNumber,&nbsp;rhs:&nbsp;NaturalNumber)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;NaturalNumber&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34018r18"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">switch</span>&nbsp;(lhs,&nbsp;rhs)&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34019r19"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;(.zero,&nbsp;<span class="cmbx-10">let</span>&nbsp;r):&nbsp;<span class="cmbx-10">return</span>&nbsp;r&nbsp;<br><span class="label"><a id="x1-34020r20"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;(<span class="cmbx-10">let</span>&nbsp;l,&nbsp;.zero):&nbsp;<span class="cmbx-10">return</span>&nbsp;l&nbsp;<br><span class="label"><a id="x1-34021r21"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;(<span class="cmbx-10">let</span>&nbsp;.successor(l),&nbsp;<span class="cmbx-10">let</span>&nbsp;.successor(r)):&nbsp;<br><span class="label"><a id="x1-34022r22"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;.successor(.successor(l&nbsp;+&nbsp;r))&nbsp;<br><span class="label"><a id="x1-34023r23"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34024r24"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34025r25"></a></span>&nbsp;<br><span class="label"><a id="x1-34026r26"></a></span>&nbsp;&nbsp;<span class="cmbx-10">static</span>&nbsp;<span class="cmbx-10">func</span>&nbsp;<span class="cmsy-10">*</span>&nbsp;(lhs:&nbsp;NaturalNumber,&nbsp;rhs:&nbsp;NaturalNumber)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;NaturalNumber&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34027r27"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">switch</span>&nbsp;(lhs,&nbsp;rhs)&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34028r28"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;(.zero,&nbsp;_):&nbsp;<span class="cmbx-10">return</span>&nbsp;.zero&nbsp;<br><span class="label"><a id="x1-34029r29"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;(_,&nbsp;.zero):&nbsp;<span class="cmbx-10">return</span>&nbsp;.zero&nbsp;<br><span class="label"><a id="x1-34030r30"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;(<span class="cmbx-10">let</span>&nbsp;.successor(l),&nbsp;<span class="cmbx-10">let</span>&nbsp;r):&nbsp;<span class="cmbx-10">return</span>&nbsp;r&nbsp;+&nbsp;l&nbsp;<span class="cmsy-10">*</span>&nbsp;r&nbsp;<br><span class="label"><a id="x1-34031r31"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34032r32"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34033r33"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34034r34"></a></span>&nbsp;<br><span class="label"><a id="x1-34035r35"></a></span><span class="cmti-10">//</span><span class="cmti-10">/</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">decimal</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">to</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Church</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Coding</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">Natural</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">number</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">and</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">vice</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">versa</span><span class="cmti-10">.</span>&nbsp;<br><span class="label"><a id="x1-34036r36"></a></span><span class="cmbx-10">extension</span>&nbsp;NaturalNumber:&nbsp;ExpressibleByIntegerLiteral<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34037r37"></a></span>&nbsp;&nbsp;<span class="cmbx-10">init</span>(integerLiteral&nbsp;decimal:&nbsp;UInt)&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34038r38"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">var</span>&nbsp;naturalNumber&nbsp;=&nbsp;NaturalNumber.zero&nbsp;<br><span class="label"><a id="x1-34039r39"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">for</span>&nbsp;_&nbsp;<span class="cmbx-10">in</span>&nbsp;0..<span class="cmmi-10">&lt;</span>decimal&nbsp;<span class="cmsy-10">{</span>&nbsp;naturalNumber&nbsp;=&nbsp;naturalNumber.next&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34040r40"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">self</span>&nbsp;=&nbsp;naturalNumber&nbsp;<br><span class="label"><a id="x1-34041r41"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34042r42"></a></span>&nbsp;<br><span class="label"><a id="x1-34043r43"></a></span>&nbsp;&nbsp;<span class="cmbx-10">var</span>&nbsp;decimal:&nbsp;UInt&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34044r44"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">var</span>&nbsp;decimalNumber:&nbsp;UInt&nbsp;=&nbsp;0&nbsp;<br><span class="label"><a id="x1-34045r45"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">var</span>&nbsp;current:&nbsp;NaturalNumber&nbsp;=&nbsp;<span class="cmbx-10">self</span>&nbsp;<br><span class="label"><a id="x1-34046r46"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">while</span>&nbsp;<span class="cmbx-10">case</span>&nbsp;NaturalNumber.successor(<span class="cmbx-10">let</span>&nbsp;n)&nbsp;=&nbsp;current&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-34047r47"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decimalNumber&nbsp;+=&nbsp;1;&nbsp;current&nbsp;=&nbsp;n&nbsp;<br><span class="label"><a id="x1-34048r48"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34049r49"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;decimalNumber&nbsp;<br><span class="label"><a id="x1-34050r50"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34051r51"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-34052r52"></a></span>&nbsp;<br><span class="label"><a id="x1-34053r53"></a></span><span class="cmbx-10">let</span>&nbsp;ten:&nbsp;NaturalNumber&nbsp;=&nbsp;10&nbsp;<br><span class="label"><a id="x1-34054r54"></a></span><span class="cmbx-10">let</span>&nbsp;decimalTen:&nbsp;UInt&nbsp;=&nbsp;ten.decimal&nbsp;<br><span class="label"><a id="x1-34055r55"></a></span><span class="cmbx-10">let</span>&nbsp;oneHundred:&nbsp;NaturalNumber&nbsp;=&nbsp;ten&nbsp;<span class="cmsy-10">*</span>&nbsp;ten&nbsp;<br><span class="label"><a id="x1-34056r56"></a></span><span class="cmbx-10">let</span>&nbsp;decimalOneHundred:&nbsp;UInt&nbsp;=&nbsp;oneHundred.decimal
+   
+   </div>
+<!--l. 922--><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-3500011"></a>Call by Value, Eager VS. Call by Name, Lazy</h4>
+<!--l. 923--><p class="noindent">Before we go for the coinductive type <span class="cmmi-10">Stream </span>in Swift, let us see something about
+eager evaluation and lazy evaluation for programming language.
+<!--l. 926--></p><p class="indent">   Swift is a call by value programming language which means when doing function
+evaluation in Swift, before invoke function, the arguments of that function would be
+evaluation to some values, then call that function with those values. Moreover there
+is a feature called <span class="cmmi-10">autoclosure </span>that can make argument evaluation later inside the
+function until that argument is actually used, in other words, delay evaluation until
+actually use. That change how to reason about a program which will be eager
+evaluation or lazy evaluation.
+<!--l. 929--></p><p class="indent">   For example, the lazy form of a coinductive type, <span class="cmmi-10">Stream</span>, would look like
+this:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift76x.png" alt="       ~
+Stream = τ × Stream
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 932--><p class="nopar">
+where <span class="cmmi-10">τ </span>is a type variable ranging over all type in Type System.
+<!--l. 936--></p><p class="indent">   Because if that type isomorphism equation of <span class="cmmi-10">Stream </span>is implemented in eager
+programming language, that would become an infinite data structure which is
+impossible to exist in eager programming language. Therefore we see it in lazy form,
+and it would look like this:
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift77x.png" alt="Stream  ~= τ × (1 → Stream )
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 939--><p class="nopar">
+where embedding <span class="cmmi-10">Stream </span>into a function type that delay evaluation in eager
+programming language. That is actually how <span class="cmmi-10">autoclosure </span>works in Swift.
+<!--l. 943--></p><p class="indent">   Remind you that inductive type is naturally show in eager form, that means it is
+naturally implemented in eager programming language like swift.
+<!--l. 946--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-3600011"></a>Stream in Swift</h4>
+   <!--l. 947-->
+   <div class="lstlisting" id="listing-5"><span class="label"><a id="x1-36001r1"></a></span><span class="cmti-10">//</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">0,</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">1,</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">2,</span><span class="cmti-10">&nbsp;</span><span class="cmti-10">3...</span>&nbsp;<br><span class="label"><a id="x1-36002r2"></a></span><span class="cmbx-10">enum</span>&nbsp;Stream&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-36003r3"></a></span>&nbsp;&nbsp;<span class="cmbx-10">indirect</span>&nbsp;<span class="cmbx-10">case</span>&nbsp;cons(Int,&nbsp;()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;Stream)&nbsp;<br><span class="label"><a id="x1-36004r4"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-36005r5"></a></span>&nbsp;<br><span class="label"><a id="x1-36006r6"></a></span><span class="cmbx-10">extension</span>&nbsp;Stream&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-36007r7"></a></span>&nbsp;&nbsp;<span class="cmbx-10">static</span>&nbsp;<span class="cmbx-10">func</span>&nbsp;create(with&nbsp;state:&nbsp;Int)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;Stream&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-36008r8"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;f&nbsp;()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;Stream&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-36009r9"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;Stream.cons(state&nbsp;+&nbsp;1,&nbsp;f)&nbsp;<br><span class="label"><a id="x1-36010r10"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-36011r11"></a></span>&nbsp;<br><span class="label"><a id="x1-36012r12"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;Stream.cons(state,&nbsp;f)&nbsp;<br><span class="label"><a id="x1-36013r13"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-36014r14"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-36015r15"></a></span>&nbsp;<br><span class="label"><a id="x1-36016r16"></a></span><span class="cmbx-10">extension</span>&nbsp;Stream&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-36017r17"></a></span>&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;head()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;Int&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-36018r18"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">switch</span>&nbsp;<span class="cmbx-10">self</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-36019r19"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;.cons(<span class="cmbx-10">let</span>&nbsp;x,&nbsp;_):&nbsp;<br><span class="label"><a id="x1-36020r20"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;x&nbsp;<br><span class="label"><a id="x1-36021r21"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-36022r22"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-36023r23"></a></span>&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;tail()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;Stream&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-36024r24"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">switch</span>&nbsp;<span class="cmbx-10">self</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-36025r25"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;.cons(_,&nbsp;<span class="cmbx-10">let</span>&nbsp;s):&nbsp;<br><span class="label"><a id="x1-36026r26"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;s()&nbsp;<br><span class="label"><a id="x1-36027r27"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-36028r28"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-36029r29"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-36030r30"></a></span>&nbsp;<br><span class="label"><a id="x1-36031r31"></a></span><span class="cmbx-10">let</span>&nbsp;s&nbsp;=&nbsp;Stream.create(with:&nbsp;3)&nbsp;<br><span class="label"><a id="x1-36032r32"></a></span><span class="cmbx-10">let</span>&nbsp;h&nbsp;=&nbsp;s.head()&nbsp;<br><span class="label"><a id="x1-36033r33"></a></span><span class="cmbx-10">let</span>&nbsp;t&nbsp;=&nbsp;s.tail()&nbsp;<br><span class="label"><a id="x1-36034r34"></a></span><span class="cmbx-10">let</span>&nbsp;ht&nbsp;=&nbsp;t.head()
+   
+   </div>
+<!--l. 983--><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">12   </span> <a id="x1-3700012"></a>Universal</h3>
+<!--l. 984--><p class="noindent">Why do we use programming language to make program which would be executed
+on a computer? Why not just operate CPU instructions and data bytes?
+Because it is way too cumbersome for our human brain to make things work in
+that level, particular for larger scale program. Therefore we invented some
+high level programming language to express our reasoning with algorithm
+then compile them into machine code. In high level programming language,
+abstraction and composition are the key for our program, because they ensure we
+can expression our thinking in concise and accurate way with scalability.
+Ideally, we want to express our ideas once and for all, moreover those ideas
+are consistent with each other. That is, we can think of our program as a
+composition of components, each component is one of our thinking, and the whole
+program is a well-organized composition of those components, thus we need
+not to make the same component twice, instead, what we want is to use it
+twice.
+<!--l. 987--></p><p class="indent">   As an example, we can see what is <span class="cmmi-10">function</span>. Without function, we should write a
+long piece of code for a purpose, and another piece of code for similar purpose with
+subtle difference. And function can help us abstract the common part of reasoning
+from those two purposes or more, then implements it once and reuses it as needed.
+                                                                  
+
+                                                                  
+Therefore, sometimes function is also called expression abstraction, or term
+abstraction.
+<!--l. 990--></p><p class="indent">   What if there are some cases that the behaviors of functions are the same except
+the types of arguments and/or return value. How can we write one piece of code
+to capture this kind of expression pattern. For example, I want a function
+called identity taking any value of any type then returning exactly what it
+took. If I supply a value of type <span class="cmmi-10">Int</span>, it would return that value of type
+<span class="cmmi-10">Int</span>. For another value of another type, it do the same thing. Therefore it is
+redundant to implement the same idea of different versions for different
+types.
+<!--l. 993--></p><p class="indent">   So the solution given by this section is called <span class="cmmi-10">universal</span><span class="cmmi-10">&nbsp;type </span>with <br class="newline">a) <span class="cmmi-10">type</span><span class="cmmi-10">&nbsp;variable </span>paralleling to <span class="cmmi-10">parameter </span>of function , <br class="newline">b) <span class="cmmi-10">type</span><span class="cmmi-10">&nbsp;abstraction </span>paralleling to function as <span class="cmmi-10">expression</span><span class="cmmi-10">&nbsp;abstraction</span>, and
+<br class="newline">c) <span class="cmmi-10">type</span><span class="cmmi-10">&nbsp;application </span>paralleling to <span class="cmmi-10">function</span><span class="cmmi-10">&nbsp;application</span>.<br class="newline">Therefore, informally, <span class="cmmi-10">Universal</span><span class="cmmi-10">&nbsp;type </span>is the type of <span class="cmmi-10">type</span><span class="cmmi-10">&nbsp;abstraction </span>Now let us see
+the type formation judgments and typing judgments for them.
+<!--l. 1001--></p><p class="indent">   Type formation rule for <span class="cmmi-10">Universal</span><span class="cmmi-10">&nbsp;type</span>
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift78x.png" alt="Δ,α-type ⊢-τ-type
+  Δ ⊢ ∀α.τ type
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1004--><p class="nopar">
+<!--l. 1006--></p><p class="indent">   Tying Judgments for <span class="cmmi-10">Universal</span><span class="cmmi-10">&nbsp;type</span>
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift79x.png" alt="Δ,α type Γ ⊢ e : τ
+----------------            (Introductory)
+Δ Γ ⊢ Λt.e : ∀α.τ
+" class="math-display"><a id="x1-37001r0"></a></center></td></tr></tbody></table>
+                                                                  
+
+                                                                  
+<!--l. 1012--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift80x.png" alt="Δ-Γ ⊢-e-: ∀α.τ-Δ-⊢ σ-type              (Elimination)
+   Δ Γ ⊢ e[σ] : [σ∕α]τ
+" class="math-display"><a id="x1-37002r0"></a></center></td></tr></tbody></table>
+<!--l. 1018--><p class="nopar">
+And its value rules and evaluation rules are as following:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift81x.png" alt="Λα.e-value-
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1022--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift82x.png" alt="----ρ-type------
+Λα.e[ρ] ↦→ [ρ∕α]e
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1026--><p class="nopar">
+                                                                  
+
+                                                                  
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift83x.png" alt="-----e ↦→-e′-----
+Λα.e[ρ] ↦→ Λα.e′[ρ]
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1030--><p class="nopar">
+<!--l. 1032--></p><p class="indent">   Before we move on to exam universal type in Swift, let us see some related
+concepts, namely monomorphism and polymorphism. Monomorphism refers that an
+expression has unique type, no type variable inside it, whereas polymorphism refers
+that an expression has universal type which contains one or more type variables.
+When those type variable inside a universal type range over all types, we call that is
+parametric polymorphism, else those type variables range over a subset of types, we
+call that is intentional polymorphism, or ad-hoc polymorphism, that is some
+restrictions on type variables. Usually when we say polymorphism wihout further
+description, we mean it is parametric polymorphism where the type variables range
+over all types.
+<!--l. 1034--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-3800012"></a>Universal Type in Swift</h4>
+   <!--l. 1035-->
+   <div class="lstlisting" id="listing-6"><span class="label"><a id="x1-38001r1"></a></span><span class="cmbx-10">enum</span>&nbsp;List<span class="cmmi-10">&lt;</span>T<span class="cmmi-10">&gt;</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-38002r2"></a></span>&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;empty&nbsp;<br><span class="label"><a id="x1-38003r3"></a></span>&nbsp;&nbsp;<span class="cmbx-10">indirect</span>&nbsp;<span class="cmbx-10">case</span>&nbsp;cons(T,&nbsp;List<span class="cmmi-10">&lt;</span>T<span class="cmmi-10">&gt;</span>)&nbsp;<br><span class="label"><a id="x1-38004r4"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-38005r5"></a></span>&nbsp;<br><span class="label"><a id="x1-38006r6"></a></span><span class="cmbx-10">extension</span>&nbsp;List&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-38007r7"></a></span>&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;fmap<span class="cmmi-10">&lt;</span>U<span class="cmmi-10">&gt;</span>&nbsp;(&nbsp;f:&nbsp;(T)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;U&nbsp;)&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;List<span class="cmmi-10">&lt;</span>U<span class="cmmi-10">&gt;</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-38008r8"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">switch</span>&nbsp;<span class="cmbx-10">self</span>&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-38009r9"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;.empty:&nbsp;<br><span class="label"><a id="x1-38010r10"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;.empty&nbsp;<br><span class="label"><a id="x1-38011r11"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">case</span>&nbsp;.cons(<span class="cmbx-10">let</span>&nbsp;head,&nbsp;<span class="cmbx-10">let</span>&nbsp;tail):&nbsp;<br><span class="label"><a id="x1-38012r12"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;.cons(f(head),&nbsp;tail.fmap(f:&nbsp;f))&nbsp;<br><span class="label"><a id="x1-38013r13"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-38014r14"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-38015r15"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-38016r16"></a></span>&nbsp;<br><span class="label"><a id="x1-38017r17"></a></span><span class="cmbx-10">let</span>&nbsp;x&nbsp;=&nbsp;List<span class="cmmi-10">&lt;</span>Int<span class="cmmi-10">&gt;</span>.empty&nbsp;<br><span class="label"><a id="x1-38018r18"></a></span><span class="cmbx-10">let</span>&nbsp;xs&nbsp;=&nbsp;List<span class="cmmi-10">&lt;</span>Int<span class="cmmi-10">&gt;</span>.cons(10,&nbsp;x)&nbsp;<br><span class="label"><a id="x1-38019r19"></a></span><span class="cmbx-10">let</span>&nbsp;xxs&nbsp;=&nbsp;List<span class="cmmi-10">&lt;</span>Int<span class="cmmi-10">&gt;</span>.cons(100,&nbsp;xs)&nbsp;<br><span class="label"><a id="x1-38020r20"></a></span><span class="cmbx-10">let</span>&nbsp;str&nbsp;=&nbsp;xxs.fmap&nbsp;<span class="cmsy-10">{</span>&nbsp;$0.description&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-38021r21"></a></span>print(str)
+   
+   </div>
+<!--l. 1058--><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">13   </span> <a id="x1-3900013"></a>Existential</h3>
+<!--l. 1059--><p class="noindent">Existential type, also called abstract type, is indeed a form of polymorphism, which
+means we can encode existential type by universal type in a particular form. But
+before let us exam existential type alone.
+<!--l. 1062--></p><p class="indent">   The notation for existential type is <span class="cmsy-10">∃</span><span class="cmmi-10">t.τ</span>. And its type formation rule and typing
+rules are showed as following:
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift84x.png" alt="Δ,α type ⊢ τ type
+----------------
+  Δ ⊢ ∃α.τ type
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1066--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift85x.png" alt="Δ-⊢-ρ-type--Δ,-α type ⊢-τ-type-Δ-Γ-⊢ e-: [ρ∕α]τ
+         Δ Γ ⊢ pack[α.τ ][ρ](e) : ∃α.τ
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1070--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift86x.png" alt="Δ-Γ-⊢ e1-: ∃α.τ1-Δ,-α type-Γ ,x : τ1-⊢ e2-: τ2-Δ-⊢-τ2 type
+          Δ Γ ⊢ open[α.τ1][τ2](e1;α,x.e2) : τ2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1074--><p class="nopar">
+And its value rules and evaluation rules would look like as following:
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift87x.png" alt="      e value
+------------------
+pack[α.τ][ρ](e) value
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1078--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift88x.png" alt="-----------e ↦→-e′-----------
+pack[α.τ][ρ](e) ↦→ pack[α.τ][ρ](e′)
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1082--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift89x.png" alt="                       ′
+------------------e ↦→-e-------------------
+open [α.τ][τ2](e;α,x.e2) ↦→ open[α.τ][τ2](e′;α,x.e2)
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1086--><p class="nopar">
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift90x.png" alt="                   e value
+-------------------------------------------
+open[α.τ][τ2](pack[α.τ][ρ](e);α,x.e2) ↦→ [ρ,e∕α,x]e2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1090--><p class="nopar">
+We can see the existential type as an interface of type <span class="cmmi-10">τ </span>given some type <span class="cmmi-10">α </span>in its
+implementation, the pack operation is the implementation process of that interface
+using a type <span class="cmmi-10">ρ </span>in implementation expression <span class="cmmi-10">e</span>, and the open operation is the use of
+that interface in a client by opening the package <span class="cmmi-10">e</span><sub><span class="cmr-7">1</span></sub> for use within the client <span class="cmmi-10">e</span><sub><span class="cmr-7">2</span></sub> by
+binding its representation type to <span class="cmmi-10">α </span>and its implementation to <span class="cmmi-10">x </span>for use within
+<span class="cmmi-10">e</span><sub><span class="cmr-7">2</span></sub>
+<!--l. 1094--></p><p class="indent">   For example of Counter, we define an interface of Counter with some operations
+on Counter, namely <span class="cmmi-10">zero </span>: <span class="cmmi-10">Counter</span>, <span class="cmmi-10">increment </span>: <span class="cmmi-10">Counter </span><span class="cmsy-10">→ </span><span class="cmmi-10">Counter</span>, <span class="cmmi-10">value </span>: <span class="cmmi-10">Nat</span>,
+therefore we get an existential type of form <span class="cmsy-10">∃</span><span class="cmmi-10">α.τ</span>
+</p><table class="align-star">
+              <tbody><tr><td class="align-odd"><span class="cmsy-10">∃</span><span class="cmmi-10">Counter.</span><span class="cmsy-10">{</span></td>              <td class="align-even"><span class="cmmi-10">zero </span>: <span class="cmmi-10">Counter,</span></td>                             <td class="align-label"></td>              <td class="align-label">
+              </td></tr><tr><td class="align-odd"></td>                        <td class="align-even"><span class="cmmi-10">increment </span>: <span class="cmmi-10">Counter </span><span class="cmsy-10">→ </span><span class="cmmi-10">Counter,</span></td>              <td class="align-label"></td>              <td class="align-label">
+              </td></tr><tr><td class="align-odd"></td>                        <td class="align-even"><span class="cmmi-10">value </span>: <span class="cmmi-10">Counter </span><span class="cmsy-10">→ </span><span class="cmmi-10">Nat</span><span class="cmsy-10">}</span></td>                     <td class="align-label"></td>              <td class="align-label"></td></tr></tbody></table>
+<!--l. 1100--><p class="indent">   where <span class="cmmi-10">α </span>is <span class="cmmi-10">Counter </span>as abstract type, and <span class="cmmi-10">τ </span>is the labeled record (tuple).
+<!--l. 1103--></p><p class="indent">   When we pick one type to implement that interface, we use pack operation of
+form
+   </p><table class="equation-star"><tbody><tr><td>
+                                                                  
+
+                                                                  
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift91x.png" alt="pack[α.τ][ρ](e)
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1106--><p class="nopar">
+as following:
+</p><table class="align-star">
+<tbody><tr><td class="align-odd"><span class="cmmi-10">pack</span></td><td class="align-even"></td>                                                                    <td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>    <td class="align-even">[<span class="cmmi-10">Counter.</span><span class="cmsy-10">{</span><span class="cmmi-10">zero </span>: <span class="cmmi-10">Counter,increment </span>: <span class="cmmi-10">Counter </span><span class="cmsy-10">→ </span><span class="cmmi-10">Counter,value </span>: <span class="cmmi-10">Nat </span><span class="cmsy-10">→ </span><span class="cmmi-10">Nat</span><span class="cmsy-10">}</span>]</td><td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>    <td class="align-even">[<span class="cmmi-10">Nat</span>]</td>                                                                <td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>    <td class="align-even">(<span class="cmsy-10">{</span><span class="cmmi-10">zeor </span>= <span class="cmmi-10">Zero,increment</span><span class="cmmi-10">&nbsp;n </span>= <span class="cmmi-10">successor</span>(<span class="cmmi-10">n</span>)<span class="cmmi-10">,value</span><span class="cmmi-10">&nbsp;n </span>= <span class="cmmi-10">n</span><span class="cmsy-10">}</span>)</td>                  <td class="align-label"></td><td class="align-label"></td></tr></tbody></table>
+<!--l. 1116--><p class="indent">   Now, we can see expression <span class="cmmi-10">e </span>in pack operation is the implementation of
+existential type with type <span class="cmmi-10">ρ</span>. Moreover, we can pick another type for <span class="cmmi-10">ρ </span>to have
+another implementation of type <span class="cmsy-10">∃</span><span class="cmmi-10">Counter.</span><span class="cmsy-10">{</span><span class="cmmi-10">...</span><span class="cmsy-10">}</span>
+<!--l. 1119--></p><p class="indent">   Next, we see how to use that existential type as following of form:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+                                                                  
+
+                                                                  
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift92x.png" alt="open [α.τ1][τ2](e1;α,x.e2) : τ2
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1122--><p class="nopar">
+</p><table class="align-star">
+<tbody><tr><td class="align-odd"><span class="cmmi-10">open</span></td><td class="align-even"></td>                                                                    <td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>    <td class="align-even">[<span class="cmmi-10">Counter.</span><span class="cmsy-10">{</span><span class="cmmi-10">zero </span>: <span class="cmmi-10">Counter,increment </span>: <span class="cmmi-10">Counter </span><span class="cmsy-10">→ </span><span class="cmmi-10">Counter,value </span>: <span class="cmmi-10">Nat </span><span class="cmsy-10">→ </span><span class="cmmi-10">Nat</span><span class="cmsy-10">}</span>]</td><td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>    <td class="align-even">[<span class="cmmi-10">Nat</span>]</td>                                                                <td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>    <td class="align-even">(<span class="cmmi-10">aCounter</span>;</td>                                                           <td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>    <td class="align-even"><span class="cmmi-10">let</span><span class="cmmi-10">&nbsp;inc </span>= <span class="cmmi-10">Counter.increment</span>(<span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">aCounter</span><span style="margin-left:0.3em" class="thinspace"></span>)<span class="cmmi-10">&nbsp;in</span><span class="cmmi-10">&nbsp;Counter.value</span>(<span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">inc</span><span style="margin-left:0.3em" class="thinspace"></span>)</td>             <td class="align-label"></td><td class="align-label">
+</td></tr><tr><td class="align-odd"></td>    <td class="align-even">)</td>                                                                   <td class="align-label"></td><td class="align-label"></td></tr></tbody></table>
+<!--l. 1131--><p class="indent">   When we use a counter, we do not know and need not know what is the
+implementation type inside. Thus it is quite straightforward to implement existential
+type in Swift with <span class="cmmi-10">protocol</span>. See the following section.
+<!--l. 1134--></p><p class="indent">   Before the end of this section, let us turn back the question of how to show
+existential in universal.
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift93x.png" alt="∃α.τ = ∀σ.(∀α.τ → σ) → σ
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1137--><p class="nopar">
+</p><table class="align-star">
+                   <tbody><tr><td class="align-odd"><span class="cmmi-10">pack</span><span style="margin-left:0.3em" class="thinspace"></span>[<span class="cmmi-10">α.τ</span>][<span class="cmmi-10">ρ</span>](<span class="cmmi-10">e</span>) =</td>                   <td class="align-even">Λ<span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">σ.</span></td>                             <td class="align-label"></td>                   <td class="align-label">
+                   </td></tr><tr><td class="align-odd"></td>                                  <td class="align-even"><span class="cmmi-10">λ</span><span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">F </span>: <span class="cmsy-10">∀</span><span class="cmmi-10">α.τ </span><span class="cmsy-10">→ </span><span class="cmmi-10">σ.</span></td>                   <td class="align-label"></td>                   <td class="align-label">
+                   </td></tr><tr><td class="align-odd"></td>                                  <td class="align-even"><span class="cmmi-10">F</span>[<span class="cmmi-10">ρ</span>](<span class="cmmi-10">e</span>)</td>                          <td class="align-label"></td>                   <td class="align-label"></td></tr></tbody></table>
+<!--l. 1143--><p class="indent">
+</p><table class="align-star">
+                <tbody><tr><td class="align-odd"><span class="cmmi-10">open</span>[<span class="cmmi-10">α.τ</span><sub><span class="cmr-7">1</span></sub>][<span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>](<span class="cmmi-10">e</span><sub><span class="cmr-7">1</span></sub>;<span class="cmmi-10">α,x.e</span><sub><span class="cmr-7">2</span></sub>) = <span class="cmmi-10">e</span><sub><span class="cmr-7">1</span></sub>[<span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>](</td>                <td class="align-even">Λ<span class="cmmi-10">α.</span></td>                   <td class="align-label"></td>                <td class="align-label">
+                </td></tr><tr><td class="align-odd"></td>                                             <td class="align-even"><span class="cmmi-10">λ</span><span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">x </span>: <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub><span class="cmmi-10">.</span></td>                <td class="align-label"></td>                <td class="align-label">
+                </td></tr><tr><td class="align-odd"></td>                                             <td class="align-even"><span class="cmmi-10">e</span><sub><span class="cmr-7">2</span></sub>)</td>                   <td class="align-label"></td>                <td class="align-label"></td></tr></tbody></table>
+                                                                  
+
+                                                                  
+<!--l. 1149--><p class="indent">   Therefore, we can say an existential type as a parametric polymorphic function
+type that, for all result type <span class="cmmi-10">σ</span>, will return a value of <span class="cmmi-10">σ </span>by given a parametric
+polymorphic function of type <span class="cmsy-10">∀</span><span class="cmmi-10">α.τ </span><span class="cmsy-10">→ </span><span class="cmmi-10">σ</span>.
+<!--l. 1152--></p><p class="indent">   By the way, we also can rewrite product and sum in terms of universal
+type:
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift94x.png" alt="τ1 × τ2 = ∀σ.(τ1 → τ2 → σ) → σ
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1155--><p class="nopar">
+It means product type can be see as a parametric polymorphic function which for all
+type <span class="cmmi-10">σ</span>, returns a value of <span class="cmmi-10">σ </span>by given a function for <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">× </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub> as argument and <span class="cmmi-10">σ </span>as
+result type.
+   </p><table class="equation-star"><tbody><tr><td>
+   <center class="math-display">
+<img src="./Type Theory in Swift_files/TypeTheoryInSwift95x.png" alt="τ1 + τ2 = ∀σ.(τ1 → σ) → (τ2 → σ) → σ
+" class="math-display"></center></td></tr></tbody></table>
+<!--l. 1159--><p class="nopar">
+It means sum type can be see as a parametric polymorphic function which for all
+type <span class="cmmi-10">σ</span>, returns a value of <span class="cmmi-10">σ </span>by given one function for each type case.
+<!--l. 1163--></p><p class="indent">   Then the related project and injection functions can be defined easily.
+<!--l. 1166--></p><p class="noindent">
+   </p><h4 class="likesubsectionHead"><a id="x1-4000013"></a>Existential Type in Swift</h4>
+   <!--l. 1167-->
+                                                                  
+
+                                                                  
+   <div class="lstlisting" id="listing-7"><span class="label"><a id="x1-40001r1"></a></span><span class="cmbx-10">protocol</span>&nbsp;Counter&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-40002r2"></a></span>&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;zeroC()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;<span class="cmbx-10">Self</span>&nbsp;<br><span class="label"><a id="x1-40003r3"></a></span>&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;increment()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;<span class="cmbx-10">Self</span>&nbsp;<br><span class="label"><a id="x1-40004r4"></a></span>&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;value()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;NaturalNumber&nbsp;<br><span class="label"><a id="x1-40005r5"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-40006r6"></a></span>&nbsp;<br><span class="label"><a id="x1-40007r7"></a></span><span class="cmbx-10">extension</span>&nbsp;NaturalNumber:&nbsp;Counter&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-40008r8"></a></span>&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;zeroC()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;NaturalNumber&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-40009r9"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;NaturalNumber.zero&nbsp;<br><span class="label"><a id="x1-40010r10"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-40011r11"></a></span>&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;increment()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;NaturalNumber&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-40012r12"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;<span class="cmbx-10">self</span>.next&nbsp;<br><span class="label"><a id="x1-40013r13"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-40014r14"></a></span>&nbsp;&nbsp;<span class="cmbx-10">func</span>&nbsp;value()&nbsp;<span class="cmsy-10">-</span><span class="cmmi-10">&gt;</span>&nbsp;NaturalNumber&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-40015r15"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmbx-10">return</span>&nbsp;<span class="cmbx-10">self</span>&nbsp;<br><span class="label"><a id="x1-40016r16"></a></span>&nbsp;&nbsp;<span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-40017r17"></a></span><span class="cmsy-10">}</span>&nbsp;<br><span class="label"><a id="x1-40018r18"></a></span>&nbsp;<br><span class="label"><a id="x1-40019r19"></a></span><span class="cmbx-10">let</span>&nbsp;n:&nbsp;NaturalNumber&nbsp;=&nbsp;10&nbsp;<br><span class="label"><a id="x1-40020r20"></a></span><span class="cmbx-10">func</span>&nbsp;counterUse<span class="cmmi-10">&lt;</span>T:Counter<span class="cmmi-10">&gt;</span>(_&nbsp;c:&nbsp;T)&nbsp;<span class="cmsy-10">{</span>&nbsp;<br><span class="label"><a id="x1-40021r21"></a></span>&nbsp;&nbsp;<span class="cmbx-10">let</span>&nbsp;s&nbsp;=&nbsp;c.increment()&nbsp;<br><span class="label"><a id="x1-40022r22"></a></span>&nbsp;&nbsp;<span class="cmbx-10">let</span>&nbsp;value&nbsp;=&nbsp;s.value()&nbsp;<br><span class="label"><a id="x1-40023r23"></a></span>&nbsp;&nbsp;print(value)&nbsp;<br><span class="label"><a id="x1-40024r24"></a></span><span class="cmsy-10">}</span>
+   
+   </div>
+<!--l. 1194--><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">14   </span> <a id="x1-4100014"></a>Summary</h3>
+<!--l. 1195--><p class="noindent">After we have a close on those 6 type forms and their related notions, we may feel
+how beautiful those forms fit together and interact with each other to form features
+of a programming language. Moreover, we would see those forms ubiquitously occurs
+in different programming language. Before we close this article, let us exam three
+related notions, namely constant, variable, and assignable<sup><span class="cmr-7">[1][2]</span></sup>. Constant means its
+value is fixed, never change, like <span class="cmmi-10">π </span>in mathematics, variables like placeholders in
+expression, after being initialized with value by substitution, never change later on,
+whereas assignable means after assigning a value to it, you can change it to another
+value. In swift, constant refers to something literals, and variable refers to constant
+of Swift declared by let, and assignable refers to normal variable of Swift
+declared by var. Mostly, in functional programming, we seldom use assignable,
+instead we focus on using variable, to make reasoning more straightforward.
+Because when use assignable, for <span class="cmmi-10">var</span><span class="cmmi-10">&nbsp;x </span>= 1, <span class="cmmi-10">x </span>+ <span class="cmmi-10">x </span>is not guaranteed to be 2 in
+concurrence situation, whereas when x is variable as <span class="cmmi-10">let</span><span class="cmmi-10">&nbsp;x </span>= 1, then <span class="cmmi-10">x </span>+ <span class="cmmi-10">x</span>
+is always 2 <sup><span class="cmr-7">[2]</span></sup>. Therefore when we do functional programming, we should
+notice which one to use, constant, variable or assignable. As rules of thumb, I
+recommend to try our best to use let in Swift to avoid mutations, particular in
+parallelism.
+<!--l. 1197--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">15   </span> <a id="x1-4200015"></a>References</h3>
+<!--l. 1198--><p class="noindent">[1] Practical Foundations for Programming Languages - Robert Harper
+<!--l. 1200--></p><p class="indent">   [2] Programming Languages Background - Robert Harper and Dan Licata -
+OPLSS 2017
+<!--l. 1202--></p><p class="indent">   [3] The Swift Programming Language - Language Reference
+<!--l. 1204--></p><p class="indent">   [4] https://existentialtype.wordpress.com/2011/03/27/the-holy-trinity/
+<!--l. 1206--></p><p class="indent">   [5] https://ncatlab.org/nlab/show/computational+trinitarianism
+<!--l. 1208--></p><p class="indent">   [6]https://ncatlab.org/nlab/show/<br class="newline">relation+between+type+theory+and+category+theory
+<!--l. 1210--></p><p class="indent">   [7] Category Theory – Steve Awodey
+<!--l. 1212--></p><p class="indent">   [8] Proof Theory Foundations - Frank Pfenning - OPLSS 2012
+<!--l. 1214--></p><p class="noindent">
+   </p><h3 class="sectionHead"><span class="titlemark">16   </span> <a id="x1-4300016"></a>Terms and Conventions</h3>
+                                                                  
+
+                                                                  
+<!--l. 1215--><p class="noindent">In this section we will list the terms and conventions used through this article.
+   </p><div class="table">
+                                                                  
+
+                                                                  
+<!--l. 1217--><p class="indent">   </p><hr class="float"><div class="float">
+                                                                  
+
+                                                                  
+ <table id="TBL-4" class="tabular" cellspacing="0" cellpadding="0"><colgroup id="TBL-4-1g"><col id="TBL-4-1"></colgroup><colgroup id="TBL-4-2g"><col id="TBL-4-2"></colgroup><colgroup id="TBL-4-3g"><col id="TBL-4-3"></colgroup><tbody><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-1-"><td style="white-space:wrap; text-align:left;" id="TBL-4-1-1" class="td11"> <!--l. 1236--><p class="noindent">Name                </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-1-2" class="td11">       <!--l. 1236--><p class="noindent">Notation           </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-1-3" class="td11">      <!--l. 1236--><p class="noindent">Description          </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-2-"><td style="white-space:wrap; text-align:left;" id="TBL-4-2-1" class="td11"> <!--l. 1236--><p class="noindent">Sorts                 </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-2-2" class="td11">    <!--l. 1236--><p class="noindent"><span class="cmmi-10">type,expression</span>     </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-2-3" class="td11">     <!--l. 1236--><p class="noindent">Sorts of syntax
+        in a language
+     which else includes
+   <span class="cmmi-10">declaration,attribute</span>
+            etc.               </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-3-"><td style="white-space:wrap; text-align:left;" id="TBL-4-3-1" class="td11"> <!--l. 1236--><p class="noindent">Expression          </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-3-2" class="td11">          <!--l. 1236--><p class="noindent"><span class="cmmi-10">e</span>              </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-3-3" class="td11">   <!--l. 1236--><p class="noindent">little English letter     </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-4-"><td style="white-space:wrap; text-align:left;" id="TBL-4-4-1" class="td11"> <!--l. 1236--><p class="noindent">Type                 </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-4-2" class="td11">        <!--l. 1236--><p class="noindent"><span class="cmmi-10">τ,ρ,σ</span>           </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-4-3" class="td11">    <!--l. 1236--><p class="noindent">little Greek letter      </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-5-"><td style="white-space:wrap; text-align:left;" id="TBL-4-5-1" class="td11"> <!--l. 1236--><p class="noindent">Expression of
+  Type                 </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-5-2" class="td11">        <!--l. 1236--><p class="noindent"><span class="cmmi-10">e  </span>:  <span class="cmmi-10">τ</span>           </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-5-3" class="td11">           <!--l. 1236--><p class="noindent">           </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-6-"><td style="white-space:wrap; text-align:left;" id="TBL-4-6-1" class="td11"> <!--l. 1236--><p class="noindent">Expression
+  Variable             </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-6-2" class="td11">     <!--l. 1236--><p class="noindent"><span class="cmmi-10">x,y,z,w,v,u</span>       </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-6-3" class="td11">   <!--l. 1236--><p class="noindent">little English letter
+        started from <span class="cmmi-10">x</span>
+   forward or backward
+      (if more than 3)      </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-7-"><td style="white-space:wrap; text-align:left;" id="TBL-4-7-1" class="td11"> <!--l. 1236--><p class="noindent">Type Variable      </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-7-2" class="td11">        <!--l. 1236--><p class="noindent"><span class="cmmi-10">α,β,γ</span>           </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-7-3" class="td11">    <!--l. 1236--><p class="noindent">little Greek letter
+       started from <span class="cmmi-10">α</span>      </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-8-"><td style="white-space:wrap; text-align:left;" id="TBL-4-8-1" class="td11"> <!--l. 1236--><p class="noindent">Function             </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-8-2" class="td11">        <!--l. 1236--><p class="noindent"><span class="cmmi-10">f,g,h</span>           </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-8-3" class="td11">   <!--l. 1236--><p class="noindent">little English letter
+       started from <span class="cmmi-10">f</span>       </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-9-"><td style="white-space:wrap; text-align:left;" id="TBL-4-9-1" class="td11"> <!--l. 1236--><p class="noindent">Type Forms        </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-9-2" class="td11">     <!--l. 1236--><p class="noindent"><span class="cmsy-10">×</span><span class="cmmi-10">,</span>+<span class="cmmi-10">,</span><span class="cmsy-10">→</span><span class="cmmi-10">,μ,</span><span class="cmsy-10">∀</span><span class="cmmi-10">,</span><span class="cmsy-10">∃</span>   </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-9-3" class="td11">  <!--l. 1236--><p class="noindent">also called compound
+         type, or type
+      structure, which
+      create new types
+        from old types        </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-10-"><td style="white-space:wrap; text-align:left;" id="TBL-4-10-1" class="td11"> <!--l. 1236--><p class="noindent">Product Type
+  Form                 </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-10-2" class="td11">       <!--l. 1236--><p class="noindent"><span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub>  <span class="cmsy-10">× </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>              </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-10-3" class="td11">    <!--l. 1236--><p class="noindent">A product type
+          created by
+      pairing two types      </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-11-"><td style="white-space:wrap; text-align:left;" id="TBL-4-11-1" class="td11"> <!--l. 1236--><p class="noindent">Expression of
+  Product Type      </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-11-2" class="td11">   <!--l. 1236--><p class="noindent"><span class="cmmi-10">&lt; e</span><sub><span class="cmr-7">1</span></sub><span class="cmmi-10">,e</span><sub><span class="cmr-7">2</span></sub> <span class="cmmi-10">&gt;</span>: <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> <span class="cmsy-10">× </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>     </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-11-3" class="td11">           <!--l. 1236--><p class="noindent">           </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-12-"><td style="white-space:wrap; text-align:left;" id="TBL-4-12-1" class="td11"> <!--l. 1236--><p class="noindent">Sum Type
+  Form                 </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-12-2" class="td11">       <!--l. 1236--><p class="noindent"><span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub>  + <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>              </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-12-3" class="td11">   <!--l. 1236--><p class="noindent">A sum type created
+    by tagged two types    </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-13-"><td style="white-space:wrap; text-align:left;" id="TBL-4-13-1" class="td11"> <!--l. 1236--><p class="noindent">Expression of
+  Sum Type           </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-13-2" class="td11">    <!--l. 1236--><p class="noindent"><span class="cmmi-10">in</span><sub><span class="cmmi-7">i</span></sub>(<span class="cmmi-10">e</span>) : <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub> + <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>        </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-13-3" class="td11">     <!--l. 1236--><p class="noindent"><span class="cmmi-10">i </span>ranges over
+       1<span class="cmmi-10">,</span>2 in this case       </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-14-"><td style="white-space:wrap; text-align:left;" id="TBL-4-14-1" class="td11"> <!--l. 1236--><p class="noindent">Exponential
+  Type Form          </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-14-2" class="td11">       <!--l. 1236--><p class="noindent"><span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub>   <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>             </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-14-3" class="td11">     <!--l. 1236--><p class="noindent">A exponential
+       type created by
+       arrow two types       </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-15-"><td style="white-space:wrap; text-align:left;" id="TBL-4-15-1" class="td11"> <!--l. 1236--><p class="noindent">Expression of
+  Exponential
+  Type                 </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-15-2" class="td11">    <!--l. 1236--><p class="noindent"><span class="cmmi-10">λ</span><span style="margin-left:0.3em" class="thinspace"></span><span class="cmmi-10">x.e </span>: <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub>  <span class="cmsy-10">→ </span><span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub>        </p></td><td style="white-space:wrap; text-align:left;" id="TBL-4-15-3" class="td11">           <!--l. 1236--><p class="noindent">           </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-4-16-"><td style="white-space:wrap; text-align:left;" id="TBL-4-16-1" class="td11"> <!--l. 1236--><p class="noindent">               </p></td></tr></tbody></table>
+                                                                  
+
+                                                                  
+   </div><hr class="endfloat">
+   </div>
+   <div class="table">
+                                                                  
+
+                                                                  
+<!--l. 1239--><p class="indent">   </p><hr class="float"><div class="float">
+                                                                  
+
+                                                                  
+ <table id="TBL-7" class="tabular" cellspacing="0" cellpadding="0"><colgroup id="TBL-7-1g"><col id="TBL-7-1"></colgroup><colgroup id="TBL-7-2g"><col id="TBL-7-2"></colgroup><colgroup id="TBL-7-3g"><col id="TBL-7-3"></colgroup><tbody><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-1-"><td style="white-space:wrap; text-align:left;" id="TBL-7-1-1" class="td11"> <!--l. 1254--><p class="noindent">Name                </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-1-2" class="td11">       <!--l. 1254--><p class="noindent">Notation           </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-1-3" class="td11">      <!--l. 1254--><p class="noindent">Description          </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-2-"><td style="white-space:wrap; text-align:left;" id="TBL-7-2-1" class="td11"> <!--l. 1254--><p class="noindent">Recursive            </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-2-2" class="td11">        <!--l. 1254--><p class="noindent"><span class="cmmi-10">μ</span>(<span class="cmmi-10">α.τ</span>)             </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-2-3" class="td11">           <!--l. 1254--><p class="noindent">           </p></td>
+</tr><tr style="vertical-align:baseline;" id="TBL-7-3-"><td style="white-space:wrap; text-align:left;" id="TBL-7-3-1" class="td11"> <!--l. 1254--><p class="noindent">Type Form          </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-3-2" class="td11">      <!--l. 1254--><p class="noindent">[<span class="cmmi-10">μ</span>(<span class="cmmi-10">α.τ</span>)<span class="cmmi-10">∕α</span>]<span class="cmmi-10">τ</span>        </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-3-3" class="td11">           <!--l. 1254--><p class="noindent">           </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-4-"><td style="white-space:wrap; text-align:left;" id="TBL-7-4-1" class="td11"> <!--l. 1254--><p class="noindent">Expression          </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-4-2" class="td11">    <!--l. 1254--><p class="noindent"><span class="cmmi-10">fold</span>(<span class="cmmi-10">e</span>) : <span class="cmmi-10">μ</span>(<span class="cmmi-10">α.τ</span>)      </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-4-3" class="td11">           <!--l. 1254--><p class="noindent">           </p></td>
+</tr><tr style="vertical-align:baseline;" id="TBL-7-5-"><td style="white-space:wrap; text-align:left;" id="TBL-7-5-1" class="td11"> <!--l. 1254--><p class="noindent">of Recursive
+  Type                 </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-5-2" class="td11">      <!--l. 1254--><p class="noindent"><span class="cmmi-10">unfold</span>(<span class="cmmi-10">e</span>)  :
+         [<span class="cmmi-10">μ</span>(<span class="cmmi-10">α.τ</span>)<span class="cmmi-10">∕α</span>]<span class="cmmi-10">τ</span>        </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-5-3" class="td11">           <!--l. 1254--><p class="noindent">           </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-6-"><td style="white-space:wrap; text-align:left;" id="TBL-7-6-1" class="td11"> <!--l. 1254--><p class="noindent">Universal Type
+  Form                 </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-6-2" class="td11">         <!--l. 1254--><p class="noindent"><span class="cmsy-10">∀</span><span class="cmmi-10">α.τ</span>            </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-6-3" class="td11">           <!--l. 1254--><p class="noindent">           </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-7-"><td style="white-space:wrap; text-align:left;" id="TBL-7-7-1" class="td11"> <!--l. 1254--><p class="noindent">Expression of
+  Universal Type    </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-7-2" class="td11">     <!--l. 1254--><p class="noindent">Λ<span class="cmmi-10">α.τ  </span>:  <span class="cmsy-10">∀</span><span class="cmmi-10">α.τ</span>        </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-7-3" class="td11">           <!--l. 1254--><p class="noindent">           </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-8-"><td style="white-space:wrap; text-align:left;" id="TBL-7-8-1" class="td11"> <!--l. 1254--><p class="noindent">Existential
+  Type Form          </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-8-2" class="td11">         <!--l. 1254--><p class="noindent"><span class="cmsy-10">∃</span><span class="cmmi-10">α.τ</span>            </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-8-3" class="td11">           <!--l. 1254--><p class="noindent">           </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-9-"><td style="white-space:wrap; text-align:left;" id="TBL-7-9-1" class="td11"> <!--l. 1254--><p class="noindent">Expression
+  of Existential
+  Type                 </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-9-2" class="td11">  <!--l. 1254--><p class="noindent"><span class="cmmi-10">pack</span>[<span class="cmmi-10">α.τ</span>][<span class="cmmi-10">ρ</span>](<span class="cmmi-10">e</span>) : <span class="cmsy-10">∃</span><span class="cmmi-10">α.τ</span>   </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-9-3" class="td11">           <!--l. 1254--><p class="noindent">           </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-10-"><td style="white-space:wrap; text-align:left;" id="TBL-7-10-1" class="td11"> <!--l. 1254--><p class="noindent">Expression
+  Variable
+  Context              </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-10-2" class="td11">          <!--l. 1254--><p class="noindent">Γ                </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-10-3" class="td11"> <!--l. 1254--><p class="noindent">Γ = <span class="cmsy-10">{</span><span class="cmmi-10">a</span><sub><span class="cmr-7">1</span></sub> : <span class="cmmi-10">τ</span><sub><span class="cmr-7">1</span></sub><span class="cmmi-10">,a</span><sub><span class="cmr-7">2</span></sub> : <span class="cmmi-10">τ</span><sub><span class="cmr-7">2</span></sub><span class="cmmi-10">...</span><span class="cmsy-10">}</span> </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-11-"><td style="white-space:wrap; text-align:left;" id="TBL-7-11-1" class="td11"> <!--l. 1254--><p class="noindent">Type Variable
+  Context              </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-11-2" class="td11">          <!--l. 1254--><p class="noindent">Δ                </p></td><td style="white-space:wrap; text-align:left;" id="TBL-7-11-3" class="td11">         <!--l. 1254--><p class="noindent">Δ  =
+   <span class="cmsy-10">{</span><span class="cmmi-10">α</span><sub><span class="cmr-7">1</span></sub><span class="cmmi-10">&nbsp;type,α</span><sub><span class="cmr-7">2</span></sub><span class="cmmi-10">&nbsp;type...</span><span class="cmsy-10">}</span> </p></td>
+</tr><tr class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr style="vertical-align:baseline;" id="TBL-7-12-"><td style="white-space:wrap; text-align:left;" id="TBL-7-12-1" class="td11"> <!--l. 1254--><p class="noindent">               </p></td></tr></tbody></table>
+                                                                  
+
+                                                                  
+   </div><hr class="endfloat">
+   </div>
+    
+ 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+
+</body></html>

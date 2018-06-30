@@ -1,0 +1,2100 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://plato.stanford.edu/entries/type-theory/ -->
+<html><!-- <![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+Type Theory (Stanford Encyclopedia of Philosophy)
+</title>
+
+<meta name="robots" content="noarchive, noodp">
+<meta name="citation_title" content="Type Theory">
+<meta name="citation_author" content="Coquand, Thierry">
+<meta name="citation_publication_date" content="2006/02/08">
+<meta name="DC.title" content="Type Theory">
+<meta name="DC.creator" content="Coquand, Thierry">
+<meta name="DCTERMS.issued" scheme="DCTERMS.W3CDTF" content="2006-02-08">
+<meta name="DCTERMS.modified" scheme="DCTERMS.W3CDTF" content="2014-03-30">
+
+<!-- NOTE: Import webfonts using this link: -->
+<link href="./Type Theory (Stanford Encyclopedia of Philosophy)_files/css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" media="screen,handheld" href="./Type Theory (Stanford Encyclopedia of Philosophy)_files/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen,handheld" href="./Type Theory (Stanford Encyclopedia of Philosophy)_files/bootstrap-responsive.min.css">
+<link rel="stylesheet" type="text/css" href="./Type Theory (Stanford Encyclopedia of Philosophy)_files/font-awesome.min.css">
+<!--[if IE 7]> <link rel="stylesheet" type="text/css" href="../../css/font-awesome-ie7.min.css"> <![endif]-->
+<link rel="stylesheet" type="text/css" media="screen,handheld" href="./Type Theory (Stanford Encyclopedia of Philosophy)_files/style.css">
+<link rel="stylesheet" type="text/css" media="print" href="./Type Theory (Stanford Encyclopedia of Philosophy)_files/print.css">
+<link rel="stylesheet" type="text/css" href="./Type Theory (Stanford Encyclopedia of Philosophy)_files/entry.css">
+<!--[if IE]> <link rel="stylesheet" type="text/css" href="../../css/ie.css" /> <![endif]-->
+<script type="text/javascript" src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/bootstrap.min.js"></script>
+
+<!-- NOTE: Javascript for sticky behavior needed on article and ToC pages -->
+<script type="text/javascript" src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/jquery-scrolltofixed-min.js"></script>
+<script type="text/javascript" src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/entry.js"></script>
+
+<!-- SEP custom script -->
+<script type="text/javascript" src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/sep.js"></script>
+</head>
+
+<!-- NOTE: The nojs class is removed from the page if javascript is enabled. Otherwise, it drives the display when there is no javascript. -->
+<body class="article" id="pagetopright">
+<div id="container">
+<div id="header-wrapper">
+  <div id="header">
+    <div id="branding">
+      <div id="site-logo"><a href="https://plato.stanford.edu/index.html"><img src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/sep-man-red.png" alt="SEP logo"></a></div>
+      <div id="site-title"><a href="https://plato.stanford.edu/index.html">Stanford Encyclopedia of Philosophy</a></div>
+    </div>
+    <div id="navigation">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="container">
+            <button class="btn btn-navbar collapsed" data-target=".collapse-main-menu" data-toggle="collapse" type="button"> <i class="icon-reorder"></i> Menu </button>
+            <div class="nav-collapse collapse-main-menu collapse">
+              <ul class="nav">
+                <li class="dropdown"><a id="drop1" href="https://plato.stanford.edu/entries/type-theory/#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-book"></i> Browse</a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                    <li><a href="https://plato.stanford.edu/contents.html">Table of Contents</a></li>
+                    <li><a href="https://plato.stanford.edu/new.html">What's New</a></li>
+                    <li><a href="https://plato.stanford.edu/cgi-bin/encyclopedia/random">Random Entry</a></li>
+                    <li><a href="https://plato.stanford.edu/published.html">Chronological</a></li>
+                    <li><a href="https://plato.stanford.edu/archives/">Archives</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown"><a id="drop2" href="https://plato.stanford.edu/entries/type-theory/#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-info-sign"></i> About</a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+                    <li><a href="https://plato.stanford.edu/info.html">Editorial Information</a></li>
+                    <li><a href="https://plato.stanford.edu/about.html">About the SEP</a></li>
+                    <li><a href="https://plato.stanford.edu/board.html">Editorial Board</a></li>
+                    <li><a href="https://plato.stanford.edu/cite.html">How to Cite the SEP</a></li>
+                    <li><a href="https://plato.stanford.edu/special-characters.html">Special Characters</a></li>
+                    <li><a href="https://plato.stanford.edu/tools/">Advanced Tools</a></li>
+                    <li><a href="https://plato.stanford.edu/contact.html">Contact</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown"><a id="drop3" href="https://plato.stanford.edu/entries/type-theory/#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-leaf"></i> Support SEP</a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+                    <li><a href="https://plato.stanford.edu/support/">Support the SEP</a></li>
+                    <li><a href="https://plato.stanford.edu/support/friends.html">PDFs for SEP Friends</a></li>
+                    <li><a href="https://plato.stanford.edu/support/donate.html">Make a Donation</a></li>
+                    <li><a href="https://plato.stanford.edu/support/sepia.html">SEPIA for Libraries</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End navigation -->
+    
+    <div id="search">
+      <form id="search-form" method="get" action="https://plato.stanford.edu/search/searcher.py">
+        <input type="search" name="query" placeholder="Search SEP">
+        <div class="search-btn-wrapper"><button class="btn search-btn" type="submit"><i class="icon-search"></i></button></div>
+      </form>
+    </div>
+    <!-- End search --> 
+    
+  </div>
+  <!-- End header --> 
+</div>
+<!-- End header wrapper -->
+
+<div id="content">
+
+<!-- Begin article sidebar -->
+<div id="article-sidebar" class="sticky" style="z-index: 999; position: static; top: 485.5px;">
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="container">
+        <button class="btn btn-navbar collapsed" data-target=".collapse-sidebar" data-toggle="collapse" type="button"> <i class="icon-reorder"></i> Entry Navigation </button>
+        <div id="article-nav" class="nav-collapse collapse-sidebar collapse">
+          <ul class="nav">
+            <li><a href="https://plato.stanford.edu/entries/type-theory/#toc">Entry Contents</a></li>
+            <li><a href="https://plato.stanford.edu/entries/type-theory/#Bib">Bibliography</a></li>
+            <li><a href="https://plato.stanford.edu/entries/type-theory/#Aca">Academic Tools</a></li>
+            <li><a href="https://leibniz.stanford.edu/friends/preview/type-theory/">Friends PDF Preview <i class="icon-external-link"></i></a></li>
+            <li><a href="https://plato.stanford.edu/cgi-bin/encyclopedia/archinfo.cgi?entry=type-theory">Author and Citation Info <i class="icon-external-link"></i></a> </li>
+            <li><a href="https://plato.stanford.edu/entries/type-theory/#pagetopright" class="back-to-top">Back to Top <i class="icon-angle-up icon2x"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><div style="display: none; width: 242px; height: 244px; float: left;"></div>
+<!-- End article sidebar --> 
+
+<!-- NOTE: Article content must have two wrapper divs: id="article" and id="article-content" -->
+<div id="article">
+<div id="article-content">
+
+<!-- BEGIN ARTICLE HTML -->
+
+
+<div id="aueditable"><!--DO NOT MODIFY THIS LINE AND ABOVE-->
+
+<h1>Type Theory</h1><div id="pubinfo"><em>First published Wed Feb 8, 2006; substantive revision Sun Mar 30, 2014</em></div>
+
+<div id="preamble">
+
+<p>
+
+The topic of type theory is fundamental both in logic and computer
+science. We limit ourselves here to sketch some aspects that are
+important in logic. For the importance of types in computer science, we
+refer the reader for instance to Reynolds 1983 and 1985. </p>
+
+</div>
+
+<div id="toc">
+<!--Entry Contents-->
+<ul>
+<li><a href="https://plato.stanford.edu/entries/type-theory/#1">1. Paradoxes and Russell's Type Theories</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#2">2. Simple Type Theory and the λ-Calculus</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#3">3. Ramified Hierarchy and Impredicative Principles</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#4">4. Type Theory/Set Theory</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#5">5. Type Theory/Category Theory</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#6">6. Extensions of Type System, Polymorphism, Paradoxes</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#7">7. Univalent Foundations</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#Bib">Bibliography</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#Aca">Academic Tools</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#Oth">Other Internet Resources</a></li>
+
+<li><a href="https://plato.stanford.edu/entries/type-theory/#Rel">Related Entries</a></li>
+</ul>
+<!--Entry Contents-->
+
+<hr>
+
+</div>
+
+<div id="main-text">
+
+<h2><a name="1">1. Paradoxes and Russell's Type Theories</a></h2>
+
+<p>
+
+The theory of types was introduced by Russell in order to cope with
+some contradictions he found in his account of set theory and was
+introduced in “Appendix B: The Doctrine of Types”
+of Russell 1903. This contradiction was obtained by analysing a
+theorem of Cantor that no mapping</p>
+
+<blockquote>
+<em>F</em> : <em>X</em> → Pow(<em>X</em>)</blockquote>
+
+<p>
+
+(where Pow(<em>X</em>) is the class of subclasses of a class
+<em>X</em>) can be surjective; that is, <em>F</em> cannot be such that
+every member <em>b</em> of Pow(<em>X</em>) is equal to
+<em>F</em>(<em>a</em>) for some element <em>a</em> of <em>X</em>. This
+can be phrased “intuitively” as the fact that there are
+more subsets of <em>X</em> than elements of <em>X</em>. The proof of
+this fact is so simple and basic that it is worthwhile giving it
+here. Consider the following subset of <em>X</em>:</p>
+
+<blockquote><em>A</em> = { <em>x</em> ∈ <em>X</em> |
+<em>x</em> 
+ ∉ <em>F</em>(<em>x</em>)
+}.</blockquote>
+
+<p>
+
+This subset cannot be in the range of <em>F</em>. For if <em>A</em> =
+<em>F</em>(<em>a</em>), for some <em>a</em>, then </p>
+
+<blockquote>
+  <table>
+  <tbody><tr>
+  <td><em>a</em> ∈ <em>F</em>(<em>a</em>)</td>
+  <td>iff</td>
+  <td><em>a</em> ∈ <em>A</em></td>
+  </tr>
+
+  <tr>
+  <td></td>
+  <td>iff</td>
+  <td><em>a</em> ∉
+<em>F</em>(<em>a</em>)</td>
+  </tr>
+  </tbody></table>
+ </blockquote>
+
+<p>
+
+which is a contradiction. Some remarks are in order. First, the proof
+does not use the law of excluded middle and is thus valid
+intuitionistically. Second, the method that is used, called
+<em>diagonalisation</em> was already present in the work of du
+Bois-Reymond for building real functions growing faster than any
+function in a given sequence of functions. </p>
+
+<p>
+
+Russell analysed what happens if we apply this theorem to the case
+where A is the class of all classes, admitting that there is such a
+class. He was then lead to consider the special class of classes that
+do not belong to themselves</p>
+
+<blockquote>(*) <em>R</em> = { <em>w</em> | <em>w</em> 
+ ∉ <em>w</em> } </blockquote>
+
+<p>
+
+We then have</p>
+
+<blockquote><em>R</em> ∈ <em>R</em> iff <em>R</em> 
+ ∉ <em>R</em>
+</blockquote>
+
+<p>
+
+It seems indeed that Cantor was already aware of the fact that the
+class of all sets cannot be considered itself to be a set.</p>
+
+<p>
+
+Russell communicated this problem to Frege, and his letter, together
+with Frege's answer appear in van Heijenoort 1967. It is important
+to realise that the formulation (*) does not apply as it is to Frege's
+system. As Frege himself wrote in his reply to Russell, the expression
+“a predicate is predicated of itself” is not exact. Frege
+had a distinction between <em>predicates</em> (concepts) and
+<em>objects</em>. A (first-order) predicate applies to an object but
+it cannot have a predicate as argument. The exact formulation of the
+paradox in Frege's system uses the notion of the <em>extension</em> of
+a predicate <em>P</em>, which we designate as ε<em>P</em>.
+The extension of a predicate is itself an object. The important axiom
+V is:</p>
+
+<blockquote>
+ (Axiom V) ε<em>P</em> = ε<em>Q</em> &nbsp; ≡
+&nbsp; ∀<em>x</em>[<em>P</em>(<em>x</em>) ≡
+<em>Q</em>(<em>x</em>)] </blockquote>
+
+<p>
+
+This axiom asserts that the extension of <em>P</em> is identical to
+the extension of <em>Q</em> if and only if <em>P</em> and <em>Q</em>
+are materially equivalent.  We can then translate Russell's paradox
+(*) in Frege's system by defining the predicate</p>
+
+<blockquote>
+ <em>R</em>(<em>x</em>) iff ∃<em>P</em>[<em>x</em> = ε<em>P</em> 
+ ∧ ¬<em>P</em>(<em>x</em>)]
+</blockquote>
+
+<p>
+
+It can then been checked, using Axiom V in a crucial way, that </p>
+
+<blockquote>
+<em>R</em>(ε<em>R</em>) ≡ ¬<em>R</em>(ε<em>R</em>)
+ </blockquote>
+
+<p>
+
+and we have a contradiction as well. (Notice that for defining the
+predicate <em>R</em>, we have used an <em>impredicative</em>
+existential quantification on predicates. It can be shown that the
+<em>predicative</em> version of Frege's system is consistent (see
+Heck 1996 and for further refinements Ferreira 2002).</p>
+
+<p>
+
+It is clear from this account that an idea of types was already
+present in Frege's work: there we find a distinction between objects,
+predicates (or concepts), predicates of predicates, etc. (This point
+is stressed in Quine 1940.) This hierarchy is called the
+“extensional hierarchy” by Russell (1959), and its
+necessity was recognised by Russell as a consequence of his
+paradox.</p>
+
+<h2><a name="2">2. Simple Type Theory and the λ-Calculus</a></h2>
+
+<p>
+
+As we saw above, the distinction: objects, predicates, predicate of
+predicates, etc., seems enough to block Russell's paradox (and this
+was recognised by Chwistek and Ramsey). We first describe the type
+structure as it is in <em>Principia</em> and later in this section we
+present the elegant formulation due to Church 1940 based on
+λ-calculus. The types can be defined as</p>
+
+<ol>
+<li><em>i</em> is the type of individuals</li>
+
+<li>( ) is the type of propositions</li>
+
+<li>if <em>A</em><sub>1</sub>,…,<em>A</em><sub><em>n</em></sub>
+are types then
+(<em>A</em><sub>1</sub>,…,<em>A</em><sub><em>n</em></sub>) is
+the type of <em>n</em>-ary relations over objects of respective types
+<em>A</em><sub>1</sub>,…,<em>A</em><sub><em>n</em></sub></li>
+</ol>
+
+<p>
+
+For instance, the type of binary relations over individuals is
+(<em>i</em>, <em>i</em>), the type of binary connectives is
+(( ),( )), the type of quantifiers over individuals is
+((<em>i</em>)).</p>
+
+<p>
+
+For forming propositions we use this type structure: thus
+<em>R</em>(<em>a</em><sub>1</sub>,…,<em>a</em><sub><em>n</em></sub>)
+is a proposition if <em>R</em> is of type
+(<em>A</em><sub>1</sub>,…,<em>A</em><sub><em>n</em></sub>) and
+<em>a</em><sub>i</sub> is of type <em>A</em><sub><em>i</em></sub> for
+<em>i</em> = 1,…,<em>n</em>. This restriction makes it
+impossible to form a proposition of the form <em>P</em>(<em>P</em>):
+the type of <em>P</em> should be of the form (<em>A</em>), and
+<em>P</em> can only be applied to arguments of type <em>A</em>, and
+thus cannot be applied to itself since <em>A</em> is not the same as
+(<em>A</em>).</p>
+
+<p>
+
+However simple type theory is not predicative: we can define an object
+<em>Q</em>(<em>x</em>, <em>y</em>) of type (<em>i</em>, <em>i</em>)
+by</p>
+
+<blockquote>∀<em>P</em>[<em>P</em>(<em>x</em>)
+⊃ <em>P</em>(<em>y</em>)]</blockquote>
+
+<p>
+
+Assume that we have two individuals <em>a</em> and <em>b</em> such
+that <em>Q</em>(<em>a</em>, <em>b</em>) holds.  We can define
+<em>P</em>(<em>x</em>) to be <em>Q</em>(<em>x</em>, <em>a</em>).  It
+is then clear that <em>P</em>(<em>a</em>) holds, since it is
+<em>Q</em>(<em>a</em>, <em>a</em>). Hence <em>P</em>(<em>b</em>) holds
+as well. We have proved, in an impredicative way, that
+<em>Q</em>(<em>a</em>, <em>b</em>) implies <em>Q</em>(<em>b</em>,
+<em>a</em>).</p>
+
+<p>
+
+Alternative simpler formulations, which retain only the notion of
+classes, classes of classes, etc., were formulated by Gödel and
+Tarski. Actually this simpler version was used by Gödel in his
+1931 paper on formally undecidable propositions.  We have objects of
+type 0, for individuals, objects of type 1, for classes of
+individuals, objects of type 2, for classes of classes of individuals,
+and so on. Functions of two or more arguments, like relations, need
+not be included among primitive objects since one can define relations
+to be classes of ordered pairs, and ordered pairs to be classes of
+classes. For example, the ordered pair of individuals <em>a, b</em>
+can be defined to be {{<em>a</em>},{<em>a</em>,<em>b</em>}} where
+{<em>x</em>,<em>y</em>} denotes the class whose sole elements are
+<em>x</em> and <em>y</em>. (Wiener 1914 had suggested a similar
+reduction of relations to classes.) In this system, all propositions
+have the form <em>a</em>(<em>b</em>), where <em>a</em> is a sign of
+type <em>n</em>+1 and <em>b</em> a sign of type <em>n</em>. Thus this
+system is built on the concept of an arbitrary class or subset of
+objects of a given domain and on the fact that the collection
+of <em>all subsets</em> of the given domain can form a new domain of
+the next type. Starting from a given domain of individuals, this
+process is then iterated. As emphasised for instance in Scott 1993, in
+set theory this process of forming subsets is iterated into
+the <em>transfinite</em>.</p>
+
+<p>
+
+In these versions of type theory, as in set theory, functions are not
+primitive objects, but are represented as functional relation. The
+addition function for instance is represented as a ternary relation by
+an object of type (<em>i</em>,<em>i</em>,<em>i</em>).  An elegant
+formulation of the simple type theory which extends it by introducing
+functions as primitive objects was given by Church in 1940. It uses
+the λ-calculus notation (Barendregt 1997). Since such a
+formulation is important in computer science, for the connection with
+category theory, and for Martin-Löf type theory, we describe it
+in some detail. In this formulation, predicates are seen as a special
+kind of functions (propositional functions), an idea that goes back to
+Frege (see for instance Quine 1940). Furthermore, the notion of
+function is seen as more primitive than the notion of predicates and
+relations, and a function is not defined anymore as a special kind of
+relation. (Oppenheimer and Zalta 2011 presents some arguments against
+such a primitive representation of functions.)  The types of this
+system are defined inductively as follows</p>
+
+<ol>
+
+<li>there are two basic types <em>i</em> (the type of individuals)
+and <em>o</em> (the type of propositions)</li>
+
+<li>if <em>A</em>, <em>B</em> are types then <em>A</em> →
+<em>B</em>, the type of functions from <em>A</em> to <em>B</em>, is a
+type</li> 
+
+</ol>
+
+<p>
+
+We can form in this way the types:</p>
+
+<blockquote>
+ <table cellpadding="4" cellspacing="4">
+ <tbody><tr>
+ <td><em>i</em>→<em>o</em></td>
+ <td>(type of predicates)</td>
+ </tr><tr>
+ <td>(<em>i</em>→<em>o</em>) → <em>o</em></td>
+ <td>(type of predicates of predicates)</td>
+  </tr>
+ </tbody></table>
+</blockquote>
+
+<p>
+
+which correspond to the types (<em>i</em>) and ((<em>i</em>)) but also
+the new types</p>
+
+<blockquote>
+  <table cellpadding="4" cellspacing="4">
+  <tbody><tr>
+  <td><em>i</em>→<em>i</em></td>
+  <td>(type of functions)</td>
+  </tr>
+  
+ <tr>
+ <td>(<em>i</em>→<em>i</em>) → <em>i</em></td>
+ <td> (type of functionals)</td>
+  </tr>
+ </tbody></table>
+ </blockquote>
+
+<p>
+
+It is convenient to write </p>
+
+<blockquote>
+<em>A</em><sub>1</sub>,…,<em>A</em><sub><em>n</em></sub>
+ → <em>B</em>
+ </blockquote>
+ 
+<p>for</p>
+ 
+ <blockquote>
+  <em>A</em><sub>1</sub> → (<em>A</em><sub>2</sub> →
+… → (<em>A</em><sub>n</sub> → <em>B</em>))</blockquote>
+
+<p>In this way</p> 
+
+<blockquote>
+ <em>A</em><sub>1</sub>,…,<em>A</em><sub><em>n</em></sub>
+ → <em>o</em> </blockquote>
+
+<p>
+
+corresponds to the type
+(<em>A</em><sub>1</sub>,…,<em>A</em><sub><em>n</em></sub>).</p>
+
+<p>
+
+First-order logic considers only types of the form</p>
+
+<blockquote>
+ <table cellpadding="4" cellspacing="4">
+ <tbody><tr>
+ <td><em>i</em>,…,<em>i</em>
+ → <em>i</em></td>
+ <td>(type of function symbols), </td>
+ <td>and</td>
+ </tr>
+
+ <tr>
+ <td><em>i</em>,…,<em>i</em> → <em>o</em></td>
+ <td>(type of predicate, relation symbols)</td>
+ <td></td>
+  </tr>
+ </tbody></table>
+ </blockquote>
+
+<p>Notice that </p>
+
+<blockquote><em>A</em> → <em>B</em> → <em>C</em></blockquote>
+
+<p>
+
+stands for </p>
+
+<blockquote><em>A</em> → (<em>B</em>→<em>C</em>)</blockquote>
+
+<p>
+
+(association to the right). </p>
+
+<p>
+
+For the terms of this logic, we shall not follow Church's account but
+a slight variation of it, due to Curry (who had similar ideas before
+Church's paper appeared) and which is presented in detail in
+R. Hindley's book on type theory. Like Church, we use
+λ-calculus, which provides a general notation for functions</p>
+
+<blockquote><em>M</em> ::= <em>x</em> | <em>M</em> <em>M</em> |
+λ<em>x</em>. <em>M</em></blockquote>
+
+<p>
+ Here we have used the so-called BNF notation, very convenient in
+computing science. This gives a syntactic specification of the
+λ-terms which, when expanded, means: </p>
+
+<ul>
+<li>every variable is a function symbol;</li>
+<li>every juxtaposition of two function symbols is a function symbol;</li>
+<li>every λ<em>x</em>. <em>M</em> is a function symbol;</li>
+<li>there are no other function symbols.</li>
+</ul>
+
+<p>
+
+The notation for function application <em>M</em> <em>N</em> is a
+little different than the mathematical notation, which would be
+<em>M</em>(<em>N</em>). In general,</p>
+
+<blockquote><em>M</em><sub>1</sub> <em>M</em><sub>2</sub>
+<em>M</em><sub>3</sub></blockquote>
+
+<p>
+
+stands for</p>
+
+<blockquote>(<em>M</em><sub>1</sub> <em>M</em><sub>2</sub>)
+<em>M</em><sub>3</sub></blockquote>
+
+<p>
+
+(association to the left). The term
+λ<em>x</em>. <em>M</em> represents the function which to
+<em>N</em> associates <em>M</em>[<em>x</em>:=<em>N</em>]. This
+notation is so convenient that one wonders why it is not widely used
+in mathematics. The main equation of λ-calculus is then
+(β-conversion)</p>
+
+<blockquote>(λ<em>x</em>. <em>M</em>) <em>N</em> =
+<em>M</em>[<em>x</em>:=<em>N</em>]</blockquote>
+
+<p>
+
+which expresses the meaning of λ<em>x</em>. <em>M</em>
+as a function. We have used <em>M</em>[<em>x</em>:=<em>N</em>] as a
+notation for the value of the expression that results when <em>N</em>
+is substituted for the variable <em>x</em> in the matrix <em>M</em>.
+One usually sees this equation as a rewrite rule
+(β-reduction)</p>
+
+<blockquote>(λ<em>x</em>. <em>M</em>) <em>N</em> →
+<em>M</em>[<em>x</em>:=<em>N</em>]</blockquote>
+
+<p>
+
+In <em>untyped</em> lambda calculus, it may be that such rewriting does
+not terminate. The canonical example is given by the term Δ =
+λ<em>x</em>. <em>x</em> <em>x</em> and the application</p> 
+
+<blockquote>Δ Δ → Δ Δ</blockquote>
+
+<p>
+
+(Notice the similarity with Russell's paradox.) The idea of Curry is
+then to look at types as predicates over lambda terms, writing
+<em>M</em>: <em>A</em> to express that <em>M</em> satisfies the
+predicate/type <em>A</em>. The meaning of</p>
+
+<blockquote><em>N</em>: <em>A</em>→<em>B</em></blockquote>
+
+<p>is then </p>
+
+<blockquote>∀<em>M</em>, if <em>M</em>: <em>A</em> then
+<em>N</em> <em>M</em>: <em>B</em></blockquote>
+
+<p>
+
+which justifies the following rules </p>
+
+<blockquote>
+<table style="border-collapse:collapse;">
+<tbody><tr><td style="padding:0px;border-bottom:1px solid black; text-align:center;">
+ <em>N</em>: <em>A</em>→<em>B</em>&nbsp;&nbsp;&nbsp;&nbsp;<em>M</em>: <em>A</em>
+</td></tr>
+<tr><td style="text-align:center;">
+ <em>N</em> <em>M</em>: <em>B</em>
+</td></tr>
+</tbody></table>
+
+<br>
+
+<table style="border-collapse:collapse;">
+<tbody><tr><td style="padding:0px;border-bottom:1px solid black; text-align:center;">
+<em>M</em>: <em>B</em> [<em>x</em>: <em>A</em>]
+</td></tr>
+<tr><td style="text-align:center;">
+λ<em>x</em>. <em>M</em>: <em>A</em> → <em>B</em>
+</td></tr>
+</tbody></table>
+</blockquote>
+
+<p>
+
+In general one works with judgements of the form </p>
+
+<blockquote>
+ <em>x</em><sub>1</sub>:<em>A</em><sub>1</sub>,...,<em>x</em><sub>n</sub>:<em>A</em><sub>n</sub> 
+ ⊢
+<em>M</em>: <em>A</em></blockquote>
+
+<p>
+
+where <em>x</em><sub>1</sub>,..., <em>x</em><sub>n</sub> are distinct
+variables, and <em>M</em> is a term having all free variables among
+<em>x</em><sub>1</sub>,..., <em>x</em><sub>n</sub>. In order to be
+able to get Church's system, one adds some constants in order to form
+propositions. Typically</p>
+
+<blockquote>not: <em>o</em>→<em>o</em>
+<br>
+ imply: <em>o</em>→<em>o</em>→<em>o</em>
+<br>
+ and: <em>o</em>→<em>o</em>→<em>o</em>
+<br>
+ forall: (<em>A</em>→<em>o</em>) → <em>o</em>
+<br>
+</blockquote>
+
+<p>
+
+The term </p>
+
+<blockquote>λ<em>x</em>. ¬(<em>x</em> <em>x</em>)</blockquote>
+
+<p>
+
+represents the predicate of predicates that do not apply to themselves.
+This term does not have a type however, that is, it is not possible to
+find <em>A</em> such that </p>
+
+<blockquote>λ<em>x</em>. ¬(<em>x</em> <em>x</em>) :
+(<em>A</em>→<em>o</em>) → <em>o</em></blockquote>
+
+<p>
+
+which is the formal expression of the fact that Russell's paradox
+cannot be expressed. Leibniz equality </p>
+
+<blockquote><em>Q</em>: <em>i</em> → <em>i</em> →
+<em>o</em></blockquote>
+
+<p>
+
+will be defined as </p>
+
+<blockquote><em>Q</em> = λ<em>x</em>
+. λ<em>y</em>. ∀(λ<em>P</em>. imply (<em>P</em>
+<em>x</em>) (<em>P</em> <em>y</em>))</blockquote>
+
+<p>
+
+One usually writes ∀<em>x</em>[<em>M</em>] instead of
+∀(λ<em>x</em>. <em>M</em>), and the definition of
+<em>Q</em> can then be rewritten as</p>
+
+<blockquote><em>Q</em> =
+λ<em>x</em>. λ<em>y</em>. ∀<em>P</em>[imply
+(<em>P</em> <em>x</em>) (<em>P</em> <em>y</em>)]</blockquote>
+
+<p>
+
+This example again illustrates that we can formulate impredicative definitions
+in simple type theory. </p>
+
+<p>
+
+The use of λ-terms and β-reduction is most convenient for
+representing the complex substitution rules that are needed in simple
+type theory. For instance, if we want to substitute the predicate
+λ<em>x</em>. <em>Q</em> <em>a</em> <em>x</em> for
+<em>P</em> in the proposition</p>
+
+<blockquote>imply (<em>P</em> <em>a</em>) (<em>P</em> <em>b</em>)</blockquote>
+
+<p>we get </p>
+
+<blockquote>imply ((λ<em>x</em>. <em>Q</em> <em>a</em>
+<em>x</em>) <em>a</em>) ((λ<em>x</em>. <em>Q</em>
+<em>a</em> <em>x</em>) <em>b</em>)</blockquote>
+
+<p>and, using β-reduction, </p>
+
+<blockquote>imply (<em>Q</em> <em>a</em> <em>a</em>) (<em>Q</em>
+<em>a</em> <em>b</em>)</blockquote>
+
+<p>
+
+In summary, simple type theory forbids self-application but not the
+circularity present in impredicative definitions. </p>
+
+<p>
+
+The λ-calculus formalism also allows for a clearer analysis
+of Russell's paradox. We can see it as the definition of the
+predicate</p>
+
+<blockquote><em>R</em> <em>x</em> = ¬(<em>x</em> <em>x</em>)</blockquote>
+
+<p>
+
+If we think of β-reduction as the process of unfolding a
+definition, we see that there is a problem already with understanding
+the definition of R R</p>
+
+<blockquote><em>R</em> <em>R</em> → ¬(<em>R</em> <em>R</em>)
+→ ¬(¬(<em>R</em> <em>R</em>)) → …</blockquote>
+
+<p>
+
+In some sense, we have a non-wellfounded definition, which is as
+problematic as a contradiction (a proposition equivalent to its
+negation). One important theorem, the normalisation theorem, says that
+this cannot happen with simple types: if we have
+<em>M</em>: <em>A</em> then <em>M</em> is normalisable in a
+strong way (any sequence of reductions starting from <em>M</em>
+terminates).</p>
+
+<p>
+
+For more information on this topic, we refer to the entry on
+Church's simple type theory.</p>
+
+<h2><a name="3">3. Ramified Hierarchy and Impredicative Principles</a></h2>
+
+<p>
+
+Russell introduced another hierarchy, that was not motivated by any
+formal paradoxes expressed in a formal system, but rather by the fear
+of “circularity” and by informal paradoxes similar to the
+paradox of the liar. If a man says “I am lying”, then we
+have a situation reminiscent of Russell's paradox: a proposition which
+is equivalent to its own negation. Another informal such paradoxical
+situation is obtained if we define an integer to be the “least
+integer not definable in less than 100 words”.  In order to
+avoid such informal paradoxes, Russell thought it necessary to
+introduce another kind of hierarchy, the so-called “ramified
+hierarchy”. The need for such a hierarchy is hinted in Appendix
+B of Russell 1903. Interestingly this is connected there to the
+question of the identity of equivalent propositions and of the logical
+product of a class of propositions. A thorough discussion can be found
+in Chapter 10 of Russell 1959. Since this notion of ramified
+hierarchy has been extremely influential in logic and especially proof
+theory, we describe it in some details. </p>
+
+<p>
+
+In order to further motivate this hierarchy, here is one example due
+to Russell. If we say </p>
+
+<blockquote>Napoleon was Corsican.</blockquote>
+
+<p>
+
+we do not refer in this sentence to any assemblage of properties. The
+property “to be Corsican” is said to be
+<em>predicative</em>. If we say on the other hand</p>
+
+<blockquote>Napoleon had all the qualities of a great
+general</blockquote>
+
+<p>
+
+we are referring to a totality of qualities. The property “to
+have all qualities of a great general” is said to be
+<em>impredicative</em>.  </p>
+
+<p>
+
+Another example, also coming from Russell, shows how impredicative 
+properties can potentially lead to problems reminiscent 
+of the liar paradox. Suppose that we suggest the definition</p>
+
+<blockquote>A typical Englishman is one who possesses all the
+properties possessed by a majority of Englishmen.</blockquote>
+
+<p>
+
+It is clear that most Englishmen do not possess <em>all</em> the
+properties that most Englishmen possess. Therefore, a typical
+Englishman, according to this definition, should be untypical. The
+problem, according to Russell, is that the word “typical”
+has been defined by a reference to all properties and has been treated
+as itself a property.  (It is remarkable that similar problems arise
+when defining the notion of <em>random</em> numbers, cf.
+Martin-Löf “Notes on constructive mathematics”
+(1970).) Russell introduced the <em>ramified hierarchy</em> in order
+to deal with the apparent circularity of such impredicative
+definitions. One should make a distinction between the
+<em>first-order</em> properties, like being Corsican, that do not
+refer to the totality of properties, and consider that the
+<em>second-order</em> properties refer only to the totality of
+<em>first-order properties</em>. One can then introduce third-order
+properties, that can refer to the totality of second-order property,
+and so on. This clearly eliminates all circularities connected to
+impredicative definitions.</p>
+
+<p>
+
+At about the same time, Poincaré carried out a similar
+analysis.  He stressed the importance of “predicative”
+classifications, and of not defining elements of a class using a
+quantification over this class (Poincaré
+1909). Poincaré used the following example. Assume that we have
+a collection with elements 0, 1 and an operation + satisfying</p>
+
+<blockquote><em>x</em>+0 = 0</blockquote>
+<blockquote><em>x</em>+(<em>y</em>+1) =
+(<em>x</em>+<em>y</em>)+1</blockquote>
+
+<p>
+
+Let us  say that a property is <em>inductive</em> if it holds of 
+0 and holds for <em>x</em>+1 if it holds for <em>x</em>. 
+</p>
+
+<p>
+
+An impredicative, and potentially “dangerous”, definition
+would be to define an element to be a <em>number</em> if it satisfies
+<em>all</em> inductive properties. It is then easy to show that this
+property “to be a number” is itself inductive. Indeed,
+0 is a number since it satisfies all inductive properties,
+and if <em>x</em> satisfies all inductive properties then so does
+<em>x</em>+1.  Similarly it is easy to show that <em>x</em>+<em>y</em> is a
+number if <em>x</em>,<em>y</em> are numbers. Indeed the property
+<em>Q</em>(<em>z</em>) that <em>x</em>+<em>z</em> is a number is inductive:
+<em>Q</em>(0) holds since <em>x</em>+0=<em>x</em> and
+if <em>x</em>+<em>z</em> is a number then so
+is <em>x</em>+(<em>z</em>+1) = (<em>x</em>+<em>z</em>)+1.  This whole
+argument however is circular since the property “to be a
+number” is not predicative and should be treated with
+suspicion.  </p>
+
+<p>
+
+Instead, one should introduce a ramified hierarchy of properties and
+numbers. At the beginning, one has only <em>first-order</em> inductive
+properties, which do not refer in their definitions to a totality of
+properties, and one defines the numbers of order 1 to be the elements
+satisfying all first-order inductive properties. One can next consider
+the second-order inductive properties, that can refer to the
+collection of first-order properties, and the numbers of order 2, that
+are the elements satisfying the inductive properties of order 2. One
+can then similarly consider numbers of order 3, and so
+on. Poincaré emphasizes the fact that a number of order 2 is
+<em>a fortiori</em> a number of order 1, and more generally, a number
+of order n+1 is <em>a fortiori</em> a number of order n.  We have thus
+a sequence of more and more restricted properties: inductive
+properties of order 1, 2, … and a sequence of more and more
+restricted collections of objects: numbers of order 1, 2, …
+Also, the property “to be a number of order <em>n</em>” is itself
+an inductive property of order <em>n</em>+1.  </p>
+
+<p>
+
+It does not seem possible to prove that <em>x</em>+<em>y</em> is a
+number of order <em>n</em> if <em>x</em>,<em>y</em> are numbers of
+order <em>n</em>. On the other hand, it is possible to show that if <em>x</em>
+is a number of order <em>n</em>+1, and <em>y</em> a number of
+order <em>n</em>+1 then <em>x</em>+<em>y</em> is a number of
+order <em>n</em>. Indeed, the property <em>P</em>(<em>z</em>) that
+“<em>x</em>+<em>z</em> is a number of order <em>n</em>” is an
+inductive property of order
+<em>n</em>+1: <em>P</em>(0) holds since <em>x</em>+0 = <em>x</em> is a number
+of order <em>n</em>+1, and hence of order <em>n</em>, and if
+<em>P</em>(<em>z</em>) holds, that is if <em>x</em>+<em>z</em> is a number of
+order <em>n</em>, then so is <em>x</em>+(<em>z</em>+1) =
+(<em>x</em>+<em>z</em>)+1, and so <em>P</em>(<em>z</em>+1)
+holds. Since <em>y</em> is a number of order <em>n</em>+1, and
+<em>P</em>(<em>z</em>) is an inductive property of order <em>n</em>+1,
+<em>P</em>(<em>y</em>) holds and so <em>x+y</em> is a number of order
+<em>n</em>. This example illustrates well the complexities introduced
+by the ramified hierarchy.  </p>
+
+<p> 
+
+The complexities are further amplified if one, like Russell as for
+Frege, defines even basic objects like natural numbers as classes of
+classes. For instance the number 2 is defined as the class of all
+classes of individuals having exactly two elements. We again obtain
+natural numbers of different orders in the ramified hierarchy.
+Besides Russell himself, and despite all these complications, Chwistek
+tried to develop arithmetic in a ramified way, and the interest of
+such an analysis was stressed by Skolem. See Burgess and Hazen 1998
+for a recent development.</p>
+
+<p> 
+
+Another mathematical example, often given, of an impredicative
+definition is the definition of least upper bound of a bounded class
+of real numbers. If we identify a real with the set of rationals that
+are less than this real, we see that this least upper bound can be
+defined as the union of all elements in this class. Let us identify
+subsets of the rationals as predicates.  For example, for rational
+numbers <em>q</em>, <em>P</em>(<em>q</em>) holds iff <em>q</em> is a
+member of the subset identified as <em>P</em>. Now, we define the
+predicate <em>L</em><sub><em>C</em></sub> (a subset of the rationals)
+to be the least upper bound of class <em>C</em> as:</p>
+
+<blockquote>
+ ∀<em>q</em>[<em>L</em><sub><em>C</em></sub>(<em>q</em>) ↔
+ ∃<em>P</em>[<em>C</em>(<em>P</em>) 
+ ∧ <em>P</em>(<em>q</em>)]]
+ </blockquote>
+
+<p>
+
+which is impredicative: we have defined a predicate <em>L</em> by an
+existential quantification over all predicates.  In the ramified
+hierarchy, if <em>C</em> is a class of first-order classes of
+rationals, then <em>L</em> will be a second-order class of
+rationals. One obtains then not <em>one</em> notion or real numbers,
+but real numbers of different orders 1, 2, … The least upper
+bound of a collection of reals of order 1 will then be at least of
+order 2 in general.
+</p>
+
+<p>
+
+As we saw earlier, yet another example of an impredicative definition
+is given by Leibniz' definition of equality. For Leibniz, the
+predicate “is equal to <em>a</em>” is true for <em>b</em>
+iff <em>b</em> satisfies all the predicates satisfied by <em>a</em>.
+</p>
+
+<p>
+
+How should one deal with the complications introduced by the ramified
+hierarchy?  Russell showed, in the introduction to the second edition
+to
+ <a href="https://plato.stanford.edu/entries/principia-mathematica/"><em>Principia Mathematica</em></a>,
+ that these complications can be avoided in some
+cases.  He even thought, in Appendix B of the second edition of
+<em>Principia Mathematica</em>, that the ramified hierarchy of natural
+numbers of order 1,2,… collapses at order 5. However,
+Gödel later found a problem in his argument, and indeed, it was
+shown by Myhill 1974 that this hierarchy actually <em>does not</em>
+collapse at any finite level. A similar problem, discussed by Russell
+in the introduction to the second edition to
+ <a href="https://plato.stanford.edu/entries/principia-mathematica/"><em>Principia Mathematica</em></a>
+ arises in the proof of Cantor's theorem that
+there cannot be any injective functions from the collection of all
+predicates to the collection of all objects (the version of Russell's
+paradox in Frege's system that we presented in the introduction). Can
+this be done in a ramified hierarchy? Russell doubted that this could
+be done within a ramified hierarchy of predicates and this was indeed
+confirmed indeed later (Heck 1996).  </p>
+
+<p>
+
+Because of these problems, Russell and Whitehead introduced in the
+first edition of <em>Principia Mathematica</em> the following
+<em>reducibility axiom</em>: the hierarchy of predicates, first-order,
+second-order, etc., collapses at level 1. This means that for any
+predicate of any order, there is a predicate of the first-order level
+which is equivalent to it. In the case of equality for instance, we
+postulate a first-order relation “<em>a</em>=<em>b</em>”
+which is equivalent to “<em>a</em> satisfies all properties that
+<em>b</em> satisfies”. The motivation for this axiom was purely
+pragmatic. Without it, all basic mathematical notions, like real or
+natural numbers are stratified into different orders. Also, despite
+the apparent circularity of impredicative definitions, the axiom of
+reducibility does not seem to lead to inconsistencies. </p>
+
+<p>
+
+As noticed however first by Chwistek, and later by Ramsey, in the
+presence of the axiom of reducibility, there is actually no point in
+introducing the ramified hierarchy at all! It is much simpler to
+accept impredicative definitions from the start.  The simple
+“extensional” hierarchy of individuals, classes, classes
+of classes, … is then enough. We get in this way the simpler
+systems formalised in Gödel 1931 or Church 1940 that were
+presented above.  </p>
+
+<p>
+
+The axiom of reducibility draws attention to the problematic status of
+impredicative definitions. To quote Weyl 1946, the axiom of
+reducibility “is a bold, an almost fantastic axiom; there is
+little justification for it in the real world in which we live, and
+none at all in the evidence on which our mind bases its
+constructions”! So far, no contradictions have been found using
+the reducibility axiom. However, as we shall see below,
+proof-theoretic investigations confirm the extreme strength of such a
+principle.</p>
+
+<p> 
+
+The idea of the ramified hierarchy has been extremely important in
+mathematical logic. Russell considered only the finite iteration of
+the hierarchy: first-order, second-order, etc., but from the
+beginning, the possibility of extending the ramification transfinitely
+was considered. Poincaré (1909) mentions the work of Koenig in
+this direction. For the example above of numbers of different order,
+he also defines a number to be inductive of order ω if it is
+inductive of all finite orders. He then points out that <em>x+y</em>
+is inductive of order ω if both <em>x</em> and <em>y</em>
+are. This shows that the introduction of transfinite orders can in
+some case play the role of the axiom of reducibility. Such transfinite
+extension of the ramified hierarchy was analysed further by Gödel
+who noticed the key fact that the following form of the reducibility
+axiom is actually <em>provable</em>: when one extends the ramified
+hierarchy of properties over the natural numbers into the transfinite
+this hiearchy collapses at level ω<sub>1</sub>, the least
+uncountable ordinal (Gödel 1995, and Prawitz
+1970). Furthermore, while at all levels &lt; ω<sub>1</sub>, the
+collection of predicates is countable, the collection of predicates at
+level ω<sub>1</sub> is of cardinality ω<sub>1</sub>. This
+fact was a strong motivation behind Gödel's model of
+constructible sets. In this model the collection of all subsets of the
+set of natural numbers (represented by predicates) is of cardinality
+ω<sub>1</sub> and is similar to the ramified hierarchy. This
+model satisfies in this way the Continuum Hypothesis, and gives a
+relative consistency proof of this axiom. (The motivation of
+Gödel was originally only to build a model where the collection
+of all subsets of natural numbers is well-ordered.)</p>
+
+<p>
+
+The ramified hierarchy has been also the source of much work in proof
+theory. After the discovery by Gentzen that the consistency of
+Arithmetic could be proved by transfinite induction (over decidable
+predicates) along the ordinal ε<sub>0</sub>, the natural
+question was to find the corresponding ordinal for the different
+levels of the ramified hierarchy. Schütte (1960) found that for
+the first level of the ramified hierarchy, that is if we extend
+arithmetic by quantifying only over first-order properties, we get a
+system of ordinal strength
+ε<sub>ε<sub>0</sub></sub>. For the second level we get
+the ordinal strength
+ε<sub>ε<sub>ε<sub>0</sub></sub></sub>, etc. We
+recall that ε<sub>α</sub> denotes the α-th
+ε-ordinal number, an ε-ordinal number being an ordinal
+β such that ω<sup>β</sup> = β, see Schütte
+(1960).</p>
+
+<p>
+
+Gödel stressed the fact that his approach to the problem of the
+continuum hypothesis was not constructive, since it needs the
+uncountable ordinal ω<sub>1</sub>, and it was natural to study
+the ramified hierarchy along constructive ordinals. After preliminary
+works of Lorenzen and Wang, Schütte analysed what happens if we
+proceed in the following more constructive way. Since arithmetic has
+for ordinal strength ε<sub>0</sub> we consider first the
+iteration of the ramified hierarchy up to ε<sub>0</sub>.
+Schütte computed the ordinal strength of the resulting system and
+found an ordinal strength <em>u</em>(1)&gt;ε<sub>0</sub>.  We
+iterate then ramified hierarchy up to this ordinal <em>u</em>(1) and
+get a system of ordinal strength <em>u</em>(2)&gt; <em>u</em>(1) ,
+etc.  Each <em>u</em>(<em>k</em>) can be computed in terms of the
+so-called Veblen hierarchy: <em>u</em>(<em>k</em>+1) is
+φ<sub><em>u</em>(<em>k</em>)</sub>(0). The limit of this process
+gives an ordinal called Γ<sub>0</sub>: if we iterate the
+ramified hierarchy up to the ordinal Γ<sub>0</sub> we get a
+system of ordinal strength Γ<sub>0</sub>. Such an ordinal was
+obtained independently about the same time by S. Feferman. It has been
+claimed that Γ<sub>0</sub> plays for predicative systems a role
+similar to ε<sub>0</sub> for Arithmetic. Recent
+proof-theoretical works however are concerned with systems having
+bigger proof-theoretical ordinals that can be considered predicative
+(see for instance Palmgren 1995).</p>
+
+<p>
+
+Besides these proof theoretic investigations related to the ramified
+hierarchy, much work has been devoted in proof theory to analysing the
+consistency of the axiom of reducibility, or, equivalently, the
+consistency of impredicative definitions.  Following Gentzen's
+analysis of the cut-elimination property in the sequent calculus,
+Takeuti found an elegant sequent formulation of simple type theory
+(without ramification) and made the bold conjecture that
+cut-elimination should hold for this system. This conjecture seemed at
+first extremely dubious given the circularity of impredicative
+quantification, which is well reflected in this formalism. The rule
+for quantifications is indeed</p>
+
+<blockquote>
+<table style="border-collapse:collapse;">
+<tbody><tr><td style="padding:0px;border-bottom:1px solid black; text-align:center;">
+ Γ ⊢ ∀<em>X</em>[A(<em>X</em>)]
+</td></tr>
+<tr><td style="text-align:center;">
+ Γ ⊢ <em>A</em>[<em>X</em>:=<em>T</em>]
+</td></tr>
+</tbody></table>
+</blockquote>
+
+<p>
+
+where <em>T</em> is <em>any</em> term predicate, which may itself
+involve a quantification over all predicates. Thus the formula
+<em>A</em>[<em>X</em>:=<em>T</em>] may be itself much more complex
+than the formula <em>A(X)</em>.  </p>
+
+<p> 
+
+One early result is that cut-elimination for Takeuti's impredicative
+system implies in a finitary way the consistency of second-order
+Arithmetic. (One shows that this implies the consistency of a suitable
+form of infinity axiom, see Andrews 2002.) Following work by
+Schütte, it was later shown by W. Tait and D. Prawitz that indeed
+the cut-elimination property holds (the proof of this has to use a
+stronger proof theoretic principle, as it should be according to the
+incompletness theorem.)  </p>
+
+<p>
+
+What is important here is that these studies have revealed the extreme
+power of impredicative quantification or, equivalently, the extreme
+power of the axiom of reducibility. This confirms in some way the
+intuitions of Poincaré and Russell. The proof-theoretic
+strength of second-order Arithmetic is way above all ramified
+extensions of Arithmetic considered by Schütte. On the other
+hand, despite the circularity of impredicative definitions, which is
+made so explicit in Takeuti's calculus, no paradoxes have been found
+yet in second-order Arithmetic.</p>
+
+<p>
+
+Another research direction in proof theory has been to understand how
+much of impredicative quantification can be explained from principles
+that are available in intuitionistic mathematics. The strongest such
+principles are strong forms of inductive definitions. With such
+principles, one can explain a limited form a impredicative
+quantification, called Π<sub>1</sub><sup>1</sup>-comprehension,
+where one uses only one level of impredicative quantification over
+predicates. Interestingly, almost all known uses of impredicative
+quantifications: Leibniz equality, least upper bound, etc., can be
+done with Π<sub>1</sub><sup>1</sup>-comprehension. This reduction
+of Π<sub>1</sub><sup>1</sup>-comprehension was first achieved by
+Takeuti in a quite indirect way, and was later simplified by Buchholz
+and Schütte using the so-called Ω-rule.  It can be seen as
+a constructive explanation of some restricted, but nontrivial, uses of
+impredicative definitions. </p>
+
+<h2><a name="4">4. Type Theory/Set Theory</a></h2>
+
+<p>
+
+Type theory can be used as a foundation for mathematics, and indeed,
+it was presented as such by Russell in his 1908 paper, which appeared
+the same year as Zermelo's paper, presenting set theory as a foundation
+for mathematics.</p>
+
+<p>
+
+It is clear intuitively how we can explain type theory in set theory:
+a type is simply interpreted as a set, and function types <em>A</em>
+→ <em>B</em> can be explained using the set theoretic notion of
+function (as a functional relation, i.e. a set of pairs of
+elements). The type <em>A</em> → <em>o</em> corresponds to the
+powerset operation.</p>
+
+<p>
+
+The other direction is more interesting. How can we explain the notion
+of sets in term of types? There is an elegant solution, due to
+A. Miquel, which complements previous works by P. Aczel (1978) and
+which has also the advantage of explaining non necessarily
+well-founded sets a la Finsler. One simply interprets a <em>set</em>
+as a <em>pointed graph</em> (where the arrow in the graph represents
+the membership relation). This is very conveniently represented in
+type theory, a pointed graph being simply given by a type A and a pair
+of elements</p>
+
+<blockquote><em>a</em>: <em>A</em>,
+<em>R</em>: <em>A</em> → <em>A</em> →
+<em>o</em></blockquote>
+
+<p>
+
+We can then define in type theory when two such sets <em>A</em>,
+<em>a</em>, <em>R</em> and <em>B</em>, <em>b</em>, <em>S</em> are
+equal: this is the case iff there is a bisimulation <em>T</em> between
+<em>A</em> and <em>B</em> such that <em>Tab</em>
+holds. A bisimulation is a relation</p>
+
+<blockquote>
+
+<em>T</em>: <em>A</em>→<em>B</em>→<em>o</em></blockquote>
+
+<p>
+such that whenever <em>Txy</em> and <em>Rxu</em> hold, there exists <em>v</em> such that <em>Tuv</em> and
+<em>Syv</em> hold, and whenever <em>Txy</em> and <em>Ryv</em> hold,
+there exists <em>u</em> such that <em>Tuv</em> and <em>Rxu</em>
+hold. We can then define the membership relation: the set
+represented <em>B</em>, <em>b</em>, <em>S</em> is a member of the set
+represented by <em>A</em>, <em>a</em>, <em>R</em> iff there exists
+<em>a</em><sub>1</sub> such that <em>Ra<sub>1</sub>a</em> 
+and <em>A</em>, <em>a</em><sub>1</sub>, <em>R</em> and
+<em>B</em>, <em>b</em>, <em>S</em> are bisimilar.</p>
+
+<p>
+
+It can then be checked that all the usual axioms of set theory
+extensionality, power set, union, comprehension over bounded formulae
+(and even antifoundation, so that the membership relation does not
+need to be well-founded) hold in this simple model. (A bounded formula
+is a formula where all quantifications are of the form
+∀<em>x</em> ∈ <em>a</em> … or ∃<em>x</em>
+∈ <em>a</em> …). In this way it can been shown that
+Church's simple type theory is equiconsistent with the bounded version
+of Zermelo's set theory.</p>
+
+<h2><a name="5">5. Type Theory/Category Theory</a></h2>
+
+<p>
+
+There are deep connections between type theory and category theory.
+We limit ourselves to presenting two applications of type theory to
+category theory: the constructions of the free cartesian closed
+category and of the free topos (see the entry on category theory for an
+explanation of “cartesian closed” and “topos”).</p>
+
+<p>
+
+For building the free cartesian closed category, we extend simple type
+theory with the type 1 (unit type) and the product type <em>A</em>
+× <em>B</em>, for <em>A</em>, <em>B</em> types. The terms are
+extended by adding pairing operations and projections and a special
+element of type 1. As in Lambek and Scott 1986, one can then define a
+notion of <em>typed conversions</em> between terms, and show that this
+relation is decidable. One can then show (Lambek and Scott 1986) that
+the category with types as objects and as morphisms from <em>A</em> to
+<em>B</em> the set of closed terms of type <em>A</em> →
+<em>B</em> (with conversion as equality) is the free cartesian closed
+category. This can be used to show that equality between arrows in
+this category is decidable.</p>
+
+<p>
+
+The theory of types of Church can also be used to build the free
+topos. For this we take as objects pairs <em>A</em>,<em>E</em> with
+<em>A</em> type and <em>E</em> a partial equivalence relation, that is
+a closed term <em>E</em>: <em>A</em> → <em>A</em> →
+<em>o</em> which is symmetric and transitive. We take as morphisms
+between <em>A</em>, <em>E</em> and <em>B</em>, <em>F</em> the
+relations
+<em>R</em>: <em>A</em>→<em>B</em>→<em>o</em> that are
+<em>functional</em> that is such that for any
+<em>a</em>: <em>A</em> satisfying <em>E</em> <em>a</em>
+<em>a</em> there exists one, and only one (modulo <em>F</em>) element
+<em>b</em> of <em>B</em> such that <em>F</em> <em>b</em> <em>b</em>
+and <em>R</em> <em>a</em> <em>b</em>. For the subobject classifier we
+take the pair <em>o</em>, <em>E</em> with
+<em>E</em>: <em>o</em>→<em>o</em>→<em>o</em> defined
+as</p>
+
+<blockquote><em>E</em> <em>M</em> <em>N</em> = and (imply <em>M</em>
+<em>N</em>) (imply <em>N</em> <em>M</em>)</blockquote>
+
+<p>
+
+One can then show that this category forms a topos, indeed the free
+topos.</p>
+
+<p>
+
+It should be noted that the type theory in Lambek and Scott 1986
+uses a variation of type theory, introduced by Henkin and refined by
+P.  Andrews (2002) which is to have an extensional equality as the
+only logical connective, i.e. a polymorphic constant</p>
+
+<blockquote>eq : <em>A</em> → <em>A</em> → <em>o</em>
+</blockquote>
+
+<p>
+
+and to define all logical connectives from this connective and
+constants <em>T</em>, <em>F</em> : <em>o</em>. For instance, one defines </p>
+
+<blockquote>∀<em>P</em> &nbsp; =<sub><em>df</em></sub> &nbsp;
+  eq (λ<em>x</em>. <em>T</em>) <em>P</em> </blockquote>
+
+<p>
+
+The equality at type <em>o</em> is logical equivalence. </p>
+
+<p>
+
+One advantage of the intensional formulation is that it allows for a
+direct notation of proofs based on λ-calculus (Martin-Löf
+1971 and Coquand 1986).</p>
+
+<h2><a name="6">6. Extensions of Type System, Polymorphism, Paradoxes</a></h2>
+
+<p>
+
+We have seen the analogy between the operation A → A → o on
+types and the powerset operation on sets. In set theory, the powerset
+operation can be iterated transfinitely along the cumulative
+hierarchy. It is then natural to look for analogous transfinite
+versions of type theory.</p>
+
+<p>
+
+One such extension of Church's simple type theory is obtained by
+adding universes (Martin-Löf 1970). Adding a universe is a
+<em>reflection</em> process: we add a type <em>U</em> whose objects
+are the types considered so far. For Church's simple type theory we
+will have</p>
+
+<blockquote><em>o</em>: <em>U</em>, <em>i</em>: <em>U</em> and
+<em>A</em>→<em>B</em>: <em>U</em> if <em>A</em>: <em>U</em>,
+<em>B</em>: <em>U</em></blockquote>
+
+<p>
+
+and, furthermore, <em>A</em> is a type if
+<em>A</em>: <em>U</em>. We can then consider types such as
+</p>
+
+<blockquote>(<em>A</em>: <em>U</em>) → <em>A</em> → <em>A</em></blockquote>
+
+<p>
+
+and functions such as</p>
+
+<blockquote>id =
+λ<em>A</em>.λ<em>x</em>. <em>x</em> :
+(<em>A</em>: <em>U</em>) → <em>A</em> → <em>A</em>
+</blockquote>
+
+<p>
+
+The function id takes as argument a “small” type
+<em>A</em>: <em>U</em> and an element <em>x</em> of type
+<em>A</em>, and outputs an element of type <em>A</em>. More generally
+if <em>T</em>(<em>A</em>) is a type under the assumption
+<em>A</em>: <em>U</em>, one can form the dependent type</p>
+
+<blockquote>(<em>A</em>: <em>U</em>) → <em>T</em>(<em>A</em>)</blockquote>
+
+<p>
+
+That <em>M</em> is of this type means that <em>M</em>
+<em>A</em>: <em>T</em>(<em>A</em>) whenever
+<em>A</em>: <em>U</em>. We get in this way extensions of type
+theory whose strength is similar to the one of Zermelo's set theory
+(Miquel 2001). More powerful form of universes are considered in
+(Palmgren 1998). Miquel (2003) presents a version of type theory of
+strength equivalent to the one of Zermelo-Fraenkel.</p>
+
+<p>
+
+One very strong form of universe is obtained by adding the axiom
+<em>U</em>: <em>U</em>. This was suggested by P. Martin-Löf in
+1970. J.Y. Girard showed that the resulting type theory is
+inconsistent as a logical system (Girard 1972). Though it seems at first
+that one could directly reproduce Russell's paradox using a set of all
+sets, such a direct paradox is actually not possible due to the
+difference between sets and types. Indeed the derivation of a
+contradiction in such a system is subtle and has been rather indirect
+(though, as noticed in Miquel 2001, it can now be reduced to
+Russell's paradox by representing sets as pointed graphs). J.Y. Girard
+first obtained his paradox for a weaker system. This paradox was
+refined later (Coquand 1994 and Hurkens 1995). (The notion of pure
+type system, introduced in Barendregt 1992, is convenient for
+getting a sharp formulation of these paradoxes.) Instead of the axiom
+<em>U</em>: <em>U</em> one assumes only</p>
+
+<blockquote>(<em>A</em>: <em>U</em>) → <em>T</em>(<em>A</em>) : <em>U</em></blockquote>
+
+<p>
+
+if <em>T</em>(<em>A</em>) : <em>U</em>
+[<em>A</em>: <em>U</em>]. Notice the circularity, indeed of the
+same kind as the one that is rejected by the ramified hierarchy: we
+define an element of type <em>U</em> by quantifying over all elements
+of <em>U</em>. For instance the type</p>
+
+<blockquote>(<em>A</em>: <em>U</em>) → <em>A</em> →
+<em>A</em>: <em>U</em></blockquote>
+
+<p>
+
+will be the type of the polymorphic identity function. Despite this
+circularity, J.Y. Girard was able to show normalisation for type
+systems with this form of polymorphism. However, the extension of
+Church's simple type theory with polymorphism is inconsistent as a
+logical system, i.e. all propositions (terms of type o) are
+provable.</p>
+
+<p>
+
+J.Y. Girard's motivation for considering a type system with
+polymorphism was to extend Gödel's Dialectica (Gödel 1958)
+interpretation to second-order arithmetic. He proved normalisation
+using the reducibility method, that had been introduced by Tait (1967)
+while analysing Gödel 1958. It is quite remarkable that the
+circularity inherent in impredicativity does not result in
+non-normalisable terms. (Girard's argument was then used to show that
+cut-elimination terminates in Takeuti's sequent calculus presented
+above.) A similar system was introduced independently by J. Reynolds
+(1974) while analysing the notion of polymorphism in computer
+science.</p>
+
+<p>
+
+Martin-Löf's introduction of a type of all types comes from the
+identification of the concept of propositions and types, suggested by
+the work of Curry and Howard. It is worth recalling here his three
+motivating points:</p>
+
+<ol>
+
+<li>Russell's definition of types as ranges of significance of
+propositional functions</li>
+
+<li>the fact that one needs to quantify over all propositions
+(impredicativity of simple type theory)</li>
+
+<li>identification of proposition and types</li>
+</ol>
+
+<p>
+
+Given (1) and (2) we should have a type of propositions (as in simple
+type theory), and given (3) this should also be the type of all
+types. Girard's paradox shows that one cannot have (1),(2) and (3)
+simultaneously. Martin-Löf's choice was to take away (2),
+restricting type theory to be predicative (and, indeed, the notion of
+universe appeared first in type theory as a predicative version of the
+type of all types). The alternative choice of taking away (3) is
+discussed in Coquand 1986. 
+<!-- For more information on this topic, we
+refer to the entry on constructive type theory.-->
+</p>
+
+<h2><a name="7">7. Univalent Foundations</a></h2>
+
+<p>
+The connections between type theory, set theory and category theory
+gets a new light through the work on Univalent Foundations (Voevodsky
+2009) and the <em>Axiom of Univalence</em>. This involves in an
+essential way the extension of type theory described in the previous
+section, in particular dependent types, the view of propositions as
+types, and the notion of universe of types. These development are also
+relevant for discussing the notion of structure, the importance of
+which was for instance emphasized in Russell 1959.</p>
+
+<p>
+Martin-Löf 1973 introduced a new basic type
+<b>Id</b><sub><em>A</em></sub>(<em>a</em>,<em>b</em>), if <em>a</em>
+and <em>b</em> are in the type <em>A</em>, which can be thought as the
+type of equality proofs of the element <em>a</em> and <em>b</em>. An
+important feature of this new type is that it can be iterated, so that
+we can consider the type
+<b>Id</b><sub><b>Id</b><sub><em>A</em></sub>(<em>a</em>,<em>b</em>)</sub>(<em>p</em>,<em>q</em>)
+if <em>p</em> and <em>q</em> are of
+type <b>Id</b><sub><em>A</em></sub>(<em>a</em>,<em>b</em>).  If we
+think of a type as a special kind of set, it is natural to conjecture
+that such a type of equality proofs is always inhabited for any two
+equality proofs <em>p</em> and <em>q</em>. Indeed, intuitively, there
+seems to be at most an equality proof between two elements <em>a</em>
+and <em>b</em>. Surprisingly, Hofmann and Streicher 1996 designed a
+model of dependent type theory where this is not valid, that is a
+model where they can be different proofs that two elements are
+equal. In this model, a type is interpreted by a <em>groupoid</em> and
+the type <b>Id</b><sub><em>A</em></sub>(<em>a</em>,<em>b</em>) by the
+set of isomorphisms between <em>a</em> and <em>b</em>, set which may
+have more than one element. The existence of this model has the
+consequence that it cannot be proved in general in type theory that an
+equality type has at most one element.  This groupoid interpretation
+has been generalized in the following way, which gives an intuitive
+interpretation of the identity type. A <em>type</em> is interpreted by
+a <em>topological space</em>, up to homotopy, and a
+type <b>Id</b><sub><em>A</em></sub>(<em>a</em>,<em>b</em>) is
+interpreted by the type of <em>paths</em> connecting <em>a</em>
+and <em>b</em>. (See Awodey et al. 2013 and the HoTT book 2013.)
+</p>
+
+<p>
+Voevodsky 2009 introduced the following stratification of types. (This
+stratification was motivated in part by this interpretation of a type
+as a topological space, but can be understood directly without
+reference to this interpretation.)  We say that a type <em>A</em> is
+a <em>proposition</em> if we
+have <b>Id</b><sub><em>A</em></sub>(<em>a</em>,<em>b</em>) for any
+element <em>a</em> and <em>b</em> of <em>A</em> (this means that the
+type <em>A</em> has at most one element). We say that a
+type <em>A</em> is a <em>set</em> if the type
+<b>Id</b><sub><em>A</em></sub>(<em>a</em>,<em>b</em>) is a proposition
+for any element <em>a</em> and <em>b</em> of <em>A</em>. We say that a
+type <em>A</em> is a <em>groupoid</em> if the type
+<b>Id</b><sub><em>A</em></sub>(<em>a</em>,<em>b</em>) is a set for any
+element <em>a</em> and <em>b</em> of <em>A</em>.  The justification of
+this terminology is that it can be shown, only using the rules of type
+theory, that any such type can indeed be seen as a groupoid in the
+usual categorical sense, where the objects are the elements of this
+type, the set of morphisms between <em>a</em> and <em>b</em> being
+represented by
+the <em>set</em> <b>Id</b><sub><em>A</em></sub>(<em>a</em>,<em>b</em>). The
+composition is the proof of transitivity of equality, and the identity
+morphism is the proof of reflexivity of equality. The fact that each
+morphism has an inverse corresponds to the fact that identity is a
+symmetric relation.  This stratification can then be extended and we
+can define when a type is a 2-groupoid, 3-groupoid and so on.  In this
+view, <em>type theory</em> appears as a vast generalization of <em>set
+theory</em>, since a set is a particular kind of type.
+</p>
+
+<p> 
+Voevodsky 2009 introduces also a notion of <em>equivalence</em>
+between types, notion which generalizes in an uniform way the notions
+of <em>logical equivalence</em> between propositions,
+<em>bijection</em> between sets, <em>categorical equivalence</em>
+between groupoids, and so on. We say that a map
+<em>f</em>:<em>A</em>→<em>B</em> is an equivalence if, for any
+element <em>b</em> in <em>B</em> the type of pairs
+<em>a</em>,<em>p</em> where <em>p</em> is of type
+<b>Id</b><sub><em>B</em></sub>(<em>f</em> <em>a</em>,<em>b</em>), is a
+proposition and is inhabited. This expresses in a strong way that an
+element in <em>B</em> is the image of exactly one element in
+<em>A</em>, and if <em>A</em> and <em>B</em> are sets, we recover the
+usual notion of bijection between sets. (In general if
+<em>f</em>:<em>A</em>→<em>B</em> is an equivalence, then we have
+a map <em>B</em>→<em>A</em>, which can be thought of as the
+inverse of <em>f</em>.)  It can be shown for instance that the
+identity map is always an equivalence.  Let
+Equiv(<em>A</em>,<em>B</em>) be the type of pairs
+<em>f</em>,<em>p</em> where <em>f</em>:<em>A</em>→<em>B</em> and
+<em>p</em> is a proof that <em>f</em> is an equivalence. Using the
+fact that the identity map is an equivalence we have an element of
+Equiv(<em>A</em>,<em>A</em>) for any type <em>A</em>. This implies
+that we have a map</p>
+<blockquote>
+<b>Id</b><sub><em>U</em></sub>(<em>A</em>,<em>B</em>)→Equiv(<em>A</em>,<em>B</em>)
+</blockquote>
+
+<p>and the <em>Axiom of Univalence</em> states that this map is an
+equivalence. In particular, we have the implication</p>
+
+<blockquote>
+Equiv(<em>A</em>,<em>B</em>)→<b>Id</b><sub><em>U</em></sub>(<em>A</em>,<em>B</em>)
+</blockquote>
+
+<p>and so if there is an equivalence between two small types then these types are equal.
+</p>
+
+<p> This Axiom can be seen as a strong form of the extensionality
+principle.  It indeed generalizes the Axiom of <em>propositional
+extensionality</em> mentionned by Church 1940, which states that two
+logically equivalent propositions are equal. Surprisingly, it also
+implies the Axiom of <em>function extensionality</em>, Axiom 10 in
+Church 1940, which states that two pointwise equal functions are equal
+(Voevodsky 2009). It also directly implies that two isomorphic sets
+are equal, that two categorically equivalent groupoids are equal, and
+so one.
+</p>
+
+<p>This can be used to give a formulation of the notion
+of <em>transport of structures</em> (Bourbaki 1957) along
+equivalences. For instance, let <em>M</em> <em>A</em> be the type of
+monoid structures on the set <em>A</em>: this is the type of
+tuples <em>m</em>, <em>e</em>, <em>p</em> where <em>m</em> is a binary
+operation on <em>A</em> and <em>e</em> an element of <em>A</em>
+and <em>p</em> a proof that these elements satisfy the usual monoid
+laws. The rule of substitution of equal by equal takes the form</p>
+
+<blockquote>
+<b>Id</b><sub><em>U</em></sub>(<em>A</em>,<em>B</em>)→
+<em>M</em> <em>A</em>→<em>M</em> <em>B</em>
+</blockquote>
+
+<p>If there is a bijection between <em>A</em> and <em>B</em> they are
+equal by the Axiom of Univalence, and we can use this implication to
+transport any monoid structure of <em>A</em> in a monoid structure
+of <em>B</em>.
+</p>
+
+<p>We can also use this framework to refine Russell 1959 discussion on
+the notion of structure. For instance, let <b>Monoid</b> be the type
+of pairs <em>A</em>,<em>p</em> where <em>p</em> is an element
+of <em>M</em> <em>A</em>. Two such pairs <em>A</em>,<em>p</em>
+and <em>B</em>,<em>q</em> are isomorphic if there exists a bijection
+<em>f</em> from <em>A</em> to <em>B</em> such that <em>q</em> is equal
+to the transport of structure of <em>p</em> along <em>f</em>.  A
+consequence of the Axiom of Univalence is that two isomorphic elements
+of the type <b>Monoid</b> are equal, and hence shares the same
+properties. Notice that such a general transport of properties
+is <em>not</em> possible when structures are formulated in a set
+theoretic framework. Indeed, in a set theoretic framework, it is
+possible to formulate properties using the membership relations, for
+instance the property that the carrier set of the structure contains
+the natural number <em>0</em>, property that is not preserved in
+general by isomorphisms. Intuitively, the set theoretical description
+of a structure is not abstract enough since we can talk about the way
+this structure is built up. This difference between set theory and
+type theory is yet another illustration of the characterization by
+J.Reynolds 1983 of a type structure as a “syntactical discipline
+for enforcing level of abstraction”.
+</p>
+
+</div>
+
+<div id="bibliography">
+
+<h2><a name="Bib">Bibliography</a></h2>
+
+<ul class="hanging">
+
+<li>Aczel, P., 1978, “The type theoretic interpretation of
+constructive set theory”, <em>Logic Colloquium '77</em>,
+Amsterdam: North-Holland, 55–66.</li>
+
+<li>Andrews, P., 2002, <em>An introduction to mathematical logic and
+type theory: to truth through proof</em> (Applied Logic Series: Volume
+27), Dordrecht: Kluwer Academic Publishers, second edition.</li>
+
+<li>Awodey, S., Pelayo, A., Warren, M. 2013, “The Axiom of
+Univalence in Homotopy Type Theory”, <em>Notices of the American
+Mathematical Society</em>, 60(09): 1157–1164.</li>
+
+<li>Barendregt, H., 1997, “The impact of the lambda calculus in
+logic and computer science”, <em>Bulletin of Symbolic
+Logic</em>, 3(2): 181–215.</li>
+
+<li>–––, 1992, <em>Lambda calculi with
+types. Handbook of logic in computer science</em>, Volume 2, Oxford,
+New York: Oxford University Press, 117–309.</li>
+
+<li>Bell, J.L. 2012, “Types, Sets and Categories”, in
+Akihiro Kanamory <em>Handbook of the History of Logic. Volume 6: Sets
+and Extensions in the Twentieth Century</em>, Amsterdam: North Holland.</li>
+
+<li>Bourbaki, N., 1958, <em>Théorie des Ensembles</em>, 3rd
+edition, Paris: Hermann.</li>
+
+<li>de Bruijn, N. G., 1980, “A survey of the project
+AUTOMATH”, in <em>To H. B. Curry: essays on combinatory logic,
+lambda calculus and formalism</em>, London-New York: Academic Press, 
+579–606.</li>
+
+<li>Burgess J. P. and Hazen A. P., 1998, “Predicative Logic and
+Formal Arithmetic Source,” <em>Notre Dame J. Formal Logic</em>,
+39(1): 1–17.</li>
+
+<li>Buchholz, W. Schütte, 1988, <em>Proof theory of impredicative
+subsystems of analysis. Studies in Proof Theory</em>, Monographs 2,
+Naples: Bibliopolis.</li>
+
+<li>Church, A., 1940, “A formulation of the simple theory of
+types,” <em>J Symbolic Logic</em>, 5: 56–68</li>
+
+<li>–––, 1984, “Russell's theory of identity
+of propositions,” <em>Philosophia Naturalis</em>, 21:
+513–522</li>
+
+<li>Chwistek, L., 1948, <em>The Limits of Science: Outline of Logic
+and of the Methodology of the Exact Sciences</em>, London: Routledge
+and Kegan Paul.</li>
+
+<li>Coquand, T., 1986, “An analysis of Girard's paradox,”
+<em>Proceedings of the IEEE Symposium on Logic in Computer
+Science</em>, 227–236.</li>
+
+<li>–––, 1994, “A new paradox in type theory,”
+<em>Stud. Logic Found. Math.</em> (Volume 134), Amsterdam:
+North-Holland, 555–570.</li>
+
+<li>du Bois-Reymond, P., 1875, “Ueber asymptotische Werthe,
+infintaere Appproximationen und infitaere Aufloesung von
+Gleichungen,” <em>Mathematische Annalen</em>, 8:
+363–414.</li>
+
+<li>Feferman, S., 1964, “Systems of predicative analysis,”
+<em>Journal of Symbolic Logic</em>, 29: 1–30.</li>
+
+<li>Ferreira, F. and Wehmeier, K., 2002, “On the consistency of
+the Delta-1-1-CA fragment of Frege's Grundgesetze,” <em>Journal
+of Philosophic Logic</em>, 31: 301–311.</li>
+
+<li>Girard, J.Y., 1972, <em>Interpretation fonctionelle et
+eleimination des coupures dans l'arithmetique d'ordre superieure</em>,
+These d'Etat, Université Paris 7.</li>
+
+<li>Gödel, K., 1995, <em>Collected Works Volume III, Unpublished
+Essays and Lectures</em>, Oxford: Oxford University Press, 1995.</li>
+
+<li>–––, 1931, “Uber formal untentschedibare Saetze
+der Principia Mathematica und verwandter Systeme I,”
+<em>Monatsh. Math. Phys</em>, 38: 349–360.</li>
+
+<li>–––, 1944, “Russell's mathematical logic,” in
+<em>The philosophy of Bertrand Russell</em>, P. A. Schilpp (ed.),
+Evanston: Northwestern University Press, 123–153.</li>
+
+<li>–––, 1958, “Über eine bisher noch nicht
+benützte Erweiterung des finiten Standpunktes,”,
+<em>Dialectica</em>, 12: 280–287.</li>
+
+<li>Heck, Richard G., Jr, 1996, “The consistency of predicative
+fragments of Frege's Grundgesetze der Arithmetik,”
+<em>History and Philosophy of Logic</em>, 17 (4): 209–220.</li>
+
+<li>van Heijenoort, 1967, <em>From Frege to Gödel. A source book
+in mathematical logic 1879–1931</em>, Cambridge, MA: Harvard
+University Press.</li>
+
+<li>Hindley, R., 1997, <em>Basic Simple Type Theory</em>, Cambridge:
+Cambridge University Press.</li>
+
+<li>Hofmann, M. and Streicher, Th. 1996, “The Groupoid
+interpretation of Type Theory,” in <em>Twenty-five years of
+constructive type theory</em> (Oxford Logic Guides: Volume 36),
+Oxford, New York: Oxford University Press, 83–111.</li>
+
+<li>Howard, W. A., 1980, “The formulae-as-types notion of
+construction,” in <em>To H.  B. Curry: essays on combinatory
+logic, lambda calculus and formalism</em>, London, New York: Academic
+Press, 480–490.</li>
+
+<li>Hurkens, A. J. C., 1995, “A simplification of Girard's
+paradox. Typed lambda calculi and applications,” in <em>Lecture
+Notes in Computer Science </em> (Volume 902), Berlin: Springer:
+266–278.</li>
+
+<li>Lambek, J., 1980. “From λ-calculus to Cartesian
+Closed Categories” in <em>To H.B. Curry: Essays on Combinatory
+Logic, λ-calculus and Formalism</em>, J. Seldin and J. Hindley
+(eds.), London, New York: Academic Press. pp. 375–402.</li>
+
+<li>Lambek, J. and Scott, P. J., 1986, <em>Introduction to higher
+order categorical logic</em> (Cambridge Studies in Advanced
+Mathematics: Volume 7), Cambridge: Cambridge University Press;
+reprinted 1988.</li>
+
+<li>Lawvere, F. W. and Rosebrugh, R., 2003, <em>Sets for
+mathematics</em>, Cambridge: Cambridge University Press.</li>
+
+<li>Martin-Löf, P., 1970, <em>Notes on constructive
+mathematics</em>, Stockholm: Almqvist &amp; Wiksell.</li>
+
+<li>–––, 1971, <em>A Theory of Types</em>, Preprint,
+Stockholm University.</li>
+
+<li>–––, 1998, “An intuitionistic theory of
+types,” in <em>Twenty-five years of constructive type
+theory</em> (Oxford Logic Guides: Volume 36), Oxford, New York: Oxford
+University Press, 127–172.</li>
+
+<li>–––, 1973, “An intuitionistic theory of
+types: Predicative Part,” in <em>Logic Colloquium, 1973</em>,
+North-Holland, volume 80, 73–118.</li>
+
+<li>Myhill, J., 1974, “The Undefinability of the Set of Natural
+Numbers in the Ramified Principia”, in <em>Bertrand Russell's
+Philosophy</em>, G. Nakhnikian (ed.), London: Duckworth,
+19–27.</li>
+
+<li>Miquel, A., 2001, <em>Le Calcul des Constructions implicite:
+syntaxe et sémantique</em>, Thèse de
+doctorat, Université Paris 7.</li>
+
+<li>–––, 2003, “A strongly normalising Curry-Howard
+correspondence for IZF set theory,” in <em>Computer science
+Logic</em> (Lecture Notes in Computer Science, 2803), Berlin: Springer:
+441–454.</li>
+
+<li>Oppenheimer, P. and E. Zalta, 2011, “Relations Versus Functions
+at the Foundations of Logic: Type-Theoretic Considerations”,
+Journal of Logic and Computation, 21: 351–374.
+</li>
+
+<li>Palmgren, Erik, 1998, “On universes in type theory,”
+in <em>Twenty-five years of constructive type theory</em> (Oxford
+Logic Guides: Volume 36), Oxford, New York: Oxford University Press,
+191–204.</li>
+
+<li>Poincaré, 1909, “H. La logique de l'infini”
+<em>Revue de metaphysique et de morale</em>, 17: 461–482.</li>
+
+<li>Prawitz, D., 1967, “Completeness and Hauptsatz for second
+order logic”, <em>Theoria</em>, 33: 246–258.</li>
+
+<li>–––, 1970, “On the proof theory of mathematical
+analysis,” in <em>Logic and value</em> (Essays dedicated to Thorild
+Dahlquist on his fiftieth birthday), Filosofiska Studier, No. 9,
+Filosof. Föreningen och Filosof. Inst., Uppsala Univ., Uppsala,
+169–180.</li>
+
+<li>Quine, W., 1940, “Review of Church ‘A formulation of
+the simple theory of types’,” <em>Journal of Symbolic Logic</em>,
+5: 114.</li>
+
+<li>Ramsey, F.P., 1926, “The foundations of mathematics,”
+<em>Proceedings of the London Mathematical Society</em>, s2–25 (1),
+338–384.</li>
+
+<li>Russell, B., 1903, <em>The Principles of Mathematics</em>, 
+Cambridge: Cambridge University Press.</li>
+
+<li>–––, 1908, “Mathematical logic as based on
+the theory of types,” <em>American Journal of Mathematics</em>,
+30: 222–262.</li>
+
+<li>–––, 1959, <em>My philosophical development</em>, London
+and New York: Routledge.</li>
+
+<li>Russell, B. and Whitehead, A., 1910, 1912, 1913, <em>Principia
+Mathematica</em> (3 volumes), Cambridge: Cambidge University
+Press.</li>
+
+<li>Reynolds, J., 1974, “Towards a theory of type
+structure,” in <em>Programming Symposium Lecture Notes in
+Computer Science</em> (Volume 19), Berlin: Springer,
+408–425.</li>
+
+<li>–––, 1983, “Types, Abstraction and
+Parametric Polymorphism,” <em>IFIP Congress</em>, Paris,
+513–523.</li>
+
+<li>–––, 1984, “Polymorphism is not
+set-theoretic. Semantics of data types,” <em>Lecture Notes in
+Computer Science</em> (Volume 173), Berlin: Springer,
+145–156.</li>
+
+<li>–––, 1985, “Three approaches to type
+structure. Mathematical foundations of software development,”
+in <em>Lecture Notes in Computer Science</em> (Volume 185), Berlin:
+Springer, 97–138.</li>
+
+<li>Schütte, K., 1960, <em>Beweistheorie</em>, Berlin:
+Springer-Verlag.</li>
+
+<li>Scott, D., 1993 “A type-theoretic alternative to ISWIM,
+CUCH, OWHY,” <em>Theoretical Computer Science</em>, 121:
+411–440.</li>
+
+<li>Skolem, T., 1970, <em>Selected works in logic</em>, Jens Erik
+Fenstad (ed.), Oslo: Universitetsforlaget.</li>
+
+<li>Tait, W. W., 1967, “Intensional interpretations of
+functionals of finite type,” <em>Journal of Symbolic Logic</em>,
+32 (2): 198–212.</li>
+
+<li>Takeuti, G., 1955 “On the fundamental conjecture of GLC:
+I”, <em>J. Math. Soc. Japan</em>, 7: 249–275.</li>
+
+<li>–––, 1967, “Consistency proofs of
+subsystems of classical analysis,” <em>The Annals of
+Mathematics</em> (Second Series), 86 (2): 299–348.</li>
+
+<li>Tarski, A., 1931, “Sur les ensembles definissables de nombres
+reels I,” <em>Fund. Math.</em>, 17: 210–239.</li> 
+
+<li>The Univalent Foundations Program, 2013,
+ <a href="http://homotopytypetheory.org/book/" target="other"><em>Homotopy Type
+Theory: Univalent Foundations of
+Mathematics</em></a>, Institute for Advanced Study.</li>
+
+<li>Urquhart, A., 2003, “The Theory of Types,” in 
+<em>The Cambridge Companion to Bertrand Russell</em>, Nicholas
+Griffin (ed.), Cambridge: Cambridge University Press.</li>
+
+<li>Voevodsky, V., 2009, <em>Univalent Foundations of Mathematics</em>,
+<a href="http://www.math.ias.edu/~vladimir/Site3/Univalent_Foundations.html" target="other">available online</a>.</li>
+
+<li>Wiener, N., 1914, “A simplification of the logic of
+relations,” <em>Proceedings of the Cambridge Philosophical
+Society</em>, 17: 387–390.</li>
+
+<li>Weyl, H., 1946, “Mathematics and Logic,” <em>American
+Mathematical Monthly</em>, 53: 2–13.</li>
+
+<li>Zermelo, E., 1908, “Untersuchungen über die Grundlagen
+der Mengenlehre I,” <em>Mathematische Annalen</em>, 65:
+261–281.</li> 
+
+</ul>
+
+</div>
+
+<div id="academic-tools">
+
+<h2><a id="Aca">Academic Tools</a></h2>
+
+<blockquote>
+<table>
+<tbody><tr>
+<td valign="top"><img src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/sepman-icon.jpg" alt="sep man icon"></td>
+<td><a href="https://plato.stanford.edu/cgi-bin/encyclopedia/archinfo.cgi?entry=type-theory" target="other">How to cite this entry</a>.</td>
+</tr>
+
+<tr>
+<td valign="top"><img src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/sepman-icon.jpg" alt="sep man icon"></td>
+<td><a href="https://leibniz.stanford.edu/friends/preview/type-theory/" target="other">Preview the PDF version of this entry</a> at the
+ <a href="https://leibniz.stanford.edu/friends/" target="other">Friends of the SEP Society</a>.</td>
+</tr>
+
+<tr>
+<td valign="top"><img src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/inpho.png" alt="inpho icon"></td>
+<td><a href="https://www.inphoproject.org/entity?sep=type-theory&amp;redirect=True" target="other">Look up this entry topic</a>
+ at the <a href="https://www.inphoproject.org/" target="other">Indiana Philosophy Ontology Project</a>
+ (InPhO).</td>
+</tr>
+
+<tr>
+<td valign="top"><img src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/pp.gif" alt="phil papers icon"></td>
+<td><a href="http://philpapers.org/sep/type-theory/" target="other">Enhanced bibliography for this entry</a>
+at <a href="http://philpapers.org/" target="other">PhilPapers</a>, with links to its database.</td>
+</tr>
+
+</tbody></table>
+</blockquote>
+
+</div>
+
+<div id="other-internet-resources">
+
+<h2><a name="Oth">Other Internet Resources</a></h2>
+
+<p>[Please contact the author with suggestions.]</p>
+
+</div>
+
+<div id="related-entries">
+
+<h2><a name="Rel">Related Entries</a></h2>
+
+<p>
+
+<a href="https://plato.stanford.edu/entries//russell/">Russell, Bertrand</a> |
+ <a href="https://plato.stanford.edu/entries/category-theory/">category theory</a> |
+ <a href="https://plato.stanford.edu/entries/frege/">Frege, Gottlob</a> |
+ <a href="https://plato.stanford.edu/entries/frege-theorem/">Frege, Gottlob: theorem and foundations for arithmetic</a> |
+ <a href="https://plato.stanford.edu/entries/logic-paraconsistent/">logic: paraconsistent</a> |
+ <a href="https://plato.stanford.edu/entries/mathematics-inconsistent/">mathematics: inconsistent</a> |
+ <!--<a href="../peano/">-->Peano, Giuseppe<!--</a>--> |
+ <a href="https://plato.stanford.edu/entries/principia-mathematica/"><em>Principia Mathematica</em></a> |
+ <a href="https://plato.stanford.edu/entries/type-theory-church/">type theory: Church's type theory</a> |
+ <a href="https://plato.stanford.edu/entries/type-theory-intuitionistic/">type theory: intuitionistic</a>
+
+</p>
+
+</div>
+
+</div><!-- #aueditable --><!--DO NOT MODIFY THIS LINE AND BELOW-->
+
+<!-- END ARTICLE HTML -->
+
+</div> <!-- End article-content -->
+
+  <div id="article-copyright">
+    <p>
+ <a href="https://plato.stanford.edu/info.html#c">Copyright © 2014</a> by
+
+<br>
+<a href="http://www.cs.chalmers.se/~coquand" target="other">Thierry Coquand</a>
+&lt;<a href="mailto:coquand%40chalmers%2ese"><em>coquand<abbr title=" at ">@</abbr>chalmers<abbr title=" dot ">.</abbr>se</em></a>&gt;
+    </p>
+  </div>
+
+</div> <!-- End article -->
+
+<!-- NOTE: article banner is outside of the id="article" div. -->
+<div id="article-banner" class="scroll-block">
+   <div id="article-banner-content">
+  <a href="https://plato.stanford.edu/fundraising/">
+  Open access to the SEP is made possible by a world-wide funding initiative.<br>
+  Please Read How You Can Help Keep the Encyclopedia Free</a>
+ </div>
+
+</div> <!-- End article-banner -->
+
+    </div> <!-- End content -->
+
+    <div id="footer">
+
+      <div id="footer-menu">
+        <div class="menu-block">
+          <h4><i class="icon-book"></i> Browse</h4>
+          <ul role="menu">
+            <li><a href="https://plato.stanford.edu/contents.html">Table of Contents</a></li>
+            <li><a href="https://plato.stanford.edu/new.html">What's New</a></li>
+            <li><a href="https://plato.stanford.edu/cgi-bin/encyclopedia/random">Random Entry</a></li>
+            <li><a href="https://plato.stanford.edu/published.html">Chronological</a></li>
+            <li><a href="https://plato.stanford.edu/archives/">Archives</a></li>
+          </ul>
+        </div>
+        <div class="menu-block">
+          <h4><i class="icon-info-sign"></i> About</h4>
+          <ul role="menu">
+            <li><a href="https://plato.stanford.edu/info.html">Editorial Information</a></li>
+            <li><a href="https://plato.stanford.edu/about.html">About the SEP</a></li>
+            <li><a href="https://plato.stanford.edu/board.html">Editorial Board</a></li>
+            <li><a href="https://plato.stanford.edu/cite.html">How to Cite the SEP</a></li>
+            <li><a href="https://plato.stanford.edu/special-characters.html">Special Characters</a></li>
+            <li><a href="https://plato.stanford.edu/tools/">Advanced Tools</a></li>
+            <li><a href="https://plato.stanford.edu/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="menu-block">
+          <h4><i class="icon-leaf"></i> Support SEP</h4>
+          <ul role="menu">
+            <li><a href="https://plato.stanford.edu/support/">Support the SEP</a></li>
+            <li><a href="https://plato.stanford.edu/support/friends.html">PDFs for SEP Friends</a></li>
+            <li><a href="https://plato.stanford.edu/support/donate.html">Make a Donation</a></li>
+            <li><a href="https://plato.stanford.edu/support/sepia.html">SEPIA for Libraries</a></li>
+          </ul>
+        </div>
+      </div> <!-- End footer menu -->
+
+      <div id="mirrors">
+        <div id="mirror-info">
+          <h4><i class="icon-globe"></i> Mirror Sites</h4>
+          <p>View this site from another server:</p>
+        </div>
+                <div class="btn-group">
+<a class="btn dropdown-toggle" data-toggle="dropdown" href="https://plato.stanford.edu/"><span class="flag flag-usa"></span> USA (Main Site) <span class="caret"></span><span class="mirror-source">CSLI, Stanford University</span></a>          <ul class="dropdown-menu">
+            <li><a href="https://stanford.library.sydney.edu.au/entries/type-theory/"><span class="flag flag-australia"></span> Australia <span class="mirror-source">Library, University of Sydney</span></a>           </li>
+            <li><a href="https://seop.illc.uva.nl/entries/type-theory/"><span class="flag flag-netherlands"></span> Netherlands <span class="mirror-source">ILLC, University of Amsterdam</span></a>           </li>
+          </ul>
+        </div>
+      </div> <!-- End mirrors -->
+      
+      <div id="site-credits">
+        <p class="csli-logo"><a href="https://www-csli.stanford.edu/"><img src="./Type Theory (Stanford Encyclopedia of Philosophy)_files/SU_csli.png" width="355" alt="Stanford Center for the Study of Language and Information"></a></p>
+        <p>The Stanford Encyclopedia of Philosophy is <a href="https://plato.stanford.edu/info.html#c">copyright © 2016</a> by <a href="http://mally.stanford.edu/">The Metaphysics Research Lab</a>, Center for the Study of Language and Information (CSLI), Stanford University</p>
+        <p>Library of Congress Catalog Data: ISSN 1095-5054</p>
+      </div> <!-- End site credits -->
+
+    </div> <!-- End footer -->
+
+  </div> <!-- End container -->
+
+   <!-- NOTE: Script required for drop-down button to work (mirrors). -->
+  <script>
+    $('.dropdown-toggle').dropdown();
+  </script>
+
+
+
+
+
+</body></html>
