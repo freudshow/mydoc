@@ -1,9 +1,4 @@
-### Graphviz dot scripts
-
-Here are some `dot` scripts I'm using in recent months.
-
-Simply grub them and run it in your local enviroment, you will need `graphviz` installed in your machine first.
-
-```sh
-$ dot -Tpng merge.dot -o merge.png
-```
+sudo apt install -y graphviz 
+dot -version  #查看graphviz版本
+dot -Tpng sample.dot -o sample.png  #编译成png图
+dot -Tsvg sample.dot -o sample.png  #编译成svg图
