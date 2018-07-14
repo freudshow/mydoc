@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://www.jb51.net/article/19332.htm -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+
+<meta name="applicable-device" content="pc">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform">
+<title>正则基础之 NFA引擎匹配原理_正则表达式_脚本之家</title>
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+<meta name="keywords" content="正则,NFA,引擎匹配">
+<meta name="description" content="不懂正则引擎原理的情况下，同样可以写出满足需求的正则，但是不知道原理，却很难写出高效且没有隐患的正则。所以对于经常使用正则，或是有兴趣深入学习正则的人，还是有必要了解一下正则引擎的匹配原理的。">
+<link rel="alternate" media="only screen and(max-width: 640px)" href="https://m.jb51.net/article/19332.htm">
+<meta http-equiv="mobile-agent" content="format=html5; url=https://m.jb51.net/article/19332.htm">
+<meta http-equiv="mobile-agent" content="format=xhtml; url=https://m.jb51.net/article/19332.htm">
+<script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/f(6).txt"></script><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/ca-pub-6384567588307613.js"></script><script type="text/javascript" async="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/pr.js"></script><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/hm.js"></script><script type="text/javascript" async="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/jdhlbb.js"></script><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/push.js"></script><script type="text/javascript" async="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/dynamicFloat.js"></script><script type="text/javascript">
+var tougao="mdxy-dxy",lmname="正则表达式",suoyin="no";
+(function(){var reWriteUrl=function(url){if(url){var Splits=url.split("/"),siteName=window.location.pathname;if(typeof siteName!=="undefined"){return "https://m.jb51.net"+siteName}}};if(/Android|webOS|iPhone|iPad|Windows Phone|iPod|BlackBerry|SymbianOS|Nokia|Mobile/i.test(navigator.userAgent)){var url=window.location.href;var pathname=window.location.pathname;if(url.indexOf("?pc")<0){try{window.location.href=reWriteUrl(url)}catch(e){}}}})();
+</script>
+<meta name="referrer" content="always">
+<link type="text/css" href="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/base.css" rel="stylesheet">
+<link type="text/css" href="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/common(3).css" rel="stylesheet">
+<script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/jquery.min.js"></script>
+<script type="text/javascript">
+    if (typeof jQuery == 'undefined') {
+        document.write(unescape("%3Cscript src='/skin/js/jquery.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+</script>
+<script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/function.js"></script> 
+<link rel="preload" href="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/f(7).txt" as="script"><script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/f(7).txt"></script></head>
+<body><div id="BAIDU_DUP_fp_wrapper" style="position: absolute; left: -1px; bottom: -1px; z-index: 0; width: 0px; height: 0px; overflow: hidden; visibility: hidden; display: none;"><iframe id="BAIDU_DUP_fp_iframe" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/o.html" style="width: 0px; height: 0px; visibility: hidden; display: none;"></iframe></div>
+<!--topTools Start -->
+<div class="topTools">
+    <div class="wrap clear_fix">
+		<div class="topToolsLeft">
+			<a href="https://www.jb51.net/" target="_blank">脚本之家</a>
+			<a href="http://s.jb51.net/" target="_blank" rel="nofollow">服务器常用软件</a>
+		<a href="https://www.yuanshichang.com/" target="_blank" style="color:red">源市场</a><a href="http://idc.jb51.net/" target="_blank" style="color:red">脚本云</a></div>
+		<div class="right">
+			<ul>
+				<li><i class="sprite md left"></i><a target="_blank" href="https://m.jb51.net/" rel="nofollow">手机版</a></li>
+				<li><i class="sprite tg left"></i><a href="http://tougao.jb51.net/" rel="nofollow" target="_blank">投稿中心</a></li>
+				<li id="wxHide"><i class="sprite wx left"></i><a href="javascript:void(0)" target="_blank">关注微信</a>
+					<div id="wxShow" class="wxHide_box"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/erwm.jpg" alt="扫一扫" width="84" hight="84" data-baiduimageplus-ignore=""></div>
+				</li>
+			</ul>
+			<!--快捷导航 开始 -->
+			<div class="text_d right" id="navHide">
+        <a rel="nofollow" href="javascript:void(0);">快捷导航 <i id="icon" class="sprite arrowRight"></i></a>
+        <div id="navBox" class="nwebNav" style="display: none;">
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4>
+                                        <a rel="nofollow" href="https://www.jb51.net/softs/" target="_blank">软件下载</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/softs/android.html" target="_blank">android</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/softs/mac.html" target="_blank">MAC</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/qudong/" target="_blank">驱动下载</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/fonts/" target="_blank">字体下载</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/dll/" target="_blank">DLL</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/" target="_blank">源码下载</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/php.html" target="_blank">PHP</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/aspnet.html" target="_blank">ASP.NET</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/asp.html" target="_blank">ASP</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/jsp.html" target="_blank">JSP</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="https://www.jb51.net/list/index_84.htm" target="_blank">软件编程</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_85_1.htm" target="_blank">C#</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_134_1.htm" target="_blank">JAVA</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_159_1.htm" target="_blank">C 语言</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_206_1.htm" target="_blank">Delphi</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_233_1.htm" target="_blank">Android</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="https://www.jb51.net/list/index_1.htm" target="_blank">网络编程</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_15_1.htm" target="_blank">PHP</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_21_1.htm" target="_blank">ASP.NET</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_2_1.htm" target="_blank">ASP</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_3_1.htm" target="_blank">JavaScript</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="http://tools.jb51.net/" target="_blank">在线工具</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/tools/cssyasuo.shtml" target="_blank">CSS格式化</a>
+                                        <a rel="nofollow" href="http://tools.jb51.net/tools/js_geshihua.asp" target="_blank">JS格式化</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/tools/html-js.htm" target="_blank">Html转化为Js</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="https://www.jb51.net/list/index_104.htm" target="_blank">数据库</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_112_1.htm" target="_blank">MYSQL</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_113_1.htm" target="_blank">MSSQL</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_154_1.htm" target="_blank">oracle</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_155_1.htm" target="_blank">DB2</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_252_1.htm" target="_blank">MARIADB</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="https://www.jb51.net/cms/" target="_blank">CMS</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/cms/list411_1.html" target="_blank">PHPCMS</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/cms/list408_1.html" target="_blank">DEDECMS</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/cms/list578_1.html" target="_blank">帝国CMS</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/cms/list419_1.html" target="_blank">WordPress</a>
+                                </dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="javascript:0;" target="_blank">常用工具</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/zt/phphuanjing.html" target="_blank">PHP开发工具</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/zt/python.html" target="_blank">python</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/zt/photoshopxz.html" target="_blank">Photoshop</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/bibei/win/index.html" target="_blank">必备软件</a></dd>
+                        </dl>
+                </div>
+        </div>
+</div>
+			<!--快捷导航 结束 -->
+		</div>
+    </div>
+</div>
+<!--topTools end -->
+
+<div class="header">
+	<!-- Logo start -->
+	<div class="wrap">
+		<div class="mtb10 clearfix">
+		  <div class="logo"><a href="https://www.jb51.net/"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/logo.gif" title="脚本之家" alt="脚本之家"></a></div>
+		  <div class="logom fl"><a href="http://99cp.win/" target="_blank"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/99yule.gif" width="370" height="60"></a>
+</div>
+		  <div class="logor fr"><a href="http://www.ku86.com/" target="_blank"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/kuyun_370.gif" width="370" height="60"></a>
+</div>
+		</div>
+	</div>
+	<!--Logo end -->
+	
+	<!-- 导航开始 -->
+	<div class="nav_top clearfix">
+		<ul>
+			<li><a href="https://www.jb51.net/">网站首页</a></li>
+			<li><a href="https://www.jb51.net/web/">网页制作</a></li>
+			<li><a href="https://www.jb51.net/list/index_1.htm">网络编程</a></li>
+			<li><a href="https://www.jb51.net/list/index_96.htm">脚本专栏</a></li>
+			<li><a href="https://www.jb51.net/jiaoben/">脚本下载</a></li>
+			<li><a href="https://www.jb51.net/list/index_104.htm">数据库</a></li>
+			<li><a href="https://www.jb51.net/list/list_82_1.htm">服务器</a></li>
+			<li><a href="https://www.jb51.net/books/">电子书籍</a></li>
+			<li><a href="https://www.jb51.net/os/">操作系统</a></li>
+			<li><a href="https://www.jb51.net/yunying/">网站运营</a></li>
+			<li><p><i>其它</i><span>
+				<a href="https://www.jb51.net/pingmian/">平面设计</a>
+				<a href="https://www.jb51.net/media/">媒体动画</a>
+				<a href="https://www.jb51.net/diannaojichu/">电脑基础</a>
+				<a href="https://www.jb51.net/hardware/">硬件教程</a>
+				<a href="https://www.jb51.net/hack/">网络安全</a>	
+			</span></p></li>
+		</ul>
+	</div>
+	<!--导航结束-->
+</div>
+
+<!-- 二级菜单开始 -->
+<div class="wrap">
+	<div class="subnav clearfix">
+<ul><li><a href="https://www.jb51.net/list/list_3_1.htm" title="JavaScript">JavaScript</a></li>
+<li><a href="https://www.jb51.net/list/list_21_1.htm" title="ASP.NET">ASP.NET</a></li>
+<li><a href="https://www.jb51.net/list/list_15_1.htm" title="PHP编程">PHP编程</a></li>
+<li><a href="https://www.jb51.net/list/list_5_1.htm" title="AJAX相关">AJAX相关</a></li>
+<li><a href="https://www.jb51.net/list/list_6_1.htm" title="正则表达式">正则表达式</a></li>
+<li><a href="https://www.jb51.net/list/list_2_1.htm" title="ASP编程">ASP编程</a></li>
+<li><a href="https://www.jb51.net/list/list_83_1.htm" title="JSP编程">JSP编程</a></li>
+<li><a href="https://www.jb51.net/list/list_123_1.htm" title="编程10000问">编程10000问</a></li>
+<li><a href="https://www.jb51.net/list/list_4_1.htm" title="CSS/HTML">CSS/HTML</a></li>
+<li><a href="https://www.jb51.net/list/list_237_1.htm" title="Flex">Flex</a></li>
+<li><a href="https://www.jb51.net/list/list_60_1.htm" title="脚本加解密">脚本加解密</a></li>
+<li><a href="https://www.jb51.net/list/list_62_1.htm" title="web2.0">web2.0</a></li>
+<li><a href="https://www.jb51.net/list/list_64_1.htm" title="XML/RSS">XML/RSS</a></li>
+<li><a href="https://www.jb51.net/list/list_176_1.htm" title="网页编辑器">网页编辑器</a></li>
+<li><a href="https://www.jb51.net/list/list_177_1.htm" title="相关技巧">相关技巧</a></li>
+<li><a href="https://www.jb51.net/list/list_72_1.htm" title="安全相关">安全相关</a></li>
+<li><a href="https://www.jb51.net/list/list_19_1.htm" title="网页播放器">网页播放器</a></li>
+<li><a href="https://www.jb51.net/list/list_185_1.htm" title="其它综合">其它综合</a></li>
+<li><a href="https://www.jb51.net/list/list_251_1.htm" title="Dart">Dart</a></li>
+</ul>
+	</div>
+</div>
+<!-- 二级菜单结束 -->	
+
+<div class="main mb10 clearfix">
+	<div class="clearfix"><div class="mainlr"><a href="http://click.aliyun.com/m/29949/" target="_blank"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/ali0323.gif" alt="aliyun" width="1080" height="50"></a></div><div class="blank5"></div><div class="mainlr"><a href="https://cloud.tencent.com/act/special/amd?fromSource=gwzcw.1085062.1085062.1085062" target="_blank"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/txy.gif" alt="txyun" width="1080" height="50"></a></div><div class="blank5"></div><div id="txtlink"><ul><li><a href="http://www.2016idc.com/cdn.html" target="_blank"><span style="color: red;">◆◆◆◆◆高防免备案CDN◆◆◆◆◆</span></a></li><li><a href="http://www.zoneidc.com/" target="_blank"><span style="color: red;">1G香港云49元/美国云49元/韩国云89元</span></a></li><li><a href="http://click.aliyun.com/m/15321/" target="_blank"><span style="color: red;">30余款阿里云产品免费6个月</span></a></li><li><a href="http://www.kaivps.com/cloud.html" target="_blank"><span style="color: red;">◆好优云◆抗攻击◆无视CC◆免备◆稳定◆</span></a></li><li><a href="http://www.jsjmpt.com/" target="_blank"><span style="color: blue;">极速短信验证码接码 接收1毛 作者提成%20</span></a></li><li><a href="https://cloud.tencent.com/act/campus?fromSource=gwzcw.846004.846004.846004" target="_blank"><span style="color: blue;">腾讯云拼团福利 1核2G云服务器10元/月</span></a></li><li><a href="http://www.osssnet.com/" target="_blank"><span style="color: blue;">◆50M香港/美国/日本服务器380免备案◆</span></a></li><li><a href="http://www.33ip.com/" target="_blank"><span style="color: blue;">枫信科技-江苏双线10M保证-399/元</span></a></li><li><a href="https://www.guowaidiaocha.com/" target="_blank"><span style="color: red;">★国外网赚月入两万，一对一教学带你★</span></a></li><li><a href="http://www.021.net/" target="_blank"><span style="color: red;">众生网络 基于云计算的互联网基础服务运营商</span></a></li><li><a href="http://www.hkcn2.com/51.htm" target="_blank"><span style="color: red;">**香港高防10m大带宽独服，低至999元**</span></a></li><li><a href="https://www.henghost.com/" target="_blank"><span style="color: red;">█▁恒创科技▁█香港服务器*双向CN2直连</span></a></li><li><a href="http://az.workwang.xyz/az/" target="_blank"><span style="color: blue;">★★★网赚达人日赚800★★★</span></a></li><li><a href="http://az.workwang.xyz/az/" target="_blank"><span style="color: blue;">★★★网赚达人日赚800★★★</span></a></li><li><a href="http://az.workwang.xyz/az/" target="_blank"><span style="color: blue;">★★★网赚达人日赚800★★★</span></a></li><li><a href="http://az.workwang.xyz/az/" target="_blank"><span style="color: blue;">★★★网赚达人日赚800★★★</span></a></li><li><a href="http://www.7yc.com/rent.html" target="_blank"><span style="color: red;">██云彩网络██100G防服务器450元</span></a></li><li><a href="https://www.50vm.com/" target="_blank"><span style="color: red;">4核独服199/16核独服360|创梦网络</span></a></li><li><a href="http://www.gwidc.com/rent/home/index.html" target="_blank"><span style="color: red;">港湾网络-徐州百独16核16G 800/月~</span></a></li><li><a href="http://www.ssf.cc/" target="_blank"><span style="color: red;">免备vps20/百独799/双线350/45互联</span></a></li><li><a href="http://www.ushk.net/server.html" target="_blank"><span style="color: blue;">██美港数据██高端香港服务器租用</span></a></li><li><a href="http://vps.zzidc.com/tongji/jb51w.html" target="_blank"><span style="color: blue;">★☆云服务器5折，天天抽红包抵扣☆★</span></a></li><li><a href="http://www.enkj.com/idc/zuyong/6" target="_blank"><span style="color: blue;">【亿恩】DELL品牌服务器，月付599元起</span></a></li><li><a href="http://www.xiaozhiyun.com/2016/" target="_blank"><span style="color: blue;">韩国香港美国站群服务器 巨牛网络</span></a></li><li><a href="http://www.wsisp.net/sale/20170518/?indexjb" target="_blank"><span style="color: red;">█▇▆5M独享云主机599/年▆▇█</span></a></li><li><a href="http://www.qy.com.cn/" target="_blank"><span style="color: red;">群英云服务器送10M带宽30G防御,49元起</span></a></li><li><a href="http://www.tuidc.com/" target="_blank"><span style="color: red;">服务器租用/托管-域名空间/认准腾佑科技</span></a></li><li><a href="http://www.jjidc.com/" target="_blank"><span style="color: red;">九九数据 — 工信部认可正规资质IDC接入商</span></a></li><li><a href="https://www.95idc.com/" target="_blank"><span style="color: blue;">95IDC█香港沙田CN2服务器 599/月</span></a></li><li><a href="http://www.zitian.cn/" target="_blank"><span style="color: blue;">中原地区核心数据中心，月付299元起</span></a></li><li><a href="http://www.qy.cn/gfhd.html" target="_blank"><span style="color: blue;">██群英网络██◆◆◆300G高防仅需599元◆◆◆</span></a></li><li><a href="http://www.pdidc.com/" target="_blank"><span style="color: blue;">浦东数据中心上海电信4星云主机30元/月起</span></a></li><li><a href="http://www.139w.com/" target="_blank"><span style="color: red;">鼎点网络百兆独享服务器仅需999元</span></a></li><li><a href="http://www.360jq.com/hkshuang.htm" target="_blank"><span style="color: red;">[香港双高防]无视CC★DDOS/堪比广东！</span></a></li><li><a href="http://www.cyidc.cc/" target="_blank"><span style="color: red;">畅游网络 百独服务器 包跑满 998元</span></a></li><li><a href="http://www.wdw6.com/" target="_blank"><span style="color: red;">服务器租用  199元起</span></a></li></ul><div class="clearfix"></div></div><div class="blank5"></div><div class="mainlr"><a href="http://27.arrowshoe.com/" target="_blank"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/27pan.jpg" alt="27pan" width="1080" height="50"></a></div><div class="blank5"></div><div class="mainlr"><iframe src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/zbj.html" width="1080" height="60" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0; vertical-align:bottom;margin:0;" allowtransparency="true"></iframe></div><div class="blank5"></div><div class="topimg"><ul><li><a href="http://www.ruixunidc.net/?jb51" target="_blank"><img alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/ruixun.gif" width="210" height="50"></a></li><li><a href="http://click.aliyun.com/m/17168/" target="_blank"><img alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/ali2371.jpg" width="211" height="50"></a></li><li><a href="https://www.simcentric.com/sc/promos/2018-e5" target="_blank"><img alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/sim210.gif" width="210" height="50"></a></li><li><a href="http://www.8dwww.com/cloud/" target="_blank"><img alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/8dwww.gif" width="210" height="50"></a></li><li><a href="https://www.arebz.com/2018.aspx?link=353943" target="_blank"><img alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/arebz210.gif" width="210" height="50"></a></li></ul></div><div class="blank5"></div>
+</div>
+</div>
+<div class="main clearfix">
+	<div class="NavBar clearfix ptb10">
+		<div class="fl w690">
+			<div class="box mb15 mt10"><i class="icon"></i>您的位置：<a href="https://www.jb51.net/">首页</a> → <a href="https://www.jb51.net/list/index_1.htm" title="网络编程">网络编程</a> → <a href="https://www.jb51.net/list/list_6_1.htm" title="正则表达式">正则表达式</a> → 正文内容 正则 NFA 引擎匹配</div>
+		</div>
+		<div class="fr w300"><div class="search">
+		<form action="https://www.jb51.net/do/search.php" target="_blank">
+			<input type="hidden" name="s" value="10520733385329581432">
+			<input type="hidden" name="ie" value="gbk">
+			<input type="text" name="q" class="key_input" placeholder="请输入关键词">
+			<input type="submit" value=" " class="c_btn">
+		</form></div>
+		</div>
+	</div>
+</div>
+<!--content Star -->
+<div id="contents">
+ <!--share start-->
+ <div id="right-share" style="display: block;">
+	<div class="right-share jb-share" id="jb-share">
+		<a class="rshare-weixin" title="">微信</a>
+        <a rel="nofollow" class="rshare-qzone" target="_blank" href="https://tougao.jb51.net/" title="投稿">投稿</a>
+		<a rel="nofollow" class="rshare-sqq" target="_blank" href="http://shequ.jb51.net/" title="交流社区">交流社区</a>
+		<a rel="nofollow" class="rshare-tsina" target="_blank" href="http://tools.jb51.net/" title="在线工具">在线工具</a>
+	</div>
+	<a class="rshare-top" onclick="javascript:;"></a>
+			
+	<div id="weixin-code" class="hide">
+	<div class="popup_weixin_head"><p>关注微信公众号</p> 
+	<div id="code"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/erwm.jpg" alt="扫一扫" width="100" hight="100"></div>
+	</div>
+	</div>	
+ </div>
+<!--share end-->
+
+ <div class="main clearfix bgf">
+      <div class="w750 fl">
+      <div class="article-content border">
+      <div class="title">
+            <h1 class="YaHei">正则基础之 NFA引擎匹配原理</h1>
+            <p><i>转载</i> &nbsp;更新时间：2009年07月24日 15:58:42 &nbsp; 作者：  &nbsp; <a href="https://www.jb51.net/article/19332.htm#comments"> <img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/text-message.png" width="15" height="15"> 我要评论</a> </p>
+        </div>
+        <div class="lbd clearfix"><div><iframe width="700" frameborder="0" height="60" scrolling="no" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/s.html"></iframe></div><script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/uphlhyovv.js"></script>
+</div>
+        <div class="art_desc mt10"><div id="art_demo">不懂正则引擎原理的情况下，同样可以写出满足需求的正则，但是不知道原理，却很难写出高效且没有隐患的正则。所以对于经常使用正则，或是有兴趣深入学习正则的人，还是有必要了解一下正则引擎的匹配原理的。</div></div>
+        <div class="lbd clearfix"><a href="http://www.php.cn/course.html?ad51" target="_blank"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/phpcn_0508.gif" width="690" height="99"></a>
+</div>
+        <div id="content">
+            <h1>1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 为什么要了解引擎匹配原理</h1>
+<p align="left">一个个音符杂乱无章的组合在一起，弹奏出的或许就是噪音，同样的音符经过作曲家的手，就可以谱出非常动听的乐曲，一个演奏者同样可以照着乐谱奏出动听的乐曲，但他/她或许不知道该如何去改变音符的组合，使得乐曲更动听。</p>
+<p align="left">作为正则的使用者也一样，不懂正则引擎原理的情况下，同样可以写出满足需求的正则，但是不知道原理，却很难写出高效且没有隐患的正则。所以对于经常使用正则，或是有兴趣深入学习正则的人，还是有必要了解一下正则引擎的匹配原理的。</p>
+<h1>2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 正则表达式引擎</h1>
+<p align="left">正则引擎大体上可分为不同的两类：DFA和NFA，而NFA又基本上可以分为传统型NFA和POSIX NFA。</p>
+<p align="left">DFA&nbsp;Deterministic finite automaton 确定型有穷自动机</p>
+<p align="left">NFA Non-deterministic finite automaton　非确定型有穷自动机</p>
+<p align="left">Traditional NFA</p>
+<p align="left">POSIX NFA</p>
+<p align="left">DFA引擎因为不需要回溯，所以匹配快速，但不支持捕获组，所以也就不支持反向引用和$number这种引用方式，目前使用DFA引擎的语言和工具主要有awk、egrep&nbsp;和 lex。</p>
+<p align="left">POSIX NFA主要指符合POSIX标准的NFA引擎，它的特点主要是提供longest-leftmost匹配，也就是在找到最左侧最长匹配之前，它将继续回溯。同DFA一样，非贪婪模式或者说忽略优先量词对于POSIX NFA同样是没有意义的。</p>
+<p align="left">大多数语言和工具使用的是传统型的NFA引擎，它有一些DFA不支持的特性：</p>
+<p align="left">　　捕获组、反向引用和$number引用方式；</p>
+<p align="left">　　环视(Lookaround，(?&lt;=…)、(?&lt;!…)、(?=…)、(?!…))，或者有的有文章叫做预搜索；</p>
+<p align="left">　　忽略优化量词（??、*?、+?、{m,n}?、{m,}?），或者有的文章叫做非贪婪模式；</p>
+<p align="left">　　占有优先量词（?+、*+、++、{m,n}+、{m,}+，目前仅Java和PCRE支持），固化分组(?&gt;…)。</p>
+<p align="left">引擎间的区别不是本文的重点，仅做简要的介绍，有兴趣的可参考相关文献。</p>
+<h1>3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 预备知识</h1>
+<h2>3.1&nbsp;&nbsp;&nbsp;&nbsp; 字符串组成</h2>
+<p align="center"><img height="119" alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/20090724155837175.jpg" width="160"></p>
+<p>对于字符串“<strong>abc</strong>”而言，包括三个字符和四个位置。</p>
+<h2>3.2&nbsp;&nbsp;&nbsp;&nbsp; 占有字符和零宽度</h2>
+<p>正则表达式匹配过程中，如果子表达式匹配到的是字符内容，而非位置，并被保存到最终的匹配结果中，那么就认为这个子表达式是占有字符的；如果子表达式匹配的仅仅是位置，或者匹配的内容并不保存到最终的匹配结果中，那么就认为这个子表达式是零宽度的。</p>
+<p>占有字符是互斥的，零宽度是非互斥的。也就是一个字符，同一时间只能由一个子表达式匹配，而一个位置，却可以同时由多个零宽度的子表达式匹配。</p>
+<h2>3.3&nbsp;&nbsp;&nbsp;&nbsp; 控制权和传动</h2>
+<p align="left">正则的匹配过程，通常情况下都是由一个子表达式（可能为一个普通字符、元字符或元字符序列组成）取得控制权，从字符串的某一位置开始尝试匹配，一个子表达式开始尝试匹配的位置，是从前一子表达匹配成功的结束位置开始的。如正则表达式：</p>
+<p align="left"><strong>(</strong><strong>子表达式一)(子表达式二)</strong></p>
+<p align="left">假设<strong>(子表达式一)</strong>为零宽度表达式，由于它匹配开始和结束的位置是同一个，如位置0，那么<strong>(子表达式二)</strong>是从位置0开始尝试匹配的。</p>
+<p align="left">假设<strong>(子表达式一)</strong>为占有字符的表达式，由于它匹配开始和结束的位置不是同一个，如匹配成功开始于位置0，结束于位置2，那么<strong>(子表达式二)</strong>是从位置2开始尝试匹配的。</p>
+<p align="left">而对于整个表达式来说，通常是由字符串位置0开始尝试匹配的。如果在位置0开始的尝试，匹配到字符串某一位置时整个表达式匹配失败，那么引擎会使正则向前传动，整个表达式从位置1开始重新尝试匹配，依此类推，直到报告匹配成功或尝试到最后一个位置后报告匹配失败。</p>
+<h1>4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 正则表达式简单匹本过程</h1>
+<h2>4.1&nbsp;&nbsp;&nbsp;&nbsp; 基础匹配过程</h2>
+<p align="left">&nbsp;</p>
+<p align="center"><img height="160" alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/20090724155839624.jpg" width="149"></p>
+<p>源字符串：<strong>abc</strong></p>
+<p>正则表达式：<strong>abc</strong></p>
+<p align="left">匹配过程：</p>
+<p align="left">首先由字符“<strong>a</strong>”取得控制权，从位置0开始匹配，由“<strong>a</strong>”来匹配“<strong>a</strong>”，匹配成功，控制权交给字符“<strong>b</strong>”；由于“<strong>a</strong>”已被“<strong>a</strong>”匹配，所以“<strong>b</strong>”从位置1开始尝试匹配，由“<strong>b</strong>”来匹配“<strong>b</strong>”，匹配成功，控制权交给“<strong>c</strong>”；由“<strong>c</strong>”来匹配“<strong>c</strong>”，匹配成功。</p>
+<p align="left">此时正则表达式匹配完成，报告匹配成功。匹配结果为“<strong>abc</strong>”，开始位置为0，结束位置为3。</p>
+<p align="left">&nbsp;</p>
+<h2>4.2&nbsp;&nbsp;&nbsp;&nbsp; 含有匹配优先量词的匹配过程——匹配成功（一）</h2>
+<p align="center"><img height="160" alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/20090724155839877.jpg" width="146"></p>
+<p>源字符串：<strong>abc</strong></p>
+<p>正则表达式：<strong>ab?c</strong></p>
+<p align="left">量词“<strong>?</strong>”属于匹配优先量词，在可匹配可不匹配时，会先选择尝试匹配，只有这种选择会使整个表达式无法匹配成功时，才会尝试让出匹配到的内容。这里的量词“<strong>?</strong>”是用来修饰字符“<strong>b</strong>”的，所以“<strong>b?</strong>”是一个整体。</p>
+<p align="left">匹配过程：</p>
+<p align="left">首先由字符“<strong>a</strong>”取得控制权，从位置0开始匹配，由“<strong>a</strong>”来匹配“<strong>a</strong>”，匹配成功，控制权交给字符“<strong>b?</strong>”；由于“<strong>?</strong>”是匹配优先量词，所以会先尝试进行匹配，由“<strong>b?</strong>”来匹配“<strong>b</strong>”，匹配成功，控制权交给“<strong>c</strong>”，同时记录一个备选状态；由“<strong>c</strong>”来匹配“<strong>c</strong>”，匹配成功。记录的备选状态丢弃。</p>
+<p align="left">此时正则表达式匹配完成，报告匹配成功。匹配结果为“<strong>abc</strong>”，开始位置为0，结束位置为3。</p>
+<h2>4.3&nbsp;&nbsp;&nbsp;&nbsp; 含有匹配优先量词的匹配过程——匹配成功（二）</h2>
+<p align="center"><img height="160" alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/20090724155839784.jpg" width="132"></p>
+<p>源字符串：<strong>ac</strong></p>
+<p>正则表达式：<strong>ab?c</strong></p>
+<p align="left">匹配过程：</p>
+<p align="left">首先由字符“<strong>a</strong>”取得控制权，从位置0开始匹配，由“<strong>a</strong>”来匹配“<strong>a</strong>”，匹配成功，控制权交给字符“<strong>b?</strong>”；先尝试进行匹配，由“<strong>b?</strong>”来匹配“<strong>c</strong>”，同时记录一个备选状态，匹配失败，此时进行回溯，找到备选状态，“<strong>b?</strong>”忽略匹配，让出控制权，把控制权交给“<strong>c</strong>”；由“<strong>c</strong>”来匹配“<strong>c</strong>”，匹配成功。</p>
+<p align="left">此时正则表达式匹配完成，报告匹配成功。匹配结果为“<strong>ac</strong>”，开始位置为0，结束位置为2。其中“<strong>b?</strong>”不匹配任何内容。</p>
+<h2>4.4&nbsp;&nbsp;&nbsp;&nbsp; 含有匹配优先量词的匹配过程——匹配失败</h2>
+<p align="center"><img height="160" alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/20090724155839224.jpg" width="146"></p>
+<p>源字符串：<strong>abd</strong></p>
+<p>正则表达式：<strong>ab?c</strong></p>
+<p align="left">匹配过程：</p>
+<p align="left">首先由字符“<strong>a</strong>”取得控制权，从位置0开始匹配，由“<strong>a</strong>”来匹配“<strong>a</strong>”，匹配成功，控制权交给字符“<strong>b?</strong>”；先尝试进行匹配，由“<strong>b?</strong>”来匹配“<strong>b</strong>”，同时记录一个备选状态，匹配成功，控制权交给“<strong>c</strong>”；由“<strong>c</strong>”来匹配“<strong>d</strong>”，匹配失败，此时进行回溯，找到记录的备选状态，“<strong>b?</strong>”忽略匹配，即“<strong>b?</strong>”不匹配“<strong>b</strong>”，让出控制权，把控制权交给“<strong>c</strong>”；由“<strong>c</strong>”来匹配“<strong>b</strong>”，匹配失败。此时第一轮匹配尝试失败。</p>
+<p align="left">正则引擎使正则向前传动，由位置1开始尝试匹配，由“<strong>a</strong>”来匹配“<strong>b</strong>”，匹配失败，没有备选状态，第二轮匹配尝试失败。</p>
+<p align="left">继续向前传动，直到在位置3尝试匹配失败，匹配结束。此时报告整个表达式匹配失败。</p>
+<h2>4.5&nbsp;&nbsp;&nbsp;&nbsp; 含有忽略优先量词的匹配过程——匹配成功</h2>
+<p align="center"><img height="160" alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/20090724155839505.jpg" width="147"></p>
+<p>源字符串：<strong>abc</strong></p>
+<p>正则表达式：<strong>ab??c</strong></p>
+<p align="left">量词“<strong>??</strong>”属于忽略优先量词，在可匹配可不匹配时，会先选择不匹配，只有这种选择会使整个表达式无法匹配成功时，才会尝试进行匹配。这里的量词“<strong>??</strong>”是用来修饰字符“<strong>b</strong>”的，所以“<strong>b??</strong>”是一个整体。</p>
+<p align="left">匹配过程：</p>
+<p align="left">首先由字符“<strong>a</strong>”取得控制权，从位置0开始匹配，由“<strong>a</strong>”来匹配“<strong>a</strong>”，匹配成功，控制权交给字符“<strong>b??</strong>”；先尝试忽略匹配，即“<strong>b??</strong>”不进行匹配，同时记录一个备选状态，控制权交给“<strong>c</strong>”；由“<strong>c</strong>”来匹配“<strong>b</strong>”，匹配失败，此时进行回溯，找到记录的备选状态，“<strong>b??</strong>”尝试匹配，即“<strong>b??</strong>”来匹配“<strong>b</strong>”，匹配成功，把控制权交给“<strong>c</strong>”；由“<strong>c</strong>”来匹配“<strong>c</strong>”，匹配成功。</p>
+<p align="left">此时正则表达式匹配完成，报告匹配成功。匹配结果为“<strong>abc</strong>”，开始位置为0，结束位置为3。其中“<strong>b??</strong>”匹配字符“<strong>b</strong>”。</p>
+<h2>4.6&nbsp;&nbsp;&nbsp;&nbsp; 零宽度匹配过程</h2>
+<p align="center"><img height="90" alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/20090724155839409.jpg" width="236"></p>
+<p>源字符串：<strong>a12</strong></p>
+<p>正则表达式：<strong>^</strong><strong>(?=[a-z])</strong><strong>[a-z0-9]+</strong><strong>$ </strong></p>
+<p align="left">元字符“<strong>^</strong>”和“<strong>$</strong>”匹配的只是位置，顺序环视“<strong>(?=[a-z])</strong>”只进行匹配，并不占有字符，也不将匹配的内容保存到最终的匹配结果，所以都是零宽度的。</p>
+<p align="left">这个正则的意义就是匹配由字母和数字组成的，第一个字符是字母的字符串。</p>
+<p align="left">匹配过程：</p>
+<p align="left">首先由元字符“<strong>^</strong>”取得控制权，从位置0开始匹配，“<strong>^</strong>”匹配的就是开始位置“<strong>位置0</strong>”，匹配成功，控制权交给顺序环视“<strong>(?=[a-z])</strong>”；</p>
+<p align="left">“<strong>(?=[a-z])</strong>”要求它所在位置右侧必须是字母才能匹配成功，零宽度的子表达式之间是不互斥的，即同一个位置可以同时由多个零宽度子表达式匹配，所以它也是从位置0尝试进行匹配，位置0的右侧是字符“<strong>a</strong>”，符合要求，匹配成功，控制权交给“<strong>[a-z0-9]+</strong>”；</p>
+<p align="left">因为“<strong>(?=[a-z])</strong>”只进行匹配，并不将匹配到的内容保存到最后结果，并且“<strong>(?=[a-z])</strong>”匹配成功的位置是位置0，所以“<strong>[a-z0-9]+</strong>”也是从位置0开始尝试匹配的，“<strong>[a-z0-9]+</strong>”首先尝试匹配“<strong>a</strong>”，匹配成功，继续尝试匹配，可以成功匹配接下来的“<strong>1</strong>”和“<strong>2</strong>”，此时已经匹配到位置3，位置3的右侧已没有字符，这时会把控制权交给“<strong>$</strong>”；</p>
+<p align="left">元字符“<strong>$</strong>”从位置3开始尝试匹配，它匹配的是结束位置，也就是“<strong>位置3</strong>”，匹配成功。</p>
+<p align="left">此时正则表达式匹配完成，报告匹配成功。匹配结果为“<strong>a12</strong>”，开始位置为0，结束位置为3。其中“<strong>^</strong>”匹配位置0，“<strong>(?=[a-z])</strong>”匹配位置0，“<strong>[a-z0-9]+</strong>”匹配字符串“<strong>a12</strong>”，“<strong>$</strong>”匹配位置3。</p>
+            
+            <div class="art_xg">
+
+</div>
+<div class="clearfix">
+
+
+</div>
+        <div class="jb51ewm"><div class="fl"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/jb51ewm.png"></div><div class="fr"><p>微信公众号搜索 “ <span>脚本之家</span> ” ，选择关注</p><p>程序猿的那些事、送书等活动等着你</p></div></div></div><!--endmain-->
+<div class="tags clearfix">
+	<i class="icon-tag"></i>
+	<ul class="meta-tags items">
+	  <li class="tag item"><a href="http://common.jb51.net/tag/%E6%AD%A3%E5%88%99/1.htm" target="_blank" title="搜索关于正则的文章" rel="nofollow">正则</a></li>
+<li class="tag item"><a href="http://common.jb51.net/tag/NFA/1.htm" target="_blank" title="搜索关于NFA的文章" rel="nofollow">NFA</a></li>
+<li class="tag item"><a href="http://common.jb51.net/tag/%E5%BC%95%E6%93%8E%E5%8C%B9%E9%85%8D/1.htm" target="_blank" title="搜索关于引擎匹配的文章" rel="nofollow">引擎匹配</a></li>
+
+	</ul>
+</div>        
+
+<div class="lbd clearfix">
+<div style=""><div style="margin-right:0px;"><div style="cursor:auto;"><div style="padding:0px;"><iframe width="700" frameborder="0" height="260" scrolling="no" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/s(1).html"></iframe></div></div></div></div><script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/lgypofdip.js"></script>
+
+</div>
+<div id="shoucang"></div>
+
+<div class="xgcomm clearfix">
+	<h2>相关文章</h2>
+	<ul><li class="lbd clearfix"><div id="_1034krdtv9t" style=""><iframe width="700" frameborder="0" height="120" scrolling="no" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/s(2).html"></iframe></div><script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/dyqhaquun.js"></script>
+</li><li><div class="item-inner"><a href="https://www.jb51.net/article/38691.htm" title="常用的JQuery数字类型验证正则表达式整理" class="img-wrap" target="_blank"> <img alt="常用的JQuery数字类型验证正则表达式整理" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg0.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/38691.htm" title="常用的JQuery数字类型验证正则表达式整理">常用的JQuery数字类型验证正则表达式整理</a></p><div class="item-info"><div class="js">本文整理了一些常用的数字类型验证正则，希望大家在使用过程中可以参考下</div><span class="lbtn" style="float:right"> 2013-06-06 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/135783.htm" title="常用的正则表达式实例整理" class="img-wrap" target="_blank"> <img alt="常用的正则表达式实例整理" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg1.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/135783.htm" title="常用的正则表达式实例整理">常用的正则表达式实例整理</a></p><div class="item-info"><div class="js">这篇文章主要介绍了常用的正则表达式实例整理,非常不错，具有参考借鉴价值，需要的朋友可以参考下</div><span class="lbtn" style="float:right"> 2018-03-03 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/3352.htm" title="正则表达式学习笔记" class="img-wrap" target="_blank"> <img alt="正则表达式学习笔记" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg2.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/3352.htm" title="正则表达式学习笔记">正则表达式学习笔记</a></p><div class="item-info"><div class="js">正则表达式学习笔记...</div><span class="lbtn" style="float:right"> 2006-10-10 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/21400.htm" title="ASP 正则表达式常用的几种方法(execute、test、replace)" class="img-wrap" target="_blank"> <img alt="ASP 正则表达式常用的几种方法(execute、test、replace)" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg3.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/21400.htm" title="ASP 正则表达式常用的几种方法(execute、test、replace)">ASP 正则表达式常用的几种方法(execute、test、replace)</a></p><div class="item-info"><div class="js">asp下正则表达式常用的几种方法，需要的朋友可以参考下。</div><span class="lbtn" style="float:right"> 2009-12-12 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/52594.htm" title="正则表达式(括号)、[中括号]、{大括号}的区别小结" class="img-wrap" target="_blank"> <img alt="正则表达式(括号)、[中括号]、{大括号}的区别小结" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg4.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/52594.htm" title="正则表达式(括号)、[中括号]、{大括号}的区别小结">正则表达式(括号)、[中括号]、{大括号}的区别小结</a></p><div class="item-info"><div class="js">这篇文章主要介绍了正则表达式(括号)、[中括号]、{大括号}的区别小结,本文用(\s*)[\s*]{\s*}做例子,需要的朋友可以参考下</div><span class="lbtn" style="float:right"> 2014-07-07 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/2823.htm" title="正则表达式中使用变量赋值" class="img-wrap" target="_blank"> <img alt="正则表达式中使用变量赋值" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg5.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/2823.htm" title="正则表达式中使用变量赋值">正则表达式中使用变量赋值</a></p><div class="item-info"><div class="js">正则表达式中使用变量赋值...</div><span class="lbtn" style="float:right"> 2006-10-10 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/31552.htm" title="js正则表达式之RegExp对象属性lastIndex，lastMatch，lastParen，lastContext，rightContext属性讲解" class="img-wrap" target="_blank"> <img alt="js正则表达式之RegExp对象属性lastIndex，lastMatch，lastParen，lastContext，rightContext属性讲解" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg6.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/31552.htm" title="js正则表达式之RegExp对象属性lastIndex，lastMatch，lastParen，lastContext，rightContext属性讲解">js正则表达式之RegExp对象属性lastIndex，lastMatch，lastParen，</a></p><div class="item-info"><div class="js">js正则表达式之RegExp对象属性lastIndex，lastMatch($&amp;)，lastParen($+),lastContext,rightContext属性的讲解</div><span class="lbtn" style="float:right"> 2012-10-10 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/58.htm" title="JScript中正则表达函数的说明与应用" class="img-wrap" target="_blank"> <img alt="JScript中正则表达函数的说明与应用" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg7.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/58.htm" title="JScript中正则表达函数的说明与应用">JScript中正则表达函数的说明与应用</a></p><div class="item-info"><div class="js">JScript中正则表达函数的说明与应用...</div><span class="lbtn" style="float:right"> 2006-06-06 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/102468.htm" title="正则表达式教程之前后查找lookaround详解" class="img-wrap" target="_blank"> <img alt="正则表达式教程之前后查找lookaround详解" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg8.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/102468.htm" title="正则表达式教程之前后查找lookaround详解">正则表达式教程之前后查找lookaround详解</a></p><div class="item-info"><div class="js">这篇文章主要介绍了正则表达式教程之前后查找lookaround,结合具体问题分析了向前查找及向后查找功能的实现技巧与注意事项,需要的朋友可以参考下</div><span class="lbtn" style="float:right"> 2017-01-01 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/19947.htm" title="使用正则表达式替换表情符号核心代码" class="img-wrap" target="_blank"> <img alt="使用正则表达式替换表情符号核心代码" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcimg9.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/19947.htm" title="使用正则表达式替换表情符号核心代码">使用正则表达式替换表情符号核心代码</a></p><div class="item-info"><div class="js">正则表达式替换表情符号核心代码，大家可以参考下。</div><span class="lbtn" style="float:right"> 2009-09-09 </span></div></div></div></div></li>
+</ul>
+</div>
+<div class="lbd clearfix mt5">
+<div id="_hbw4q76jlg" style="width: 100%;"><iframe width="700" frameborder="0" height="260" scrolling="no" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/s(3).html"></iframe></div><script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/fasjibjzg.js"></script>
+
+</div>
+<a href="https://www.jb51.net/article/19332.htm#comments"></a>
+<div id="comments">
+<h2>最新评论</h2>
+<div class="pd5"><div id="SOHUCS" sid="art_19332"></div></div>
+</div>
+      </div><!--endborder-->
+      </div><!--end fl-->
+      
+<div class="w350 fr">
+<div class="article-right">
+<div class="r300 clearfix"><script async="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/f(8).txt"></script><ins class="adsbygoogle" style="display: inline-block; width: 300px; height: 250px;" data-ad-client="ca-pub-6384567588307613" data-ad-slot="2817964327" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:300px;height:250px;" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/saved_resource.html"></iframe></ins></ins></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+<div class="tabTitleBar mt10 bgf borderTblue">
+<div class="borderTnone pb10 YaHei">
+<h4 class="blue">大家感兴趣的内容</h4>
+<ul class="newsList newList-in">
+<li><em class="no1">1</em><a href="https://www.jb51.net/article/16829.htm" title="Java 正则表达式详解" target="_blank">Java 正则表达式详解</a></li><li><em class="no2">2</em><a href="https://www.jb51.net/article/19713.htm" title="正则表达式匹配任意字符（包括换行符）的写法" target="_blank">正则表达式匹配任意字符（包括换</a></li><li><em class="no3">3</em><a href="https://www.jb51.net/article/31182.htm" title="比较正宗的验证邮箱的正则表达式js代码详解" target="_blank">比较正宗的验证邮箱的正则表达式</a></li><li><em class="no4">4</em><a href="https://www.jb51.net/article/21292.htm" title="javascript 手机号码正则表达式验证函数" target="_blank">javascript 手机号码正则表达式验</a></li><li><em class="no5">5</em><a href="https://www.jb51.net/article/96201.htm" title="最新手机号码、电话号码正则表达式" target="_blank">最新手机号码、电话号码正则表达</a></li><li><em class="no6">6</em><a href="https://www.jb51.net/article/43949.htm" title="JS利用正则配合replace替换指定字符" target="_blank">JS利用正则配合replace替换指定字</a></li><li><em class="no7">7</em><a href="https://www.jb51.net/article/28007.htm" title="js正则函数match、exec、test、search、replace、split使用介绍集合" target="_blank">js正则函数match、exec、test、s</a></li><li><em class="no8">8</em><a href="https://www.jb51.net/article/31478.htm" title="正则中需要转义的特殊字符小结" target="_blank">正则中需要转义的特殊字符小结</a></li><li><em class="no9">9</em><a href="https://www.jb51.net/article/52491.htm" title="正则表达式匹配不包含某些字符串的技巧" target="_blank">正则表达式匹配不包含某些字符串</a></li><li><em class="no10">10</em><a href="https://www.jb51.net/article/31207.htm" title="grep用法详解 grep与正则表达式" target="_blank">grep用法详解 grep与正则表达式</a></li>
+</ul>
+</div>
+</div>
+<div class="r300 clearfix mt10"><script async="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/f(8).txt"></script><!--thea+300*250--><ins class="adsbygoogle" style="display: inline-block; width: 300px; height: 250px;" data-ad-client="ca-pub-6389290466807248" data-ad-slot="6788945816" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;width:300px;height:250px;" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/saved_resource(1).html"></iframe></ins></ins></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script><div class="blank5"></div><a href="http://click.aliyun.com/m/21950/" target="_blank"><img alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/ali_300_1.jpg" width="300" height="100"></a><div class="blank5"></div><a href="https://cloud.tencent.com/act/special/amd?fromSource=gwzcw.1087961.1087961.1087961" target="_blank"><img alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/txy300.gif" width="300" height="100"></a><div class="blank5"></div><a href="http://27.arrowshoe.com/" target="_blank"><img alt="" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/37cdn.jpg" width="300" height="100"></a>
+</div>
+<div class="tabTitleBar mt10 bgf borderTblue">
+<div class="borderTnone pb10 YaHei">
+<h4 class="blue">最近更新的内容</h4>
+<ul class="newsListA">
+<li><a href="https://www.jb51.net/article/19334.htm" title="正则 捕获组（capture group）" target="_blank">正则 捕获组（capture group）</a></li><li><a href="https://www.jb51.net/article/109.htm" title="常用的匹配正则表达式和实例" target="_blank">常用的匹配正则表达式和实例</a></li><li><a href="https://www.jb51.net/article/118524.htm" title="使用正则表达式(regex_replace)模拟读取INI文件" target="_blank">使用正则表达式(regex_replace)模拟读取I</a></li><li><a href="https://www.jb51.net/article/38691.htm" title="常用的JQuery数字类型验证正则表达式整理" target="_blank">常用的JQuery数字类型验证正则表达式整理</a></li><li><a href="https://www.jb51.net/article/73038.htm" title="php获取超链接文本内容的正则表达式(五种方法)" target="_blank">php获取超链接文本内容的正则表达式(五种</a></li><li><a href="https://www.jb51.net/article/56.htm" title="正则表达式验证" target="_blank">正则表达式验证</a></li><li><a href="https://www.jb51.net/article/31168.htm" title="正则表达式的优化全面详解( 三江小渡)" target="_blank">正则表达式的优化全面详解( 三江小渡)</a></li><li><a href="https://www.jb51.net/article/14565.htm" title="javascript正则表达式分析" target="_blank">javascript正则表达式分析</a></li><li><a href="https://www.jb51.net/article/102462.htm" title="正则表达式验证IPV4地址功能实例分析" target="_blank">正则表达式验证IPV4地址功能实例分析</a></li><li><a href="https://www.jb51.net/article/10435.htm" title="javascript用正则表达式把1234567890替换为abcdefghij" target="_blank">javascript用正则表达式把1234567890替换</a></li>
+</ul>
+</div>
+</div>   
+<div class="r300 clearfix mt10"><div class="idc3"><a href="http://www.021.net/" target="_blank"><h1>众生网络</h1><span>品牌服务器租用</span> </a><a href="http://www.geisnic.com/" target="_blank"><h1>集思网络</h1><span>VPS主机</span> </a><a href="http://www.33ip.com/" target="_blank"><h1>枫信科技</h1><span>IDC服务商</span> </a></div>
+</div>
+<div class="tabTitleBar mt10 bgf borderTblue">
+<div class="borderTnone pb10 YaHei">
+<h4 class="blue">常用在线小工具</h4>
+<ul class="newsListA"><li><a href="http://tools.jb51.net/code/css" target="_blank"><font color="red">CSS代码工具</font></a></li><li><a href="http://tools.jb51.net/code/js" target="_blank"><font color="red">JavaScript代码格式化工具</font></a></li><li><a href="http://tools.jb51.net/code/xmlformat" target="_blank">在线XML格式化/压缩工具</a></li><li><a href="http://tools.jb51.net/code/phpformat" target="_blank"><font color="red">php代码在线格式化美化工具</font></a></li><li><a href="http://tools.jb51.net/code/sqlcodeformat" target="_blank">sql代码在线格式化美化工具</a></li><li><a href="http://tools.jb51.net/transcoding/html_transcode" target="_blank">在线HTML转义/反转义工具</a></li><li><a href="http://tools.jb51.net/code/json" target="_blank">在线JSON代码检验/检验/美化/格式化</a></li><li><a href="http://tools.jb51.net/regex/javascript" target="_blank">JavaScript正则在线测试工具</a></li><li><a href="http://tools.jb51.net/transcoding/jb51qrcode" target="_blank">在线生成二维码工具(加强版)</a></li><li><a href="http://tools.jb51.net/" target="_blank">更多在线工具</a></li>
+</ul>
+</div>
+</div>
+<div class="r300 clearfix mt10 mb10"><a href="http://tuidc.com/" target="_blank"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/tengyou300.gif" width="300" height="100"></a><div class="blank5"></div><a href="http://www.enkj.com/special/cloud180701/" target="_blank"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/enkj300.gif" alt="云服务器" width="300" height="100"></a>
+</div> 
+<div class="rFixedBox" style="position: static; top: 0px;">
+<script type="text/javascript">jb51_a_d("jb51xf");</script><script type="text/javascript">var cpro_id="u1397867";(window["cproStyleApi"] = window["cproStyleApi"] || {})[cpro_id]={at:"3",rsi0:"300",rsi1:"380",pat:"6",tn:"baiduCustNativeAD",rss1:"#FFFFFF",conBW:"1",adp:"1",ptt:"0",titFF:"%E5%BE%AE%E8%BD%AF%E9%9B%85%E9%BB%91",titFS:"14",rss2:"#000000",titSU:"0",ptbg:"90",piw:"0",pih:"0",ptp:"0"}</script><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/c.js" type="text/javascript"></script><div id="BAIDU_SSP__wrapper_u1397867_0" style="width: 300px; height: 380px; display: inline-block;"><iframe id="iframeu1397867_0" name="iframeu1397867_0" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/bcpm.html" width="300" height="380" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:300px;height:380px" allowtransparency="true"></iframe></div>
+</div>
+  </div>   
+      
+      </div><!--end fr-->
+      </div>
+</div><!--end content-->
+<div id="footer">
+<div class="main clearfix">
+<p>
+<a rel="nofollow" href="https://www.jb51.net/about.htm" target="_blank">关于我们</a> - 
+<a rel="nofollow" href="https://www.jb51.net/support.htm" target="_blank">广告合作</a> - 
+<a rel="nofollow" href="https://www.jb51.net/linkus.htm" target="_blank">联系我们</a> -  
+<a rel="nofollow" href="https://www.jb51.net/sm.htm" target="_blank">免责声明</a> -  
+<a rel="nofollow" href="https://www.jb51.net/sitemap.htm" target="_blank">网站地图</a> - 
+<a rel="nofollow" href="tencent://message/?uin=461478385&amp;Site=http://www.jb51.net" target="_blank">投诉建议</a> - 
+<a rel="nofollow" href="https://www.jb51.net/up.htm" target="_blank">在线投稿</a>
+</p>
+<p><a rel="nofollow" class="ba" target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32031102000137"><img src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/ghs.png"> 苏公网安备 32031102000137号</a>&nbsp;&nbsp;<a href="http://www.miibeian.gov.cn/" class="ba" rel="nofollow" target="_blank">苏ICP备14036222号</a></p>
+<p>&#169;CopyRight 2006-2018 JB51.Net Inc All Rights Reserved. 脚本之家 版权所有</p>
+</div>
+</div><!--end footer-->
+<link type="text/css" rel="stylesheet" href="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/shCore.css">
+<link type="text/css" rel="Stylesheet" href="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/shThemeDefault.css">
+<script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/shCore.js"></script>
+<script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/shAutoloader.js"></script>
+<script type="text/javascript">
+(function(){
+	var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+/*更多导航*/
+$(".nav_top p").hover(function(){$(this).addClass("hover")},function(){$(this).removeClass("hover")});
+
+if (top.location != self.location)top.location=self.location;
+
+var varwindow=$(window);
+$(function(){
+	$('#content').find('img').each(function(){
+        var img = this;
+        if (img.width >= 650){
+            img.style.width = "650px";
+            img.style.height = "auto";
+            //$(img).removeAttr('height');
+            var aTag = document.createElement('a');
+            aTag.href = img.src;
+			aTag.target="_blank";
+            $(aTag).addClass('bPic')
+            .insertAfter(img).append(img)
+          }
+    });
+	varwindow.scroll(function()
+    {	
+    	//rFixedBox跟随滚动
+    	var h = varwindow.height();
+        var top = varwindow.scrollTop();
+    	var rFixedBox = $('.rFixedBox').prev().offset();
+        var fixedTop = rFixedBox.top;
+		
+        if(top>=fixedTop+344)
+        {
+			var h1 = parseInt($('#content').children('.main').height());
+			if(parseInt(top) + 340 < h1){
+				$('.rFixedBox').css({'position':'fixed','top': 0});
+			}else{
+				$('.rFixedBox').css({'position':'absolute','top': h1-510});
+			}
+        }
+        else
+        {
+            $('.rFixedBox').css({'position':'static', 'top':0});   
+        }	
+       /* return true;*/
+	   
+	   /*右侧快捷菜单*/
+	   sideFixed();
+    });
+	var ww = varwindow.width();
+	
+	function sideFixed(){
+	var scrolltop = document.body.scrollTop || document.documentElement.scrollTop;
+	var a1 = 550;
+	if(ww>440){
+		if(a1<=scrolltop){
+			$('#right-share').slideDown();
+			}
+		else{
+			$('#right-share').slideUp();
+			}
+		}
+	}
+	$('.rshare-weixin').hover(function(){
+			$('#weixin-code').removeClass('hide');
+		},function(){
+			$('#weixin-code').addClass('hide');
+		});
+	/*二维码*/
+	$('#right-share .rshare-top').on('click',function(){
+        $('html,body').animate({'scrollTop':0},500);
+    });
+/*$(document).ready(function() {
+  $("#content img").unveil();
+});	*/
+
+if(suoyin=="ok"){
+	GenerateContentList();
+}
+
+SyntaxHighlighter.autoloader(
+	'applescript			/jslib/syntaxhighlighter/scripts/shBrushAppleScript.js',
+	'actionscript3 as3		/jslib/syntaxhighlighter/scripts/shBrushAS3.js',
+	'bash shell				/jslib/syntaxhighlighter/scripts/shBrushBash.js',
+	'coldfusion cf			/jslib/syntaxhighlighter/scripts/shBrushColdFusion.js',
+	'cpp c					/jslib/syntaxhighlighter/scripts/shBrushCpp.js',
+	'obj-c objc				/jslib/syntaxhighlighter/scripts/shBrushObjC.js',
+	'c# c-sharp csharp		/jslib/syntaxhighlighter/scripts/shBrushCSharp.js',
+	'css					/jslib/syntaxhighlighter/scripts/shBrushCss.js',
+	'delphi pascal			/jslib/syntaxhighlighter/scripts/shBrushDelphi.js',
+	'diff patch pas			/jslib/syntaxhighlighter/scripts/shBrushDiff.js',
+	'erl erlang				/jslib/syntaxhighlighter/scripts/shBrushErlang.js',
+	'groovy					/jslib/syntaxhighlighter/scripts/shBrushGroovy.js',
+	'haxe hx				/jslib/syntaxhighlighter/scripts/shBrushHaxe.js',
+	'java					/jslib/syntaxhighlighter/scripts/shBrushJava.js',
+	'jfx javafx				/jslib/syntaxhighlighter/scripts/shBrushJavaFX.js',
+	'js jscript javascript	/jslib/syntaxhighlighter/scripts/shBrushJScript.js',
+	'perl pl				/jslib/syntaxhighlighter/scripts/shBrushPerl.js',
+	'php					/jslib/syntaxhighlighter/scripts/shBrushPhp.js',
+	'text plain				/jslib/syntaxhighlighter/scripts/shBrushPlain.js',
+	'py python				/jslib/syntaxhighlighter/scripts/shBrushPython.js',
+	'ruby rails ror rb		/jslib/syntaxhighlighter/scripts/shBrushRuby.js',
+	'scala					/jslib/syntaxhighlighter/scripts/shBrushScala.js',
+	'sql					/jslib/syntaxhighlighter/scripts/shBrushSql.js',
+	'vb vbnet				/jslib/syntaxhighlighter/scripts/shBrushVb.js',
+	'ps powershell			/jslib/syntaxhighlighter/scripts/shBrushPowerShell.js',
+	'xml xhtml xslt html	/jslib/syntaxhighlighter/scripts/shBrushXml.js'
+);
+SyntaxHighlighter.all();
+});
+var ourl="";
+</script>
+<script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/arcts.js"></script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<div id="tongji">
+<script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/tongji.js"></script><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/stat.php" language="JavaScript"></script><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/core.php" charset="utf-8" type="text/javascript"></script><a href="http://www.cnzz.com/stat/website.php?web_id=1585378" target="_blank" title="站长统计">站长统计</a><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/stat(1).php" language="JavaScript"></script><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/core(1).php" charset="utf-8" type="text/javascript"></script><a href="http://www.cnzz.com/stat/website.php?web_id=5488963" target="_blank" title="站长统计">站长统计</a>
+</div>
+<script type="text/javascript">
+//tu+
+var cpro_id = "u1893014";
+document.write('<scri'+'pt src="//cpro.baidustatic.com/cpro/ui/i.js" type="text/javascript"></s'+'cript>');
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?2f793ca9dd6f4c32488903eed5c7fbcb":"https://jspassport.ssl.qhimg.com/11.0.1.js?2f793ca9dd6f4c32488903eed5c7fbcb";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/i.js" type="text/javascript"></script><script src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/11.0.1.js" id="sozz"></script><script charset="utf-8" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/ab77b6ea7f3fbf79.js"></script> 
+<script type="text/javascript" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/pl.asp"></script>
+<script type="application/ld+json">
+        {
+            "@context": "https://ziyuan.baidu.com/contexts/cambrian.jsonld",
+            "@id": "https://www.jb51.net/article/19332.htm",
+            "appid": "1549322409310619",
+            "title": "正则基础之 NFA引擎匹配原理",
+            "description": "不懂正则引擎原理的情况下，同样可以写出满足需求的正则，但是不知道原理，却很难写出高效且没有隐患的正则。所以对于经常使用正则，或是有兴趣深入学习正则的人，还是有必要了解一下正则引擎的匹配原理的。",
+            "pubDate": "2009-07-24T15:58:42",
+			"upDate": "2009-07-24T15:58:42"
+        }
+</script>
+
+
+<!-- published at 2018/6/11 0:18:19By dxycms qq:461478385  -->
+<iframe id="google_osd_static_frame_6509514721868" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./正则基础之 NFA引擎匹配原理_正则表达式_脚本之家_files/saved_resource(2).html"></iframe></body></html>

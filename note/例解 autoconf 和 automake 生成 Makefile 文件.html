@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html -->
+<html lang="zh-CN" style="" class="applicationcache geolocation history postmessage svg websockets localstorage sessionstorage websqldatabase webworkers hashchange pointerevents canvas audio canvastext video webgl cssgradients multiplebgs opacity rgba inlinesvg hsla supports svgclippaths smil no-touchevents fontface generatedcontent textshadow cssanimations backgroundsize borderimage borderradius boxshadow csscolumns csscolumns-width csscolumns-span csscolumns-fill csscolumns-gap csscolumns-rule csscolumns-rulecolor csscolumns-rulestyle csscolumns-rulewidth csscolumns-breakbefore csscolumns-breakafter csscolumns-breakinside flexbox flexboxlegacy cssreflections csstransforms csstransforms3d csstransitions indexeddb indexeddb-deletedatabase js ibm-v18 ibm-cxtype-4g no-hires linux chrome chrome6 webkit webkit5 ibm-grid-xlarge greater-china-imt"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+<meta name="viewport" content="width=device-width, initial-scale=1">      
+<link rel="icon" href="https://www.ibm.com/favicon.ico">
+<link rel="canonical" href="http://www.ibm.com/developerworks/cn/linux/l-makefile/index.html">
+<meta name="geo.country" content="CN">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2006">
+<meta name="dcterms.date" content="2006-09-21">
+<meta name="description" content="本文介绍了在 linux 系统中，通过 Gnu autoconf 和 automake 生成 Makefile 的方法。主要探讨了生成 Makefile 的来龙去脉及其机理，接着详细介绍了配置 Configure.in 的方法及其规则。">	
+<meta name="keywords" content="Linux, Makefile, automake, autoconf, tttlca">
+<meta name="robots" content="index,follow">
+<title>例解 autoconf 和 automake 生成 Makefile 文件</title>
+    
+<script type="text/javascript" async="" charset="utf-8" id="utag_19" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/hotjar-42920.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_53" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/js"></script><script type="text/javascript" async="" charset="utf-8" id="tealium_cormetrics2" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/eluminate.js"></script><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/analytics-marketing.js" type="text/javascript" async=""></script><script type="text/javascript" async="" charset="utf-8" id="dle_api_165bb465c3136e69c75849c1311165378d647ddece91218d46ee143715308587" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/p_165bb465c3136e69c75849c1311165378d647ddece91218d46ee143715308587.js"></script><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/p_devwrks.js" type="application/javascript" async=""></script><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/p_devwrks.js" type="application/javascript" async=""></script><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/bluemix-analytics.min.js" type="application/javascript" async=""></script><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/callback=_dl.fn.lotameApi.callback" type="application/javascript" async=""></script><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/utag.js" type="application/javascript" async=""></script><script> 
+    digitalData = {
+        "page":{
+            "category":{
+                "primaryCategory":"SOFDCLNXCN"
+            },
+            "pageInfo":{
+                "effectiveDate":"2006-09-21",
+                "language":"zh-CN",
+                "publishDate":"2006-09-21",
+                "publisher":"IBM Corporation",
+                "version":"v18",
+                "ibm":{ 
+                    "contentDelivery":"IBM developerWorks template",
+                    "contentProducer":"IBM developerWorks",
+                    "country":"CN",
+                    "owner":"developerWorks/China/IBM",
+                    "siteID":"DEVWRKS",
+                    "subject":"SWGC0",
+                    "type":"CT316",
+                    "topic":"开发工具",
+                    "topicId":"553",
+                    "contentArea":"linux",
+                    "contentAreaId":"2",
+                    "contentType":"article",
+                    "contentId":"161255",
+                },
+                "keywords":"Linux, Makefile, automake, autoconf, tttlca",
+                "description":"本文介绍了在 linux 系统中，通过 Gnu autoconf 和 automake 生成 Makefile 的方法。主要探讨了生成 Makefile 的来龙去脉及其机理，接着详细介绍了配置 Configure.in 的方法及其规则。"
+            }
+        }
+    };
+    window._analytics = {
+        "coremetrics": false,
+        "optimizely": false,
+        "googleAddServices": false,
+        "addRoll": false,
+        "intercom": false,
+        "fullStory": false,
+        "hotjar": false,
+        "tealeaf": false,
+        "nps": false,
+        "segment_key": 'HU3dbkAG5wE0F1IkRf9S1RexlAqo3jby'
+    };
+</script>
+	
+    <meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@developerworks">
+<meta property="og:title" content="例解 autoconf 和 automake 生成 Makefile 文件">
+<meta property="og:description" content="本文介绍了在 linux 系统中，通过 Gnu autoconf 和 automake 生成 Makefile 的方法。主要探讨了生成 Makefile 的来龙去脉及其机理，接着详细介绍了配置 Configure.in 的方法及其规则。">
+    <meta property="og:image" content="http://www.ibm.com/developerworks/i/dw-social-201508.png">
+<!-- Segment meta tag -->
+<meta name="segment" property="developerWorks (developerWorks)" producttitle="developerWorks" value="Linux Chinese (developerWorks)">      
+<!-- SITE MON : START (DO NOT DELETE) -->
+<!-- developerWorks monitoring token -->
+<!-- SITE MON : END (DO NOT DELETE) -->
+
+<!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+<!-- <script src="//cdn.optimizely.com/js/5399420604.js"></script> -->
+<!-- BEGIN: Use this section to set page specific variables for the Page Tag -->
+<script language="JavaScript">var NTPT_PGEXTRA="ibmSkillLevel=1&ibmCmaId=161255&ibmContentAreas=linux";</script>
+<!--END -->
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/ida_stats.js"></script>
+<link href="./例解 autoconf 和 automake 生成 Makefile 文件_files/www.css" rel="stylesheet">
+<link href="./例解 autoconf 和 automake 生成 Makefile 文件_files/syntaxhighlighter.css" rel="stylesheet">
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/www.js"></script><style></style>
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/syntaxhighlighter.js"></script>    
+<link href="./例解 autoconf 和 automake 生成 Makefile 文件_files/tables.css" rel="stylesheet">
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/tables.js"></script>   
+<!--  Masthead/footer  -->
+<link href="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-mf-v18.css" rel="stylesheet">
+<!-- <link href="//dw1.s81c.com/developerworks/css/dw-mf/v18/alt-signedin-ux.css" rel="stylesheet" /> -->   
+<!--[if lt IE 9]>
+    <link href="//dw1.s81c.com/developerworks/css/dw-mf/v18/dw-mf-ie8fix.css?v=022216" rel="stylesheet" />
+<![endif]-->
+<link href="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-article.css" rel="stylesheet">
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-auth-properties.js"></script>
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-auth.js"></script>
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-mf.js"></script>
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-include.js"></script>     
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-article.js"></script>
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-auto-links.js"></script>     
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/tactic.js"></script>
+<script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/tacticbindlinks.js"></script>
+
+<!-- 
+<PageMap>
+    <DataObject type="document">
+        <Attribute name="topic">开发工具</Attribute>
+        <Attribute name="topicId">553</Attribute>
+        <Attribute name="contentArea">linux</Attribute>
+        <Attribute name="contentAreaId">2</Attribute>
+        <Attribute name="abstract">本文介绍了在 linux 系统中，通过 Gnu autoconf 和 automake 生成 Makefile 的方法。主要探讨了生成 Makefile 的来龙去脉及其机理，接着详细介绍了配置 Configure.in 的方法及其规则。</Attribute>
+        <Attribute name="pub.date">2006-09-21</Attribute>
+        <Attribute name="contentType">article</Attribute>
+    </DataObject>
+</PageMap>
+-->        
+
+<style id="ibm-masthead-hidelinks">@media screen and (max-width: 552px) { .ibm-masthead-categories,#ibm-megamenu-sections{display:none} }@media screen and (max-width: 552px) { .ibm-mh-marketplace-link{display:none} }</style><style id="ibm-sitenav-menu-hidelinks">@media screen and (max-width: 694px) {.ibm-sitenav-menu-container .ibm-sitenav-menu-list > ul > li {display:none}.ibm-sitenav-menu-list > ul > .ibm-sitenav-menu-item-right {display:block}}@media screen and (min-width: 695px) {.ibm-mobilemenu-sitenavmenu > ul > li {display:none}}@media screen and (max-width: 343px) {.ibm-sitenav-menu-list > ul > .ibm-sitenav-menu-item-right {display:none}}@media screen and (min-width: 344px) {.ibm-mobilemenu-sitenavmenu > ul > .ibm-sitenav-menu-item-right {display:none}}</style><style type="text/css" class="jquery-comments-css">.jquery-comments ul.navigation li.active:after {background: #2793e6 !important;</style><style type="text/css" class="jquery-comments-css">.jquery-comments ul.navigation ul.dropdown li.active {background: #2793e6 !important;</style><style type="text/css" class="jquery-comments-css">.jquery-comments .highlight-background {background: #2793e6 !important;</style><style type="text/css" class="jquery-comments-css">.jquery-comments .highlight-font {color: #2793e6 !important;}</style><style type="text/css" class="jquery-comments-css">.jquery-comments .highlight-font-bold {color: #2793e6 !important;font-weight: bold;}</style><script type="text/javascript" async="" charset="utf-8" id="utag_ibm.web_53" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/utag.53.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_ibm.web_94" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/utag.94.js"></script><script type="text/javascript" async="" charset="utf-8" id="tiqapp" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/utag.v.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_ibm.web_19" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/utag.19.js"></script><script type="text/javascript" async="" charset="utf-8" id="LOTCC_10026" src="https://tags.crwdcntrl.net/c/10026/cc.js?ns=_cc10026&amp;pre=cn"></script><script type="text/javascript" async="" charset="utf-8" id="utag_ibm.web_45" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/utag.45.js"></script><style type="text/css">@media only screen and (max-width:480px){.truste_box_overlay{width: 100%!important;margin: 0px!important;max-width: 100%!important;box-shadow: rgb(0,0,0,0.2) 0px 0px 16px 2px!important;}}@media only screen and (min-width:481px){.truste_box_overlay{width: 80%!important;margin: 20px auto!important;max-width: 800px!important;box-shadow: rgb(0,0,0,0.2) 0px 0px 16px 2px!important;}}</style><style type="text/css">@font-face {font-family: "ibm-plex-sans"; src: url("https://1.www.s81c.com/common/fonts/plex/v1/ibmplexsans-regular.woff2") format("woff2");font-family: "ibm-plex-sans"; src: url("https://1.www.s81c.com/common/fonts/plex/v1/ibmplexsans-regular.woff") format("woff");}</style><script language="javascript" type="text/javascript" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/50200000.js"></script><script language="javascript" type="text/javascript" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/rules_50200000.js"></script><script language="javascript" type="text/javascript" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dispatcher-v3.js"></script><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/yahoo-min.js" type="text/javascript"></script><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/cp-v3.js" type="text/javascript"></script><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/json-min.js" type="text/javascript"></script><script async="" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/modules-cf5028eda4f4b4aeb82e5b7555a3b16e.js"></script><style type="text/css">iframe#_hjRemoteVarsFrame {display: none !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important;}</style><style type="text/css">.truste_cookie_prefs,#teconsent{display:none !important}</style><script type="text/javascript" async="" charset="utf-8" id="tealium_visitor_service_45main" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/0163b42f510b002331a6dc7000e80406900260610093c"></script><script type="text/javascript" async="" charset="utf-8" id="tealium_visitor_service_45main" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/0163b42f510b002331a6dc7000e80406900260610093c(1)"></script></head>
+<body id="ibm-com" class="ibm-type ibm-sitenav-menu ibm-sitenav-menu-sticky ibm-masthead-sticky ibm-masthead-sticky-showing">
+	
+<div id="ibm-top" class="ibm-landing-page">
+
+<!-- MASTHEAD_BEGIN -->
+<div id="ibm-masthead" role="banner" aria-label="IBM" class="ibm-mhtype-minimal hastransition">
+    <div id="ibm-universal-nav" class="">    
+  
+        <nav role="navigation" aria-label="IBM">
+            <div id="ibm-home"><a href="https://www.ibm.com/cn/zh/?lnk=m">IBM®</a></div>
+            <ul id="ibm-menu-links" role="toolbar" aria-label="Site map" class="ibm-hide">
+                <li><a href="https://www.ibm.com/sitemap/cn/zh/">站点地图</a></li>
+            </ul><div class="ibm-masthead-rightside"><p class="ibm-mh-marketplace-link ibm-button-link ibm-fleft ibm-padding-bottom-0"><a class="ibm-btn-small ibm-btn-sec ibm-btn-blue-50" href="https://www.ibm.com/cn-zh/marketplace?lnk=mp">市场</a></p><div id="ibm-search-module" role="search" aria-labelledby="ibm-masthead" class="ibm-has-scope">
+            <div class="ibm-masthead-search-close"><p class="ibm-ind-link ibm-icononly ibm-padding-bottom-0"><a href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#" class="ibm-close-link ibm-nospacing">关闭</a></p></div><form id="ibm-search-form" action="https://www.ibm.com/Search/" method="get" aria-labelledby="ibm-masthead">
+                <p>
+                    <label for="q">IBM</label>
+                    <input type="text" maxlength="100" value="" placeholder="搜索" name="q" id="q" aria-label="搜索 developerWorks" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="ibm-search-typeahead-container"><input name="lnk" type="hidden" value="mhsrch">
+                    <input type="hidden" value="18" name="v">
+                    <input type="hidden" value="utf" name="en">
+                    <input type="hidden" value="zh" name="lang">
+                    <input type="hidden" value="cn" name="cc">
+                    <input type="hidden" name="sn" value="dw">
+                    <input type="hidden" name="dws" value="cndw">
+                    <input type="hidden" name="hpp" value="20">
+                    <span class="ibm-search-scope ibm-fadeout" aria-expanded="true"><input class="ibm-styled-checkbox" data-init="false" type="checkbox" name="sn" value="" id="ibm-mh-scopeoption"> <label for="ibm-mh-scopeoption">In Marketplace</label></span><button role="button" type="submit" id="ibm-search" class="ibm-search-link" value="提交"><span class="ibm-access">提交</span></button>
+                </p>
+            </form><form class="ibm-hide" id="ibm-default-scope-form" action="https://www.ibm.com/marketplace/search/cn/zh-cn" method="get"><input name="terms" type="text"><input name="lnk" type="hidden" value="mhmpsrch"></form>
+        </div><div id="ibm-search-typeahead-container" aria-expanded="true" class="ibm-search-typeahead-container ibm-fadeout"></div><ul aria-label="Tools" role="menubar" class="ibm-masthead-iconsonly"><li role="presentation" class="ibm-masthead-item-signin"><button role="button" aria-haspopup="true" aria-owns="ibm-signin-minimenu-container" class="ibm-profile-link">我的 IBM</button><ul id="ibm-signin-minimenu-container" role="menu" aria-label="Profile" class="ibm-dropdown-menu">    <li class="ibm-dropdown-menu-primary" role="presentation" data-linktype="notifications">       <a class="" href="https://myibm.ibm.com/dashboard/?lnk=mmi" tabindex="0">我的 IBM</a>     </li>    <li class="ibm-dropdown-menu-primary menu-heading" role="presentation">       <span tabindex="0">developerWorks</span>     </li>   <li class="ibm-dropdown-menu-primary ibm-signin-alt" role="presentation">     <a href="https://www.ibm.com/developerworks/dwwi/jsp/ssologin.jsp?d=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fl-makefile%2Findex.html&amp;lang=zh&amp;a=dwmav" role="menuitem">登录</a>   </li>   <li class="ibm-dropdown-menu-primary dw-register-alt" role="presentation">     <a href="https://www.ibm.com/developerworks/dwwi/jsp/ssoregister.jsp?d=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fl-makefile%2Findex.html&amp;lang=zh&amp;a=dwmav" role="menuitem">注册</a>   </li></ul></li><li role="presentation" class="ibm-masthead-item-menu"><button role="button" aria-haspopup="true" aria-owns="ibm-burger-menu-container" class="ibm-menu-link">站点导航</button></li></ul></div> 
+        </nav>
+  
+        
+       
+    </div>
+</div><div class="ibm-mobilemenu ibm-hide" id="ibm-burger-menu-container" aria-labelledby="ibm-burgermenu-a11y" role="dialog" tabindex="0"><p class="ibm-hide" id="ibm-burgermenu-a11y">站点导航</p><div class="ibm-mobilemenu-close"><p class="ibm-icononly ibm-fright ibm-ind-link ibm-nospacing"><a class="ibm-close-link" href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html?lnk=hm#">关闭</a></p></div><div class="ibm-mobilemenu-section ibm-mobilemenu-sitenavmenu"><ul role="menubar"><li class="ibm-mobile-section-heading ibm-mobile-sitename">
+        <a href="https://www.ibm.com/developerworks/cn/?lnk=hm">
+            <img width="186" height="24" alt="developerWorks®" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-mf-wordmark.svg">
+        </a>
+    </li>
+                            <li class="dw-navpage-learn" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/topics/?lnk=hm" role="menuitem" tabindex="0">学习</a>
+                </li>
+                    
+                <li class="dw-navpage-develop" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/downloads/?lnk=hm" role="menuitem" tabindex="-1">开发</a>
+                </li>                    
+
+                <li class="dw-navpage-connect" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/community/?lnk=hm" role="menuitem" tabindex="-1">社区</a>
+                </li>
+                <li class="ibm-sitenav-menu-item-right">
+                    <a href="https://www.ibm.com/ibm/cn/partners/start/?lnk=hm" role="menuitem" tabindex="-1">合作</a>
+                </li>
+        </ul></div><div class="ibm-mobilemenu-section"><ul class="ibm-mobilemenu-mhlinks" aria-label="发现 IBM"><li><a href="https://www.ibm.com/cn-zh/marketplace?lnk=hmmp">市场</a></li><li><div data-widget="showhide" data-type="panel" class="ibm-show-hide ibm-widget-processed"><h2><a href="javascript:void();">产品</a></h2><div class="ibm-container-body" style="display: none;"><ul><li><a href="https://www.ibm.com/products/cn/zh/?lnk=hmhmpr_cnzh"><span>产品</span></a></li><li><a href="https://www.ibm.com/analytics/cn/zh/?lnk=hmmpr_bua_cnzh&amp;lnk2=learn"><span>大数据与分析</span></a></li><li><a href="https://www.ibm.com/cloud-computing/cn/zh?lnk=hmmpr_bucl_cnzh&amp;lnk2=learn"><span>云计算</span></a></li><li><a href="https://www.ibm.com/ibm/cn/cognitive/outthink/?lnk=hmmpr_buce_cnzh&amp;lnk2=learn"><span>认知</span></a></li><li><a href="https://www.ibm.com/watson/customer-engagement/cn-zh/?lnk=hm"><span>认知客户互动</span></a></li><li><a href="https://www.ibm.com/internet-of-things/cn-zh/?lnk=hmmpr_iot_cnzh&amp;lnk2=learn"><span>物联网</span></a></li><li><a href="https://www.ibm.com/solutions/cn/zh/index.html?lnk=hm"><span>行业解决方案</span></a></li><li><a href="https://www.ibm.com/it-infrastructure/cn-zh/?lnk=hmmpr_buit_cnzh&amp;lnk2=learn"><span>IT 基础架构</span></a></li><li><a href="https://www.ibm.com/mobilefirst/cn/zh/?lnk=hmmpr_bumf_cnzh&amp;lnk2=learn"><span>移动</span></a></li><li><a href="https://www.ibm.com/security/cn-zh/?lnk=hmmpr_buse_cnzh&amp;lnk2=learnquick"><span>IBM 安全</span></a></li><li><a href="https://www.ibm.com/social-business/cn-zh/?lnk=hm"><span>社交协作与人才管理</span></a></li><li><a href="https://www.ibm.com/services/cn/zh/watson/explorer.html?lnk=hm"><span>Watson</span></a></li></ul></div></div></li><li><div data-widget="showhide" data-type="panel" class="ibm-show-hide ibm-widget-processed"><h2><a href="javascript:void();">服务</a></h2><div class="ibm-container-body" style="display: none;"><ul><li><a href="https://www.ibm.com/services/cn-zh/digital-reinvention/case/index.html?lnk=hm"><span>业务咨询</span></a></li><li><a href="https://www.ibm.com/technologyservices/cn/zh/?lnk=hmmse_ts_cnzh&amp;lnk2=learn#technology-outsourcing"><span>技术服务</span></a></li><li><a href="https://www.ibm.com/financing/cn/zh/index.html?lnk=hmmse_fin_cnzh&amp;lnk2=learn"><span>融资</span></a></li><li><a href="https://www.ibm.com/solutions/cn/zh/index.html?lnk=hm"><span>行业解决方案</span></a></li><li><a href="https://www.ibm.com/training/?lnk=hm"><span>培训与技能 (US)</span></a></li></ul></div></div></li><li><a href="https://www.ibm.com/solutions/cn/zh/?lnk=hmmin">行业</a></li><li><div data-widget="showhide" data-type="panel" class="ibm-show-hide ibm-widget-processed"><h2><a href="javascript:void();">开发人员</a></h2><div class="ibm-container-body" style="display: none;"><ul><li><a href="https://www.ibm.com/developerworks/cn/?lnk=hmmdev_dw_cnzh&amp;lnk2=learn"><span>developerWorks</span></a></li><li><a href="https://www.ibm.com/partnerworld?lnk=hmmdev_pw_cnzh&amp;lnk2=learn"><span>PartnerWorld</span></a></li><li><a href="https://www.ibm.com/ibm/cn/partners/start/?masthead=&amp;lnk=hm"><span>云/AI 合作伙伴</span></a></li></ul></div></div></li><li><a href="https://www.ibm.com/support/cn/zh/?lnk=hmmsu_cnzh">支持</a></li><li><a href="https://www.ibm.com/employment/cn/?lnk=hmmca_cnzh">工作机会</a></li></ul></div></div><div class="ibm-mhplaceholder"></div><!-- MASTHEAD_END -->
+	    
+<!-- LAYOUT -->
+<div id="ibm-content-wrapper">
+    <!-- LEADSPACE_BEGIN -->
+    <header role="banner" aria-labelledby="ibm-pagetitle-h1">
+        
+        <!-- MASTHEAD_SITENAV_BEGIN -->
+        <div class="ibm-sitenav-menu-container" data-widgetprocessed="true">
+    <div class="ibm-sitenav-menu-name">
+        <a href="https://www.ibm.com/developerworks/cn/">
+            <img width="186" height="24" alt="developerWorks®" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-mf-wordmark.svg">
+        </a>
+    </div>
+    <div class="ibm-sitenav-menu-list">
+        <ul role="menubar">
+                            <li class="dw-navpage-learn" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/topics/" role="menuitem" tabindex="0">学习</a>
+                </li>
+                    
+                <li class="dw-navpage-develop" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/downloads/" role="menuitem" tabindex="-1">开发</a>
+                </li>                    
+
+                <li class="dw-navpage-connect" role="presentation">
+                    <a href="https://www.ibm.com/developerworks/cn/community/" role="menuitem" tabindex="-1">社区</a>
+                </li>
+                <li class="ibm-sitenav-menu-item-right">
+                    <a href="https://www.ibm.com/ibm/cn/partners/start/" role="menuitem" tabindex="-1">合作</a>
+                </li>
+        </ul>
+    </div>
+</div>        <!-- MASTHEAD_SITENAV_END -->
+        
+        <!-- NAVIGATION_TRAIL_BEGIN -->
+        <div id="ibm-leadspace-head" class="ibm-alternate">
+            <div id="ibm-leadspace-body">
+                <nav aria-label="Breadcrumb" role="navigation">                     
+                            <ul id="dw-navigation-trail" itemscope="" itemtype="http://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://www.ibm.com/developerworks/cn/topics/"><span itemprop="name">学习</span></a><meta itemprop="position" content="1"></li><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://www.ibm.com/developerworks/cn/linux/"><span itemprop="name">Linux</span></a><meta itemprop="position" content="2"></li></ul>
+                </nav>
+            </div>
+        </div>
+        <!-- NAVIGATION_TRAIL_END -->
+        
+    </header>
+    <!-- LEADSPACE_END -->
+    
+    <!-- MAIN_CONTENT_BEGIN -->
+    <main role="main" aria-label=""> 
+        <div id="ibm-pcon">
+            <!-- BEGIN_IBM-CONTENT -->
+            <div id="ibm-content">
+                <!-- BEGIN_IBM-CONTENT-BODY -->
+                <div id="ibm-content-body">
+                    <!-- BEGIN_IBM-CONTENT-MAIN -->
+                    <div id="ibm-content-main" class="dw-article">                        
+                        <!-- BEGIN_INTERIOR-COLUMNS -->
+                                <div class="ibm-columns dw-article-toc">
+                                    <!-- LEFT_6_2_CONTENT_COLUMN_BEGIN -->  
+                                    <div id="dw-article-toc-container" class="ibm-col-6-2">
+                                        <div id="dw-article-toc-body" data-widget="scrollable" data-height="563" style="width: 380px; height: 563px;" class="ibm-widget-processed"><div class="nano-content" tabindex="-1" style="right: -15px;">
+                                            <h2>内容</h2><div class="ibm-alternate-rule"><hr></div><ul role="directory" aria-label="内容" class="ibm-plain-list"><li><a onclick="tocLink(&#39;#ibm-pagetitle-h1&#39;)" role="link" tabindex="0">概览</a></li><li><a onclick="tocLink(&#39;#N1003E&#39;)" role="link" tabindex="0">引子</a></li><li><a onclick="tocLink(&#39;#N10049&#39;)" role="link" tabindex="0">模拟需求</a></li><li><a onclick="tocLink(&#39;#N10064&#39;)" role="link" tabindex="0">工具简介</a></li><li class="dw-highlight"><a onclick="tocLink(&#39;#N1007D&#39;)" role="link" tabindex="0">生成 Makefile 的来龙去脉</a></li><li class=""><a onclick="tocLink(&#39;#N100A4&#39;)" role="link" tabindex="0">Configure.in的八股文</a></li><li class=""><a onclick="tocLink(&#39;#N100E6&#39;)" role="link" tabindex="0">实战Makefile.am</a></li><li class=""><a onclick="tocLink(&#39;#artdownload&#39;)" role="link" tabindex="0">下载资源</a></li><li><a onclick="tocLink(&#39;#icomments&#39;)" role="link" tabindex="0">评论</a></li></ul>
+                                        </div><div class="nano-pane" style="display: none; opacity: 1; visibility: visible;"><div class="nano-slider" style="height: 548px; transform: translate(0px, 0px);"></div></div></div>
+                                    </div>
+                                    <!-- LEFT_6_2_CONTENT_COLUMN_END -->
+                                    
+                                    <!-- CENTER_6_4_CONTENT_COLUMN_BEGIN -->
+                                    <div class="ibm-col-6-4">
+                                        <h1 id="ibm-pagetitle-h1" class="ibm-h1">例解 autoconf 和 automake 生成 Makefile 文件</h1>
+                                        <!-- Article Top Bar -->
+                                                <div class="ibm-columns dw-article-topbar">
+                                                    <!-- Author and article info. -->
+                                                    <div class="ibm-col-6-2 ibm-col-medium-6-4 dw-article-metadata">
+                                                        <div class="dw-article-avatar"><img width="42" height="42" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-author.png" alt=""></div><div class="dw-article-authordate">杨 小华<br><span class="dw-article-pubdate">2006 年 9 月 21 日发布</span></div>
+                                                    </div>
+                                                    <!-- Social -->
+                                                    <div class="ibm-col-6-2 ibm-col-medium-6-4 ibm-col-small-6-2 dw-article-social">
+                                                        <!-- Sharing links -->
+                                                        <div id="dw-article-share-inline">
+                                                            <div class="dw-article-sharelink-inline">
+                                                                <div class="ibm-sharethispage"><h4 class="ibm-bold">分享此页面</h4><p class="ibm-icononly"><a class="ibm-weibo-encircled-link" href="http://service.weibo.com/share/share.php?url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fl-makefile%2Findex.html%&amp;title=%E4%BE%8B%E8%A7%A3%20autoconf%20%E5%92%8C%20automake%20%E7%94%9F%E6%88%90%20Makefile%20%E6%96%87%E4%BB%B6&amp;language=zh_cn" data-id="weibo" onclick="return IBMCore.common.module.sharethispage.gotoUrl(window.open(), this);">Weibo</a><a class="ibm-googleplus-encircled-link" href="https://plus.google.com/share?url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fl-makefile%2Findex.html&amp;t=%E4%BE%8B%E8%A7%A3%20autoconf%20%E5%92%8C%20automake%20%E7%94%9F%E6%88%90%20Makefile%20%E6%96%87%E4%BB%B6" data-id="googleplus" onclick="return IBMCore.common.module.sharethispage.gotoUrl(window.open(), this);">Google+</a><a class="ibm-email-encircled-link" href="mailto:?subject=%E4%BE%8B%E8%A7%A3%20autoconf%20%E5%92%8C%20automake%20%E7%94%9F%E6%88%90%20Makefile%20%E6%96%87%E4%BB%B6&amp;body=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fl-makefile%2Findex.html" data-id="email" onclick="">用电子邮件发送本页面</a></p></div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Number of comments and link to comments -->
+                                                        <div id="dw-article-cmts">
+                                                            <div class="dw-article-cmtslink">
+                                                                <a onclick="tocLink(&#39;#icomments&#39;)" href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#icomments" role="link" tabindex="0" aria-label="Comments">
+                                                                    <img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/dw-article-cmt-icon.png" width="29" height="29" alt="Comments">
+                                                                </a>
+                                                            </div>
+                                                            <div class="dw-article-cmtslink">
+                                                                <a onclick="tocLink(&#39;#icomments&#39;)" href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#icomments" role="link" tabindex="0">
+                                                                    <div id="nCmts">3</div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                        <!-- Article Body -->
+                                        
+                                        <h2 id="N1003E" class="ibm-h2">引子</h2><p>无论是在Linux还是在Unix环境中，make都是一个非常重要的编译命令。不管是自己进行项目开发还是安装应用软件，我们都经常要用到make或 make install。利用make工具，我们可以将大型的开发项目分解成为多个更易于管理的模块，对于一个包括几百个源文件的应用程序，使用make和 makefile工具就可以轻而易举的理顺各个源文件之间纷繁复杂的相互关系。</p><p>但是如果通过查阅make的帮助文档来手工编写Makefile,对任何程序员都是一场挑战。幸而有GNU 提供的Autoconf及Automake这两套工具使得编写makefile不再是一个难题。</p><p>本文将介绍如何利用 GNU Autoconf 及 Automake 这两套工具来协助我们自动产生 Makefile文件，并且让开发出来的软件可以像大多数源码包那样，只需"./configure", "make","make install" 就可以把程序安装到系统中。</p><h2 id="N10049" class="ibm-h2">模拟需求</h2><p>假设源文件按如下目录存放，如图1所示，运用autoconf和automake生成makefile文件。</p><h5 id="N10051" class="ibm-h5">图 1文件目录结构</h5><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/image001.jpg" class="ibm-downsize" alt="图 1文件目录结构" height="190" width="217"><p>假设src是我们源文件目录，include目录存放其他库的头文件，lib目录存放用到的库文件，然后开始按模块存放，每个模块都有一个对应的目录，模块下再分子模块，如apple、orange。每个子目录下又分core，include，shell三个目录，其中core和shell目录存放.c文件，include的存放.h文件，其他类似。</p><p>样例程序功能：基于多线程的数据读写保护（联系作者获取整个autoconf和automake生成的Makefile工程和源码，E-mail：<a href="mailto:normalnotebook@126.com">normalnotebook@126.com</a>）。</p><h2 id="N10064" class="ibm-h2">工具简介</h2><p>所必须的软件：autoconf/automake/m4/perl/libtool（其中libtool非必须）。</p><p>autoconf是一个用于生成可以自动地配置软件源码包，用以适应多种UNIX类系统的shell脚本工具，其中autoconf需要用到 m4，便于生成脚本。automake是一个从Makefile.am文件自动生成Makefile.in的工具。为了生成Makefile.in，automake还需用到perl，由于automake创建的发布完全遵循GNU标准，所以在创建中不需要perl。libtool是一款方便生成各种程序库的工具。</p><p>目前automake支持三种目录层次：flat、shallow和deep。</p><p>1)	flat指的是所有文件都位于同一个目录中。</p><p>就是所有源文件、头文件以及其他库文件都位于当前目录中，且没有子目录。Termutils就是这一类。</p><p>2)	shallow指的是主要的源代码都储存在顶层目录，其他各个部分则储存在子目录中。</p><p>就是主要源文件在当前目录中，而其它一些实现各部分功能的源文件位于各自不同的目录。automake本身就是这一类。</p><p>3)	deep指的是所有源代码都被储存在子目录中；顶层目录主要包含配置信息。</p><p>就是所有源文件及自己写的头文件位于当前目录的一个子目录中，而当前目录里没有任何源文件。 GNU cpio和GNU tar就是这一类。</p><p>flat类型是最简单的，deep类型是最复杂的。不难看出，我们的模拟需求正是基于第三类deep型，也就是说我们要做挑战性的事情：)。注：我们的测试程序是基于多线程的简单程序。</p><h2 id="N1007D" class="ibm-h2">生成 Makefile 的来龙去脉</h2><p>首先进入 project 目录，在该目录下运行一系列命令，创建和修改几个文件，就可以生成符合该平台的Makefile文件，操作过程如下：</p><p>1)	运行autoscan命令</p><p>2)	将configure.scan 文件重命名为configure.in，并修改configure.in文件</p><p>3)	在project目录下新建Makefile.am文件，并在core和shell目录下也新建makefile.am文件</p><p>4)	在project目录下新建NEWS、 README、 ChangeLog 、AUTHORS文件</p><p>5)	将/usr/share/automake-1.X/目录下的depcomp和complie文件拷贝到本目录下</p><p>6)	运行aclocal命令</p><p>7)	运行autoconf命令</p><p>8)	运行automake -a命令</p><p>9)	运行./confiugre脚本</p><p>可以通过图2看出产生Makefile的流程，如图所示：</p><h5 id="N10099" class="ibm-h5">图 2生成Makefile流程图</h5><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/image002.gif" class="ibm-downsize" alt="图 2生成Makefile流程图" height="338" width="468"><p class="ibm-ind-link ibm-hide"><a class="ibm-popup-link" onclick="IBMCore.common.widget.overlay.show(&#39;N1009E&#39;);return false;" href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#N1009E">点击查看大图</a></p><h2 id="N100A4" class="ibm-h2">Configure.in的八股文</h2><p>当我们利用autoscan工具生成confiugre.scan文件时，我们需要将confiugre.scan重命名为confiugre.in文件。confiugre.in调用一系列autoconf宏来测试程序需要的或用到的特性是否存在，以及这些特性的功能。</p><p>下面我们就来目睹一下confiugre.scan的庐山真面目：</p><h5 id="N100AF" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_117895" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain"># Process this file with autoconf to produce a configure script.</code></div><div class="line number2 index1 alt1"><code class="htmlscript plain">AC_PREREQ(2.59)</code></div><div class="line number3 index2 alt2"><code class="htmlscript plain">AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)</code></div><div class="line number4 index3 alt1"><code class="htmlscript plain">AC_CONFIG_SRCDIR([config.h.in])</code></div><div class="line number5 index4 alt2"><code class="htmlscript plain">AC_CONFIG_HEADER([config.h])</code></div><div class="line number6 index5 alt1"><code class="htmlscript plain"># Checks for programs.</code></div><div class="line number7 index6 alt2"><code class="htmlscript plain">AC_PROG_CC</code></div><div class="line number8 index7 alt1"><code class="htmlscript plain"># Checks for libraries.</code></div><div class="line number9 index8 alt2"><code class="htmlscript plain"># FIXME: Replace `main' with a function in `-lpthread':</code></div><div class="line number10 index9 alt1"><code class="htmlscript plain">AC_CHECK_LIB([pthread], [main])</code></div><div class="line number11 index10 alt2"><code class="htmlscript plain"># Checks for header files.</code></div><div class="line number12 index11 alt1"><code class="htmlscript plain"># Checks for typedefs, structures, and compiler characteristics.</code></div><div class="line number13 index12 alt2"><code class="htmlscript plain"># Checks for library functions.</code></div><div class="line number14 index13 alt1"><code class="htmlscript plain">AC_OUTPUT</code></div></div></td></tr></tbody></table></div></div></div></span><p>每个configure.scan文件都是以AC_INIT开头，以AC_OUTPUT结束。我们不难从文件中看出confiugre.in文件的一般布局：</p></h5><h5 id="N100B8" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_364957" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">AC_INIT</code></div><div class="line number2 index1 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">测试程序</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">测试函数库</code></div><div class="line number4 index3 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">测试头文件</code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">测试类型定义</code></div><div class="line number6 index5 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">测试结构</code></div><div class="line number7 index6 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">测试编译器特性</code></div><div class="line number8 index7 alt1"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">测试库函数</code></div><div class="line number9 index8 alt2"><code class="htmlscript spaces">&nbsp;</code><code class="htmlscript plain">测试系统调用</code></div><div class="line number10 index9 alt1"><code class="htmlscript plain">AC_OUTPUT</code></div></div></td></tr></tbody></table></div></div></div></span><p>上面的调用次序只是建议性质的，但我们还是强烈建议不要随意改变对宏调用的次序。</p><p>现在就开始修改该文件：</p></h5><h5 id="N100C3" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_844814" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">$mv configure.scan configure.in</code></div><div class="line number2 index1 alt1"><code class="htmlscript plain">$vim configure.in</code></div></div></td></tr></tbody></table></div></div></div></span><p>修改后的结果如下：</p></h5><h5 id="N100CC" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_324442" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -*- Autoconf -*-</code></div><div class="line number2 index1 alt1"><code class="htmlscript plain"># Process this file with autoconf to produce a configure script.</code></div><div class="line number3 index2 alt2">&nbsp;</div><div class="line number4 index3 alt1"><code class="htmlscript plain">AC_PREREQ(2.59)</code></div><div class="line number5 index4 alt2"><code class="htmlscript plain">AC_INIT(test, 1.0, normalnotebook@126.com)</code></div><div class="line number6 index5 alt1"><code class="htmlscript plain">AC_CONFIG_SRCDIR([src/ModuleA/apple/core/test.c])</code></div><div class="line number7 index6 alt2"><code class="htmlscript plain">AM_CONFIG_HEADER(config.h)</code></div><div class="line number8 index7 alt1"><code class="htmlscript plain">AM_INIT_AUTOMAKE(test,1.0)</code></div><div class="line number9 index8 alt2">&nbsp;</div><div class="line number10 index9 alt1"><code class="htmlscript plain"># Checks for programs.</code></div><div class="line number11 index10 alt2"><code class="htmlscript plain">AC_PROG_CC</code></div><div class="line number12 index11 alt1"><code class="htmlscript plain"># Checks for libraries.</code></div><div class="line number13 index12 alt2"><code class="htmlscript plain"># FIXME: Replace `main' with a function in `-lpthread':</code></div><div class="line number14 index13 alt1"><code class="htmlscript plain">AC_CHECK_LIB([pthread], [pthread_rwlock_init])</code></div><div class="line number15 index14 alt2"><code class="htmlscript plain">AC_PROG_RANLIB</code></div><div class="line number16 index15 alt1"><code class="htmlscript plain"># Checks for header files.</code></div><div class="line number17 index16 alt2"><code class="htmlscript plain"># Checks for typedefs, structures, and compiler characteristics.</code></div><div class="line number18 index17 alt1"><code class="htmlscript plain"># Checks for library functions.</code></div><div class="line number19 index18 alt2"><code class="htmlscript plain">AC_OUTPUT([Makefile</code></div><div class="line number20 index19 alt1"><code class="htmlscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="htmlscript plain">src/lib/Makefile</code></div><div class="line number21 index20 alt2"><code class="htmlscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="htmlscript plain">src/ModuleA/apple/core/Makefile</code></div><div class="line number22 index21 alt1"><code class="htmlscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="htmlscript plain">src/ModuleA/apple/shell/Makefile</code></div><div class="line number23 index22 alt2"><code class="htmlscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="htmlscript plain">])</code></div></div></td></tr></tbody></table></div></div></div></span><p>其中要将AC_CONFIG_HEADER([config.h])修改为：AM_CONFIG_HEADER(config.h), 
+并加入AM_INIT_AUTOMAKE(test,1.0)。由于我们的测试程序是基于多线程的程序，所以要加入AC_PROG_RANLIB，不然运行automake命令时会出错。在AC_OUTPUT输入要创建的Makefile文件名。</p><p>由于我们在程序中使用了读写锁，所以需要对库文件进行检查，即AC_CHECK_LIB([pthread], [main])，该宏的含义如下：</p></h5><h5 id="N100D6" class="ibm-h5"><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/table1.gif" class="ibm-downsize" alt="" height="166" width="537"><p class="ibm-ind-link ibm-hide"><a class="ibm-popup-link" onclick="IBMCore.common.widget.overlay.show(&#39;N100DA&#39;);return false;" href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#N100DA">点击查看大图</a></p><p>其中，LIBS是link的一个选项，详细请参看后续的Makefile文件。由于我们在程序中使用了读写锁，所以我们测试pthread库中是否存在pthread_rwlock_init函数。</p><p>由于我们是基于deep类型来创建makefile文件，所以我们需要在四处创建Makefile文件。即：project目录下，lib目录下，core和shell目录下。	</p><p>Autoconf提供了很多内置宏来做相关的检测，限于篇幅关系，我们在这里对其他宏不做详细的解释，具体请参看参考文献1和参考文献2，也可参看autoconf信息页。</p></h5><h2 id="N100E6" class="ibm-h2">实战Makefile.am</h2><p>Makefile.am是一种比Makefile更高层次的规则。只需指定要生成什么目标，它由什么源文件生成，要安装到什么目录等构成。</p><p>表一列出了可执行文件、静态库、头文件和数据文件，四种书写Makefile.am文件个一般格式。</p><h5 id="N100F0" class="ibm-h5">表 1Makefile.am一般格式</h5><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/table2.gif" class="ibm-downsize" alt="表 1Makefile.am一般格式" height="351" width="522"><p class="ibm-ind-link ibm-hide"><a class="ibm-popup-link" onclick="IBMCore.common.widget.overlay.show(&#39;N100F5&#39;);return false;" href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#N100F5">点击查看大图</a></p><p>对于可执行文件和静态库类型，如果只想编译，不想安装到系统中，可以用noinst_PROGRAMS代替bin_PROGRAMS，noinst_LIBRARIES代替lib_LIBRARIES。</p><p>Makefile.am还提供了一些全局变量供所有的目标体使用：</p><h5 id="N10100" class="ibm-h5">表 2 Makefile.am中可用的全局变量</h5><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/table3.gif" class="ibm-downsize" alt="表 2 Makefile.am中可用的全局变量" height="221" width="523"><p class="ibm-ind-link ibm-hide"><a class="ibm-popup-link" onclick="IBMCore.common.widget.overlay.show(&#39;N10105&#39;);return false;" href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#N10105">点击查看大图</a></p><p>在Makefile.am中尽量使用相对路径，系统预定义了两个基本路径：</p><h5 id="N1010E" class="ibm-h5">表 3Makefile.am中可用的路径变量</h5><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/table4.gif" class="ibm-downsize" alt="表 3Makefile.am中可用的路径变量" height="112" width="522"><p class="ibm-ind-link ibm-hide"><a class="ibm-popup-link" onclick="IBMCore.common.widget.overlay.show(&#39;N10113&#39;);return false;" href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#N10113">点击查看大图</a></p><p>在上文中我们提到过安装路径，automake设置了默认的安装路径：</p><p>1)	标准安装路径</p><p>默认安装路径为：$(prefix) = /usr/local，可以通过./configure --prefix=&lt;new_path&gt;的方法来覆盖。</p><p>其它的预定义目录还包括：bindir = $(prefix)/bin, libdir = $(prefix)/lib, datadir = $(prefix)/share, sysconfdir = $(prefix)/etc等等。</p><p>2)	定义一个新的安装路径</p><p>比如test, 可定义testdir = $(prefix)/test,  然后test_DATA =test1 test2，则test1，test2会作为数据文件安装到$(prefix)/ /test目录下。</p><p>我们首先需要在工程顶层目录下（即project/）创建一个Makefile.am来指明包含的子目录：</p><h5 id="N10129" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_688573" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">SUBDIRS=src/lib src/ModuleA/apple/shell src/ModuleA/apple/core </code></div><div class="line number2 index1 alt1"><code class="htmlscript plain">CURRENTPATH=$(shell /bin/pwd)</code></div><div class="line number3 index2 alt2"><code class="htmlscript plain">INCLUDES=-I$(CURRENTPATH)/src/include -I$(CURRENTPATH)/src/ModuleA/apple/include </code></div><div class="line number4 index3 alt1"><code class="htmlscript plain">export INCLUDES</code></div></div></td></tr></tbody></table></div></div></div></span><p>由于每个源文件都会用到相同的头文件，所以我们在最顶层的Makefile.am中包含了编译源文件时所用到的头文件，并导出，见蓝色部分代码。</p><p>我们将lib目录下的swap.c文件编译成libswap.a文件，被apple/shell/apple.c文件调用，那么lib目录下的Makefile.am如下所示：</p></h5><h5 id="N10134" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_800777" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">noinst_LIBRARIES=libswap.a</code></div><div class="line number2 index1 alt1"><code class="htmlscript plain">libswap_a_SOURCES=swap.c</code></div><div class="line number3 index2 alt2"><code class="htmlscript plain">INCLUDES=-I$(top_srcdir)/src/includ</code></div></div></td></tr></tbody></table></div></div></div></span><p>细心的读者可能就会问：怎么表1中给出的是bin_LIBRARIES，而这里是noinst_LIBRARIES？这是因为如果只想编译，而不想安装到系统中，就用noinst_LIBRARIES代替bin_LIBRARIES，对于可执行文件就用noinst_PROGRAMS代替bin_PROGRAMS。对于安装的情况，库将会安装到$(prefix)/lib目录下，可执行文件将会安装到${prefix}/bin。如果想安装该库，则Makefile.am示例如下：</p></h5><h5 id="N1013D" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_91045" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">bin_LIBRARIES=libswap.a</code></div><div class="line number2 index1 alt1"><code class="htmlscript plain">libswap_a_SOURCES=swap.c</code></div><div class="line number3 index2 alt2"><code class="htmlscript plain">INCLUDES=-I$(top_srcdir)/src/include</code></div><div class="line number4 index3 alt1"><code class="htmlscript plain">swapincludedir=$(includedir)/swap</code></div><div class="line number5 index4 alt2"><code class="htmlscript plain">swapinclude_HEADERS=$(top_srcdir)/src/include/swap.h</code></div></div></td></tr></tbody></table></div></div></div></span><p>最后两行的意思是将swap.h安装到${prefix}/include /swap目录下。</p><p>接下来，对于可执行文件类型的情况，我们将讨论如何写Makefile.am？对于编译apple/core目录下的文件，我们写成的Makefile.am如下所示：</p></h5><h5 id="N10148" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_514826" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">noinst_PROGRAMS=test</code></div><div class="line number2 index1 alt1"><code class="htmlscript plain">test_SOURCES=test.c </code></div><div class="line number3 index2 alt2"><code class="htmlscript plain">test_LDADD=$(top_srcdir)/src/ModuleA/apple/shell/apple.o $(top_srcdir)/src/lib/libswap.a </code></div><div class="line number4 index3 alt1"><code class="htmlscript plain">test_LDFLAGS=-D_GNU_SOURCE</code></div><div class="line number5 index4 alt2"><code class="htmlscript plain">DEFS+=-D_GNU_SOURCE</code></div><div class="line number6 index5 alt1"><code class="htmlscript plain">#LIBS=-lpthread</code></div></div></td></tr></tbody></table></div></div></div></span><p>由于我们的test.c文件在链接时，需要apple.o和libswap.a文件，所以我们需要在test_LDADD中包含这两个文件。对于Linux下的信号量/读写锁文件进行编译，需要在编译选项中指明-D_GNU_SOURCE。所以在test_LDFLAGS中指明。而test_LDFLAGS只是链接时的选项，编译时同样需要指明该选项，所以需要DEFS来指明编译选项，由于DEFS已经有初始值，所以这里用+=的形式指明。从这里可以看出，Makefile.am中的语法与Makefile的语法一致，也可以采用条件表达式。如果你的程序还包含其他的库，除了用AC_CHECK_LIB宏来指明外，还可以用LIBS来指明。</p><p>如果你只想编译某一个文件，那么Makefile.am如何写呢？这个文件也很简单，写法跟可执行文件的差不多，如下例所示：</p></h5><h5 id="N10153" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_78265" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">noinst_PROGRAMS=apple</code></div><div class="line number2 index1 alt1"><code class="htmlscript plain">apple_SOURCES=apple.c</code></div><div class="line number3 index2 alt2"><code class="htmlscript plain">DEFS+=-D_GNU_SOURCE</code></div></div></td></tr></tbody></table></div></div></div></span><p>我们这里只是欺骗automake，假装要生成apple文件，让它为我们生成依赖关系和执行命令。所以当你运行完automake命令后，然后修改apple/shell/下的Makefile.in文件，直接将LINK语句删除，即：</p></h5><h5 id="N1015C" class="ibm-h5"><span class="dw-code-nohighlight"><div class="ibm-syntax-container"><div><div id="highlighter_771388" class="syntaxhighlighter  htmlscript"><table border="0" cellpadding="0" cellspacing="0" role="none"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="htmlscript plain">…….</code></div><div class="line number2 index1 alt1"><code class="htmlscript plain">clean-noinstPROGRAMS:</code></div><div class="line number3 index2 alt2"><code class="htmlscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="htmlscript plain">-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)</code></div><div class="line number4 index3 alt1"><code class="htmlscript plain">apple$(EXEEXT): $(apple_OBJECTS) $(apple_DEPENDENCIES) </code></div><div class="line number5 index4 alt2"><code class="htmlscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="htmlscript plain">@rm -f apple$(EXEEXT)</code></div><div class="line number6 index5 alt1"><code class="htmlscript plain">#$(LINK) $(apple_LDFLAGS) $(apple_OBJECTS) $(apple_LDADD) $(LIBS)</code></div><div class="line number7 index6 alt2"><code class="htmlscript plain">…….</code></div></div></td></tr></tbody></table></div></div></div></span><p>通过上述处理，就可以达到我们的目的。从图1中不难看出为什么要修改Makefile.in的原因，而不是修改其他的文件。</p><!--CMA ID: 161255--><!--Site ID: 10--><!--XSLT stylesheet used to transform this file: dw-document-html-8.0.xsl-->
+                                        <!-- Article Quiz -->
+                                        
+                                        <!-- Article Resources -->
+                                        <div class="ibm-alternate-rule"><hr></div></h5><h4 id="artdownload" class="ibm-h4">下载资源</h4><ul class="ibm-link-list"><li><a class="ibm-download-link" href="http://www.ibm.com/developerworks/apps/download/index.jsp?contentid=161255&amp;filename=project.rar&amp;method=http&amp;locale=zh_CN"> (project.rar)</a></li></ul><a class="ibm-download-link" href="http://www.ibm.com/developerworks/apps/download/index.jsp?contentid=161255&amp;filename=project.rar&amp;method=http&amp;locale=zh_CN">
+                                        <!-- Commenting -->
+<!-- INLINE_COMMENTS_BEGIN: -->
+<div class="ibm-alternate-rule"><hr></div>
+</a><div id="dw-article-cmts-top" class="ibm-columns"><a class="ibm-download-link" href="http://www.ibm.com/developerworks/apps/download/index.jsp?contentid=161255&amp;filename=project.rar&amp;method=http&amp;locale=zh_CN">
+    </a><div class="ibm-col-6-2"><a class="ibm-download-link" href="http://www.ibm.com/developerworks/apps/download/index.jsp?contentid=161255&amp;filename=project.rar&amp;method=http&amp;locale=zh_CN">
+        <h4 id="icomments" class="ibm-h4">评论</h4>
+        </a><div id="dw-article-cmts-login"><a class="ibm-download-link" href="http://www.ibm.com/developerworks/apps/download/index.jsp?contentid=161255&amp;filename=project.rar&amp;method=http&amp;locale=zh_CN">
+            </a><p><a class="ibm-download-link" href="http://www.ibm.com/developerworks/apps/download/index.jsp?contentid=161255&amp;filename=project.rar&amp;method=http&amp;locale=zh_CN">添加或订阅评论，请先</a><a onclick="window.location=userLinks[0].url;" tabindex="0" role="link">登录</a>或<a onclick="window.location=userLinks[1].url;" tabindex="0" role="link">注册</a>。</p>
+        </div>
+    </div>    
+    <div class="ibm-col-6-2" id="dw-notify"> 
+        <input type="checkbox" value="1" name="comment_notification" id="comment_notification" disabled="">
+        <label for="comment_notification" style="color: rgb(204, 204, 204);">有新评论时提醒我</label>	   
+    </div>
+</div>
+
+<div class="dw-article-cmts-container">       
+    <div class="ibm-no-print jquery-comments read-only" id="dw-icomments-container"><div class="commenting-field main"><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/user-icon.png" alt="" class="profile-picture round by-current-user"><div class="textarea-wrapper"><span class="close" style="display: none;"><span class="left"></span><span class="right"></span></span><div class="textarea" data-placeholder="添加评论" contenteditable="true" style="height: 3.65em;"></div><div class="control-row" style="display: none;"><span class="send save highlight-background">提交</span></div></div></div><ul class="navigation"><div class="navigation-wrapper"><li data-sort-key="newest" data-container-name="comments" class="active">最新的</li><li data-sort-key="oldest" data-container-name="comments">历史</li><li data-sort-key="popularity" data-container-name="comments">热门</li></div><div class="navigation-wrapper responsive"><li class="title active"><header>最新的</header></li><ul class="dropdown"><li data-sort-key="newest" data-container-name="comments" class="active">最新的</li><li data-sort-key="oldest" data-container-name="comments">历史</li><li data-sort-key="popularity" data-container-name="comments">热门</li></ul></div></ul><div class="data-container" data-container="comments"><ul id="comment-list" class="main"><li data-id="21515" class="comment"><div class="comment-wrapper"><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/user-icon.png" alt="" class="profile-picture round"><time data-original="1411182833735">2014 年 09 月 20 日</time><div class="name"><a href="https://www.ibm.com/developerworks/community/profiles/user/liminwanqing">liminwanqing</a></div><div class="wrapper"><div class="content">good article</div><span class="actions"><button class="action reply" type="button">回复</button><span class="separator">·</span><button class="action upvote"><span class="upvote-count">0</span><i class="fa fa-thumbs-up"></i></button><span class="separator">·</span><a class="action reply" href="https://www.ibm.com/developerworks/community/report?lang=cn&amp;referingURL=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fl-makefile%2Findex.html&amp;mymessage=%E8%AF%84%E8%AE%BA%3A%20good%20article%0D%E7%94%B1%20liminwanqing%20%20%E4%BA%8E%202014%20%E5%B9%B4%2009%20%E6%9C%88%2020%20%E6%97%A5%20%0D%0D---%20%E5%9C%A8%E4%B8%8B%E6%96%B9%E6%B7%BB%E5%8A%A0%E8%AF%84%E8%AE%BA%20---" target="_blank">报告滥用<i class="fa image" style="background-image: url(&quot;/developerworks/maverick/image/report-abuse.png&quot;);"></i></a></span></div></div><ul class="child-comments"></ul></li><li data-id="4868" class="comment"><div class="comment-wrapper"><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/user-icon.png" alt="" class="profile-picture round"><time data-original="1349856000000">2012 年 10 月 10 日</time><div class="name"><a href="https://www.ibm.com/developerworks/community/profiles/user/%EF%BC%A1oems">Ａoems</a></div><div class="wrapper"><div class="content">在Ｕbuntu12下直接下載，直接編譯運行make失敗;按照流程自己修改Ｍakefile.am和configure.in，命令automake時失敗。出现错误：\naoems@ubuntu:~\/program\/ibmtest$ automake --add-missing\nautomake: no `Makefile.am' found for any configure output\nautomake: Did you forget AC_CONFIG_FILES(&amp;lt;a href=\"http:\/\/www.ibm.com\/developerworks\/forums\/\"&amp;gt;Makefile&amp;lt;\/a&amp;gt;) in configure.in?\n是什么原因？？？\n\n此版本文档已经需要更新或者说明。如：宏AM_CONFIG_HEADER已被更新为AC_CONFIG_HEADERS。</div><span class="actions"><button class="action reply" type="button">回复</button><span class="separator">·</span><button class="action upvote"><span class="upvote-count">0</span><i class="fa fa-thumbs-up"></i></button><span class="separator">·</span><a class="action reply" href="https://www.ibm.com/developerworks/community/report?lang=cn&amp;referingURL=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fl-makefile%2Findex.html&amp;mymessage=%E8%AF%84%E8%AE%BA%3A%20%E5%9C%A8%EF%BC%B5buntu12%E4%B8%8B%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BC%89%EF%BC%8C%E7%9B%B4%E6%8E%A5%E7%B7%A8%E8%AD%AF%E9%81%8B%E8%A1%8Cmake%E5%A4%B1%E6%95%97%3B%E6%8C%89%E7%85%A7%E6%B5%81%E7%A8%8B%E8%87%AA%E5%B7%B1%E4%BF%AE%E6%94%B9%EF%BC%ADakefile.am%E5%92%8Cconfigure.in%EF%BC%8C%E5%91%BD%E4%BB%A4automake%E6%99%82%E5%A4%B1%E6%95%97%E3%80%82%E5%87%BA%E7%8E%B0%E9%94%99%E8%AF%AF%EF%BC%9A%5Cnaoems%40ubuntu%3A~%5C%2Fprogram%5C%2Fibmtest%24%20automake%20--add-missing%5Cnautomake%3A%20no%20%60Makefile.am%27%20found%20for%20any%20configure%20output%5Cnautomake%3A%20Did%20you%20forget%20AC_CONFIG_FILES(%26lt%3Ba%20href%3D%5C%22http%3A%5C%2F%5C%2Fwww.ibm.com%5C%2Fdeveloperworks%5C%2Fforums%5C%2F%5C%22%26gt%3BMakefile%26lt%3B%5C%2Fa%26gt%3B)%20in%20configure.in%3F%5Cn%E6%98%AF%E4%BB%80%E4%B9%88%E5%8E%9F%E5%9B%A0%EF%BC%9F%EF%BC%9F%EF%BC%9F%5Cn%5Cn%E6%AD%A4%E7%89%88%E6%9C%AC%E6%96%87%E6%A1%A3%E5%B7%B2%E7%BB%8F%E9%9C%80%E8%A6%81%E6%9B%B4%E6%96%B0%E6%88%96%E8%80%85%E8%AF%B4%E6%98%8E%E3%80%82%E5%A6%82%EF%BC%9A%E5%AE%8FAM_CONFIG_HEADER%E5%B7%B2%E8%A2%AB%E6%9B%B4%E6%96%B0%E4%B8%BAAC_CONFIG_HEADERS%E3%80%82%0D%E7%94%B1%20%EF%BC%A1oems%20%20%E4%BA%8E%202012%20%E5%B9%B4%2010%20%E6%9C%88%2010%20%E6%97%A5%20%0D%0D---%20%E5%9C%A8%E4%B8%8B%E6%96%B9%E6%B7%BB%E5%8A%A0%E8%AF%84%E8%AE%BA%20---" target="_blank">报告滥用<i class="fa image" style="background-image: url(&quot;/developerworks/maverick/image/report-abuse.png&quot;);"></i></a></span></div></div><ul class="child-comments"></ul></li><li data-id="4867" class="comment"><div class="comment-wrapper"><img src="./例解 autoconf 和 automake 生成 Makefile 文件_files/user-icon.png" alt="" class="profile-picture round"><time data-original="1320220800000">2011 年 11 月 02 日</time><div class="name"><a href="https://www.ibm.com/developerworks/community/profiles/user/Jamesprite">Jamesprite</a></div><div class="wrapper"><div class="content">现在在Linux下做一个P2P流媒体项目，需要用到MakeFile的一些信息，本文比较全面的阐述了MakeFile产生的过程，比较适合我入门使用。</div><span class="actions"><button class="action reply" type="button">回复</button><span class="separator">·</span><button class="action upvote"><span class="upvote-count">0</span><i class="fa fa-thumbs-up"></i></button><span class="separator">·</span><a class="action reply" href="https://www.ibm.com/developerworks/community/report?lang=cn&amp;referingURL=https%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Flinux%2Fl-makefile%2Findex.html&amp;mymessage=%E8%AF%84%E8%AE%BA%3A%20%E7%8E%B0%E5%9C%A8%E5%9C%A8Linux%E4%B8%8B%E5%81%9A%E4%B8%80%E4%B8%AAP2P%E6%B5%81%E5%AA%92%E4%BD%93%E9%A1%B9%E7%9B%AE%EF%BC%8C%E9%9C%80%E8%A6%81%E7%94%A8%E5%88%B0MakeFile%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BF%A1%E6%81%AF%EF%BC%8C%E6%9C%AC%E6%96%87%E6%AF%94%E8%BE%83%E5%85%A8%E9%9D%A2%E7%9A%84%E9%98%90%E8%BF%B0%E4%BA%86MakeFile%E4%BA%A7%E7%94%9F%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%8C%E6%AF%94%E8%BE%83%E9%80%82%E5%90%88%E6%88%91%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8%E3%80%82%0D%E7%94%B1%20Jamesprite%20%20%E4%BA%8E%202011%20%E5%B9%B4%2011%20%E6%9C%88%2002%20%E6%97%A5%20%0D%0D---%20%E5%9C%A8%E4%B8%8B%E6%96%B9%E6%B7%BB%E5%8A%A0%E8%AF%84%E8%AE%BA%20---" target="_blank">报告滥用<i class="fa image" style="background-image: url(&quot;/developerworks/maverick/image/report-abuse.png&quot;);"></i></a></span></div></div><ul class="child-comments"></ul></li></ul><div class="no-comments no-data"><i class="fa fa-comments fa-2x"></i><br>第一个评论</div></div></div>
+</div>
+<!-- INLINE_COMMENTS_END -->                                        <!-- CENTER_6_4_CONTENT_COLUMN_END -->
+                                    </div>   
+                                </div>
+                        <!--Rating_Meta_BEGIN--><div class="metavalue">static.content.url=http://www.ibm.com/developerworks/js/artrating/</div><div class="metavalue">SITE_ID=10</div><div class="metavalue">Zone=Linux</div><div class="metavalue">ArticleID=161255</div><div class="metavalue">ArticleTitle=例解 autoconf 和 automake 生成 Makefile 文件</div><div class="metavalue">publish-date=09212006</div><script language="javascript" type="text/javascript">document.write('<div class="metavalue">url='+location.href.replace(/</g,  '%3C')+'</div>');</script><div class="metavalue">url=https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html</div><!--Rating_Meta_END-->
+                    </div>
+                    <!-- END_IBM-CONTENT-MAIN -->
+                </div>
+                <!-- END_IBM-CONTENT-BODY -->
+            </div>
+            <!-- END_IBM-CONTENT -->
+        </div>
+        <!-- END_IBM-PCON -->
+    </main>
+    <!-- MAIN_CONTENT_END -->
+    
+    <!-- END_CONTENT-WRAPPER -->	
+</div>
+<!-- FOOTER_BEGIN -->
+<footer role="contentinfo" aria-label="IBM developerWorks">
+    <div id="dw-footer-module" class="dw-footer-home">
+        <section aria-label="参考资料" role="contentinfo">
+            <div class="ibm-columns">
+                <div class="ibm-col-6-1 dw-footer-col-1">
+                    <ul>
+                        <li class="dw-footer-heading" aria-label="developerWorks">developerWorks</li>
+                        <li><a href="https://www.ibm.com/developerworks/secure/feedback.jsp?domain=dwchina">站点反馈</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/secure/myideas2.jsp?domain=dwchina">我要投稿</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/cn/author/">投稿指南</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/community/report?lang=zh">报告滥用</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/cn/community/terms/thirdparty/">第三方提示</a></li>
+                    </ul>
+                    <ul>
+                        <li class="dw-footer-newline"><a href="https://weibo.com/ibmdw/">关注微博</a></li>
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-2">
+                    <ul>
+                        <li class="dw-footer-heading" aria-label="加入">加入</li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/partnerworld/isv/">ISV 资源 (英语)</a></li>
+                        <li class="dw-footer-newline"><a href="https://www-31.ibm.com/ibm/cn/ur/">大学合作</a></li>
+                    </ul>
+                    <ul class="dw-footer-lang" aria-label="选择语言">
+                        <li class="dw-footer-heading">选择语言</li>
+                        <li><a href="https://www.ibm.com/developerworks/">English</a></li>
+                        <li><a href="https://www.ibm.com/developerworks/cn/" lang="zh">中文</a></li>
+                        <li><a href="https://www.ibm.com/developerworks/jp/" lang="ja">日本語</a></li>
+                        <li><a href="https://www.ibm.com/developerworks/ru/" lang="ru">Русский</a></li>
+                        <li class="dw-footer-newline"><a href="https://www.ibm.com/developerworks/br/" lang="pt">Português (Brasil)</a></li>
+                        <li><a href="https://www.ibm.com/developerworks/ssa/" lang="es">Español</a></li>
+                        <li><a href="https://developer.ibm.com/kr/" lang="kr">한글</a></li>
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-3"> </div>
+                <div class="ibm-col-6-1 dw-footer-col-4">
+                    <ul class="dw-footer-categories">
+                        <li class="dw-footer-category">
+                            <a href="https://www.ibm.com/developerworks/cn/views/global/libraryview.jsp">技术文档库</a>
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="http://ibmdeveloperworks.mkt6741.com/developerWorksChina-NewsletterSubscriptionPage/">dW 中国时事通讯</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/dwblog/">博客</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/events/">活动</a>  
+                        </li>
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-5">
+                    <ul class="dw-footer-categories">
+                        <li class="dw-footer-category">
+                            <a href="https://www.ibm.com/developerworks/cn/community/">社区</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/">开发者中心</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/tv/">视频</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://www.ibm.com/developerworks/cn/rss/">订阅源</a>  
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-6">
+                    <ul class="dw-footer-categories">
+                        <li class="dw-footer-category">
+                            <a href="https://www.ibm.com/developerworks/cn/downloads/">软件下载</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="https://developer.ibm.com/cn/journey/">Code patterns</a>  
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div id="dw-footer" class="ibm-padding-normal ibm-alternate">
+        <div class="ibm-columns">
+            <div class="ibm-col-1-1">
+                <div class="dw-footer-corporate-links">
+                <ul>
+                    <li><a href="https://www.ibm.com/contact/cn/zh/">联系 IBM</a></li>
+                    <li><a href="https://www.ibm.com/privacy/cn/zh/">隐私条约</a></li>
+                    <li><a href="https://www.ibm.com/developerworks/community/terms?lang=zh">使用条款</a></li>
+                    <li><a href="https://www.ibm.com/accessibility/cn/zh/">信息无障碍选项</a></li>
+                    <li class="ibm-feedbacklink"><a href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#">反馈</a></li>
+                    <li id="ibm-truste-cp"><a onclick="truste.eu.clickListener();return false;" href="https://www.ibm.com/developerworks/cn/linux/l-makefile/index.html#">Cookie 首选项</a></li>
+                </ul>                 
+                </div>    
+            </div>
+        </div>
+    </div>        
+</footer> <!-- FOOTER_END -->
+
+<!-- END_IBM-TOP -->
+</div>
+
+<!-- SCRIPTS_INCLUDE_BEGIN -->
+<!-- Styles -->
+<link rel="stylesheet" type="text/css" href="./例解 autoconf 和 automake 生成 Makefile 文件_files/jquery-comments.css">
+<link rel="stylesheet" href="./例解 autoconf 和 automake 生成 Makefile 文件_files/font-awesome.min.css">
+
+<!-- Libraries -->
+<script type="text/javascript" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/jquery-comments.min.js"></script>
+<script type="text/javascript" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/moment-with-locales.js"></script>
+<script type="text/javascript" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/ContentComments.js"></script>
+<script type="text/javascript" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/ContentCommentsFormatter.js"></script>
+<script type="text/javascript" language="JavaScript">
+
+	IBMCore.common.module.masthead.subscribe("ready", "customjs", setupCommentsPlugin).runAsap(setupCommentsPlugin);
+
+	function setupCommentsPlugin(){
+		//debugger;
+			//alert(userLinks);
+			var commentsInitInfo = {
+				contentId : $("div[class=metavalue]:contains('ArticleID=')").text().split("=")[1],
+				siteId :  $("div[class=metavalue]:contains('SITE_ID=')").text().split("=")[1],
+				pluginDivId : '#dw-icomments-container',
+				notifyElementId : "#comment_notification",
+				loginMessageDivId : "#dw-article-cmts-login",
+				totalCommentsDivId : "#nCmts",
+						isIdea:false
+
+			};				
+								
+			ContentComments.Setup(commentsInitInfo);
+	}
+</script>
+
+<!-- SCRIPTS_INCLUDE_END -->
+
+
+
+<div id="ibm-overlay-backdrop"></div><div class="ibm-common-overlay ibm-overlay-alt-three" id="ibm-overlaywidget-N1009E" role="dialog" aria-describedby="ibm-overlaywidget-N1009E-content" aria-label="Overlay content" data-widget="overlay container" data-name=""><div class="ibm-overlay-heading-con"><p class="ibm-icononly"><a href="javascript:void(0);" class="ibm-close-link" role="button">关闭</a></p></div><div id="ibm-overlaywidget-N1009E-content" class="content"><div class="ibm-widget-processed" data-widget="overlay" id="N1009E"><img alt="图 2生成Makefile流程图" border="0" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/image002.gif" width="468"></div></div></div><div class="ibm-common-overlay ibm-overlay-alt-three" id="ibm-overlaywidget-N100DA" role="dialog" aria-describedby="ibm-overlaywidget-N100DA-content" aria-label="Overlay content" data-widget="overlay container" data-name=""><div class="ibm-overlay-heading-con"><p class="ibm-icononly"><a href="javascript:void(0);" class="ibm-close-link" role="button">关闭</a></p></div><div id="ibm-overlaywidget-N100DA-content" class="content"><div class="ibm-widget-processed" data-widget="overlay" id="N100DA"><img alt="" border="0" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/table1.gif" width="537"></div></div></div><div class="ibm-common-overlay ibm-overlay-alt-three" id="ibm-overlaywidget-N100F5" role="dialog" aria-describedby="ibm-overlaywidget-N100F5-content" aria-label="Overlay content" data-widget="overlay container" data-name=""><div class="ibm-overlay-heading-con"><p class="ibm-icononly"><a href="javascript:void(0);" class="ibm-close-link" role="button">关闭</a></p></div><div id="ibm-overlaywidget-N100F5-content" class="content"><div class="ibm-widget-processed" data-widget="overlay" id="N100F5"><img alt="表 1Makefile.am一般格式" border="0" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/table2.gif" width="522"></div></div></div><div class="ibm-common-overlay ibm-overlay-alt-three" id="ibm-overlaywidget-N10105" role="dialog" aria-describedby="ibm-overlaywidget-N10105-content" aria-label="Overlay content" data-widget="overlay container" data-name=""><div class="ibm-overlay-heading-con"><p class="ibm-icononly"><a href="javascript:void(0);" class="ibm-close-link" role="button">关闭</a></p></div><div id="ibm-overlaywidget-N10105-content" class="content"><div class="ibm-widget-processed" data-widget="overlay" id="N10105"><img alt="表 2 Makefile.am中可用的全局变量" border="0" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/table3.gif" width="523"></div></div></div><div class="ibm-common-overlay ibm-overlay-alt-three" id="ibm-overlaywidget-N10113" role="dialog" aria-describedby="ibm-overlaywidget-N10113-content" aria-label="Overlay content" data-widget="overlay container" data-name=""><div class="ibm-overlay-heading-con"><p class="ibm-icononly"><a href="javascript:void(0);" class="ibm-close-link" role="button">关闭</a></p></div><div id="ibm-overlaywidget-N10113-content" class="content"><div class="ibm-widget-processed" data-widget="overlay" id="N10113"><img alt="表 3Makefile.am中可用的路径变量" border="0" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/table4.gif" width="522"></div></div></div><div id="ibm-mobilemenu-screen"></div><div id="teconsent" class="truste_cookie_prefs" style="position: fixed; display: none; height: 40px; background-color: #ffffff; z-index: 9999999999; bottom: 0; right: 0; margin: 0; padding: 0 16px; line-height: 40px; vertical-align: middle; box-shadow:0 0 10px 3px rgba(0,0,0,.1)" consent="undefined"><script type="text/javascript" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/notice" id="truste_0.10947202769702513"></script><script async="async" type="text/javascript" crossorigin="" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/1.9"></script><a id="icon-id029181778838136263" tabindex="0" role="button" lang="en" style="cursor: pointer; font-family: ibm-plex-sans; font-size: 12pt; color: #3d3d3d; text-decoration: none">Cookie Preferences</a></div><script src="./例解 autoconf 和 automake 生成 Makefile 文件_files/js(1)" id="mm_pp_background"></script><iframe name="_hjRemoteVarsFrame" title="_hjRemoteVarsFrame" id="_hjRemoteVarsFrame" style="display: none !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important;" src="./例解 autoconf 和 automake 生成 Makefile 文件_files/rcj-99d43ead6bdf30da8ed5ffcb4f17100c.html"></iframe><div id="ads"></div><iframe src="./例解 autoconf 和 automake 生成 Makefile 文件_files/iframe.html" id="mm_batch_supply_background" style="visibility: hidden; display: none;"></iframe><iframe src="./例解 autoconf 和 automake 生成 Makefile 文件_files/iframe(1).html" id="mm_sync_back_ground" style="visibility: hidden; display: none;"></iframe></body></html>
