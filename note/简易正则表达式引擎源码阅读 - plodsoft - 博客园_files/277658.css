@@ -1,0 +1,28 @@
+body {
+ font-size: .9em;
+}
+
+.postTitle {
+ font-size: 1.1em;
+}
+
+.dayTitle {
+ font-size: .9em;
+}
+
+.postDesc {
+ font-size: .9em;
+}
+
+.postCon a:link {
+ font-size: .9em;
+}
+
+.day {
+ margin-bottom: 0;
+ padding-bottom: 0;
+}
+
+.c_ad_block {
+ display: none;
+}

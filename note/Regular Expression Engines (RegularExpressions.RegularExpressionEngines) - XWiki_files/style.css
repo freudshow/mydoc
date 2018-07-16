@@ -1,0 +1,31 @@
+@import "/site/skin/skins/bluebird/css/cerulean.min.css";
+@import "/site/skin/skins/bluebird/css/bootstrap%2Dresponsive.min.css";
+@import "/site/skin/skins/bluebird/css/font%2Dawesome.min.css";
+@import "/site/skin/skins/bluebird/bluebird.css";
+
+.footer.navbar-inner {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  padding: 0 0 15px 0;
+  margin-top: 10px;
+}
+
+.footer [class*="span"] {
+  text-align: left;
+}
+
+.footer .nav-list li {
+  font-size: 9pt;
+  line-height: 1.3em;
+}
+
+.footer .nav-header, .footer .nav-header a {
+  color: #FFFFFF;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+}
+
+.footer .nav-list a {
+  color: #FFFFFF;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+}

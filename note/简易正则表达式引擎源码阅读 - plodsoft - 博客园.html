@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://www.cnblogs.com/plodsoft/p/5853945.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>简易正则表达式引擎源码阅读 - plodsoft - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/bundle-BlackLowKey.css">
+<link type="text/css" rel="stylesheet" href="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/277658.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/bundle-BlackLowKey-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/plodsoft/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/plodsoft/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/plodsoft/wlwmanifest.xml">
+<script async="" src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/analytics.js"></script><script type="text/javascript" src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/encoder.js"></script><script src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'plodsoft', cb_enable_mathjax=true;var isLogined=false;</script>
+<script type="text/x-mathjax-config;executed=true">
+    MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'blogpost-body', processEscapes: true },
+        TeX: { 
+            equationNumbers: { autoNumber: ['AMS'], useLabelIds: true }, extensions: ['extpfeil.js'] },
+            'HTML-CSS': { linebreaks: { automatic: true } },
+            SVG: { linebreaks: { automatic: true } }
+        });
+    </script><script src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/MathJax.js"></script>
+<script src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/blog-common.js" type="text/javascript"></script>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><style type="text/css">.MathJax_Display {text-align: center; margin: 1em 0em; position: relative; display: block!important; text-indent: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; width: 100%}
+.MathJax .merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MathJax .MJX-monospace {font-family: monospace}
+.MathJax .MJX-sans-serif {font-family: sans-serif}
+#MathJax_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true'); padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.MathJax {display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; padding: 0; margin: 0}
+.MathJax:focus, body :focus .MathJax {display: inline-table}
+.MathJax.MathJax_FullWidth {text-align: center; display: table-cell!important; width: 10000em!important}
+.MathJax img, .MathJax nobr, .MathJax a {border: 0; padding: 0; margin: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+img.MathJax_strut {border: 0!important; padding: 0!important; margin: 0!important; vertical-align: 0!important}
+.MathJax span {display: inline; position: static; border: 0; padding: 0; margin: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+.MathJax nobr {white-space: nowrap!important}
+.MathJax img {display: inline!important; float: none!important}
+.MathJax * {transition: none; -webkit-transition: none; -moz-transition: none; -ms-transition: none; -o-transition: none}
+.MathJax_Processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MathJax_Processed {display: none!important}
+.MathJax_ExBox {display: block!important; overflow: hidden; width: 1px; height: 60ex; min-height: 0; max-height: none}
+.MathJax .MathJax_EmBox {display: block!important; overflow: hidden; width: 1px; height: 60em; min-height: 0; max-height: none}
+.MathJax_LineBox {display: table!important}
+.MathJax_LineBox span {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
+.MathJax .MathJax_HitBox {cursor: text; background: white; opacity: 0; filter: alpha(opacity=0)}
+.MathJax .MathJax_HitBox * {filter: none; opacity: 1; background: transparent}
+#MathJax_Tooltip * {filter: none; opacity: 1; background: transparent}
+@font-face {font-family: MathJax_Blank; src: url('about:blank')}
+.MathJax .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;"><div id="MathJax_Hidden"></div></div><div id="MathJax_Message" style="display: none;"></div>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/plodsoft/"><img id="blogLogo" src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/plodsoft/">Plodsoft</a></h1>
+<h2>本博客已不再更新，请移步https://arucil.github.io/</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/plodsoft/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/plodsoft">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/plodsoft/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/plodsoft/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 9&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 3</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/plodsoft/p/5853945.html">简易正则表达式引擎源码阅读</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>　　第一篇博客。分析一下一个简单的正则表达式引擎的实现。这个引擎是Ozan S. Yigit（Dept. of Computer Science,&nbsp;York University）根据4.nBSD UN*X中的regex routine编写的，在他的<a href="http://www.cse.yorku.ca/~oz/" target="_blank">个人主页</a>上可以找到源码。引擎支持的特性不多，但源码不到1000行，而且是典型的compile-execute模式，逻辑清晰，对理解正则表达式的工作原理很有帮助。</p>
+<h1><span style="font-size: 18px;"><strong>1&nbsp;受支持的特性</strong></span></h1>
+<p>　　引擎支持的正则表达式特性如下。</p>
+<table style="height: 92px; width: 641px;" align="left">
+<tbody>
+<tr><th colspan="2" width="30%">字符</th><th>解释&nbsp;</th></tr>
+<tr align="center">
+<td colspan="2">&nbsp;常规字符</td>
+<td>
+<p>&nbsp;除了元字符（. \ [ ] * + ^ $）以外的字符。</p>
+<p>匹配字符本身</p>
+</td>
+</tr>
+<tr align="center">
+<td colspan="2">&nbsp;.</td>
+<td>匹配任意字符&nbsp;</td>
+</tr>
+<tr align="center">
+<td colspan="2">&nbsp;[set]</td>
+<td>
+<p>character class。 匹配所有set中的字符。</p>
+<p>如果set的第一个字符是^，表示匹配所有不在set内的字符。</p>
+<p>快捷写法S-E表示匹配从字符S到字符E的所有字符。</p>
+<p>例：</p>
+<p>[a-z] 匹配 任意一个小写字母</p>
+<p>[^]-] 匹配 除了 "]" 和 "-" 以外的任意字符</p>
+<p>[^A-Z] 匹配 除了大写字母以外的任意字符</p>
+<p>[a-zA-Z] 匹配 任意字母</p>
+</td>
+</tr>
+<tr align="center">
+<td colspan="2">*</td>
+<td>
+<p>closure。匹配零个或多个指定符号。</p>
+<p>它只能紧跟在常规字符、"." 、character class或closure的后面。</p>
+<p>它会尽可能多地匹配满足条件的字符。</p>
+</td>
+</tr>
+<tr align="center">
+<td colspan="2">+</td>
+<td>
+<p>匹配一个或多个指定符号。其他规则与*相同。</p>
+</td>
+</tr>
+<tr align="center">
+<td rowspan="5">\</td>
+<td>\（group\）</td>
+<td>
+<p>captured group。匹配group中的符号。</p>
+<p>在其后的表达式中可以使用\1 ~ \9引用这个group</p>
+</td>
+</tr>
+<tr align="center">
+<td>\1 ~ \9</td>
+<td>引用之前匹配的group</td>
+</tr>
+<tr align="center">
+<td>\&lt;</td>
+<td>
+<p>匹配单词开头的边界。</p>
+<p>单词是一个或多个由字母、数字和下划线组成的序列。</p>
+</td>
+</tr>
+<tr align="center">
+<td>\&gt;</td>
+<td>匹配单词末尾的边界。</td>
+</tr>
+<tr align="center">
+<td>其他字符</td>
+<td>匹配字符本身。主要用于对元字符进行转义</td>
+</tr>
+<tr align="center">
+<td colspan="2">^</td>
+<td>
+<p>如果^是表达式的第一个字符，表示匹配字符串的开头；</p>
+<p>否则将匹配^字符本身。</p>
+</td>
+</tr>
+<tr align="center">
+<td colspan="2">$</td>
+<td>
+<p>如果$是表达式的最后一个字符，表示匹配字符串的末尾；</p>
+<p>否则将匹配$字符本身。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: 18px;">2 工作原理</span></strong><span style="font-size: 18px;"><br></span></p>
+<p>　　引擎首先将表达式编译为NFA，然后使用这个NFA匹配字符串。</p>
+<h2><span style="font-size: 15px;"><strong>2.1 编译</strong></span></h2>
+<p>　　引擎扫描整个表达式，并生成一个NFA。NFA的结构是一个由opcode组成的序列。所有opcode如下。</p>
+<table style="height: 286px; width: 566px; text-align: center;" align="left">
+<tbody>
+<tr><th>&nbsp;opcode</th><th>operand</th><th>&nbsp;解释</th>
+
+</tr>
+<tr>
+<td>&nbsp;CHR</td>
+<td>字符</td>
+<td>匹配一个字符</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>ANY</td>
+<td>&nbsp;</td>
+<td>匹配任意一个字符</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>CCL</td>
+<td>bitset</td>
+<td>
+<p>character class。</p>
+<p>操作数为16 byte的bitset，其中每个bit都</p>
+<p>与一个ASCII字符匹配。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>BOL</td>
+<td>&nbsp;</td>
+<td>&nbsp;匹配字符串开头</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>EOL</td>
+<td>&nbsp;</td>
+<td>匹配字符串末尾</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>BOT</td>
+<td>1~9</td>
+<td>标识一个captured group的开头</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>EOT</td>
+<td>1~9</td>
+<td>标识一个captured group的结尾</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>BOW</td>
+<td>&nbsp;</td>
+<td>匹配单词开头的边界</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>EOW</td>
+<td>&nbsp;</td>
+<td>匹配单词末尾的边界</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>REF</td>
+<td>1~9</td>
+<td>引用group</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>CLO</td>
+<td>&nbsp;</td>
+<td>
+<p>closure。</p>
+<p>一个CLO ... END pair所包含的内容为closure的内容。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>END</td>
+<td>&nbsp;</td>
+<td>标识NFA结束或closure结束</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>　　例：</p>
+<p>　　表达式：&nbsp;<span class="cnblogs_code">foo*.*</span>&nbsp;</p>
+<p>　　NFA：　&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> f <span style="color: #0000ff;">CHR</span> o <span style="color: #0000ff;">CLO</span> <span style="color: #0000ff;">CHR</span> o <span style="color: #0000ff;">END</span> <span style="color: #0000ff;">CLO ANY END END</span></span>&nbsp;</p>
+<p>　　匹配：　&nbsp;<span class="cnblogs_code">fo foo fooo foobar fobar foxx ...</span>&nbsp;</p>
+<p>&nbsp;</p>
+<p>　　表达式：&nbsp;<span class="cnblogs_code">fo[ob]a[rz]</span>&nbsp;</p>
+<p>　　NFA：　&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> f <span style="color: #0000ff;">CHR</span> o <span style="color: #0000ff;">CCL</span> bitset <span style="color: #0000ff;">CHR</span> a <span style="color: #0000ff;">CCL</span> bitset <span style="color: #0000ff;">END</span></span><span style="color: #0000ff;">&nbsp;</span></p>
+<p>　　匹配：　&nbsp;<span class="cnblogs_code">fobar fooar fobaz fooaz</span>&nbsp;</p>
+<p>&nbsp;</p>
+<p>　　表达式：&nbsp;<span class="cnblogs_code">foo\\+</span>&nbsp;</p>
+<p>　　NFA：　&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> f <span style="color: #0000ff;">CHR</span> o <span style="color: #0000ff;">CHR</span> o <span style="color: #0000ff;">CHR</span> \ <span style="color: #0000ff;">CLO CHR</span> \ <span style="color: #0000ff;">END END</span> &nbsp; &nbsp;<span style="color: #008000;">--</span><span style="color: #008000;">&nbsp;x+ 被转换成 xx*</span></span>&nbsp;</p>
+<p>　　匹配：　&nbsp;<span class="cnblogs_code">foo\ foo\\ foo\\\ ...</span>&nbsp;</p>
+<p>&nbsp;</p>
+<p>　　表达式：&nbsp;<span class="cnblogs_code"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;f&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 1.875em; display: inline-block;"><span style="display: inline-block; position: relative; width: 1.875em; height: 0px; font-size: 98%;"><span style="position: absolute; clip: rect(1.62em, 1001.88em, 2.98em, -999.996em); top: -2.547em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math; font-style: italic;">f<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.089em;"></span></span><span class="mi" id="MathJax-Span-4" style="font-family: MathJax_Math; font-style: italic;">o</span><span class="mi" id="MathJax-Span-5" style="font-family: MathJax_Math; font-style: italic;">o</span></span><span style="display: inline-block; width: 0px; height: 2.555em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.246em; border-left: 0px solid; width: 0px; height: 1.088em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi><mi>o</mi><mi>o</mi></math></span></span><script type="math/tex" id="MathJax-Element-1">foo</script>[<span style="color: #800080;">1</span>-<span style="color: #800080;">3</span>]\<span style="color: #800080;">1</span></span>&nbsp;</p>
+<p>　　NFA：　&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">BOT</span> <span style="color: #800080;">1</span> <span style="color: #0000ff;">CHR</span> f <span style="color: #0000ff;">CHR</span> o <span style="color: #0000ff;">CHR</span> o <span style="color: #0000ff;">EOT</span> <span style="color: #800080;">1</span> <span style="color: #0000ff;">CCL</span> bitset <span style="color: #0000ff;">REF</span> <span style="color: #800080;">1</span> <span style="color: #0000ff;">END</span></span><span style="color: #0000ff;">&nbsp;</span></p>
+<p>　　匹配：　&nbsp;<span class="cnblogs_code">foo1foo foo2foo foo3foo</span>&nbsp;</p>
+<p>&nbsp;</p>
+<p>　　表达式：&nbsp;<span class="cnblogs_code"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;f&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mo&gt;.&lt;/mo&gt;&lt;mo&gt;&amp;#x2217;&lt;/mo&gt;&lt;/math&gt;" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-6" style="width: 2.725em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.725em; height: 0px; font-size: 98%;"><span style="position: absolute; clip: rect(1.62em, 1002.64em, 2.98em, -999.996em); top: -2.547em; left: 0em;"><span class="mrow" id="MathJax-Span-7"><span class="mi" id="MathJax-Span-8" style="font-family: MathJax_Math; font-style: italic;">f<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.089em;"></span></span><span class="mi" id="MathJax-Span-9" style="font-family: MathJax_Math; font-style: italic;">o</span><span class="mo" id="MathJax-Span-10" style="font-family: MathJax_Main;">.</span><span class="mo" id="MathJax-Span-11" style="font-family: MathJax_Main; padding-left: 0.174em;">∗</span></span><span style="display: inline-block; width: 0px; height: 2.555em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.246em; border-left: 0px solid; width: 0px; height: 1.088em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi><mi>o</mi><mo>.</mo><mo>∗</mo></math></span></span><script type="math/tex" id="MathJax-Element-2">fo.*</script>-\<span style="color: #800080;">1</span></span>&nbsp;</p>
+<p>　　NFA：　&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">BOT</span> <span style="color: #800080;">1</span> <span style="color: #0000ff;">CHR</span> f <span style="color: #0000ff;">CHR</span> o <span style="color: #0000ff;">CLO ANY END EOT</span> <span style="color: #800080;">1</span> <span style="color: #0000ff;">CHR</span> - <span style="color: #0000ff;">REF</span> <span style="color: #800080;">1</span> <span style="color: #0000ff;">END</span></span><span style="color: #0000ff;">&nbsp;</span></p>
+<p>　　匹配：　&nbsp;<span class="cnblogs_code">foo-foo fo-fo fob-fob foobar-foobar ...</span>&nbsp;</p>
+<p>&nbsp;</p>
+<p>　　编译生成的NFA保存在一个全局char数组中：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">#define</span> MAXNFA  1024
+<span style="color: #0000ff;">static</span> CHAR nfa[MAXNFA];</pre>
+</div>
+<p>　　re_comp()函数接受一个表达式字符串并编译生成NFA。如果编译失败，则返回错误信息的字符串，否则返回0。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">char</span> *re_comp(<span style="color: #0000ff;">char</span> *<span style="color: #000000;">pat) {
+</span><span style="color: #008080;"> 2</span>     <span style="color: #0000ff;">char</span> *p;               <span style="color: #008000;">/*</span><span style="color: #008000;"> pattern pointer   </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 3</span>     CHAR *mp = nfa;          <span style="color: #008000;">/*</span><span style="color: #008000;"> nfa pointer       </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 4</span>     CHAR *lp;              <span style="color: #008000;">/*</span><span style="color: #008000;"> saved pointer..   </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 5</span>     CHAR *sp = nfa;          <span style="color: #008000;">/*</span><span style="color: #008000;"> another one..     </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 6</span> 
+<span style="color: #008080;"> 7</span>     <span style="color: #0000ff;">int</span> tagi = <span style="color: #800080;">0</span>;          <span style="color: #008000;">/*</span><span style="color: #008000;"> tag stack index   </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 8</span>     <span style="color: #0000ff;">int</span> tagc = <span style="color: #800080;">1</span>;          <span style="color: #008000;">/*</span><span style="color: #008000;"> actual tag count  </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 9</span> 
+<span style="color: #008080;">10</span>     <span style="color: #0000ff;">int</span><span style="color: #000000;"> n;
+</span><span style="color: #008080;">11</span>     CHAR mask;        <span style="color: #008000;">/*</span><span style="color: #008000;"> xor mask CCL </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">12</span>     <span style="color: #0000ff;">int</span> c1, c2;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　p作为遍历字符串pat的指针使用。mp作为写入nfa数组的指针使用，它始终指向最近写入的数据的下一个位置。lp和sp用于保存mp的位置。</p>
+<p>　　tagi是一个stack的top指针，这个stack保存了当前所处的group编号：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">#define</span> MAXTAG  10
+<span style="color: #0000ff;">static</span> <span style="color: #0000ff;">int</span>  tagstk[MAXTAG];</pre>
+</div>
+<p>　　tagc是group编号的counter。</p>
+<p>　　剩下的局部变量都作为临时变量。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">13</span>     <span style="color: #0000ff;">for</span> (p = pat; *p; p++<span style="color: #000000;">) {
+</span><span style="color: #008080;">14</span>         lp =<span style="color: #000000;"> mp;
+</span><span style="color: #008080;">15</span>         <span style="color: #0000ff;">switch </span>(*<span style="color: #000000;">p) {</span>
+<span style="color: #008080;">16</span>         <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">.</span><span style="color: #800000;">'</span>:               <span style="color: #008000;">/*</span><span style="color: #008000;"> match any char..  </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">17</span> <span style="color: #000000;">            store(ANY);
+</span><span style="color: #008080;">18</span>             <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　生成NFA的主循环。</p>
+<p>　　首先使用lp保存当前mp，在for循环末尾再将lp赋值给sp。sp保存了上一个opcode位置的指针。</p>
+<p>　　15行的switch根据不同的字符模式生成opcode和operand。</p>
+<p>　　17行从"."字符生成ANY opcode，store()是一个写入mp的宏：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">#define</span> store(x)    *mp++ = x</pre>
+</div>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">19</span>         <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">^</span><span style="color: #800000;">'</span>:               <span style="color: #008000;">/*</span><span style="color: #008000;"> match beginning.. </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">20</span>             <span style="color: #0000ff;">if</span> (p ==<span style="color: #000000;"> pat)
+</span><span style="color: #008080;">21</span> <span style="color: #000000;">                store(BOL);
+</span><span style="color: #008080;">22</span>             <span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+</span><span style="color: #008080;">23</span> <span style="color: #000000;">                store(CHR);
+</span><span style="color: #008080;">24</span>                 store(*<span style="color: #000000;">p);
+</span><span style="color: #008080;">25</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">26</span>             <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">27</span>         <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">$</span><span style="color: #800000;">'</span>:               <span style="color: #008000;">/*</span><span style="color: #008000;"> match endofline.. </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">28</span>             <span style="color: #0000ff;">if</span> (!p[<span style="color: #800080;">1</span><span style="color: #000000;">])
+</span><span style="color: #008080;">29</span> <span style="color: #000000;">                store(EOL);
+</span><span style="color: #008080;">30</span>             <span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+</span><span style="color: #008080;">31</span> <span style="color: #000000;">                store(CHR);
+</span><span style="color: #008080;">32</span>                 store(*<span style="color: #000000;">p);
+</span><span style="color: #008080;">33</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">34</span>             <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　如果^字符是字符串的第一个字符，那么生成&nbsp;<span class="cnblogs_code" style="color: #0000ff;">BOL</span>&nbsp;，否则当作常规字符处理，生成&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> ^</span>&nbsp;。对$字符的处理也类似。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">35</span>         <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">[</span><span style="color: #800000;">'</span>:               <span style="color: #008000;">/*</span><span style="color: #008000;"> match char class..</span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">36</span> <span style="color: #000000;">            store(CCL);
+</span><span style="color: #008080;">37</span>             <span style="color: #0000ff;">if</span> (*++p == <span style="color: #800000;">'</span><span style="color: #800000;">^</span><span style="color: #800000;">'</span><span style="color: #000000;">) {
+</span><span style="color: #008080;">38</span>                 mask = <span style="color: #800080;">0377</span><span style="color: #000000;">;    
+</span><span style="color: #008080;">39</span>                 p++<span style="color: #000000;">;
+</span><span style="color: #008080;">40</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">41</span>             <span style="color: #0000ff;">else</span>
+<span style="color: #008080;">42</span>                 mask = <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">43</span> 
+<span style="color: #008080;">44</span>             <span style="color: #0000ff;">if</span> (*p == <span style="color: #800000;">'</span><span style="color: #800000;">-</span><span style="color: #800000;">'</span>)        <span style="color: #008000;">/*</span><span style="color: #008000;"> real dash </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">45</span>                 chset(*p++<span style="color: #000000;">);
+</span><span style="color: #008080;">46</span>             <span style="color: #0000ff;">if</span> (*p == <span style="color: #800000;">'</span><span style="color: #800000;">]</span><span style="color: #800000;">'</span>)        <span style="color: #008000;">/*</span><span style="color: #008000;"> real brac </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">47</span>                 chset(*p++<span style="color: #000000;">);
+</span><span style="color: #008080;">48</span>             <span style="color: #0000ff;">while</span> (*p &amp;&amp; *p != <span style="color: #800000;">'</span><span style="color: #800000;">]</span><span style="color: #800000;">'</span><span style="color: #000000;">) {
+</span><span style="color: #008080;">49</span>                 <span style="color: #0000ff;">if</span> (*p == <span style="color: #800000;">'</span><span style="color: #800000;">-</span><span style="color: #800000;">'</span> &amp;&amp; p[<span style="color: #800080;">1</span>] &amp;&amp; p[<span style="color: #800080;">1</span>] != <span style="color: #800000;">'</span><span style="color: #800000;">]</span><span style="color: #800000;">'</span><span style="color: #000000;">) {
+</span><span style="color: #008080;">50</span>                     p++<span style="color: #000000;">;
+</span><span style="color: #008080;">51</span>                     c1 = p[-<span style="color: #800080;">2</span>] + <span style="color: #800080;">1</span><span style="color: #000000;">;
+</span><span style="color: #008080;">52</span>                     c2 = *p++<span style="color: #000000;">;
+</span><span style="color: #008080;">53</span>                     <span style="color: #0000ff;">while</span> (c1 &lt;=<span style="color: #000000;"> c2)
+</span><span style="color: #008080;">54</span>                         chset((CHAR)c1++<span style="color: #000000;">);
+</span><span style="color: #008080;">55</span>                 } <span style="color: #0000ff;">else</span>
+<span style="color: #008080;">56</span>                     chset(*p++<span style="color: #000000;">);
+</span><span style="color: #008080;">57</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">58</span>             <span style="color: #0000ff;">if</span> (!*<span style="color: #000000;">p)
+</span><span style="color: #008080;">59</span>                 <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Missing ]</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">60</span> 
+<span style="color: #008080;">61</span>             <span style="color: #0000ff;">for</span> (n = <span style="color: #800080;">0</span>; n &lt; BITBLK; bittab[n++] = (<span style="color: #0000ff;">char</span>) <span style="color: #800080;">0</span><span style="color: #000000;">)
+</span><span style="color: #008080;">62</span>                 store(mask ^<span style="color: #000000;"> bittab[n]);
+</span><span style="color: #008080;">63</span>     
+<span style="color: #008080;">64</span>             <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　35~64行处理character class。</p>
+<p>　　37行判断"["字符后的第一个字符是否是"^"，如果是，那么需要在最后bitwise not整个bitset，这里用了一个mask，在最后会将bitset的每个byte和mask做xor操作（62行）。</p>
+<p>　　44行和46行的两个if对出现在character class开头的"-"和"]"字符当作常规字符处理。chset()函数传入一个ASCII字符，将一个临时bitset的对应bit置为1：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> chset(CHAR c) {
+    bittab[(CHAR) ((c) </span>&amp; BLKIND) &gt;&gt; <span style="color: #800080;">3</span>] |= bitarr[(c) &amp;<span style="color: #000000;"> BITIND];
+}</span></pre>
+</div>
+<p>　　chset()函数中涉及的全局变量和宏定义如下：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">#define</span> MAXCHR    128
+<span style="color: #0000ff;">#define</span> CHRBIT    8
+<span style="color: #0000ff;">#define</span> BITBLK    MAXCHR/CHRBIT
+<span style="color: #0000ff;">#define</span> BLKIND    0170
+<span style="color: #0000ff;">#define</span> BITIND    07
+
+<span style="color: #0000ff;">static</span><span style="color: #000000;"> CHAR bittab[BITBLK];
+</span><span style="color: #0000ff;">static</span> CHAR bitarr[] = {<span style="color: #800080;">1</span>,<span style="color: #800080;">2</span>,<span style="color: #800080;">4</span>,<span style="color: #800080;">8</span>,<span style="color: #800080;">16</span>,<span style="color: #800080;">32</span>,<span style="color: #800080;">64</span>,<span style="color: #800080;">128</span>};</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　bittab是一个临时bitset，程序在处理character class时首先将bit信息写入bittab，最后再将bittab写入nfa作为&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">CCL</span>&nbsp;</span>的operand。</p>
+<p>　　MAXCHAR是一个ASCII字符所需的bitset空间，BITBLK是一个bitset的字节大小，即MAXCHR/CHRBIT = 128 / 8 = 16字节。</p>
+<p>　　回到case ']'的代码。48行的while循环处理方括号内的字符。49行判断S-E形式，51行获取S的ASCII，之所以要加1（c1 = p[-2] + 1）是因为在上一次循环中已经将S字符的bit置为1了，不再需要置1。52行获取E字符的ASCII，53行的while循环将S~E字符区间的bit全部置为1。</p>
+<p>　　56行处理除了S-E形式以外的常规字符。</p>
+<p>　　61行将bittab的每个字节和mask做xor操作后写入nfa。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">65</span>         <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">*</span><span style="color: #800000;">'</span>:               <span style="color: #008000;">/*</span><span style="color: #008000;"> match 0 or more.. </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">66</span>         <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">+</span><span style="color: #800000;">'</span>:               <span style="color: #008000;">/*</span><span style="color: #008000;"> match 1 or more.. </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">67</span>             <span style="color: #0000ff;">if</span> (p ==<span style="color: #000000;"> pat)
+</span><span style="color: #008080;">68</span>                 <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Empty closure</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">69</span>             lp = sp;        <span style="color: #008000;">/*</span><span style="color: #008000;"> previous opcode </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">70</span>             <span style="color: #0000ff;">if</span> (*lp == CLO)        <span style="color: #008000;">/*</span><span style="color: #008000;"> equivalence..   </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">71</span>                 <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">72</span>             <span style="color: #0000ff;">switch</span>(*<span style="color: #000000;">lp) {
+</span><span style="color: #008080;">73</span>             <span style="color: #0000ff;">case</span><span style="color: #000000;"> BOL:
+</span><span style="color: #008080;">74</span>             <span style="color: #0000ff;">case</span><span style="color: #000000;"> BOT:
+</span><span style="color: #008080;">75</span>             <span style="color: #0000ff;">case</span><span style="color: #000000;"> EOT:
+</span><span style="color: #008080;">76</span>             <span style="color: #0000ff;">case</span><span style="color: #000000;"> BOW:
+</span><span style="color: #008080;">77</span>             <span style="color: #0000ff;">case</span><span style="color: #000000;"> EOW:
+</span><span style="color: #008080;">78</span>             <span style="color: #0000ff;">case</span><span style="color: #000000;"> REF:
+</span><span style="color: #008080;">79</span>                 <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Illegal closure</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">80</span>             <span style="color: #0000ff;">default</span><span style="color: #000000;">:
+</span><span style="color: #008080;">81</span>                 <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">82</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">83</span> 
+<span style="color: #008080;">84</span>             <span style="color: #0000ff;">if</span> (*p == <span style="color: #800000;">'</span><span style="color: #800000;">+</span><span style="color: #800000;">'</span><span style="color: #000000;">)
+</span><span style="color: #008080;">85</span>                 <span style="color: #0000ff;">for</span> (sp = mp; lp &lt; sp; lp++<span style="color: #000000;">)
+</span><span style="color: #008080;">86</span>                     store(*<span style="color: #000000;">lp);
+</span><span style="color: #008080;">87</span> 
+<span style="color: #008080;">88</span> <span style="color: #000000;">            store(END);
+</span><span style="color: #008080;">89</span> <span style="color: #000000;">            store(END);
+</span><span style="color: #008080;">90</span>             sp =<span style="color: #000000;"> mp;
+</span><span style="color: #008080;">91</span>             <span style="color: #0000ff;">while</span> (--mp &gt;<span style="color: #000000;"> lp)
+</span><span style="color: #008080;">92</span>                 *mp = mp[-<span style="color: #800080;">1</span><span style="color: #000000;">];
+</span><span style="color: #008080;">93</span> <span style="color: #000000;">            store(CLO);
+</span><span style="color: #008080;">94</span>             mp =<span style="color: #000000;"> sp;
+</span><span style="color: #008080;">95</span>             <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　65行和66行的两个case处理closure。69行将上一个opcode的指针赋值给lp。</p>
+<p>　　70行判断如果出现了两个连续的closure（x**的形式），那么会忽略当前closure。</p>
+<p>　　72行的switch限制closure所包含的内容，必须为常规字符、"."、character class或closure。</p>
+<p>　　84行将x+形式转换为xx*形式，即将上一个opcode和operand复制一遍（lp ~ mp - 1）。</p>
+<p>　　88行和89行添加两个&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">END</span>&nbsp;</span>，其中一个是为了后面插入&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">CLO</span>&nbsp;</span>预留空间用的。90行~94行将上一个opcode后移一字节，并在空出的位置插入&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">CLO</span>&nbsp;</span>。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 96</span>         <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">\\</span><span style="color: #800000;">'</span>:              <span style="color: #008000;">/*</span><span style="color: #008000;"> tags, backrefs .. </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 97</span>             <span style="color: #0000ff;">switch</span>(*++<span style="color: #000000;">p) {</span>
+<span style="color: #008080;"> 98</span>             <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">(</span><span style="color: #800000;">'</span><span style="color: #000000;">:
+</span><span style="color: #008080;"> 99</span>                 <span style="color: #0000ff;">if</span> (tagc &lt;<span style="color: #000000;"> MAXTAG) {
+</span><span style="color: #008080;">100</span>                     tagstk[++tagi] =<span style="color: #000000;"> tagc;
+</span><span style="color: #008080;">101</span> <span style="color: #000000;">                    store(BOT);
+</span><span style="color: #008080;">102</span>                     store(tagc++<span style="color: #000000;">);
+</span><span style="color: #008080;">103</span> <span style="color: #000000;">                }
+</span><span style="color: #008080;">104</span>                 <span style="color: #0000ff;">else</span>
+<span style="color: #008080;">105</span>                     <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Too many \\(\\) pairs</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">106</span>                 <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">107</span>             <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">)</span><span style="color: #800000;">'</span><span style="color: #000000;">:
+</span><span style="color: #008080;">108</span>                 <span style="color: #0000ff;">if</span> (*sp ==<span style="color: #000000;"> BOT)
+</span><span style="color: #008080;">109</span>                     <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Null pattern inside \\(\\)</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">110</span>                 <span style="color: #0000ff;">if</span> (tagi &gt; <span style="color: #800080;">0</span><span style="color: #000000;">) {
+</span><span style="color: #008080;">111</span> <span style="color: #000000;">                    store(EOT);
+</span><span style="color: #008080;">112</span>                     store(tagstk[tagi--<span style="color: #000000;">]);
+</span><span style="color: #008080;">113</span> <span style="color: #000000;">                }
+</span><span style="color: #008080;">114</span>                 <span style="color: #0000ff;">else</span>
+<span style="color: #008080;">115</span>                     <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Unmatched \\)</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">116</span>                 <span style="color: #0000ff;">break</span><span style="color: #000000;">;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　98行的case处理"\("。100行将当前group counter值压入tagstk，然后生成&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">BOT</span> tagc</span>&nbsp;。</p>
+<p>　　107行处理"\)"。108行的if防止出现空的group。111行和112行生成&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">EOT </span>x</span>&nbsp;，并从tagstk中弹出原group counter值。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">117</span>             <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">&lt;</span><span style="color: #800000;">'</span><span style="color: #000000;">:
+</span><span style="color: #008080;">118</span> <span style="color: #000000;">                store(BOW);
+</span><span style="color: #008080;">119</span>                 <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">120</span>             <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">&gt;</span><span style="color: #800000;">'</span><span style="color: #000000;">:
+</span><span style="color: #008080;">121</span>                 <span style="color: #0000ff;">if</span> (*sp ==<span style="color: #000000;"> BOW)
+</span><span style="color: #008080;">122</span>                     <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Null pattern inside \\&lt;\\&gt;</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">123</span> <span style="color: #000000;">                store(EOW);
+</span><span style="color: #008080;">124</span>                 <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　上面的两个case处理"\&lt;"和"\&gt;"。121行的if防止出现空的单词（\&lt;\&gt;）。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">125</span>             <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">1</span><span style="color: #800000;">'</span>: <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">2</span><span style="color: #800000;">'</span>: <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">3</span><span style="color: #800000;">'</span>: <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">4</span><span style="color: #800000;">'</span>: <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">5</span><span style="color: #800000;">'</span><span style="color: #000000;">:
+</span><span style="color: #008080;">126</span>             <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">6</span><span style="color: #800000;">'</span>: <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">7</span><span style="color: #800000;">'</span>: <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">8</span><span style="color: #800000;">'</span>: <span style="color: #0000ff;">case</span> <span style="color: #800000;">'</span><span style="color: #800000;">9</span><span style="color: #800000;">'</span><span style="color: #000000;">:
+</span><span style="color: #008080;">127</span>                 n = *p-<span style="color: #800000;">'</span><span style="color: #800000;">0</span><span style="color: #800000;">'</span><span style="color: #000000;">;
+</span><span style="color: #008080;">128</span>                 <span style="color: #0000ff;">if</span> (tagi &gt; <span style="color: #800080;">0</span> &amp;&amp; tagstk[tagi] ==<span style="color: #000000;"> n)
+</span><span style="color: #008080;">129</span>                     <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Cyclical reference</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">130</span>                 <span style="color: #0000ff;">if</span> (tagc &gt;<span style="color: #000000;"> n) {
+</span><span style="color: #008080;">131</span> <span style="color: #000000;">                    store(REF);
+</span><span style="color: #008080;">132</span> <span style="color: #000000;">                    store(n);
+</span><span style="color: #008080;">133</span> <span style="color: #000000;">                }
+</span><span style="color: #008080;">134</span>                 <span style="color: #0000ff;">else</span>
+<span style="color: #008080;">135</span>                     <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Undetermined reference</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">136</span>                 <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　处理group引用。128行防止出现循环引用（当前正位于某个group中时对这个group进行引用）。</p>
+<p>　　130行的if防止引用尚未存在的group。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">137</span>             <span style="color: #0000ff;">default</span><span style="color: #000000;">:
+</span><span style="color: #008080;">138</span> <span style="color: #000000;">                store(CHR);
+</span><span style="color: #008080;">139</span>                 store(*<span style="color: #000000;">p);
+</span><span style="color: #008080;">140</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">141</span>             <span style="color: #0000ff;">break</span>;</pre>
+</div>
+<p>　　对于"\x"中x的其他情况，直接生成&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> x</span>&nbsp;。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">142</span>         <span style="color: #0000ff;">default</span> :               <span style="color: #008000;">/*</span><span style="color: #008000;"> an ordinary char  </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">143</span> <span style="color: #000000;">            store(CHR);
+</span><span style="color: #008080;">144</span>             store(*<span style="color: #000000;">p);
+</span><span style="color: #008080;">145</span>             <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">146</span>         }</pre>
+</div>
+<p>　　如果*p是常规字符，生成&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> x</span>&nbsp;。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">147</span>     <span style="color: #0000ff;">if</span> (tagi &gt; <span style="color: #800080;">0</span><span style="color: #000000;">)
+</span><span style="color: #008080;">148</span>         <span style="color: #0000ff;">return</span> badpat(<span style="color: #800000;">"</span><span style="color: #800000;">Unmatched \\(</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008080;">149</span> <span style="color: #000000;">    store(END);</span><span style="color: #008080;">150</span>     <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">151</span> }</pre>
+</div>
+<p>　　在主循环结束后，判断表达式中的\（和\）是否匹配（tagi == 0）。最后向nfa写入一个&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">END</span>&nbsp;</span>。</p>
+<p>&nbsp;</p>
+<h2><span style="font-size: 15px;"><strong>2.2 匹配</strong></span></h2>
+<p>　　在生成NFA后，就可以用这个NFA对目标字符串进行匹配。</p>
+<p>　　<img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/928363-20160911140400123-698485028.gif" alt=""></p>
+<p>　　这里要对NFA分三种情况：</p>
+<p>　　1) 开头是&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">BOL</span>&nbsp;</span>。此时仅在字符串开头使用整个NFA进行一次匹配；</p>
+<p>　　<img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/928363-20160910170155004-1714834140.png" alt=""></p>
+<p>　　2) 开头是&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> x</span>&nbsp;。此时需要在字符串中找到字符x第一次出现的位置，然后从这个位置开始使用NFA进行匹配，如果匹配失败则从下一个位置开始使用NFA匹配；</p>
+<p>　　<img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/928363-20160910171234551-1289751173.gif" alt=""></p>
+<p>　　3) 其他情况。从字符串开头开始使用NFA匹配，若匹配失败则从字符串的第二个字符开始使用NFA匹配，以此类推。</p>
+<p>　　<strong>closure的处理</strong></p>
+<p>　　closure要尽可能多地匹配符合条件的字符，因此要先跳过所有匹配的字符，从第一个不匹配的字符开始用剩余的NFA进行匹配，若匹配失败则向前移动一个字符，继续使用NFA匹配。</p>
+<p>　　</p>
+<p>　　函数re_exec()接受一个字符串，使用全局nfa进行匹配。若匹配成功则返回非0，并将所有匹配的group的start offset和end offset放入全局变量：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">static</span> <span style="color: #0000ff;">char</span> *<span style="color: #000000;">bol;
+</span><span style="color: #0000ff;">char</span> *<span style="color: #000000;">bopat[MAXTAG];
+</span><span style="color: #0000ff;">char</span> *eopat[MAXTAG];</pre>
+</div>
+<p>　　bopat和eopat分别保存group的start offset和end offset。其中group 0是整个匹配的字符串。bol在匹配的过程中保存字符串地址。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">int</span> re_exec(<span style="color: #0000ff;">char</span> *<span style="color: #000000;">lp) {
+</span><span style="color: #008080;"> 2</span> <span style="color: #000000;">    CHAR c;
+</span><span style="color: #008080;"> 3</span>     <span style="color: #0000ff;">char</span> *ep = <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;"> 4</span>     CHAR *ap =<span style="color: #000000;"> nfa;
+</span><span style="color: #008080;"> 5</span> 
+<span style="color: #008080;"> 6</span>     bol =<span style="color: #000000;"> lp;
+</span><span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span>     memset(bopat, <span style="color: #800080;">0</span>, <span style="color: #0000ff;">sizeof</span> (<span style="color: #0000ff;">char</span> *) *<span style="color: #000000;"> MAXTAG);
+</span><span style="color: #008080;"> 9</span> 
+<span style="color: #008080;">10</span>     <span style="color: #0000ff;">switch</span>(*<span style="color: #000000;">ap) {
+</span><span style="color: #008080;">11</span>     <span style="color: #0000ff;">case</span> BOL:            <span style="color: #008000;">/*</span><span style="color: #008000;"> anchored: match from BOL only </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">12</span>         ep =<span style="color: #000000;"> pmatch(lp,ap);
+</span><span style="color: #008080;">13</span>         <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">14</span>     <span style="color: #0000ff;">case</span> CHR:            <span style="color: #008000;">/*</span><span style="color: #008000;"> ordinary char: locate it fast </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">15</span>         c = *(ap+<span style="color: #800080;">1</span><span style="color: #000000;">);
+</span><span style="color: #008080;">16</span>         <span style="color: #0000ff;">while</span> (*lp &amp;&amp; *lp !=<span style="color: #000000;"> c)
+</span><span style="color: #008080;">17</span>             lp++<span style="color: #000000;">;
+</span><span style="color: #008080;">18</span>         <span style="color: #0000ff;">if</span> (!*lp)        <span style="color: #008000;">/*</span><span style="color: #008000;"> if EOS, fail, else fall thru. </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">19</span>             <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">20</span>     <span style="color: #0000ff;">default</span>:            <span style="color: #008000;">/*</span><span style="color: #008000;"> regular matching all the way. </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">21</span>         <span style="color: #0000ff;">do</span><span style="color: #000000;"> {
+</span><span style="color: #008080;">22</span>             <span style="color: #0000ff;">if</span> ((ep =<span style="color: #000000;"> pmatch(lp,ap)))
+</span><span style="color: #008080;">23</span>                 <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">24</span>             lp++<span style="color: #000000;">;
+</span><span style="color: #008080;">25</span>         } <span style="color: #0000ff;">while</span> (*<span style="color: #000000;">lp);
+</span><span style="color: #008080;">26</span>         <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">27</span>     <span style="color: #0000ff;">case</span> END:            <span style="color: #008000;">/*</span><span style="color: #008000;"> munged automaton. fail always </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;">28</span>         <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">29</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">30</span>     <span style="color: #0000ff;">if</span> (!<span style="color: #000000;">ep)
+</span><span style="color: #008080;">31</span>         <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">32</span> 
+<span style="color: #008080;">33</span>     bopat[<span style="color: #800080;">0</span>] =<span style="color: #000000;"> lp;
+</span><span style="color: #008080;">34</span>     eopat[<span style="color: #800080;">0</span>] =<span style="color: #000000;"> ep;
+</span><span style="color: #008080;">35</span>     <span style="color: #0000ff;">return</span> <span style="color: #800080;">1</span><span style="color: #000000;">;
+</span><span style="color: #008080;">36</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　10行的switch处理nfa的3种情况。如果nfa第一个opcode是&nbsp;<span class="cnblogs_code" style="color: #0000ff;">BOL</span>&nbsp;，从字符串开头进行一次匹配。pmatch()函数是使用NFA匹配字符串的核心函数，它返回匹配的字符串的end offset。如果第一个opcode是&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> x</span>&nbsp;，16行的while将找到x字符第一次出现的位置，之后和第三种情况一样处理。其他情况下，21行的do-while循环将逐个以字符串的每个字符开始使用NFA匹配。在匹配完后，将start offset和end offset分别保存到bopat[0]和eopat[0]。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">char</span> *pmatch(<span style="color: #0000ff;">char</span> *lp, CHAR *<span style="color: #000000;">ap) {
+</span><span style="color: #008080;"> 2</span>     <span style="color: #0000ff;">int</span><span style="color: #000000;"> op, c, n;
+</span><span style="color: #008080;"> 3</span>     <span style="color: #0000ff;">char</span> *e;        <span style="color: #008000;">/*</span><span style="color: #008000;"> extra pointer for CLO </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 4</span>     <span style="color: #0000ff;">char</span> *bp;        <span style="color: #008000;">/*</span><span style="color: #008000;"> beginning of subpat.. </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 5</span>     <span style="color: #0000ff;">char</span> *ep;        <span style="color: #008000;">/*</span><span style="color: #008000;"> ending of subpat..     </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 6</span>     <span style="color: #0000ff;">char</span> *are;            <span style="color: #008000;">/*</span><span style="color: #008000;"> to save the line ptr. </span><span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span>     <span style="color: #0000ff;">while</span> ((op = *ap++) !=<span style="color: #000000;"> END)
+</span><span style="color: #008080;"> 9</span>         <span style="color: #0000ff;">switch</span><span style="color: #000000;">(op) {
+</span><span style="color: #008080;">10</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> CHR:
+</span><span style="color: #008080;">11</span>             <span style="color: #0000ff;">if</span> (*lp++ != *ap++<span style="color: #000000;">)
+</span><span style="color: #008080;">12</span>                 <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">13</span>             <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">14</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> ANY:
+</span><span style="color: #008080;">15</span>             <span style="color: #0000ff;">if</span> (!*lp++<span style="color: #000000;">)
+</span><span style="color: #008080;">16</span>                 <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">17</span>             <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">18</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> CCL:
+</span><span style="color: #008080;">19</span>             c = *lp++<span style="color: #000000;">;
+</span><span style="color: #008080;">20</span>             <span style="color: #0000ff;">if</span> (!<span style="color: #000000;">isinset(ap,c))
+</span><span style="color: #008080;">21</span>                 <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">22</span>             ap +=<span style="color: #000000;"> BITBLK;
+</span><span style="color: #008080;">23</span>             <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　8行的循环遍历整个nfa，并根据不同的opcode做不同处理。&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> x</span>&nbsp;的处理是直接对*lp和x进行判断。&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">ANY</span>&nbsp;</span>匹配任意字符，因此只需要判断字符串中是否有剩余字符。&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CCL</span> bitset</span>&nbsp;需要判断字符在bitset中对应bit是否为1，使用isinset这个宏实现：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">#define</span> isinset(x,y)     ((x)[((y)&amp;BLKIND)&gt;&gt;3] &amp; bitarr[(y)&amp;BITIND])</pre>
+</div>
+<p>　　22行跳过bitset所占用的nfa空间。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">24</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> BOL:
+</span><span style="color: #008080;">25</span>             <span style="color: #0000ff;">if</span> (lp !=<span style="color: #000000;"> bol)
+</span><span style="color: #008080;">26</span>                 <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">27</span>             <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">28</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> EOL:
+</span><span style="color: #008080;">29</span>             <span style="color: #0000ff;">if</span> (*<span style="color: #000000;">lp)
+</span><span style="color: #008080;">30</span>                 <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">31</span>             <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">BOL</span>&nbsp;</span>和&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">EOL</span>&nbsp;</span>的处理很简单，只要判断lp是否是字符串首地址或末尾。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">32</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> BOT:
+</span><span style="color: #008080;">33</span>             bopat[*ap++] =<span style="color: #000000;"> lp;
+</span><span style="color: #008080;">34</span>             <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">35</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> EOT:
+</span><span style="color: #008080;">36</span>             eopat[*ap++] =<span style="color: #000000;"> lp;
+</span><span style="color: #008080;">37</span>             <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">BOT</span> n</span>&nbsp;和&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">EOT</span> n</span>&nbsp;分别将当前的字符串指针写入bopat和eopat数组。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">38</span>          <span style="color: #0000ff;">case</span><span style="color: #000000;"> BOW:
+</span><span style="color: #008080;">39</span>             <span style="color: #0000ff;">if</span> (lp!=bol &amp;&amp; iswordc(lp[-<span style="color: #800080;">1</span>]) || !iswordc(*<span style="color: #000000;">lp))
+</span><span style="color: #008080;">40</span>                 <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">41</span>             <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">42</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> EOW:
+</span><span style="color: #008080;">43</span>             <span style="color: #0000ff;">if</span> (lp==bol || !iswordc(lp[-<span style="color: #800080;">1</span>]) || iswordc(*<span style="color: #000000;">lp))
+</span><span style="color: #008080;">44</span>                 <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">45</span>             <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">BOW</span>&nbsp;</span>成功的条件是上一个字符是非单词字符（或没有上一个字符，即位于字符串开头）并且当前字符是单词字符。iswordc()宏判断某个字符是否为单词字符。</p>
+<p>　　&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">EOW</span>&nbsp;</span>成功的条件是前一个字符是单词字符且当前字符是非单词字符，如果当前位于字符串开头那么判断也将失败。</p>
+<p>　　这两个opcode都不匹配任何字符，他们只是匹配字符的边界：</p>
+<p>　　<img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/928363-20160911144835795-189178008.png" alt=""></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">46</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> REF:
+</span><span style="color: #008080;">47</span>             n = *ap++<span style="color: #000000;">;
+</span><span style="color: #008080;">48</span>             bp =<span style="color: #000000;"> bopat[n];
+</span><span style="color: #008080;">49</span>             ep =<span style="color: #000000;"> eopat[n];
+</span><span style="color: #008080;">50</span>             <span style="color: #0000ff;">while</span> (bp &lt;<span style="color: #000000;"> ep)
+</span><span style="color: #008080;">51</span>                 <span style="color: #0000ff;">if</span> (*bp++ != *lp++<span style="color: #000000;">)
+</span><span style="color: #008080;">52</span>                     <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">53</span>             <span style="color: #0000ff;">break</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">REF</span> n</span>&nbsp;先从bopat和eopat取出group n的start offset和end offset，对字符串中的每个字符逐个与start offset ~ end offset中的字符做比较。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">54</span>         <span style="color: #0000ff;">case</span><span style="color: #000000;"> CLO:
+</span><span style="color: #008080;">55</span>             are =<span style="color: #000000;"> lp;
+</span><span style="color: #008080;">56</span>             <span style="color: #0000ff;">switch</span>(*<span style="color: #000000;">ap) {
+</span><span style="color: #008080;">57</span> 
+<span style="color: #008080;">58</span>             <span style="color: #0000ff;">case</span><span style="color: #000000;"> ANY:
+</span><span style="color: #008080;">59</span>                 <span style="color: #0000ff;">while</span> (*<span style="color: #000000;">lp)
+</span><span style="color: #008080;">60</span>                     lp++<span style="color: #000000;">;
+</span><span style="color: #008080;">61</span>                 n =<span style="color: #000000;"> ANYSKIP;
+</span><span style="color: #008080;">62</span>                 <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">63</span>             <span style="color: #0000ff;">case</span><span style="color: #000000;"> CHR:
+</span><span style="color: #008080;">64</span>                 c = *(ap+<span style="color: #800080;">1</span><span style="color: #000000;">);
+</span><span style="color: #008080;">65</span>                 <span style="color: #0000ff;">while</span> (*lp &amp;&amp; c == *<span style="color: #000000;">lp)
+</span><span style="color: #008080;">66</span>                     lp++<span style="color: #000000;">;
+</span><span style="color: #008080;">67</span>                 n =<span style="color: #000000;"> CHRSKIP;
+</span><span style="color: #008080;">68</span>                 <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">69</span>             <span style="color: #0000ff;">case</span><span style="color: #000000;"> CCL:
+</span><span style="color: #008080;">70</span>                 <span style="color: #0000ff;">while</span> ((c = *lp) &amp;&amp; isinset(ap+<span style="color: #800080;">1</span><span style="color: #000000;">,c))
+</span><span style="color: #008080;">71</span>                     lp++<span style="color: #000000;">;
+</span><span style="color: #008080;">72</span>                 n =<span style="color: #000000;"> CCLSKIP;
+</span><span style="color: #008080;">73</span>                 <span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #008080;">74</span>             <span style="color: #0000ff;">default</span><span style="color: #000000;">:
+</span><span style="color: #008080;">75</span>                 re_fail(<span style="color: #800000;">"</span><span style="color: #800000;">closure: bad nfa.</span><span style="color: #800000;">"</span>, *<span style="color: #000000;">ap);
+</span><span style="color: #008080;">76</span>                 <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">77</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">78</span> 
+<span style="color: #008080;">79</span>             ap +=<span style="color: #000000;"> n;
+</span><span style="color: #008080;">80</span> 
+<span style="color: #008080;">81</span>             <span style="color: #0000ff;">while</span> (lp &gt;=<span style="color: #000000;"> are) {
+</span><span style="color: #008080;">82</span>                 <span style="color: #0000ff;">if</span> (e =<span style="color: #000000;"> pmatch(lp, ap))
+</span><span style="color: #008080;">83</span>                     <span style="color: #0000ff;">return</span><span style="color: #000000;"> e;
+</span><span style="color: #008080;">84</span>                 --<span style="color: #000000;">lp;
+</span><span style="color: #008080;">85</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">86</span>             <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span>;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">CLO</span>&nbsp;</span>的处理比较复杂。首先使用临时变量are保存当前字符串指针lp。接下来对closure包含的内容的三种不同情况分别处理。</p>
+<p>　　对于&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">ANY</span>&nbsp;</span>，将直接把lp移动到字符串末尾。将ANYSKIP（值为2）赋给n，n是nfa指针ap将跳过的字节数（79行）。这种情况下NFA的opcode序列如下：</p>
+<p>　　&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">CLO</span>&nbsp;&nbsp;<span class="cnblogs_code">ANY</span>&nbsp;&nbsp;</span><span style="color: #0000ff;"><span class="cnblogs_code">END</span>&nbsp;&nbsp;<span style="color: #000000;">...</span></span></p>
+<p>　　此时ap指向&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">ANY</span>&nbsp;</span>，需要跳过2个字节才能移动到下一个opcode，因此ANYSKIP值为2。</p>
+<p>　　对于&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CHR</span> x</span>&nbsp;，跳过所有字符x。CHRSKIP值为3（&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">CLO</span>&nbsp;&nbsp;<span class="cnblogs_code">CHR</span>&nbsp;&nbsp;</span><span class="cnblogs_code">x</span>&nbsp;&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">END</span>&nbsp;</span>）。</p>
+<p>　　对于&nbsp;<span class="cnblogs_code"><span style="color: #0000ff;">CCL</span> bitset</span>&nbsp;，跳过所有位于bitset中的字符。CCLSKIP值为18（&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">CLO</span>&nbsp;&nbsp;<span class="cnblogs_code">CCL</span>&nbsp;&nbsp;</span><span class="cnblogs_code">bitset (<span style="color: #800080;">16</span> bytes)</span>&nbsp;&nbsp;<span style="color: #0000ff;"><span class="cnblogs_code">END</span>&nbsp;</span>）。</p>
+<p>　　81行从当前lp开始使用剩余的NFA递归调用pmatch()匹配，并不断向前移动lp指针，直到lp小于are指针。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;">87</span>         <span style="color: #0000ff;">default</span><span style="color: #000000;">:
+</span><span style="color: #008080;">88</span>             re_fail(<span style="color: #800000;">"</span><span style="color: #800000;">re_exec: bad nfa.</span><span style="color: #800000;">"</span><span style="color: #000000;">, op);
+</span><span style="color: #008080;">89</span>             <span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+</span><span style="color: #008080;">90</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">91</span>     <span style="color: #0000ff;">return</span><span style="color: #000000;"> lp;
+</span><span style="color: #008080;">92</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　最后返回当前lp指针，即最后一个匹配的字符的下一个字符的位置。</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag">标签: <a href="http://www.cnblogs.com/plodsoft/tag/C%2FC%2B%2B/">C/C++</a>, <a href="http://www.cnblogs.com/plodsoft/tag/code%20reading/">code reading</a>, <a href="http://www.cnblogs.com/plodsoft/tag/regex/">regex</a>, <a href="http://www.cnblogs.com/plodsoft/tag/compilers/">compilers</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(5853945,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;887d4ead-6bfa-e511-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/plodsoft/" target="_blank"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/plodsoft/">plodsoft</a><br>
+            <a href="http://home.cnblogs.com/u/plodsoft/followees">关注 - 1</a><br>
+            <a href="http://home.cnblogs.com/u/plodsoft/followers">粉丝 - 3</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;887d4ead-6bfa-e511-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(5853945,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(5853945,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/plodsoft/p/5900270.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/plodsoft/p/5900270.html" title="发布于2016-09-23 15:41">[译] Closures in Lua - Lua中的闭包</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2016-09-11 15:14</span> <a href="http://www.cnblogs.com/plodsoft/">plodsoft</a> 阅读(<span id="post_view_count">955</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=5853945" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/plodsoft/p/5853945.html#" onclick="AddToWz(5853945);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=277658,cb_entryId=5853945,cb_blogApp=currentBlogApp,cb_blogUserGuid='887d4ead-6bfa-e511-9fc1-ac853d9f53cc',cb_entryCreatedDate='2016/9/11 15:14:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/plodsoft/p/5853945.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/plodsoft/p/5853945.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="https://cloud.tencent.com/developer/labs?fromSource=gwzcw.1087957.1087957.1087957" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2 - 腾讯云&#39;)">【推荐】如何快速搭建人工智能应用？</a><br><a href="http://challenge.xfyun.cn/?ch=bk" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-xfyun&#39;)">【大赛】2018首届“顶天立地”AI开发者大赛</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/campus?fromSource=gwzcw.1087959.1087959.1087959" target="_blank"><img width="300" height="250" src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/24442-20180710085714894-1703644023.jpg" alt="腾讯云0710" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/601677/" target="_blank">特斯拉，你就是这么服务你的客户的吗？</a><br> ·  <a href="https://news.cnblogs.com/n/601688/" target="_blank">重大发现！黑洞加速出宇宙中能量最高的粒子</a><br> ·  <a href="https://news.cnblogs.com/n/601690/" target="_blank">割“韭菜”割出了心得，但李笑来最后还是露馅了</a><br> ·  <a href="https://news.cnblogs.com/n/601691/" target="_blank">景驰高管疑似伪造签名、变更法人证据披露</a><br> ·  <a href="https://news.cnblogs.com/n/601689/" target="_blank">特斯拉本月下线1.5万辆Model 3 累计生产7.2万辆</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/9667/" target="_blank"><img src="./简易正则表达式引擎源码阅读 - plodsoft - 博客园_files/TB1iQKbhqmWBuNjy1XaXXXCbXXa-468-60.jpg" alt="" style="width: 468px; height: 60px;"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/598963/" target="_blank">危害程序员职业生涯的三大观念</a><br> ·  <a href="http://kb.cnblogs.com/page/601061/" target="_blank">断点单步跟踪是一种低效的调试方法</a><br> ·  <a href="http://kb.cnblogs.com/page/600804/" target="_blank">测试 | 让每一粒尘埃有的放矢</a><br> ·  <a href="http://kb.cnblogs.com/page/599854/" target="_blank">从Excel到微服务</a><br> ·  <a href="http://kb.cnblogs.com/page/522513/" target="_blank">如何提升你的能力？给年轻程序员的几条建议</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/plodsoft/">plodsoft</a><br>园龄：<a href="https://home.cnblogs.com/u/plodsoft/" title="入园时间：2016-04-04">2年3个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/plodsoft/followers/">3</a><br>关注：<a href="https://home.cnblogs.com/u/plodsoft/followees/">1</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;887d4ead-6bfa-e511-9fc1-ac853d9f53cc&#39;)">+加关注</a></div><script>getFollowStatus('887d4ead-6bfa-e511-9fc1-ac853d9f53cc')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/06/01&#39;);return false;">&lt;</a></td><td align="center">2018年7月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/08/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">24</td><td class="CalOtherMonthDay" align="center">25</td><td class="CalOtherMonthDay" align="center">26</td><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td></tr><tr><td class="CalWeekendDay" align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td class="CalWeekendDay" align="center">7</td></tr><tr><td class="CalWeekendDay" align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td class="CalTodayDay" align="center">14</td></tr><tr><td class="CalWeekendDay" align="center">15</td><td align="center">16</td><td align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td class="CalWeekendDay" align="center">21</td></tr><tr><td class="CalWeekendDay" align="center">22</td><td align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td class="CalWeekendDay" align="center">28</td></tr><tr><td class="CalWeekendDay" align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block"></div><div id="sidebar_recentposts" class="sidebar-block">
+<div class="catListEssay">
+<h3 class="catListTitle">最新随笔</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/plodsoft/p/6971685.html">1. [译] The Why of Y - 理解Y Combinator</a></li><li><a href="http://www.cnblogs.com/plodsoft/p/6752485.html">2. 重写了GVBASIC模拟器</a></li><li><a href="http://www.cnblogs.com/plodsoft/p/5984436.html">3. 解决windows中打包的zip在linux中解压文件名乱码的问题</a></li><li><a href="http://www.cnblogs.com/plodsoft/p/5979466.html">4. 解决Linux下chrome无法播放flash问题</a></li><li><a href="http://www.cnblogs.com/plodsoft/p/5973532.html">5. Cinnamon解决鼠标主题部分指针缺失的问题</a></li><li><a href="http://www.cnblogs.com/plodsoft/p/5966165.html">6. N551JW解决Linux下耳机电流声问题</a></li><li><a href="http://www.cnblogs.com/plodsoft/p/5948907.html">7. Debian下编译shadowsocks-qt5</a></li><li><a href="http://www.cnblogs.com/plodsoft/p/5900270.html">8. [译] Closures in Lua - Lua中的闭包</a></li><li><a href="http://www.cnblogs.com/plodsoft/p/5853945.html">9. 简易正则表达式引擎源码阅读</a></li>
+</ul>
+</div>
+</div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/plodsoft/tag/linux/">linux</a>(5)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/C%2FC%2B%2B/">C/C++</a>(2)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/compilers/">compilers</a>(2)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/translations/">translations</a>(2)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/debian/">debian</a>(1)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/functional%20programming/">functional programming</a>(1)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/code%20reading/">code reading</a>(1)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/Lua/">Lua</a>(1)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/Qt/">Qt</a>(1)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/regex/">regex</a>(1)</li><li><a href="http://www.cnblogs.com/plodsoft/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/plodsoft/archive/2017/06.html">2017年6月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/plodsoft/archive/2017/04.html">2017年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/plodsoft/archive/2016/10.html">2016年10月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/plodsoft/archive/2016/09.html">2016年9月 (2)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_scorerank" class="sidebar-block">
+<div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	5963
+	</li>
+	<li class="liRank">
+		排名 -	54572
+	</li>
+</ul>
+</div>
+
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/plodsoft/p/5979466.html#3596702">1. Re:解决Linux下chrome无法播放flash问题</a></li>
+        <li class="recent_comment_body">这个方法确实好用，谢谢楼主。附上命令行使用代理启动chrome：google-chrome --proxy-server=:port...</li>
+        <li class="recent_comment_author">--尘世小码男</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/plodsoft/p/5979466.html#3548952">2. Re:解决Linux下chrome无法播放flash问题</a></li>
+        <li class="recent_comment_body">按照chrome官方,百度经验啥的,都没解决.你这个办法有用对症.Thank You</li>
+        <li class="recent_comment_author">--铁马丶冰河</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/plodsoft/p/5900270.html#3542703">3. Re:[译] Closures in Lua - Lua中的闭包</a></li>
+        <li class="recent_comment_body">很详细很准确，翻译的真好，个别地方有点疑问，先收藏了慢慢看</li>
+        <li class="recent_comment_author">--战斗的喵喵！</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/plodsoft/p/5979466.html">1. 解决Linux下chrome无法播放flash问题(7093)</a></li><li><a href="https://www.cnblogs.com/plodsoft/p/5984436.html">2. 解决windows中打包的zip在linux中解压文件名乱码的问题(1153)</a></li><li><a href="https://www.cnblogs.com/plodsoft/p/5853945.html">3. 简易正则表达式引擎源码阅读(955)</a></li><li><a href="https://www.cnblogs.com/plodsoft/p/5966165.html">4. N551JW解决Linux下耳机电流声问题(366)</a></li><li><a href="https://www.cnblogs.com/plodsoft/p/5900270.html">5. [译] Closures in Lua - Lua中的闭包(234)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/plodsoft/p/5979466.html">1. 解决Linux下chrome无法播放flash问题(2)</a></li><li><a href="https://www.cnblogs.com/plodsoft/p/5900270.html">2. [译] Closures in Lua - Lua中的闭包(1)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/plodsoft/p/5900270.html">1. [译] Closures in Lua - Lua中的闭包(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 plodsoft
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+<div style="position: absolute; width: 0px; height: 0px; overflow: hidden; padding: 0px; border: 0px; margin: 0px;"><div id="MathJax_Font_Test" style="position: absolute; visibility: hidden; top: 0px; left: 0px; width: auto; padding: 0px; border: 0px; margin: 0px; white-space: nowrap; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; font-size: 40px; font-weight: normal; font-style: normal; font-family: MathJax_Size4, sans-serif;"></div></div></body></html>

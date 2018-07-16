@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://www.cnblogs.com/catch/p/3722082.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>基于ε-NFA的正则表达式引擎 - twoon - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/bundle-sea.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/bundle-sea-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/catch/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/catch/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/catch/wlwmanifest.xml">
+<script async="" src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/analytics.js"></script><script src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'catch', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="header">
+	
+<!--done-->
+<div class="header">
+	<div class="headerText">
+		<a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/catch/"></a><br>
+		
+	</div>
+</div>
+
+</div>
+
+<div id="mytopmenu">
+	
+		<div id="mylinks"><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a> &nbsp;
+<a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/catch/">首页</a> &nbsp;
+<a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a> &nbsp;
+<a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/twoon">联系</a> &nbsp;
+<a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/catch/rss">订阅</a><a id="blog_nav_rss_image" href="http://www.cnblogs.com/catch/rss"><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/xml.gif" alt="订阅"></a>&nbsp;
+<a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a>
+</div>
+		<div id="mystats"><div id="blog_stats">
+随笔-52&nbsp;
+评论-165&nbsp;
+文章-0&nbsp;
+<!--trackbacks-0-->
+</div></div>
+	
+</div>
+<div id="centercontent">
+	
+<div id="post_detail">
+<div class="post">
+	<h1 class="postTitle"><a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/catch/p/3722082.html">基于ε-NFA的正则表达式引擎</a></h1>
+	<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown"><p>正则表达式几乎每个程序员都会用到，对于这么常见的一个语言，有没有想过怎么去实现一个呢？乍一想，也许觉得困难，实际上实现一个正则表达式的引擎并没有想像中的复杂，《编译原理》一书中有一章专门讲解了怎么基于状态机来构建基本的正则表达式引擎，它讲这个初衷是为词法分析服务，不过书里的东西相对偏理论了些，实现起来还是要费些功夫的，只是它到底指明了一条路，当然，书里只针对基本的语法进行了分析讲解，对于在实际中很多非常有用的扩展语法，它就基本没有涉及了，这些扩展的语法中有些是比较好实现的，有些则比较难。</p>
+<h2 id="基本的正则表达式"><strong>基本的正则表达式</strong></h2>
+<p>正则表达式由字符与元字符组成，整个表达式用于描述符合某些特定特征的一类字符串，比如说表达式：abc，它表示 "abc" 这个字符串，由 'a', 'b', 'c' 三个字符按顺序连接在一起。基本的正则表达比较简单，其主要包括以下规则与元字符(meta-character)：</p>
+<ul>
+<li>连接符，该操作符没有对应的符号表示，比如对于上述的表达式 "abc"，我们默认 a 与 b, b 与 c 之间有一个连接符。</li>
+<li>或操作符，由 '|' 表示，该操作符表示它左右两边的正则表达式是一个或的关系，待匹配的字符只要符合其中一个，就是符合条件的。</li>
+<li>重复操作符，共有三个：分别是 '+', '*', '?'，分别用于表示将它前面的正则表达式的单元重复至少一次，至少0次，0次或1次。</li>
+<li>集合，用 '[]' 围起来，表示所有符合的字符。</li>
+<li>任意字符，用'.'表示，该字符表示匹配任意字符。</li>
+<li>单元或者说组，用括号'(',')'表示，该字符用于将一组正则表达式当成一个单元，使得其它的操作将该单元作为一个整体，比如说 (ab)+ 表示重复 "ab" 至少一次。</li>
+</ul>
+<p>以上这些元字符从功能上来说，可分进一步划分为以下三类：</p>
+<ol>
+<li>用于表示一类字符，包括基本字符，及元字符：'$', '^', '.', [a-z]集合，</li>
+<li>用于表示一种重复的操作，如'*', '?', '+'，统称为操作符。</li>
+<li>用于表示各个表达式间的组合关系，只有两个，或('|')及与(即连接符, 没有具体的符号表示), 统称为关系符。</li>
+</ol>
+<p>当操作符与关系符同时作用于某一与表达式时，这两者间有优先级的差异，最弱的是或，其次是与，最弱的是重复操作符，比如表达式 abc|efg，其等价于 (abc)|(efg)。</p>
+<h2 id="扩展的正则表达式"><strong>扩展的正则表达式</strong></h2>
+<p>由前面的说明，我们可以发现基本的正则表达式相对来说是比较弱的，语法上也很简单，容易实现的同时不可避免地相对功能偏弱，于是就有了扩展的语法，扩展的语法相对复杂了些，这儿就不一一介绍，具体可以参考维基百科上的<a href="http://zh.wikipedia.org/zh-cn/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">条目</a>，对于本文来说，主要想实现其中的几个语法，分别是：</p>
+<ul>
+<li>重复，用{min,max}表示，该语法表示将前面的单元重复 min 到 max 次，是个闭区间。</li>
+<li>头和尾，分别用'^'，'$'表示，表示字符串以该正则表达式描述的样子开头和结尾。</li>
+<li>向后引用(back reference)，用\1,\2等反斜杠加数字表示，这些符号表示引用前面单元中已经匹配好的内容，如([ab]cc)cd\1, 其中的\1在匹配时就会等于前面括号里的表达式匹配到的内容。</li>
+</ul>
+<p>之所以考虑加入这几个语法，主要是因为它们太常用也太有用了，具体到实现上，前面两个还比较容易，向后引用这个功能却是很麻烦的，而且实现起来效率很低，后面会介绍。</p>
+<h2 id="ε-nfa"><strong>ε-NFA</strong></h2>
+<p>实现正则表达式引擎，目前来说流行的做法主要有两种，一种是各大语言里(perl, python,etc）常用的回溯法(backtracking)，一种是龙书里说的基于状态机的做法。二者的实现各有优劣，回溯法相对来说实现功能较容易，但算法效率很低，状态机的实现，最大的优点是效率很高，但对于扩展的语法实现起来比较困难，而且代码相对不好理解。</p>
+<p>对于基本的正则表达式语法来说，用状态机实现是很理想的，性能很高，而且比较容易实现，龙书里所说的ε-NFA(non-deterministic finite automata)是这样一种状态机，首先就是某些状态对同一个输入，它可以有多个不同的转换，然后就是除了一般状态机所具有的状态与具体转换之外，还加入了一种叫作ε的状态及ε转变：</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171703156096903.png"></p>
+<p>如上图所示，状态3就是我们所说的ε状态，该状态只能通过ε转换从别的状态转过来，也只能通过ε转换转到其它状态，其中，ε转换指的是不需要任务输入就可以进行的转换。ε状态与ε转换的加入让状态机的构建更加容易与清晰，同时在某些情况下也使得一些特殊功能更加好实现，但是ε状态过多也是有坏处的，它使得状态机的状态转换变复杂变冗余了，因此应该尽可能的少用。</p>
+<h2 id="从正则表达式到ε-nfa"><strong>从正则表达式到ε-NFA</strong></h2>
+<p>一条完整的正则表达式可以看成是一系列小的正则表达式的组合，这些组合的关系根据前面的介绍主要可以概括为如下几种：</p>
+<ul>
+<li>单个字符，这是正则表达式的基本单元，如‘a', 'b'，'c'等。</li>
+<li>连接(concat),表示将两个正则表达式连接起来，是一个并的关系。</li>
+<li>或组合，表示将两个正则表达式用'|'连接起来。</li>
+<li>重复，表示将前面的正则表达式重复指定的次数，如:?, +, *,{2, 4}等。</li>
+</ul>
+<p>将正则表达式转换为ε-NFA的原则就是先从小的正则表达式开始，先将单个字符转为各个小的ε-NFA，再将这些ε-NFA根据组合关系拼凑成完整的ε-NFA。对于单个字符来说，它的ε-NFA很简单，只有两个状态，一个转换：</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171700170005669.png"></p>
+<p>concat组合则主要是将两个ε-NFA用ε转换连起来：</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171704326872418.png"></p>
+<p>接下来是或组合：</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171708050787503.png"></p>
+<p>对于重复组合来说，情况稍微复杂，对于其中'?', '+', '*'，我们只需要在子ε-NFA的开始与结束状态之间加入ε转换则可，如下所示：</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171714222657170.png"><br>
+重复一次或0次</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171715273599390.png"><br>
+重复至少一次</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171715408909957.png"><br>
+重复任意次</p>
+<p>对于扩展语法中的指定重复次数，我们可以采取将状态直接复制的做法，比较暴力，但管用，如：(a){2, 4}，我们得到如下ε-NFA</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171725469211538.png"></p>
+<p>注意其中后三组不同颜色的状态，它们是从第一组状态复制过来的。扩展的语法里，还包括如:{0,≌}这样的重复，我们只要把状态按最小的重复次数复制一遍，然后和?,+，*一样加ε转换就行了：如{2,≌}</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171731182347854.png"></p>
+<h2 id="正则表达式的语法树"><strong>正则表达式的语法树</strong></h2>
+<p>前面描述了怎么将小的ε-NFA组合成大的ε-NFA，我们知道，关键是先从小的正则表达式开始，但是具体在面对正则表达式时，我们怎么把一条完整的正则表达拆成小的正则表达式呢？<br>
+为了将大正则拆成小正则，我们可以借助语法树的帮助，所谓的语法树在这里是指这样的一棵树，它的内部结点是操作符，节点的子树则是该操作符的操作数，而叶结点则是具体的符号，在这里操作符只有三种：或(or), concat, 重复(统一用star表示), ，如：我们可以将(ab)+cd(e|f)转换为如下一棵语法树：<br>
+<img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171755226879543.png"></p>
+<p>显然对于任意一个内部结点来说，它的左右子树，就分别代表了一个小的正则表达式，而叶子结点则是最小的，解释这样一棵树显然简单多了。至于怎样构建语法树，仔细想想，在正则表达式里，表达式与操作符是右结合的，如：a+, 然后两个表达式之间要么是是concat组合，要么是或组合，所以我们在构造语法树时，可以考虑从右往左，依次将各个小的表达式，操作符分别抽出来，然后对该小的正则表达式构建语法树则可。</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp hljs"><span class="hljs-function">TreeNode* <span class="hljs-title">ConstructSynTree</span><span class="hljs-params">(</span></span><span class="dt"><span class="hljs-function"><span class="hljs-params"><span class="hljs-keyword">const</span></span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="dt"><span class="hljs-function"><span class="hljs-params"><span class="hljs-keyword">char</span></span></span></span><span class="hljs-function"><span class="hljs-params">* reg_start, </span></span><span class="dt"><span class="hljs-function"><span class="hljs-params"><span class="hljs-keyword">const</span></span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="dt"><span class="hljs-function"><span class="hljs-params"><span class="hljs-keyword">char</span></span></span></span><span class="hljs-function"><span class="hljs-params">* reg_end)</span>
+</span>{
+     <span class="dt"><span class="hljs-keyword">const</span></span> <span class="dt"><span class="hljs-keyword">char</span></span>* right_exp = ExtractExpression(reg_start, reg_end);
+
+     <span class="dt"><span class="hljs-keyword">int</span></span> <span class="kw"><span class="hljs-keyword">operator</span></span> = GetOperator(right_exp - <span class="dv"><span class="hljs-number">1</span></span>);
+
+     TreeNode* node = CreateInteriorNode(<span class="kw"><span class="hljs-keyword">operator</span></span>);
+
+     TreeNode* left_child = ConstructSynTree(reg_start, right_exp - <span class="dv"><span class="hljs-number">2</span></span>);
+
+     TreeNode* right_child = ConstructSynTree(right_exp, reg_end);
+
+     node-&gt;left = left_child;
+
+     node-&gt;right = right_child; 
+
+     <span class="kw"><span class="hljs-keyword">return</span></span> node;
+}</code></pre></div>
+<p>详细代码可以参考<a href="https://github.com/kmalloc/CompilerFront/blob/master/Regex/RegExpSyntaxTree.cc">这里</a>。</p>
+<h2 id="部分扩展语法的实现"><strong>部分扩展语法的实现</strong></h2>
+<p>前面讲的内容主要是针对基本的正则表达式语法，原理主要来自龙书的介绍，只是在实现上我尽可能减少了ε状态，因为没有涉及扩展语法，这些算法实现起来是很简单的，大概只需要一千行左右代码就可以写出来，而且效率是很高的，只是因为太简单使用起来不方便，只能玩玩，下面我讲一下怎么实现前面提到几个扩展语法。</p>
+<p>首先是关于重复，这个比较简单，前面已经讲了，至于匹配头(^),匹配尾($)，这个实现也比较容易，但我们需要增加一些铺助的ε状态：</p>
+<ol>
+<li>如果正则表达式中存在匹配头时，则在开始状态前增加一个ε状态，该状态只有一个向外的ε转换。</li>
+<li>如果正则表达式中<strong>不存在</strong>匹配尾时，则增加一个ε状态，该状态对任何输入都转换为自己。</li>
+</ol>
+<p>举个例子，对于“^a"，我们构建出如下ε-NFA:</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/171852315462880.png"></p>
+<p>而至于向后引用，这个语法在现实中是很实用的，因此我才想着要把它加进来，但等到真正实现时，才发现这个功能却出乎意料的难以实现，根据这篇<a href="http://swtch.com/~rsc/regexp/regexp1.html">文档</a>的介绍，正则表达式中向后引用的实现是一个NP完全问题，到目前来说，还没有发现高效的实现方法，而我面对的问题已经不是高效不高效的问题，而是在一个简单的ε-NFA状态机框架上要加入这个功能都是比较痛苦的，至于我现在的实现，已经把原先的状态机给hack了才做出来，代码也写得很难看了，接下来得再想想看能不能把实现设计的好一点。</p>
+<p>要想实现这个向后引用，关键在于及时把前面括号里的正则表达式所捕获的内容保存下来，而一般来说，状态机的状态本身应该是没有状态的，它不应该记住它在前一个状态做了什么事情，这些限制都让实现很为难。<br>
+但是为了捕获括号里的正则表达式所匹配的内容，我们又必须清楚地知道，当前状态机是否进入了某个括号的正则表达式对应的状态，以及什么时候退出了该括号所对应的状态，为达到这个效果，我们在构建状态机时，可以引入两个特殊的ε状态，其中一个状态称作ε-unit-start，用来表示，下次输入如果导致当前状态发生转换，则需要开始保存后续的输入，另一个状态称作ε-unit-end，用来表示，如果进入了该状态，则如果后续输入导致该状态被转换出去，则应该停止保存后续的输入。</p>
+<p>举个例子，对于a(bc)e\1，我们得到如下的语法树及ε-NFA:</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/181522528596139.png"></p>
+<p>语法树</p>
+<p><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/181528288122975.png"></p>
+<p>相应的ε-NFA，注意其中浅色的状态2和7，这两状态分别是上面提到的ε-unit-start和ε-unit-end，当状态机运行起来进入这两状态时，就分别检查是否该开始保存输入，和停止保存输入。</p>
+<p>上面的想法看起来在简单情况下比较好处理，但实现起来有很多细节需要注意，因为是ε-NFA，对于每一个输入，状态机可能会得到好多个新的状态，因此：</p>
+<ul>
+<li>有时我们可能在同一时间进入ε-unit-start和ε-unit-end。</li>
+<li>有时可能好几个ε-unit-start与ε-unit-start同时出现。</li>
+<li>有时还没有进入ε-unit-start, 却发现先进入ε-unit-end了。</li>
+<li>甚至有时进入ε-unit-start后，却发现永远都不会进入对应的ε-unit-end了。</li>
+</ul>
+<p>这些都需要一一处理好，特别是类似(a*),(a)*, a(cd)*fe这种有重复操作符的表达式，括号里可能捕获不到任何内容。</p>
+<p>我实现基本的正则表达式，只花了二三天时间，但为了使现这个向后引用，却反复修改，二三个星期才搞好。。。</p>
+<p>现在代码差不多写好了，有兴趣的可以去<a href="https://github.com/kmalloc/CompilerFront/tree/master/Regex">瞄瞄</a>，先从unit test看起，代码可读性可能不是太好，得做好心理准备，不过话说回来，读难读的代码才是真的考验啊。</p>
+</div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/catch/category/449113.html" target="_blank">c/c++</a>,<a href="http://www.cnblogs.com/catch/category/493620.html" target="_blank">Language</a>,<a href="http://www.cnblogs.com/catch/category/580183.html" target="_blank">compiler</a></div>
+<div id="EntryTag">标签: <a href="http://www.cnblogs.com/catch/tag/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">正则表达式</a>, <a href="http://www.cnblogs.com/catch/tag/regular%20expresssion/">regular expresssion</a>, <a href="http://www.cnblogs.com/catch/tag/NFA/">NFA</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(3722082,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;27ba3157-e465-e211-aa8f-842b2b196315&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/catch/" target="_blank"><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/catch/">twoon</a><br>
+            <a href="http://home.cnblogs.com/u/catch/followees">关注 - 5</a><br>
+            <a href="http://home.cnblogs.com/u/catch/followers">粉丝 - 127</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;27ba3157-e465-e211-aa8f-842b2b196315&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(3722082,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">1</span>
+    </div>
+    <div class="buryit" onclick="votePost(3722082,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/catch/p/3619379.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/catch/p/3619379.html" title="发布于2014-04-07 21:57">c++ 异常处理（2）</a><br><a href="http://www.cnblogs.com/catch/p/3751353.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/catch/p/3751353.html" title="发布于2014-06-15 16:29">模板中的名字查找问题</a><br></div>
+</div>
+
+
+	<div class="postDesc">posted on <span id="post-date">2014-05-17 20:03</span> <a href="http://www.cnblogs.com/catch/">twoon</a> 阅读(<span id="post_view_count">4388</span>) 评论(<span id="post_comment_count">1</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=3722082" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/catch/p/3722082.html#" onclick="AddToWz(3722082);return false;">收藏</a></div>
+</div>
+<script src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/highlight.min.js"></script><script>markdown_highlight();</script><script type="text/javascript">var allowComments=true,cb_blogId=140806,cb_entryId=3722082,cb_blogApp=currentBlogApp,cb_blogUserGuid='27ba3157-e465-e211-aa8f-842b2b196315',cb_entryCreatedDate='2014/5/17 20:03:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<!--done-->
+<br>
+<b>评论:</b>
+<div class="feedbackNoItems"></div>
+	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a href="https://www.cnblogs.com/catch/p/3722082.html#2941175" class="layer">#1楼</a><a name="2941175" id="comment_anchor_2941175"></a><span id="comment-maxId" style="display:none;">2941175</span><span id="comment-maxDate" style="display:none;">2014/5/18 14:10:59</span>
+				 <span class="comment_date">2014-05-18 14:10</span> | <a id="a_comment_author_2941175" href="http://home.cnblogs.com/u/634815/" target="_blank">402269235</a> <a href="http://msg.cnblogs.com/send/402269235" title="发送站内短消息" class="sendMsg2This">&nbsp;</a><br>
+				<div align="left"><div id="comment_body_2941175" class="blog_comment_body">表示不懂，一点也看不懂</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2941175,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2941175,&#39;Bury&#39;,this)">反对(0)</a></div>&nbsp;&nbsp;<span class="comment_actions"></span></div>
+			</div>
+			
+			
+		</div>
+	
+
+
+
+<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/catch/p/3722082.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/catch/p/3722082.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="https://cloud.tencent.com/developer/labs?fromSource=gwzcw.1087957.1087957.1087957" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2 - 腾讯云&#39;)">【推荐】如何快速搭建人工智能应用？</a><br><a href="http://challenge.xfyun.cn/?ch=bk" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-xfyun&#39;)">【大赛】2018首届“顶天立地”AI开发者大赛</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/campus?fromSource=gwzcw.1087959.1087959.1087959" target="_blank"><img width="300" height="250" src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/24442-20180710085714894-1703644023.jpg" alt="腾讯云0710" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/601677/" target="_blank">特斯拉，你就是这么服务你的客户的吗？</a><br> ·  <a href="https://news.cnblogs.com/n/601688/" target="_blank">重大发现！黑洞加速出宇宙中能量最高的粒子</a><br> ·  <a href="https://news.cnblogs.com/n/601690/" target="_blank">割“韭菜”割出了心得，但李笑来最后还是露馅了</a><br> ·  <a href="https://news.cnblogs.com/n/601691/" target="_blank">景驰高管疑似伪造签名、变更法人证据披露</a><br> ·  <a href="https://news.cnblogs.com/n/601689/" target="_blank">特斯拉本月下线1.5万辆Model 3 累计生产7.2万辆</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/9667/" target="_blank"><img src="./基于ε-NFA的正则表达式引擎 - twoon - 博客园_files/TB1iQKbhqmWBuNjy1XaXXXCbXXa-468-60.jpg" alt="" style="width: 468px; height: 60px;"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/598963/" target="_blank">危害程序员职业生涯的三大观念</a><br> ·  <a href="http://kb.cnblogs.com/page/601061/" target="_blank">断点单步跟踪是一种低效的调试方法</a><br> ·  <a href="http://kb.cnblogs.com/page/600804/" target="_blank">测试 | 让每一粒尘埃有的放矢</a><br> ·  <a href="http://kb.cnblogs.com/page/599854/" target="_blank">从Excel到微服务</a><br> ·  <a href="http://kb.cnblogs.com/page/522513/" target="_blank">如何提升你的能力？给年轻程序员的几条建议</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+</div>
+<div id="leftcontent">
+	
+		<div id="leftcontentcontainer">
+			
+<!--done-->
+<div class="newsItem">
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/catch/">twoon</a><br>园龄：<a href="https://home.cnblogs.com/u/catch/" title="入园时间：2013-01-24">5年5个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/catch/followers/">127</a><br>关注：<a href="https://home.cnblogs.com/u/catch/followees/">5</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;27ba3157-e465-e211-aa8f-842b2b196315&#39;)">+加关注</a></div><script>getFollowStatus('27ba3157-e465-e211-aa8f-842b2b196315')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/06/01&#39;);return false;">&lt;</a></td><td align="center">2018年7月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/08/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">24</td><td class="CalOtherMonthDay" align="center">25</td><td class="CalOtherMonthDay" align="center">26</td><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td></tr><tr><td class="CalWeekendDay" align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td class="CalWeekendDay" align="center">7</td></tr><tr><td class="CalWeekendDay" align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td class="CalTodayDay" align="center">14</td></tr><tr><td class="CalWeekendDay" align="center">15</td><td align="center">16</td><td align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td class="CalWeekendDay" align="center">21</td></tr><tr><td class="CalWeekendDay" align="center">22</td><td align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td class="CalWeekendDay" align="center">28</td></tr><tr><td class="CalWeekendDay" align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script><br>
+			<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_recentposts" class="sidebar-block">
+<h3 class="catListTitle">最新随笔</h3>
+<div class="RecentComment" id="RecentPosts">
+<ul style="word-break:break-all">
+<li><a href="http://www.cnblogs.com/catch/p/6370859.html">1. 一个由进程内存布局异常引起的问题</a></li><li><a href="http://www.cnblogs.com/catch/p/5841339.html">2. zmq 学习笔记</a></li><li><a href="http://www.cnblogs.com/catch/p/5676662.html">3. 一种高效的 vector 四则运算处理方法</a></li><li><a href="http://www.cnblogs.com/catch/p/5129586.html">4. 实现无锁的栈与队列(5)：Hazard Pointer</a></li><li><a href="http://www.cnblogs.com/catch/p/5019402.html">5. 左值右值的一点总结</a></li><li><a href="http://www.cnblogs.com/catch/p/4903653.html">6. 实现一个 Variant</a></li><li><a href="http://www.cnblogs.com/catch/p/4856064.html">7. c++ 相关的技术资源整理归类</a></li><li><a href="http://www.cnblogs.com/catch/p/4314256.html">8. c++ 全局变量初始化的一点总结</a></li><li><a href="http://www.cnblogs.com/catch/p/4158495.html">9. 再说 c++11 内存模型</a></li><li><a href="http://www.cnblogs.com/catch/p/3952141.html">10. c++ 模板元编程的一点体会</a></li>
+</ul>
+</div>
+</div><div id="sidebar_toptags" class="sidebar-block">
+<h3 class="catListTitle">我的标签</h3>
+<div id="MyTag">
+<ul>
+<li><a href="http://www.cnblogs.com/catch/tag/c%2B%2B/">c++</a>(17)</li><li><a href="http://www.cnblogs.com/catch/tag/lock%20free/">lock free</a>(7)</li><li><a href="http://www.cnblogs.com/catch/tag/acm/">acm</a>(6)</li><li><a href="http://www.cnblogs.com/catch/tag/algorithm/">algorithm</a>(5)</li><li><a href="http://www.cnblogs.com/catch/tag/c%2B%2B11/">c++11</a>(5)</li><li><a href="http://www.cnblogs.com/catch/tag/linux/">linux</a>(4)</li><li><a href="http://www.cnblogs.com/catch/tag/queue/">queue</a>(4)</li><li><a href="http://www.cnblogs.com/catch/tag/stack/">stack</a>(4)</li><li><a href="http://www.cnblogs.com/catch/tag/%E6%97%A0%E9%94%81/">无锁</a>(4)</li><li><a href="http://www.cnblogs.com/catch/tag/%E6%97%A0%E9%94%81%E9%98%9F%E5%88%97/">无锁队列</a>(4)</li><li><a href="http://www.cnblogs.com/catch/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+		<h3 class="catListTitle">随笔档案<span style="font-size:11px;font-weight:normal">(52)</span></h3>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_0" class="listitem" href="https://www.cnblogs.com/catch/archive/2017/02.html">2017年2月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_1" class="listitem" href="https://www.cnblogs.com/catch/archive/2016/09.html">2016年9月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_2" class="listitem" href="https://www.cnblogs.com/catch/archive/2016/07.html">2016年7月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_3" class="listitem" href="https://www.cnblogs.com/catch/archive/2016/03.html">2016年3月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_4" class="listitem" href="https://www.cnblogs.com/catch/archive/2015/12.html">2015年12月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_5" class="listitem" href="https://www.cnblogs.com/catch/archive/2015/10.html">2015年10月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_6" class="listitem" href="https://www.cnblogs.com/catch/archive/2015/03.html">2015年3月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_7" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/12.html">2014年12月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_8" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/10.html">2014年10月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_9" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/09.html">2014年9月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_10" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/08.html">2014年8月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_11" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/07.html">2014年7月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_12" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/06.html">2014年6月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_13" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/05.html">2014年5月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_14" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/04.html">2014年4月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_15" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/03.html">2014年3月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_16" class="listitem" href="https://www.cnblogs.com/catch/archive/2014/01.html">2014年1月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_17" class="listitem" href="https://www.cnblogs.com/catch/archive/2013/12.html">2013年12月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_18" class="listitem" href="https://www.cnblogs.com/catch/archive/2013/10.html">2013年10月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_19" class="listitem" href="https://www.cnblogs.com/catch/archive/2013/08.html">2013年8月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_20" class="listitem" href="https://www.cnblogs.com/catch/archive/2013/07.html">2013年7月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_21" class="listitem" href="https://www.cnblogs.com/catch/archive/2013/06.html">2013年6月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_22" class="listitem" href="https://www.cnblogs.com/catch/archive/2013/05.html">2013年5月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_23" class="listitem" href="https://www.cnblogs.com/catch/archive/2013/03.html">2013年3月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_24" class="listitem" href="https://www.cnblogs.com/catch/archive/2013/02.html">2013年2月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="CatList_LinkList_0_Link_25" class="listitem" href="https://www.cnblogs.com/catch/archive/2013/01.html">2013年1月 (6)</a></li>
+			
+				</ul>
+			
+	
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<h3 class="catListTitle">最新评论</h3>
+<div class="RecentComment" id="RecentComments">
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/catch/p/3500678.html#3928107">1. Re:c++中的左值与右值</a></li>
+        <li class="recent_comment_body">//error<br>func(get_cs());<br><br>这个现在编译可以过呀  为什么</li>
+        <li class="recent_comment_author">--team79</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/catch/p/3507883.html#3826004">2. Re:c++11 中的 move 与 forward</a></li>
+        <li class="recent_comment_body">@xxyyttxxforward 事实上有两个重载，我这里只写了一种，有点误导，之所以用 remove_reference 原因其实很简单，这里这样写的目的是：禁掉 forward 对参数类型的推导，......</li>
+        <li class="recent_comment_author">--twoon</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/catch/p/3507883.html#3818402">3. Re:c++11 中的 move 与 forward</a></li>
+        <li class="recent_comment_body">“ TYPE&amp;&amp; forward(typename remove_reference::type&amp; arg)请问这个原型为什么要有remove_reference呢？按照文章中的折叠原则，不管是T .......</li>
+        <li class="recent_comment_author">--xxyyttxx</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/catch/p/5019402.html#3818400">4. Re:左值右值的一点总结</a></li>
+        <li class="recent_comment_body">“具有 move 语义的类型在作为参数传递时，要么直接传值(sink parameter)，要么传 const 左值引用(read only)，根本不需要右值引用这种 tricky 的东西。”本来觉得......</li>
+        <li class="recent_comment_author">--xxyyttxx</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/catch/p/6370859.html#3805479">5. Re:一个由进程内存布局异常引起的问题</a></li>
+        <li class="recent_comment_body">干货</li>
+        <li class="recent_comment_author">--seeyouangin</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<h3 class="catListTitle">评论排行榜</h3>
+<div class="RecentComment" id="TopCommentsPosts">
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/catch/p/6370859.html">1. 一个由进程内存布局异常引起的问题(18)</a></li><li><a href="https://www.cnblogs.com/catch/p/3973104.html">2. Haskell 与范畴论(16)</a></li><li><a href="https://www.cnblogs.com/catch/p/3507883.html">3. c++11 中的 move 与 forward(15)</a></li><li><a href="https://www.cnblogs.com/catch/p/3803130.html">4. c++11 内存模型解读(8)</a></li><li><a href="https://www.cnblogs.com/catch/p/3161403.html">5. 实现无锁的栈与队列(1)(8)</a></li></ul></div>
+</div></div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/catch/p/6370859.html">1. 一个由进程内存布局异常引起的问题(27)</a></li><li><a href="https://www.cnblogs.com/catch/p/3500678.html">2. c++中的左值与右值(12)</a></li><li><a href="https://www.cnblogs.com/catch/p/3495450.html">3. 说说尾递归(10)</a></li><li><a href="https://www.cnblogs.com/catch/p/3973104.html">4. Haskell 与范畴论(7)</a></li><li><a href="https://www.cnblogs.com/catch/p/3507883.html">5. c++11 中的 move 与 forward(6)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script></div>
+	
+</div>
+
+<!--done-->
+<div class="footer">
+	Powered by: <a href="http://www.cnblogs.com/">博客园</a>	模板提供：<a href="http://blog.hjenglish.com/">沪江博客</a>
+	Copyright ©2018 twoon
+</div>
+
+
+
+
+
+</body></html>

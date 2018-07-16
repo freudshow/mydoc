@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://www.jb51.net/article/73482.htm -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+
+<meta name="applicable-device" content="pc">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform">
+<title>正则表达式详细介绍（上）_正则表达式_脚本之家</title>
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+<meta name="keywords" content="正则表达式,使用">
+<meta name="description" content="这篇文章主要介绍了正则表达式，正则表达式是由英文词语regular expression翻译过来的，就是符合某种规则的表达式。本文将会详细的介绍正则表达式，需要的朋友可以参考下">
+<link rel="alternate" media="only screen and(max-width: 640px)" href="https://m.jb51.net/article/73482.htm">
+<meta http-equiv="mobile-agent" content="format=html5; url=https://m.jb51.net/article/73482.htm">
+<meta http-equiv="mobile-agent" content="format=xhtml; url=https://m.jb51.net/article/73482.htm">
+<script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/f(6).txt"></script><script type="text/javascript" async="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/pr.js"></script><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/ca-pub-6384567588307613.js"></script><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/hm.js"></script><script type="text/javascript" async="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/jdhlbb.js"></script><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/push.js"></script><script type="text/javascript" async="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/dynamicFloat.js"></script><script type="text/javascript">
+var tougao="lijiao",lmname="正则表达式",suoyin="no";
+(function(){var reWriteUrl=function(url){if(url){var Splits=url.split("/"),siteName=window.location.pathname;if(typeof siteName!=="undefined"){return "https://m.jb51.net"+siteName}}};if(/Android|webOS|iPhone|iPad|Windows Phone|iPod|BlackBerry|SymbianOS|Nokia|Mobile/i.test(navigator.userAgent)){var url=window.location.href;var pathname=window.location.pathname;if(url.indexOf("?pc")<0){try{window.location.href=reWriteUrl(url)}catch(e){}}}})();
+</script>
+<meta name="referrer" content="always">
+<link type="text/css" href="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/base.css" rel="stylesheet">
+<link type="text/css" href="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/common.css" rel="stylesheet">
+<script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/jquery.min.js"></script>
+<script type="text/javascript">
+    if (typeof jQuery == 'undefined') {
+        document.write(unescape("%3Cscript src='/skin/js/jquery.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+</script>
+<script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/function.js"></script> 
+<link rel="preload" href="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/f(7).txt" as="script"><script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/f(7).txt"></script></head>
+<body><div id="BAIDU_DUP_fp_wrapper" style="position: absolute; left: -1px; bottom: -1px; z-index: 0; width: 0px; height: 0px; overflow: hidden; visibility: hidden; display: none;"><iframe id="BAIDU_DUP_fp_iframe" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/o.html" style="width: 0px; height: 0px; visibility: hidden; display: none;"></iframe></div>
+<!--topTools Start -->
+<div class="topTools">
+    <div class="wrap clear_fix">
+		<div class="topToolsLeft">
+			<a href="https://www.jb51.net/" target="_blank">脚本之家</a>
+			<a href="http://s.jb51.net/" target="_blank" rel="nofollow">服务器常用软件</a>
+		<a href="https://www.yuanshichang.com/" target="_blank" style="color:red">源市场</a><a href="http://idc.jb51.net/" target="_blank" style="color:red">脚本云</a></div>
+		<div class="right">
+			<ul>
+				<li><i class="sprite md left"></i><a target="_blank" href="https://m.jb51.net/" rel="nofollow">手机版</a></li>
+				<li><i class="sprite tg left"></i><a href="http://tougao.jb51.net/" rel="nofollow" target="_blank">投稿中心</a></li>
+				<li id="wxHide"><i class="sprite wx left"></i><a href="javascript:void(0)" target="_blank">关注微信</a>
+					<div id="wxShow" class="wxHide_box"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/erwm.jpg" alt="扫一扫" width="84" hight="84" data-baiduimageplus-ignore=""></div>
+				</li>
+			</ul>
+			<!--快捷导航 开始 -->
+			<div class="text_d right" id="navHide">
+        <a rel="nofollow" href="javascript:void(0);">快捷导航 <i id="icon" class="sprite arrowRight"></i></a>
+        <div id="navBox" class="nwebNav" style="display: none;">
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4>
+                                        <a rel="nofollow" href="https://www.jb51.net/softs/" target="_blank">软件下载</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/softs/android.html" target="_blank">android</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/softs/mac.html" target="_blank">MAC</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/qudong/" target="_blank">驱动下载</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/fonts/" target="_blank">字体下载</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/dll/" target="_blank">DLL</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/" target="_blank">源码下载</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/php.html" target="_blank">PHP</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/aspnet.html" target="_blank">ASP.NET</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/asp.html" target="_blank">ASP</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/codes/jsp.html" target="_blank">JSP</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="https://www.jb51.net/list/index_84.htm" target="_blank">软件编程</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_85_1.htm" target="_blank">C#</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_134_1.htm" target="_blank">JAVA</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_159_1.htm" target="_blank">C 语言</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_206_1.htm" target="_blank">Delphi</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_233_1.htm" target="_blank">Android</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="https://www.jb51.net/list/index_1.htm" target="_blank">网络编程</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_15_1.htm" target="_blank">PHP</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_21_1.htm" target="_blank">ASP.NET</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_2_1.htm" target="_blank">ASP</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_3_1.htm" target="_blank">JavaScript</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="http://tools.jb51.net/" target="_blank">在线工具</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/tools/cssyasuo.shtml" target="_blank">CSS格式化</a>
+                                        <a rel="nofollow" href="http://tools.jb51.net/tools/js_geshihua.asp" target="_blank">JS格式化</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/tools/html-js.htm" target="_blank">Html转化为Js</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="https://www.jb51.net/list/index_104.htm" target="_blank">数据库</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_112_1.htm" target="_blank">MYSQL</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_113_1.htm" target="_blank">MSSQL</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_154_1.htm" target="_blank">oracle</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_155_1.htm" target="_blank">DB2</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/list/list_252_1.htm" target="_blank">MARIADB</a></dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="https://www.jb51.net/cms/" target="_blank">CMS</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/cms/list411_1.html" target="_blank">PHPCMS</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/cms/list408_1.html" target="_blank">DEDECMS</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/cms/list578_1.html" target="_blank">帝国CMS</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/cms/list419_1.html" target="_blank">WordPress</a>
+                                </dd>
+                        </dl>
+                </div>
+                <div class="ndealList clear_fix">
+                        <div class="navTitle left">
+                                <h4><a rel="nofollow" href="javascript:0;" target="_blank">常用工具</a></h4>
+                        </div>
+                        <dl class="right">
+                                <dd>
+                                        <a rel="nofollow" href="https://www.jb51.net/zt/phphuanjing.html" target="_blank">PHP开发工具</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/zt/python.html" target="_blank">python</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/zt/photoshopxz.html" target="_blank">Photoshop</a>
+                                        <a rel="nofollow" href="https://www.jb51.net/bibei/win/index.html" target="_blank">必备软件</a></dd>
+                        </dl>
+                </div>
+        </div>
+</div>
+			<!--快捷导航 结束 -->
+		</div>
+    </div>
+</div>
+<!--topTools end -->
+
+<div class="header">
+	<!-- Logo start -->
+	<div class="wrap">
+		<div class="mtb10 clearfix">
+		  <div class="logo"><a href="https://www.jb51.net/"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/logo.gif" title="脚本之家" alt="脚本之家"></a></div>
+		  <div class="logom fl"><a href="http://99cp.win/" target="_blank"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/99yule.gif" width="370" height="60"></a>
+</div>
+		  <div class="logor fr"><a href="http://www.ku86.com/" target="_blank"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/kuyun_370.gif" width="370" height="60"></a>
+</div>
+		</div>
+	</div>
+	<!--Logo end -->
+	
+	<!-- 导航开始 -->
+	<div class="nav_top clearfix">
+		<ul>
+			<li><a href="https://www.jb51.net/">网站首页</a></li>
+			<li><a href="https://www.jb51.net/web/">网页制作</a></li>
+			<li><a href="https://www.jb51.net/list/index_1.htm">网络编程</a></li>
+			<li><a href="https://www.jb51.net/list/index_96.htm">脚本专栏</a></li>
+			<li><a href="https://www.jb51.net/jiaoben/">脚本下载</a></li>
+			<li><a href="https://www.jb51.net/list/index_104.htm">数据库</a></li>
+			<li><a href="https://www.jb51.net/list/list_82_1.htm">服务器</a></li>
+			<li><a href="https://www.jb51.net/books/">电子书籍</a></li>
+			<li><a href="https://www.jb51.net/os/">操作系统</a></li>
+			<li><a href="https://www.jb51.net/yunying/">网站运营</a></li>
+			<li><p><i>其它</i><span>
+				<a href="https://www.jb51.net/pingmian/">平面设计</a>
+				<a href="https://www.jb51.net/media/">媒体动画</a>
+				<a href="https://www.jb51.net/diannaojichu/">电脑基础</a>
+				<a href="https://www.jb51.net/hardware/">硬件教程</a>
+				<a href="https://www.jb51.net/hack/">网络安全</a>	
+			</span></p></li>
+		</ul>
+	</div>
+	<!--导航结束-->
+</div>
+
+<!-- 二级菜单开始 -->
+<div class="wrap">
+	<div class="subnav clearfix">
+<ul><li><a href="https://www.jb51.net/list/list_3_1.htm" title="JavaScript">JavaScript</a></li>
+<li><a href="https://www.jb51.net/list/list_21_1.htm" title="ASP.NET">ASP.NET</a></li>
+<li><a href="https://www.jb51.net/list/list_15_1.htm" title="PHP编程">PHP编程</a></li>
+<li><a href="https://www.jb51.net/list/list_5_1.htm" title="AJAX相关">AJAX相关</a></li>
+<li><a href="https://www.jb51.net/list/list_6_1.htm" title="正则表达式">正则表达式</a></li>
+<li><a href="https://www.jb51.net/list/list_2_1.htm" title="ASP编程">ASP编程</a></li>
+<li><a href="https://www.jb51.net/list/list_83_1.htm" title="JSP编程">JSP编程</a></li>
+<li><a href="https://www.jb51.net/list/list_123_1.htm" title="编程10000问">编程10000问</a></li>
+<li><a href="https://www.jb51.net/list/list_4_1.htm" title="CSS/HTML">CSS/HTML</a></li>
+<li><a href="https://www.jb51.net/list/list_237_1.htm" title="Flex">Flex</a></li>
+<li><a href="https://www.jb51.net/list/list_60_1.htm" title="脚本加解密">脚本加解密</a></li>
+<li><a href="https://www.jb51.net/list/list_62_1.htm" title="web2.0">web2.0</a></li>
+<li><a href="https://www.jb51.net/list/list_64_1.htm" title="XML/RSS">XML/RSS</a></li>
+<li><a href="https://www.jb51.net/list/list_176_1.htm" title="网页编辑器">网页编辑器</a></li>
+<li><a href="https://www.jb51.net/list/list_177_1.htm" title="相关技巧">相关技巧</a></li>
+<li><a href="https://www.jb51.net/list/list_72_1.htm" title="安全相关">安全相关</a></li>
+<li><a href="https://www.jb51.net/list/list_19_1.htm" title="网页播放器">网页播放器</a></li>
+<li><a href="https://www.jb51.net/list/list_185_1.htm" title="其它综合">其它综合</a></li>
+<li><a href="https://www.jb51.net/list/list_251_1.htm" title="Dart">Dart</a></li>
+</ul>
+	</div>
+</div>
+<!-- 二级菜单结束 -->	
+
+<div class="main mb10 clearfix">
+	<div class="clearfix"><div class="mainlr"><a href="http://click.aliyun.com/m/29949/" target="_blank"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/ali0323.gif" alt="aliyun" width="1080" height="50"></a></div><div class="blank5"></div><div class="mainlr"><a href="https://cloud.tencent.com/act/special/amd?fromSource=gwzcw.1085062.1085062.1085062" target="_blank"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/txy.gif" alt="txyun" width="1080" height="50"></a></div><div class="blank5"></div><div id="txtlink"><ul><li><a href="http://www.2016idc.com/cdn.html" target="_blank"><span style="color: red;">◆◆◆◆◆高防免备案CDN◆◆◆◆◆</span></a></li><li><a href="http://www.zoneidc.com/" target="_blank"><span style="color: red;">1G香港云49元/美国云49元/韩国云89元</span></a></li><li><a href="http://click.aliyun.com/m/15321/" target="_blank"><span style="color: red;">30余款阿里云产品免费6个月</span></a></li><li><a href="http://www.kaivps.com/cloud.html" target="_blank"><span style="color: red;">◆好优云◆抗攻击◆无视CC◆免备◆稳定◆</span></a></li><li><a href="http://www.jsjmpt.com/" target="_blank"><span style="color: blue;">极速短信验证码接码 接收1毛 作者提成%20</span></a></li><li><a href="https://cloud.tencent.com/act/campus?fromSource=gwzcw.846004.846004.846004" target="_blank"><span style="color: blue;">腾讯云拼团福利 1核2G云服务器10元/月</span></a></li><li><a href="http://www.osssnet.com/" target="_blank"><span style="color: blue;">◆50M香港/美国/日本服务器380免备案◆</span></a></li><li><a href="http://www.33ip.com/" target="_blank"><span style="color: blue;">枫信科技-江苏双线10M保证-399/元</span></a></li><li><a href="https://www.guowaidiaocha.com/" target="_blank"><span style="color: red;">★国外网赚月入两万，一对一教学带你★</span></a></li><li><a href="http://www.021.net/" target="_blank"><span style="color: red;">众生网络 基于云计算的互联网基础服务运营商</span></a></li><li><a href="http://www.hkcn2.com/51.htm" target="_blank"><span style="color: red;">**香港高防10m大带宽独服，低至999元**</span></a></li><li><a href="https://www.henghost.com/" target="_blank"><span style="color: red;">█▁恒创科技▁█香港服务器*双向CN2直连</span></a></li><li><a href="http://az.workwang.xyz/az/" target="_blank"><span style="color: blue;">★★★网赚达人日赚800★★★</span></a></li><li><a href="http://az.workwang.xyz/az/" target="_blank"><span style="color: blue;">★★★网赚达人日赚800★★★</span></a></li><li><a href="http://az.workwang.xyz/az/" target="_blank"><span style="color: blue;">★★★网赚达人日赚800★★★</span></a></li><li><a href="http://az.workwang.xyz/az/" target="_blank"><span style="color: blue;">★★★网赚达人日赚800★★★</span></a></li><li><a href="http://www.7yc.com/rent.html" target="_blank"><span style="color: red;">██云彩网络██100G防服务器450元</span></a></li><li><a href="https://www.50vm.com/" target="_blank"><span style="color: red;">4核独服199/16核独服360|创梦网络</span></a></li><li><a href="http://www.gwidc.com/rent/home/index.html" target="_blank"><span style="color: red;">港湾网络-徐州百独16核16G 800/月~</span></a></li><li><a href="http://www.ssf.cc/" target="_blank"><span style="color: red;">免备vps20/百独799/双线350/45互联</span></a></li><li><a href="http://www.ushk.net/server.html" target="_blank"><span style="color: blue;">██美港数据██高端香港服务器租用</span></a></li><li><a href="http://vps.zzidc.com/tongji/jb51w.html" target="_blank"><span style="color: blue;">★☆云服务器5折，天天抽红包抵扣☆★</span></a></li><li><a href="http://www.enkj.com/idc/zuyong/6" target="_blank"><span style="color: blue;">【亿恩】DELL品牌服务器，月付599元起</span></a></li><li><a href="http://www.xiaozhiyun.com/2016/" target="_blank"><span style="color: blue;">韩国香港美国站群服务器 巨牛网络</span></a></li><li><a href="http://www.wsisp.net/sale/20170518/?indexjb" target="_blank"><span style="color: red;">█▇▆5M独享云主机599/年▆▇█</span></a></li><li><a href="http://www.qy.com.cn/" target="_blank"><span style="color: red;">群英云服务器送10M带宽30G防御,49元起</span></a></li><li><a href="http://www.tuidc.com/" target="_blank"><span style="color: red;">服务器租用/托管-域名空间/认准腾佑科技</span></a></li><li><a href="http://www.jjidc.com/" target="_blank"><span style="color: red;">九九数据 — 工信部认可正规资质IDC接入商</span></a></li><li><a href="https://www.95idc.com/" target="_blank"><span style="color: blue;">95IDC█香港沙田CN2服务器 599/月</span></a></li><li><a href="http://www.zitian.cn/" target="_blank"><span style="color: blue;">中原地区核心数据中心，月付299元起</span></a></li><li><a href="http://www.qy.cn/gfhd.html" target="_blank"><span style="color: blue;">██群英网络██◆◆◆300G高防仅需599元◆◆◆</span></a></li><li><a href="http://www.pdidc.com/" target="_blank"><span style="color: blue;">浦东数据中心上海电信4星云主机30元/月起</span></a></li><li><a href="http://www.139w.com/" target="_blank"><span style="color: red;">鼎点网络百兆独享服务器仅需999元</span></a></li><li><a href="http://www.360jq.com/hkshuang.htm" target="_blank"><span style="color: red;">[香港双高防]无视CC★DDOS/堪比广东！</span></a></li><li><a href="http://www.cyidc.cc/" target="_blank"><span style="color: red;">畅游网络 百独服务器 包跑满 998元</span></a></li><li><a href="http://www.wdw6.com/" target="_blank"><span style="color: red;">服务器租用  199元起</span></a></li></ul><div class="clearfix"></div></div><div class="blank5"></div><div class="mainlr"><a href="http://27.arrowshoe.com/" target="_blank"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/27pan.jpg" alt="27pan" width="1080" height="50"></a></div><div class="blank5"></div><div class="mainlr"><iframe src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/zbj.html" width="1080" height="60" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0; vertical-align:bottom;margin:0;" allowtransparency="true"></iframe></div><div class="blank5"></div><div class="topimg"><ul><li><a href="http://www.ruixunidc.net/?jb51" target="_blank"><img alt="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/ruixun.gif" width="210" height="50"></a></li><li><a href="http://click.aliyun.com/m/17168/" target="_blank"><img alt="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/ali2371.jpg" width="211" height="50"></a></li><li><a href="https://www.simcentric.com/sc/promos/2018-e5" target="_blank"><img alt="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/sim210.gif" width="210" height="50"></a></li><li><a href="http://www.8dwww.com/cloud/" target="_blank"><img alt="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/8dwww.gif" width="210" height="50"></a></li><li><a href="https://www.arebz.com/2018.aspx?link=353943" target="_blank"><img alt="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/arebz210.gif" width="210" height="50"></a></li></ul></div><div class="blank5"></div>
+</div>
+</div>
+<div class="main clearfix">
+	<div class="NavBar clearfix ptb10">
+		<div class="fl w690">
+			<div class="box mb15 mt10"><i class="icon"></i>您的位置：<a href="https://www.jb51.net/">首页</a> → <a href="https://www.jb51.net/list/index_1.htm" title="网络编程">网络编程</a> → <a href="https://www.jb51.net/list/list_6_1.htm" title="正则表达式">正则表达式</a> → 正文内容 正则表达式</div>
+		</div>
+		<div class="fr w300"><div class="search">
+		<form action="https://www.jb51.net/do/search.php" target="_blank">
+			<input type="hidden" name="s" value="10520733385329581432">
+			<input type="hidden" name="ie" value="gbk">
+			<input type="text" name="q" class="key_input" placeholder="请输入关键词">
+			<input type="submit" value=" " class="c_btn">
+		</form></div>
+		</div>
+	</div>
+</div>
+<!--content Star -->
+<div id="contents">
+ <!--share start-->
+ <div id="right-share" style="display: block;">
+	<div class="right-share jb-share" id="jb-share">
+		<a class="rshare-weixin" title="">微信</a>
+        <a rel="nofollow" class="rshare-qzone" target="_blank" href="https://tougao.jb51.net/" title="投稿">投稿</a>
+		<a rel="nofollow" class="rshare-sqq" target="_blank" href="http://shequ.jb51.net/" title="交流社区">交流社区</a>
+		<a rel="nofollow" class="rshare-tsina" target="_blank" href="http://tools.jb51.net/" title="在线工具">在线工具</a>
+	</div>
+	<a class="rshare-top" onclick="javascript:;"></a>
+			
+	<div id="weixin-code" class="hide">
+	<div class="popup_weixin_head"><p>关注微信公众号</p> 
+	<div id="code"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/erwm.jpg" alt="扫一扫" width="100" hight="100"></div>
+	</div>
+	</div>	
+ </div>
+<!--share end-->
+
+ <div class="main clearfix bgf">
+      <div class="w750 fl">
+      <div class="article-content border">
+      <div class="title">
+            <h1 class="YaHei">正则表达式详细介绍（上）</h1>
+            <p><i>转载</i> &nbsp;更新时间：2015年10月16日 10:40:12 &nbsp; 作者：摩诘  &nbsp; <a href="https://www.jb51.net/article/73482.htm#comments"> <img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/text-message.png" width="15" height="15"> 我要评论</a> </p>
+        </div>
+        <div class="lbd clearfix"><div id="_8xvgjddrghs" style=""><iframe width="700" frameborder="0" height="60" scrolling="no" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/s.html"></iframe></div><script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/uphlhyovv.js"></script>
+</div>
+        <div class="art_desc mt10"><div id="art_demo">这篇文章主要介绍了正则表达式，正则表达式是由英文词语regular expression翻译过来的，就是符合某种规则的表达式。本文将会详细的介绍正则表达式，需要的朋友可以参考下</div></div>
+        <div class="lbd clearfix"><a href="http://www.php.cn/course.html?ad51" target="_blank"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/phpcn_0508.gif" width="690" height="99"></a>
+</div>
+        <div id="content">
+            <p>本文是Jan Goyvaerts为RegexBuddy写的教程的译文，下面来看吧！</p>
+<p><strong>1. 什么是正则表达式</strong></p>
+<p>基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex代表Regular Express。本文将用&lt;&lt;regex&gt;&gt;来表示一段具体的正则表达式。</p>
+<p>一段文本就是最基本的模式，简单的匹配相同的文本。</p>
+<p><strong>2. 不同的正则表达式引擎</strong></p>
+<p>正则表达式引擎是一种可以处理正则表达式的软件。通常，引擎是更大的应用程序的一部分。在软件世界，不同的正则表达式并不互相兼容。本教程会集中讨论Perl 5 类型的引擎，因为这种引擎是应用最广泛的引擎。同时我们也会提到一些和其他引擎的区别。许多近代的引擎都很类似，但不完全一样。例如.NET正则库，JDK正则包。</p>
+<p><strong>3. 文字符号</strong></p>
+<p>最基本的正则表达式由单个文字符号组成。如&lt;&lt;a&gt;&gt;，它将匹配字符串中第一次出现的字符“a”。如对字符串“Jack is a boy”。“J”后的“a”将被匹配。而第二个“a”将不会被匹配。</p>
+<p>正则表达式也可以匹配第二个“a”，这必须是你告诉正则表达式引擎从第一次匹配的地方开始搜索。在文本编辑器中，你可以使用“查找下一个”。在编程语言中，会有一个函数可以使你从前一次匹配的位置开始继续向后搜索。</p>
+<p>类似的，&lt;&lt;cat&gt;&gt;会匹配“About cats and dogs”中的“cat”。这等于是告诉正则表达式引擎，找到一个&lt;&lt;c&gt;&gt;，紧跟一个&lt;&lt;a&gt;&gt;，再跟一个&lt;&lt;t&gt;&gt;。</p>
+<p>要注意，正则表达式引擎缺省是大小写敏感的。除非你告诉引擎忽略大小写，否则&lt;&lt;cat&gt;&gt;不会匹配“Cat”。</p>
+<p><strong>（1）特殊字符</strong></p>
+<p>对于文字字符，有11个字符被保留作特殊用途。他们是：</p>
+<p>[ ] \ ^ $ . | ? * + ( )</p>
+<p>这些特殊字符也被称作元字符。</p>
+<p>如果你想在正则表达式中将这些字符用作文本字符，你需要用反斜杠“\”对其进行换码 (escape)。例如你想匹配“1+1=2”，正确的表达式为&lt;&lt;1\+1=2&gt;&gt;.</p>
+<p>需要注意的是，&lt;&lt;1+1=2&gt;&gt;也是有效的正则表达式。但它不会匹配“1+1=2”，而会匹配“123+111=234”中的“111=2”。因为“+”在这里表示特殊含义（重复1次到多次）。</p>
+<p>在编程语言中，要注意，一些特殊的字符会先被编译器处理，然后再传递给正则引擎。因此正则表达式&lt;&lt;1\+2=2&gt;&gt;在C++中要写成“1\\+1=2”。为了匹配“C:\temp”，你要用正则表达式&lt;&lt;C:\\temp&gt;&gt;。而在C++中，正则表达式则变成了“C:\\\\temp”。</p>
+<p><strong>（2）不可显示字符</strong></p>
+<p>可以使用特殊字符序列来代表某些不可显示字符：</p>
+<p>&lt;&lt;\t&gt;&gt;代表Tab(0x09)</p>
+<p>&lt;&lt;\r&gt;&gt;代表回车符(0x0D)</p>
+<p>&lt;&lt;\n&gt;&gt;代表换行符(0x0A)</p>
+<p>要注意的是Windows中文本文件使用“\r\n”来结束一行而Unix使用“\n”。</p>
+<p><strong>4. 正则表达式引擎的内部工作机制</strong></p>
+<p>知道正则表达式引擎是如何工作的有助于你很快理解为何某个正则表达式不像你期望的那样工作。</p>
+<p>有两种类型的引擎：文本导向(text-directed)的引擎和正则导向(regex-directed)的引擎。Jeffrey Friedl把他们称作DFA和NFA引擎。本文谈到的是正则导向的引擎。这是因为一些非常有用的特性，如“惰性”量词(lazy quantifiers)和反向引用(backreferences)，只能在正则导向的引擎中实现。所以毫不意外这种引擎是目前最流行的引擎。</p>
+<p>你可以轻易分辨出所使用的引擎是文本导向还是正则导向。如果反向引用或“惰性”量词被实现，则可以肯定你使用的引擎是正则导向的。你可以作如下测试：将正则表达式&lt;&lt;regex|regex not&gt;&gt;应用到字符串“regex not”。如果匹配的结果是regex，则引擎是正则导向的。如果结果是regex not，则是文本导向的。因为正则导向的引擎是“猴急”的，它会很急切的进行表功，报告它找到的第一个匹配 。</p>
+<p><strong>正则导向的引擎总是返回最左边的匹配</strong></p>
+<p>这是需要你理解的很重要的一点：即使以后有可能发现一个“更好”的匹配，正则导向的引擎也总是返回最左边的匹配。</p>
+<p>当把&lt;&lt;cat&gt;&gt;应用到“He captured a catfish for his cat”，引擎先比较&lt;&lt;c&gt;&gt;和“H”，结果失败了。于是引擎再比较&lt;&lt;c&gt;&gt;和“e”，也失败了。直到第四个字符，&lt;&lt;c&gt;&gt;匹配了“c”。&lt;&lt;a&gt;&gt;匹配了第五个字符。到第六个字符&lt;&lt;t&gt;&gt;没能匹配“p”，也失败了。引擎再继续从第五个字符重新检查匹配性。直到第十五个字符开始，&lt;&lt;cat&gt;&gt;匹配上了“catfish”中的“cat”，正则表达式引擎急切的返回第一个匹配的结果，而不会再继续查找是否有其他更好的匹配。</p>
+<p><strong>5. 字符集</strong></p>
+<p>字符集是由一对方括号“[]”括起来的字符集合。使用字符集，你可以告诉正则表达式引擎仅仅匹配多个字符中的一个。如果你想匹配一个“a”或一个“e”，使用&lt;&lt;[ae]&gt;&gt;。你可以使用&lt;&lt;gr[ae]y&gt;&gt;匹配gray或grey。这在你不确定你要搜索的字符是采用美国英语还是英国英语时特别有用。相反，&lt;&lt;gr[ae]y&gt;&gt;将不会匹配graay或graey。字符集中的字符顺序并没有什么关系，结果都是相同的。</p>
+<p>你可以使用连字符“-”定义一个字符范围作为字符集。&lt;&lt;[0-9]&gt;&gt;匹配0到9之间的单个数字。你可以使用不止一个范围。&lt;&lt;[0-9a-fA-F] &gt;&gt;匹配单个的十六进制数字，并且大小写不敏感。你也可以结合范围定义与单个字符定义。&lt;&lt;[0-9a-fxA-FX]&gt;&gt;匹配一个十六进制数字或字母X。再次强调一下，字符和范围定义的先后顺序对结果没有影响。</p>
+<p><strong>（1）字符集的一些应用</strong></p>
+<p>查找一个可能有拼写错误的单词，比如&lt;&lt;sep[ae]r[ae]te&gt;&gt; 或 &lt;&lt;li[cs]en[cs]e&gt;&gt;。</p>
+<p>查找程序语言的标识符，&lt;&lt;A-Za-z_][A-Za-z_0-9]*&gt;&gt;。(*表示重复0或多次)</p>
+<p>查找C风格的十六进制数&lt;&lt;0[xX][A-Fa-f0-9]+&gt;&gt;。(+表示重复一次或多次)</p>
+<p><strong>（2）取反字符集</strong></p>
+<p>在左方括号“[”后面紧跟一个尖括号“^”，将会对字符集取反。结果是字符集将匹配任何不在方括号中的字符。不像“.”，取反字符集是可以匹配回车换行符的。</p>
+<p>需要记住的很重要的一点是，取反字符集必须要匹配一个字符。&lt;&lt;q[^u]&gt;&gt;并不意味着：匹配一个q，后面没有u跟着。它意味着：匹配一个q，后面跟着一个不是u的字符。所以它不会匹配“Iraq”中的q，而会匹配“Iraq is a country”中的q和一个空格符。事实上，空格符是匹配中的一部分，因为它是一个“不是u的字符”。</p>
+<p>如果你只想匹配一个q，条件是q后面有一个不是u的字符，我们可以用后面将讲到的向前查看来解决。</p>
+<p><strong>（3）字符集中的元字符</strong></p>
+<p>需要注意的是，在字符集中只有4个 字符具有特殊含义。它们是：“] \ ^ -”。“]”代表字符集定义的结束；“\”代表转义；“^”代表取反；“-”代表范围定义。其他常见的元字符在字符集定义内部都是正常字符，不需要转义。例如，要搜索星号*或加号+，你可以用&lt;&lt;[+*]&gt;&gt;。当然，如果你对那些通常的元字符进行转义，你的正则表达式一样会工作得很好，但是这会降低可读性。</p>
+<p>在字符集定义中为了将反斜杠“\”作为一个文字字符而非特殊含义的字符，你需要用另一个反斜杠对它进行转义。&lt;&lt;[\\x]&gt;&gt;将会匹配一个反斜杠和一个X。“]^-”都可以用反斜杠进行转义，或者将他们放在一个不可能使用到他们特殊含义的位置。我们推荐后者，因为这样可以增加可读性。比如对于字符“^”，将它放在除了左括号“[”后面的位置，使用的都是文字字符含义而非取反含义。如&lt;&lt;[x^]&gt;&gt;会匹配一个x或^。&lt;&lt;[]x]&gt;&gt;会匹配一个“]”或“x”。&lt;&lt;[-x]&gt;&gt;或&lt;&lt;[x-]&gt;&gt;都会匹配一个“-”或“x”。</p>
+<p><strong>（4）字符集的简写</strong></p>
+<p>因为一些字符集非常常用，所以有一些简写方式。</p>
+<p>&lt;&lt;\d&gt;&gt;代表&lt;&lt;[0-9]&gt;&gt;;</p>
+<p>&lt;&lt;\w&gt;&gt;代表单词字符。这个是随正则表达式实现的不同而有些差异。绝大多数的正则表达式实现的单词字符集都包含了&lt;&lt;A-Za-z0-9_]&gt;&gt;。</p>
+<p>&lt;&lt;\s&gt;&gt;代表“白字符”。这个也是和不同的实现有关的。在绝大多数的实现中，都包含了空格符和Tab符，以及回车换行符&lt;&lt;\r\n&gt;&gt;。</p>
+<p>字符集的缩写形式可以用在方括号之内或之外。&lt;&lt;\s\d&gt;&gt;匹配一个白字符后面紧跟一个数字。&lt;&lt;[\s\d]&gt;&gt;匹配单个白字符或数字。&lt;&lt;[\da-fA-F]&gt;&gt;将匹配一个十六进制数字。</p>
+<p>取反字符集的简写</p>
+<p>&lt;&lt;[\S]&gt;&gt; = &lt;&lt;[^\s]&gt;&gt;</p>
+<p>&lt;&lt;[\W]&gt;&gt; = &lt;&lt;[^\w]&gt;&gt;</p>
+<p>&lt;&lt;[\D]&gt;&gt; = &lt;&lt;[^\d]&gt;&gt;</p>
+<p><strong>（5）字符集的重复</strong></p>
+<p>如果你用“?*+”操作符来重复一个字符集，你将会重复整个字符集。而不仅是它匹配的那个字符。正则表达式&lt;&lt;[0-9]+&gt;&gt;会匹配837以及222。</p>
+<p>如果你仅仅想重复被匹配的那个字符，可以用向后引用达到目的。我们以后将讲到向后引用。</p>
+<p><strong>6. 使用?*或+ 进行重复</strong></p>
+<p>?：告诉引擎匹配前导字符0次或一次。事实上是表示前导字符是可选的。</p>
+<p>+：告诉引擎匹配前导字符1次或多次</p>
+<p>*：告诉引擎匹配前导字符0次或多次</p>
+<p>&lt;[A-Za-z][A-Za-z0-9]*&gt;匹配没有属性的HTML标签，“&lt;”以及“&gt;”是文字符号。第一个字符集匹配一个字母，第二个字符集匹配一个字母或数字。</p>
+<p>我们似乎也可以用&lt;[A-Za-z0-9]+&gt;。但是它会匹配&lt;1&gt;。但是这个正则表达式在你知道你要搜索的字符串不包含类似的无效标签时还是足够有效的。</p>
+<p><strong>（1）限制性重复</strong></p>
+<p>许多现代的正则表达式实现，都允许你定义对一个字符重复多少次。词法是：{min,max}。min和max都是非负整数。如果逗号有而max被忽略了，则max没有限制。如果逗号和max都被忽略了，则重复min次。</p>
+<p>因此{0,}和*一样，{1，}和+ 的作用一样。</p>
+<p>你可以用&lt;&lt;\b[1-9][0-9]{3}\b&gt;&gt;匹配1000~9999之间的数字(“\b”表示单词边界)。&lt;&lt;\b[1-9][0-9]{2,4}\b&gt;&gt;匹配一个在100~99999之间的数字。</p>
+<p><strong>（2）注意贪婪性</strong></p>
+<p>假设你想用一个正则表达式匹配一个HTML标签。你知道输入将会是一个有效的HTML文件，因此正则表达式不需要排除那些无效的标签。所以如果是在两个尖括号之间的内容，就应该是一个HTML标签。</p>
+<p>许多正则表达式的新手会首先想到用正则表达式&lt;&lt; &lt;.+&gt; &gt;&gt;，他们会很惊讶的发现，对于测试字符串，“This is a &lt;EM&gt;first&lt;/EM&gt; test”，你可能期望会返回&lt;EM&gt;，然后继续进行匹配的时候，返回&lt;/EM&gt;。</p>
+<p>但事实是不会。正则表达式将会匹配“&lt;EM&gt;first&lt;/EM&gt;”。很显然这不是我们想要的结果。原因在于“+”是贪婪的。也就是说，“+”会导致正则表达式引擎试图尽可能的重复前导字符。只有当这种重复会引起整个正则表达式匹配失败的情况下，引擎会进行回溯。也就是说，它会放弃最后一次的“重复”，然后处理正则表达式余下的部分。</p>
+<p>和“+”类似，“?*”的重复也是贪婪的。</p>
+<p><strong>（3）深入正则表达式引擎内部</strong></p>
+<p>让我们来看看正则引擎如何匹配前面的例子。第一个记号是“&lt;”，这是一个文字符号。第二个符号是“.”，匹配了字符“E”，然后“+”一直可以匹配其余的字符，直到一行的结束。然后到了换行符，匹配失败(“.”不匹配换行符)。于是引擎开始对下一个正则表达式符号进行匹配。也即试图匹配“&gt;”。到目前为止，“&lt;.+”已经匹配了“&lt;EM&gt;first&lt;/EM&gt; test”。引擎会试图将“&gt;”与换行符进行匹配，结果失败了。于是引擎进行回溯。结果是现在“&lt;.+”匹配“&lt;EM&gt;first&lt;/EM&gt; tes”。于是引擎将“&gt;”与“t”进行匹配。显然还是会失败。这个过程继续，直到“&lt;.+”匹配“&lt;EM&gt;first&lt;/EM”，“&gt;”与“&gt;”匹配。于是引擎找到了一个匹配“&lt;EM&gt;first&lt;/EM&gt;”。记住，正则导向的引擎是“急切的”，所以它会急着报告它找到的第一个匹配。而不是继续回溯，即使可能会有更好的匹配，例如“&lt;EM&gt;”。所以我们可以看到，由于“+”的贪婪性，使得正则表达式引擎返回了一个最左边的最长的匹配。</p>
+<p><strong>（4）用懒惰性取代贪婪性</strong></p>
+<p>一个用于修正以上问题的可能方案是用“+”的惰性代替贪婪性。你可以在“+”后面紧跟一个问号“?”来达到这一点。“*”，“{}”和“?”表示的重复也可以用这个方案。因此在上面的例子中我们可以使用“&lt;.+?&gt;”。让我们再来看看正则表达式引擎的处理过程。</p>
+<p>再一次，正则表达式记号“&lt;”会匹配字符串的第一个“&lt;”。下一个正则记号是“.”。这次是一个懒惰的“+”来重复上一个字符。这告诉正则引擎，尽可能少的重复上一个字符。因此引擎匹配“.”和字符“E”，然后用“&gt;”匹配“M”，结果失败了。引擎会进行回溯，和上一个例子不同，因为是惰性重复，所以引擎是扩展惰性重复而不是减少，于是“&lt;.+”现在被扩展为“&lt;EM”。引擎继续匹配下一个记号“&gt;”。这次得到了一个成功匹配。引擎于是报告“&lt;EM&gt;”是一个成功的匹配。整个过程大致如此。</p>
+<p><strong>（5）惰性扩展的一个替代方案</strong></p>
+<p>我们还有一个更好的替代方案。可以用一个贪婪重复与一个取反字符集：“&lt;[^&gt;]+&gt;”。之所以说这是一个更好的方案在于使用惰性重复时，引擎会在找到一个成功匹配前对每一个字符进行回溯。而使用取反字符集则不需要进行回溯。</p>
+<p>最后要记住的是，本教程仅仅谈到的是正则导向的引擎。文本导向的引擎是不回溯的。但是同时他们也不支持惰性重复操作。</p>
+<p><strong>7. 使用“.”匹配几乎任意字符</strong></p>
+<p>在正则表达式中，“.”是最常用的符号之一。不幸的是，它也是最容易被误用的符号之一。</p>
+<p>“.”匹配一个单个的字符而不用关心被匹配的字符是什么。唯一的例外是新行符。在本教程中谈到的引擎，缺省情况下都是不匹配新行符的。因此在缺省情况下，“.”等于是字符集[^\n\r](Window)或[^\n]( Unix)的简写。</p>
+<p>这个例外是因为历史的原因。因为早期使用正则表达式的工具是基于行的。它们都是一行一行的读入一个文件，将正则表达式分别应用到每一行上去。在这些工具中，字符串是不包含新行符的。因此“.”也就从不匹配新行符。</p>
+<p>现代的工具和语言能够将正则表达式应用到很大的字符串甚至整个文件上去。本教程讨论的所有正则表达式实现都提供一个选项，可以使“.”匹配所有的字符，包括新行符。在RegexBuddy, EditPad Pro或PowerGREP等工具中，你可以简单的选中“点号匹配新行符”。在Perl中，“.”可以匹配新行符的模式被称作“单行模式”。很不幸，这是一个很容易混淆的名词。因为还有所谓“多行模式”。多行模式只影响行首行尾的锚定(anchor)，而单行模式只影响“.”。</p>
+<p>其他语言和正则表达式库也采用了Perl的术语定义。当在.NET Framework中使用正则表达式类时，你可以用类似下面的语句来激活单行模式：Regex.Match(“string”,”regex”,RegexOptions.SingleLine)</p>
+<p><strong>保守的使用点号“.”</strong></p>
+<p>点号可以说是最强大的元字符。它允许你偷懒：用一个点号，就能匹配几乎所有的字符。但是问题在于，它也常常会匹配不该匹配的字符。</p>
+<p>我会以一个简单的例子来说明。让我们看看如何匹配一个具有“mm/dd/yy”格式的日期，但是我们想允许用户来选择分隔符。很快能想到的一个方案是&lt;&lt;\d\d.\d\d.\d\d&gt;&gt;。看上去它能匹配日期“02/12/03”。问题在于02512703也会被认为是一个有效的日期。</p>
+<p>&lt;&lt;\d\d[-/.]\d\d[-/.]\d\d&gt;&gt;看上去是一个好一点的解决方案。记住点号在一个字符集里不是元字符。这个方案远不够完善，它会匹配“99/99/99”。而&lt;&lt;[0-1]\d[-/.][0-3]\d[-/.]\d\d&gt;&gt;又更进一步。尽管他也会匹配“19/39/99”。你想要你的正则表达式达到如何完美的程度取决于你想达到什么样的目的。如果你想校验用户输入，则需要尽可能的完美。如果你只是想分析一个已知的源，并且我们知道没有错误的数据，用一个比较好的正则表达式来匹配你想要搜寻的字符就已经足够。</p>
+<p><strong>8. 字符串开始和结束的锚定</strong></p>
+<p>锚定和一般的正则表达式符号不同，它不匹配任何字符。相反，他们匹配的是字符之前或之后的位置。“^”匹配一行字符串第一个字符前的位置。&lt;&lt;^a&gt;&gt;将会匹配字符串“abc”中的a。&lt;&lt;^b&gt;&gt;将不会匹配“abc”中的任何字符。</p>
+<p>类似的，$匹配字符串中最后一个字符的后面的位置。所以&lt;&lt;c$&gt;&gt;匹配“abc”中的c。</p>
+<p><strong>（1）锚定的应用</strong></p>
+<p>在编程语言中校验用户输入时，使用锚定是非常重要的。如果你想校验用户的输入为整数，用&lt;&lt;^\d+$&gt;&gt;。</p>
+<p>用户输入中，常常会有多余的前导空格或结束空格。你可以用&lt;&lt;^\s*&gt;&gt;和&lt;&lt;\s*$&gt;&gt;来匹配前导空格或结束空格。</p>
+<p><strong>（2）使用“^”和“$”作为行的开始和结束锚定</strong></p>
+<p>如果你有一个包含了多行的字符串。例如：“first line\n\rsecond line”(其中\n\r表示一个新行符)。常常需要对每行分别处理而不是整个字符串。因此，几乎所有的正则表达式引擎都提供一个选项，可以扩展这两种锚定的含义。“^”可以匹配字串的开始位置(在f之前)，以及每一个新行符的后面位置(在\n\r和s之间)。类似的，$会匹配字串的结束位置(最后一个e之后)，以及每个新行符的前面(在e与\n\r之间)。</p>
+<p>在.NET中，当你使用如下代码时，将会定义锚定匹配每一个新行符的前面和后面位置：Regex.Match("string", "regex", RegexOptions.Multiline)</p>
+<p>应用：string str = Regex.Replace(Original, "^", "&gt; ", RegexOptions.Multiline)--将会在每行的行首插入“&gt; ”。</p>
+<p><strong>（3）绝对锚定</strong></p>
+<p>&lt;&lt;\A&gt;&gt;只匹配整个字符串的开始位置，&lt;&lt;\Z&gt;&gt;只匹配整个字符串的结束位置。即使你使用了“多行模式”，&lt;&lt;\A&gt;&gt;和&lt;&lt;\Z&gt;&gt;也从不匹配新行符。</p>
+<p>即使\Z和$只匹配字符串的结束位置，仍然有一个例外的情况。如果字符串以新行符结束，则\Z和$将会匹配新行符前面的位置，而不是整个字符串的最后面。这个“改进”是由Perl引进的，然后被许多的正则表达式实现所遵循，包括Java，.NET等。如果应用&lt;&lt;^[a-z]+$&gt;&gt;到“joe\n”，则匹配结果是“joe”而不是“joe\n”。</p>
+<p>以上就是正则表达式详细介绍上篇的全部内容，希望对大家更好的理解正则表达式有所帮助。</p>
+            
+            <div class="art_xg">
+<h4>您可能感兴趣的文章:</h4><ul><li><a href="https://www.jb51.net/article/72867.htm" title="最全的常用正则表达式大全——包括校验数字、字符、一些特殊的需求等" target="_blank">最全的常用正则表达式大全——包括校验数字、字符、一些特殊的需求等</a></li><li><a href="https://www.jb51.net/article/72871.htm" title="正则表达式问号的四种用法详解" target="_blank">正则表达式问号的四种用法详解</a></li><li><a href="https://www.jb51.net/article/72928.htm" title="MySQL中REGEXP正则表达式使用大全" target="_blank">MySQL中REGEXP正则表达式使用大全</a></li><li><a href="https://www.jb51.net/article/73779.htm" title="Java正则表达式过滤出字母、数字和中文" target="_blank">Java正则表达式过滤出字母、数字和中文</a></li><li><a href="https://www.jb51.net/article/73795.htm" title="IOS开发常用的正则表达式" target="_blank">IOS开发常用的正则表达式</a></li><li><a href="https://www.jb51.net/article/82835.htm" title="20个正则表达式必知(能让你少写1,000行代码)" target="_blank">20个正则表达式必知(能让你少写1,000行代码)</a></li></ul>
+</div>
+<div class="clearfix">
+
+
+</div>
+        <div class="jb51ewm"><div class="fl"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/jb51ewm.png"></div><div class="fr"><p>微信公众号搜索 “ <span>脚本之家</span> ” ，选择关注</p><p>程序猿的那些事、送书等活动等着你</p></div></div></div><!--endmain-->
+<div class="tags clearfix">
+	<i class="icon-tag"></i>
+	<ul class="meta-tags items">
+	  <li class="tag item"><a href="http://common.jb51.net/tag/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/1.htm" target="_blank" title="搜索关于正则表达式的文章" rel="nofollow">正则表达式</a></li>
+<li class="tag item"><a href="http://common.jb51.net/tag/%E4%BD%BF%E7%94%A8/1.htm" target="_blank" title="搜索关于使用的文章" rel="nofollow">使用</a></li>
+
+	</ul>
+</div>        
+
+<div class="lbd clearfix">
+<div id="_chfx7ewn2w" style="width: 100%;"><iframe width="700" frameborder="0" height="260" scrolling="no" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/s(1).html"></iframe></div><script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/lgypofdip.js"></script>
+
+</div>
+<div id="shoucang"></div>
+
+<div class="xgcomm clearfix">
+	<h2>相关文章</h2>
+	<ul><li class="lbd clearfix"><div style="width: 100%;"><div id="ydego"><iframe width="700" frameborder="0" height="120" scrolling="no" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/s(2).html"></iframe></div></div><script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/dyqhaquun.js"></script>
+</li><li><div class="item-inner"><a href="https://www.jb51.net/article/42299.htm" title="JS只能输入数字或数字和字母等的正则表达式" class="img-wrap" target="_blank"> <img alt="JS只能输入数字或数字和字母等的正则表达式" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg0.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/42299.htm" title="JS只能输入数字或数字和字母等的正则表达式">JS只能输入数字或数字和字母等的正则表达式</a></p><div class="item-info"><div class="js">只能输入数字和字母等的正则表达式，本文整理了一些，经测试还不错，感兴趣的朋友也可以练练手</div><span class="lbtn" style="float:right"> 2013-10-10 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/111342.htm" title="正则表达式中环视的简单应用示例【基于java】" class="img-wrap" target="_blank"> <img alt="正则表达式中环视的简单应用示例【基于java】" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg1.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/111342.htm" title="正则表达式中环视的简单应用示例【基于java】">正则表达式中环视的简单应用示例【基于java】</a></p><div class="item-info"><div class="js">这篇文章主要介绍了正则表达式中环视的简单应用,简单分析了环视的概念与功能,并基于java给出了正则表达式环视的具体使用技巧,需要的朋友可以参考下</div><span class="lbtn" style="float:right"> 2017-04-04 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/14454.htm" title="JScript 8.0 正则表达式语法" class="img-wrap" target="_blank"> <img alt="JScript 8.0 正则表达式语法" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg2.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/14454.htm" title="JScript 8.0 正则表达式语法">JScript 8.0 正则表达式语法</a></p><div class="item-info"><div class="js">正则表达式是一种文本模式，包括普通字符（例如，a 到 z 之间的字母）和特殊字符（称为“元字符”）。模式描述在搜索文本时要匹配的一个或多个字符串。</div><span class="lbtn" style="float:right"> 2008-05-05 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/84807.htm" title="正则表达式 运算符优先级介绍" class="img-wrap" target="_blank"> <img alt="正则表达式 运算符优先级介绍" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg3.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/84807.htm" title="正则表达式 运算符优先级介绍">正则表达式 运算符优先级介绍</a></p><div class="item-info"><div class="js">正则表达式从左到右进行计算，并遵循优先级顺序，这与算术表达式非常类似</div><span class="lbtn" style="float:right"> 2016-05-05 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/25312.htm" title="正则表达式匹配中文与双字节的代码" class="img-wrap" target="_blank"> <img alt="正则表达式匹配中文与双字节的代码" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg4.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/25312.htm" title="正则表达式匹配中文与双字节的代码">正则表达式匹配中文与双字节的代码</a></p><div class="item-info"><div class="js">匹配中文字符与匹配双字节字符的代码，需要的朋友可以参考下。</div><span class="lbtn" style="float:right"> 2010-11-11 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/80346.htm" title="55分钟学会正则表达式" class="img-wrap" target="_blank"> <img alt="55分钟学会正则表达式" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg5.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/80346.htm" title="55分钟学会正则表达式">55分钟学会正则表达式</a></p><div class="item-info"><div class="js">正则表达式是一种用来描述一定数量文本的模式，用来匹配相同规范样式的文本。在JavaScript中用RegExp对象表示正则表达式( 即Regular Eexpression)，它是对字符串执行模式匹配的强大工</div><span class="lbtn" style="float:right"> 2016-03-03 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/1393.htm" title="我的正则" class="img-wrap" target="_blank"> <img alt="我的正则" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg6.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/1393.htm" title="我的正则">我的正则</a></p><div class="item-info"><div class="js">我的正则...</div><span class="lbtn" style="float:right"> 2006-10-10 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/110698.htm" title="正则表达式的多行模式与单行模式图文分析" class="img-wrap" target="_blank"> <img alt="正则表达式的多行模式与单行模式图文分析" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg7.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/110698.htm" title="正则表达式的多行模式与单行模式图文分析">正则表达式的多行模式与单行模式图文分析</a></p><div class="item-info"><div class="js">这篇文章主要介绍了正则表达式的多行模式与单行模式图文分析,需要的朋友可以参考下</div><span class="lbtn" style="float:right"> 2017-04-04 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/136639.htm" title="JavaScript+Regex 身份证号码的正则表达式及验证详解" class="img-wrap" target="_blank"> <img alt="JavaScript+Regex 身份证号码的正则表达式及验证详解" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg8.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/136639.htm" title="JavaScript+Regex 身份证号码的正则表达式及验证详解">JavaScript+Regex 身份证号码的正则表达式及验证详解</a></p><div class="item-info"><div class="js">在做用户实名验证时，常会用到身份证号码的正则表达式及校验方案。本文列举了两种验证方案，大家可以根据自己的项目实际情况，选择适合的方案</div><span class="lbtn" style="float:right"> 2018-03-03 </span></div></div></div></div></li>
+<li><div class="item-inner"><a href="https://www.jb51.net/article/26819.htm" title="精确查找PHP WEBSHELL木马 修正版" class="img-wrap" target="_blank"> <img alt="精确查找PHP WEBSHELL木马 修正版" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/bcimg9.png"> </a><div class="rbox"><div class="rbox-inner"><p><a class="link title" target="_blank" href="https://www.jb51.net/article/26819.htm" title="精确查找PHP WEBSHELL木马 修正版">精确查找PHP WEBSHELL木马 修正版</a></p><div class="item-info"><div class="js">上篇提到了关于网上流传查找PHP webshell的python脚本中，不严谨的代码，并且给出了一个python的检测代码，同时，下文里也提到不能检测到反引号的命令执行的地方。今天，我想了下，现在把思路发出来。</div><span class="lbtn" style="float:right"> 2011-04-04 </span></div></div></div></div></li>
+</ul>
+</div>
+<div class="lbd clearfix mt5">
+<div style=""><iframe width="700" frameborder="0" height="260" scrolling="no" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/s(3).html"></iframe></div><script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/fasjibjzg.js"></script>
+
+</div>
+<a href="https://www.jb51.net/article/73482.htm#comments"></a>
+<div id="comments">
+<h2>最新评论</h2>
+<div class="pd5"><div id="SOHUCS" sid="art_73482"></div></div>
+</div>
+      </div><!--endborder-->
+      </div><!--end fl-->
+      
+<div class="w350 fr">
+<div class="article-right">
+<div class="r300 clearfix"><script async="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/f(8).txt"></script><ins class="adsbygoogle" style="display: inline-block; width: 300px; height: 250px;" data-ad-client="ca-pub-6384567588307613" data-ad-slot="2817964327" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:300px;height:250px;" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/saved_resource(2).html"></iframe></ins></ins></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+<div class="tabTitleBar mt10 bgf borderTblue">
+<div class="borderTnone pb10 YaHei">
+<h4 class="blue">大家感兴趣的内容</h4>
+<ul class="newsList newList-in">
+<li><em class="no1">1</em><a href="https://www.jb51.net/article/16829.htm" title="Java 正则表达式详解" target="_blank">Java 正则表达式详解</a></li><li><em class="no2">2</em><a href="https://www.jb51.net/article/19713.htm" title="正则表达式匹配任意字符（包括换行符）的写法" target="_blank">正则表达式匹配任意字符（包括换</a></li><li><em class="no3">3</em><a href="https://www.jb51.net/article/31182.htm" title="比较正宗的验证邮箱的正则表达式js代码详解" target="_blank">比较正宗的验证邮箱的正则表达式</a></li><li><em class="no4">4</em><a href="https://www.jb51.net/article/21292.htm" title="javascript 手机号码正则表达式验证函数" target="_blank">javascript 手机号码正则表达式验</a></li><li><em class="no5">5</em><a href="https://www.jb51.net/article/96201.htm" title="最新手机号码、电话号码正则表达式" target="_blank">最新手机号码、电话号码正则表达</a></li><li><em class="no6">6</em><a href="https://www.jb51.net/article/43949.htm" title="JS利用正则配合replace替换指定字符" target="_blank">JS利用正则配合replace替换指定字</a></li><li><em class="no7">7</em><a href="https://www.jb51.net/article/28007.htm" title="js正则函数match、exec、test、search、replace、split使用介绍集合" target="_blank">js正则函数match、exec、test、s</a></li><li><em class="no8">8</em><a href="https://www.jb51.net/article/31478.htm" title="正则中需要转义的特殊字符小结" target="_blank">正则中需要转义的特殊字符小结</a></li><li><em class="no9">9</em><a href="https://www.jb51.net/article/52491.htm" title="正则表达式匹配不包含某些字符串的技巧" target="_blank">正则表达式匹配不包含某些字符串</a></li><li><em class="no10">10</em><a href="https://www.jb51.net/article/31207.htm" title="grep用法详解 grep与正则表达式" target="_blank">grep用法详解 grep与正则表达式</a></li>
+</ul>
+</div>
+</div>
+<div class="r300 clearfix mt10"><script async="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/f(8).txt"></script><!--thea+300*250--><ins class="adsbygoogle" style="display: inline-block; width: 300px; height: 250px;" data-ad-client="ca-pub-6389290466807248" data-ad-slot="6788945816" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;width:300px;height:250px;" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/saved_resource(3).html"></iframe></ins></ins></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script><div class="blank5"></div><a href="http://click.aliyun.com/m/21950/" target="_blank"><img alt="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/ali_300_1.jpg" width="300" height="100"></a><div class="blank5"></div><a href="https://cloud.tencent.com/act/special/amd?fromSource=gwzcw.1087961.1087961.1087961" target="_blank"><img alt="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/txy300.gif" width="300" height="100"></a><div class="blank5"></div><a href="http://27.arrowshoe.com/" target="_blank"><img alt="" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/37cdn.jpg" width="300" height="100"></a>
+</div>
+<div class="tabTitleBar mt10 bgf borderTblue">
+<div class="borderTnone pb10 YaHei">
+<h4 class="blue">最近更新的内容</h4>
+<ul class="newsListA">
+<li><a href="https://www.jb51.net/article/82580.htm" title="常用的正则表达式大全(数字、字符、固定格式)" target="_blank">常用的正则表达式大全(数字、字符、固定格</a></li><li><a href="https://www.jb51.net/article/58.htm" title="JScript中正则表达函数的说明与应用" target="_blank">JScript中正则表达函数的说明与应用</a></li><li><a href="https://www.jb51.net/article/101259.htm" title="正则表达式小脚本(对输入内容进行处理)" target="_blank">正则表达式小脚本(对输入内容进行处理)</a></li><li><a href="https://www.jb51.net/article/2462.htm" title="限制文本框中只能输入实数或整数,其它字符无效,有劳大家了!" target="_blank">限制文本框中只能输入实数或整数,其它字符</a></li><li><a href="https://www.jb51.net/article/27450.htm" title="正则表达式应用之提炼百度歌词的实现代码" target="_blank">正则表达式应用之提炼百度歌词的实现代码</a></li><li><a href="https://www.jb51.net/article/19910.htm" title="php 正则 不包含某字符串的正则表达式" target="_blank">php 正则 不包含某字符串的正则表达式</a></li><li><a href="https://www.jb51.net/article/25673.htm" title="一个正则表达式的看法（?:）" target="_blank">一个正则表达式的看法（?:）</a></li><li><a href="https://www.jb51.net/article/17499.htm" title="webregexp 正则测试实现代码" target="_blank">webregexp 正则测试实现代码</a></li><li><a href="https://www.jb51.net/article/118524.htm" title="使用正则表达式(regex_replace)模拟读取INI文件" target="_blank">使用正则表达式(regex_replace)模拟读取I</a></li><li><a href="https://www.jb51.net/article/45.htm" title="JScript中正则表达函数的说明与应用" target="_blank">JScript中正则表达函数的说明与应用</a></li>
+</ul>
+</div>
+</div>   
+<div class="r300 clearfix mt10"><div class="idc3"><a href="http://www.021.net/" target="_blank"><h1>众生网络</h1><span>品牌服务器租用</span> </a><a href="http://www.geisnic.com/" target="_blank"><h1>集思网络</h1><span>VPS主机</span> </a><a href="http://www.33ip.com/" target="_blank"><h1>枫信科技</h1><span>IDC服务商</span> </a></div>
+</div>
+<div class="tabTitleBar mt10 bgf borderTblue">
+<div class="borderTnone pb10 YaHei">
+<h4 class="blue">常用在线小工具</h4>
+<ul class="newsListA"><li><a href="http://tools.jb51.net/code/css" target="_blank"><font color="red">CSS代码工具</font></a></li><li><a href="http://tools.jb51.net/code/js" target="_blank"><font color="red">JavaScript代码格式化工具</font></a></li><li><a href="http://tools.jb51.net/code/xmlformat" target="_blank">在线XML格式化/压缩工具</a></li><li><a href="http://tools.jb51.net/code/phpformat" target="_blank"><font color="red">php代码在线格式化美化工具</font></a></li><li><a href="http://tools.jb51.net/code/sqlcodeformat" target="_blank">sql代码在线格式化美化工具</a></li><li><a href="http://tools.jb51.net/transcoding/html_transcode" target="_blank">在线HTML转义/反转义工具</a></li><li><a href="http://tools.jb51.net/code/json" target="_blank">在线JSON代码检验/检验/美化/格式化</a></li><li><a href="http://tools.jb51.net/regex/javascript" target="_blank">JavaScript正则在线测试工具</a></li><li><a href="http://tools.jb51.net/transcoding/jb51qrcode" target="_blank">在线生成二维码工具(加强版)</a></li><li><a href="http://tools.jb51.net/" target="_blank">更多在线工具</a></li>
+</ul>
+</div>
+</div>
+<div class="r300 clearfix mt10 mb10"><a href="http://tuidc.com/" target="_blank"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/tengyou300.gif" width="300" height="100"></a><div class="blank5"></div><a href="http://www.enkj.com/special/cloud180701/" target="_blank"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/enkj300.gif" alt="云服务器" width="300" height="100"></a>
+</div> 
+<div class="rFixedBox" style="position: static; top: 0px;">
+<script type="text/javascript">jb51_a_d("jb51xf");</script><script type="text/javascript">var cpro_id="u1397867";(window["cproStyleApi"] = window["cproStyleApi"] || {})[cpro_id]={at:"3",rsi0:"300",rsi1:"380",pat:"6",tn:"baiduCustNativeAD",rss1:"#FFFFFF",conBW:"1",adp:"1",ptt:"0",titFF:"%E5%BE%AE%E8%BD%AF%E9%9B%85%E9%BB%91",titFS:"14",rss2:"#000000",titSU:"0",ptbg:"90",piw:"0",pih:"0",ptp:"0"}</script><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/c.js" type="text/javascript"></script><div id="BAIDU_SSP__wrapper_u1397867_0_placeholder" style="width: 300px; height: 380px; margin: 0px; padding: 0px; background: none; border: none; display: inline-block;"></div><div id="BAIDU_SSP__wrapper_u1397867_0" style="width: 300px; height: 380px; display: inline-block; z-index: 2147483646; position: fixed; left: 937px; top: 5px;"><iframe id="iframeu1397867_0" name="iframeu1397867_0" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/jcam.html" width="300" height="380" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:300px;height:380px" allowtransparency="true"></iframe></div>
+</div>
+  </div>   
+      
+      </div><!--end fr-->
+      </div>
+</div><!--end content-->
+<div id="footer">
+<div class="main clearfix">
+<p>
+<a rel="nofollow" href="https://www.jb51.net/about.htm" target="_blank">关于我们</a> - 
+<a rel="nofollow" href="https://www.jb51.net/support.htm" target="_blank">广告合作</a> - 
+<a rel="nofollow" href="https://www.jb51.net/linkus.htm" target="_blank">联系我们</a> -  
+<a rel="nofollow" href="https://www.jb51.net/sm.htm" target="_blank">免责声明</a> -  
+<a rel="nofollow" href="https://www.jb51.net/sitemap.htm" target="_blank">网站地图</a> - 
+<a rel="nofollow" href="tencent://message/?uin=461478385&amp;Site=http://www.jb51.net" target="_blank">投诉建议</a> - 
+<a rel="nofollow" href="https://www.jb51.net/up.htm" target="_blank">在线投稿</a>
+</p>
+<p><a rel="nofollow" class="ba" target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32031102000137"><img src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/ghs.png"> 苏公网安备 32031102000137号</a>&nbsp;&nbsp;<a href="http://www.miibeian.gov.cn/" class="ba" rel="nofollow" target="_blank">苏ICP备14036222号</a></p>
+<p>&#169;CopyRight 2006-2018 JB51.Net Inc All Rights Reserved. 脚本之家 版权所有</p>
+</div>
+</div><!--end footer-->
+<link type="text/css" rel="stylesheet" href="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/shCore.css">
+<link type="text/css" rel="Stylesheet" href="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/shThemeDefault.css">
+<script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/shCore.js"></script>
+<script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/shAutoloader.js"></script>
+<script type="text/javascript">
+(function(){
+	var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+/*更多导航*/
+$(".nav_top p").hover(function(){$(this).addClass("hover")},function(){$(this).removeClass("hover")});
+
+if (top.location != self.location)top.location=self.location;
+
+var varwindow=$(window);
+$(function(){
+	$('#content').find('img').each(function(){
+        var img = this;
+        if (img.width >= 650){
+            img.style.width = "650px";
+            img.style.height = "auto";
+            //$(img).removeAttr('height');
+            var aTag = document.createElement('a');
+            aTag.href = img.src;
+			aTag.target="_blank";
+            $(aTag).addClass('bPic')
+            .insertAfter(img).append(img)
+          }
+    });
+	varwindow.scroll(function()
+    {	
+    	//rFixedBox跟随滚动
+    	var h = varwindow.height();
+        var top = varwindow.scrollTop();
+    	var rFixedBox = $('.rFixedBox').prev().offset();
+        var fixedTop = rFixedBox.top;
+		
+        if(top>=fixedTop+344)
+        {
+			var h1 = parseInt($('#content').children('.main').height());
+			if(parseInt(top) + 340 < h1){
+				$('.rFixedBox').css({'position':'fixed','top': 0});
+			}else{
+				$('.rFixedBox').css({'position':'absolute','top': h1-510});
+			}
+        }
+        else
+        {
+            $('.rFixedBox').css({'position':'static', 'top':0});   
+        }	
+       /* return true;*/
+	   
+	   /*右侧快捷菜单*/
+	   sideFixed();
+    });
+	var ww = varwindow.width();
+	
+	function sideFixed(){
+	var scrolltop = document.body.scrollTop || document.documentElement.scrollTop;
+	var a1 = 550;
+	if(ww>440){
+		if(a1<=scrolltop){
+			$('#right-share').slideDown();
+			}
+		else{
+			$('#right-share').slideUp();
+			}
+		}
+	}
+	$('.rshare-weixin').hover(function(){
+			$('#weixin-code').removeClass('hide');
+		},function(){
+			$('#weixin-code').addClass('hide');
+		});
+	/*二维码*/
+	$('#right-share .rshare-top').on('click',function(){
+        $('html,body').animate({'scrollTop':0},500);
+    });
+/*$(document).ready(function() {
+  $("#content img").unveil();
+});	*/
+
+if(suoyin=="ok"){
+	GenerateContentList();
+}
+
+SyntaxHighlighter.autoloader(
+	'applescript			/jslib/syntaxhighlighter/scripts/shBrushAppleScript.js',
+	'actionscript3 as3		/jslib/syntaxhighlighter/scripts/shBrushAS3.js',
+	'bash shell				/jslib/syntaxhighlighter/scripts/shBrushBash.js',
+	'coldfusion cf			/jslib/syntaxhighlighter/scripts/shBrushColdFusion.js',
+	'cpp c					/jslib/syntaxhighlighter/scripts/shBrushCpp.js',
+	'obj-c objc				/jslib/syntaxhighlighter/scripts/shBrushObjC.js',
+	'c# c-sharp csharp		/jslib/syntaxhighlighter/scripts/shBrushCSharp.js',
+	'css					/jslib/syntaxhighlighter/scripts/shBrushCss.js',
+	'delphi pascal			/jslib/syntaxhighlighter/scripts/shBrushDelphi.js',
+	'diff patch pas			/jslib/syntaxhighlighter/scripts/shBrushDiff.js',
+	'erl erlang				/jslib/syntaxhighlighter/scripts/shBrushErlang.js',
+	'groovy					/jslib/syntaxhighlighter/scripts/shBrushGroovy.js',
+	'haxe hx				/jslib/syntaxhighlighter/scripts/shBrushHaxe.js',
+	'java					/jslib/syntaxhighlighter/scripts/shBrushJava.js',
+	'jfx javafx				/jslib/syntaxhighlighter/scripts/shBrushJavaFX.js',
+	'js jscript javascript	/jslib/syntaxhighlighter/scripts/shBrushJScript.js',
+	'perl pl				/jslib/syntaxhighlighter/scripts/shBrushPerl.js',
+	'php					/jslib/syntaxhighlighter/scripts/shBrushPhp.js',
+	'text plain				/jslib/syntaxhighlighter/scripts/shBrushPlain.js',
+	'py python				/jslib/syntaxhighlighter/scripts/shBrushPython.js',
+	'ruby rails ror rb		/jslib/syntaxhighlighter/scripts/shBrushRuby.js',
+	'scala					/jslib/syntaxhighlighter/scripts/shBrushScala.js',
+	'sql					/jslib/syntaxhighlighter/scripts/shBrushSql.js',
+	'vb vbnet				/jslib/syntaxhighlighter/scripts/shBrushVb.js',
+	'ps powershell			/jslib/syntaxhighlighter/scripts/shBrushPowerShell.js',
+	'xml xhtml xslt html	/jslib/syntaxhighlighter/scripts/shBrushXml.js'
+);
+SyntaxHighlighter.all();
+});
+var ourl="";
+</script>
+<script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/arcts.js"></script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script>
+<script>jbLoader();</script><script class="closetag">jbLoader(true);</script>
+<div id="tongji">
+<script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/tongji.js"></script><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/stat.php" language="JavaScript"></script><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/core.php" charset="utf-8" type="text/javascript"></script><a href="http://www.cnzz.com/stat/website.php?web_id=1585378" target="_blank" title="站长统计">站长统计</a><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/stat(1).php" language="JavaScript"></script><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/core(1).php" charset="utf-8" type="text/javascript"></script><a href="http://www.cnzz.com/stat/website.php?web_id=1255898178" target="_blank" title="站长统计">站长统计</a>
+</div>
+<script type="text/javascript">
+//tu+
+var cpro_id = "u1893014";
+document.write('<scri'+'pt src="//cpro.baidustatic.com/cpro/ui/i.js" type="text/javascript"></s'+'cript>');
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?2f793ca9dd6f4c32488903eed5c7fbcb":"https://jspassport.ssl.qhimg.com/11.0.1.js?2f793ca9dd6f4c32488903eed5c7fbcb";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/i.js" type="text/javascript"></script><script src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/11.0.1.js" id="sozz"></script><script charset="utf-8" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/ab77b6ea7f3fbf79.js"></script> 
+<script type="text/javascript" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/pl.asp"></script>
+<script type="application/ld+json">
+        {
+            "@context": "https://ziyuan.baidu.com/contexts/cambrian.jsonld",
+            "@id": "https://www.jb51.net/article/73482.htm",
+            "appid": "1549322409310619",
+            "title": "正则表达式详细介绍（上）",
+            "description": "这篇文章主要介绍了正则表达式，正则表达式是由英文词语regular expression翻译过来的，就是符合某种规则的表达式。本文将会详细的介绍正则表达式，需要的朋友可以参考下",
+            "pubDate": "2015-10-16T10:40:12",
+			"upDate": "2015-10-16T10:40:12"
+        }
+</script>
+
+
+<!-- published at 2018/6/11 0:18:19By dxycms qq:461478385  -->
+<iframe id="google_osd_static_frame_6027874440082" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./正则表达式详细介绍（上）_正则表达式_脚本之家_files/saved_resource(4).html"></iframe></body></html>
