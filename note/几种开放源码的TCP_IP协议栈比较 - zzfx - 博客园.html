@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://www.cnblogs.com/feng9exe/p/7000162.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+<title>几种开放源码的TCP/IP协议栈比较 - zzfx - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/bundle-red_autumnal_leaves.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/bundle-red_autumnal_leaves-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/feng9exe/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/feng9exe/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/feng9exe/wlwmanifest.xml">
+<script async="" src="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/analytics.js"></script><script src="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'feng9exe', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/feng9exe/"><img id="blogLogo" src="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/feng9exe/">zzfx</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/feng9exe/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/zzfx">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/feng9exe/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/feng9exe/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 2437&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 9</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/feng9exe/p/7000162.html">几种开放源码的TCP/IP协议栈比较</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>http://blog.chinaunix.net/uid-28785506-id-3828286.html</p>
+<div class="Blog_con3">
+<p>原文地址：<a href="http://blog.chinaunix.net/uid-20620288-id-3210348.html">几种开放源码的TCP/IP协议栈比较</a>&nbsp;作者：<a href="http://blog.chinaunix.net/uid/20620288.html">三点水兽</a></p>
+<p>&nbsp;</p>
+</div>
+<div class="Blog_wz1">
+<div class="cnt">
+<p>1、BSD TCP/IP协议栈</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; BSD栈历史上是其他商业栈的起点，大多数专业TCP/IP栈（VxWorks内嵌的TCP/IP栈）是BSD栈派生的。这是因为BSD栈在BSD许可协 议下提供了这些专业栈的雏形，BSD许用证允许BSD栈以修改或未修改的形式结合这些专业栈的代码而无须向创建者付版税。同时，BSD也是许多 TCP/IP协议中的创新（如广域网中饿拥塞控制和避免）的开始点。</p>
+<p>2、uC/IP</p>
+<p>&nbsp;&nbsp;&nbsp; uC/IP是由Guy Lancaster编写的一套基于uC/OS且开放源码的TCP/IP协议栈，亦可移植到其它操作系统，是一套完全免费的、可供研究的TCP/IP协议 栈，uC/IP大部分源码是从公开源码BSD发布站点和KA9Q（一个基于DOS单任务环境运行的TCP/IP协议栈）移植过来。uC/IP具有如下一些 特点：带身份验证和报头压缩支持的PPP协议，优化的单一请求/回复交互过程，支持IP/TCP/UDP协议，可实现的网络功能较为强大，并可裁减。 UCIP协议栈被设计为一个带最小化用户接口及可应用串行链路网络模块。根据采用CPU、编译器和系统所需实现协议的多少，协议栈需要的代码容量空间在 30-60KB之间。<br><a href="http://ucip.sourceforge.net/" target="_blank">http://ucip.sourceforge.net</a></p>
+<p>3、LwIP</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; LwIP是瑞士计算机科学院（Swedish Institute of Computer Science）的Adam Dunkels等开发的一套用于嵌入式系统的开放源代码TCP/IP协议栈。LwIP的含义是Light Weight(轻型)IP协议，相对于uip。LwIP可以移植到操作系统上，也可以在无操作系统的情况下独立运行。LwIP TCP/IP实现的重点是在保持TCP协议主要功能的基础上减少对RAM的占用，一般它只需要几十K的RAM和40K左右的ROM就可以运行，这使 LwIP协议栈适合在低端嵌入式系统中使用。LwIP的特性如下：支持多网络接口下的IP转发，支持ICMP协议 ，包括实验性扩展的的UDP（用户数据报协议），包括阻塞控制，RTT估算和快速恢复和快速转发的TCP（传输控制协议），提供专门的内部回调接口 （Raw API）用于提高应用程序性能，并提供了可选择的Berkeley接口API。<a href="http://www.sics.se/~adam/lwip/" target="_blank">http://www.sics.se/~adam/lwip/</a>或<a href="http://savannah.nongnu.org/projects/lwip/" target="_blank">http://savannah.nongnu.org/projects/lwip/</a></p>
+<p>4、uIP</p>
+<p>&nbsp;&nbsp;&nbsp; uIP是专门为8位和16位控制器设计的一个非常小的TCP/IP栈。完全用C编写，因此可移植到各种不同的结构和操作系统上，一个编译过的栈可以在几KB ROM或几百字节RAM中运行。uIP中还包括一个HTTP服务器作为服务内容。许可：BSD许用证<br><a href="http://www.sics.se/~adam/uip/" target="_blank">http://www.sics.se/~adam/uip/</a></p>
+<p>5、TinyTcp</p>
+<p>&nbsp;&nbsp;&nbsp; TinyTcp 栈是TCP/IP的一个非常小和简单的实现，它包括一个FTP客户。TinyTcp是为了烧入ROM设计的并且现在开始对大端结构似乎是有用的（初始目标是68000芯片）。TinyTcp也包括一个简单的以太网驱动器用于3COM多总线卡&nbsp;<br><a href="http://ftp.ecs.soton.ac.uk/pub/elks/utils/tiny-tcp.txt" target="_blank">http://ftp.ecs.soton.ac.uk/pub/elks/utils/tiny-tcp.txt</a></p>
+<p>选择一个开源协议栈可以从四个方面来考虑：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 一个是是否提供易用的底层硬件API，即与硬件平台的无关性；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 一个是与操作系统的内核API。协议栈需要调用的系统函数接口是否容易构造，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 另一个对于应用支持程度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最关键的是占用的系统资源是否在可接受范围内，有裁减优化的空间否？&nbsp;<br><br>其中，BSD 栈可完整实现TCP/IP协议，但代码庞大，70KB-150KB之间，裁减优化有难度，uIP和TinyTcp代码容量小巧，实现功能精简，限制了在一些较高要求场合下的应用，如可靠性与大容量数据传输。<br><br>LwIP 和uC/IP是同量级别的两个开源协议栈，两者代码容量和实现功能相似，LwIP没有操作系统针对性，它将协议栈与平台相关的代码抽象出来，用户如果要移 植到自己的系统，需要完成该部分代码的封装，并为网络应用支持提供了API接口的可选性。uC/IP协议最初是针对uC/OS设计，为方便用户移植实现， 同样也抽象了协议栈与平台相关代码，但是协议栈所需调用的系统函数大多参照uC/OS内核函数原型设计，并提供了协议栈的测试函数，方便用户参考，其不足 在于该协议栈对网络应用支持不足。&nbsp;<br><br>根据以上分析，从应用和开发的角度看，似乎LWIP更得到了网上很多朋友使用的青睐；uC/IP在文 档支持与软件升级管理上有很多不足，但是它最初是针对UC/OS而设计，如果选用UC/OS作为软件基础的话，在系统函数构造方面有优势。当然你选择其他 操作系统的话，可参照OS_NULL文件夹下的文件修改。 以上的这些开源协议栈也并非免费，拿来就可以用，据我所知，UC/OS的母公司推出UC/OS-TCP/IP花了6人*2年的工作量，国内某公司使用 LWIP作为移植的参照，花了4-5人*2年的工作量来测试与优化协议，使用商用TCP/IP栈的高费用就不足为奇了。 作为广大的爱好者学习而言，如果只是跑跑原型，实验一下效果，以上的几种开源协议栈都提供了测试的例子，应该是不错的选择。<br><br>个人的看法：LWIP可优先考虑，至少网上有很多的人一块研究，参考的资料较多；UC/IP其次，如果你想深入学习TCP/IP的话，移植UC/IP是一种挑战性的工作，它尚需完善。</p>
+
+</div>
+
+</div></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/feng9exe/category/953545.html" target="_blank">网络理论</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(7000162,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;eb2dcb90-f1eb-df11-ac81-842b2b196315&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/feng9exe/" target="_blank"><img src="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/feng9exe/">zzfx</a><br>
+            <a href="http://home.cnblogs.com/u/feng9exe/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/feng9exe/followers">粉丝 - 39</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;eb2dcb90-f1eb-df11-ac81-842b2b196315&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(7000162,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(7000162,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/feng9exe/p/6994637.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/feng9exe/p/6994637.html" title="发布于2017-06-12 19:31">struct socket结构体详解</a><br><a href="http://www.cnblogs.com/feng9exe/p/7000299.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/feng9exe/p/7000299.html" title="发布于2017-06-13 11:37">由PPPOE看Linux网络协议栈的实现</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-06-13 11:18</span> <a href="http://www.cnblogs.com/feng9exe/">zzfx</a> 阅读(<span id="post_view_count">2250</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=7000162" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/feng9exe/p/7000162.html#" onclick="AddToWz(7000162);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=289025,cb_entryId=7000162,cb_blogApp=currentBlogApp,cb_blogUserGuid='eb2dcb90-f1eb-df11-ac81-842b2b196315',cb_entryCreatedDate='2017/6/13 11:18:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/feng9exe/p/7000162.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/feng9exe/p/7000162.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="https://cloud.tencent.com/developer/labs?fromSource=gwzcw.1087957.1087957.1087957" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2 - 腾讯云&#39;)">【推荐】如何快速搭建人工智能应用？</a><br><a href="https://cloud.tencent.com/developer/salon/activity-1078?fromSource=gwzcw.1110771.1110771.1110771" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-AI&#39;)">【活动】AI技术全面场景化落地实践</a><br><a href="http://challenge.xfyun.cn/?ch=bk" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-xfyun&#39;)">【大赛】2018首届“顶天立地”AI开发者大赛</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/campus?fromSource=gwzcw.1087959.1087959.1087959" target="_blank"><img width="300" height="250" src="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/24442-20180710085714894-1703644023.jpg" alt="腾讯云0710" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/602423/" target="_blank">还剩三天时间：高通收购恩智浦已经心凉了</a><br> ·  <a href="https://news.cnblogs.com/n/602412/" target="_blank">这个要跟马云争亚洲首富的印度人，看上了阿里的蛋糕</a><br> ·  <a href="https://news.cnblogs.com/n/602421/" target="_blank">刘强东再次说京东进入欧洲 希望年底在德设办事处</a><br> ·  <a href="https://news.cnblogs.com/n/602422/" target="_blank">小米集团：发行2.01亿股B类普通股</a><br> ·  <a href="https://news.cnblogs.com/n/602420/" target="_blank">特斯拉要求供应商对已完成交易降价退款</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="http://click.aliyun.com/m/9667/" target="_blank"><img src="./几种开放源码的TCP_IP协议栈比较 - zzfx - 博客园_files/TB1iQKbhqmWBuNjy1XaXXXCbXXa-468-60.jpg" alt="" style="width: 468px; height: 60px;"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/602053/" target="_blank">那些让人睡不着觉的bug，你有没有遭遇过？</a><br> ·  <a href="http://kb.cnblogs.com/page/602061/" target="_blank">观察之道：带你走进可观察性</a><br> ·  <a href="http://kb.cnblogs.com/page/598963/" target="_blank">危害程序员职业生涯的三大观念</a><br> ·  <a href="http://kb.cnblogs.com/page/601061/" target="_blank">断点单步跟踪是一种低效的调试方法</a><br> ·  <a href="http://kb.cnblogs.com/page/600804/" target="_blank">测试 | 让每一粒尘埃有的放矢</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/feng9exe/">zzfx</a><br>园龄：<a href="https://home.cnblogs.com/u/feng9exe/" title="入园时间：2010-11-09">7年8个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/feng9exe/followers/">39</a><br>关注：<a href="https://home.cnblogs.com/u/feng9exe/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;eb2dcb90-f1eb-df11-ac81-842b2b196315&#39;)">+加关注</a></div><script>getFollowStatus('eb2dcb90-f1eb-df11-ac81-842b2b196315')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/06/01&#39;);return false;">&lt;</a></td><td align="center">2018年7月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/08/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">24</td><td class="CalOtherMonthDay" align="center">25</td><td class="CalOtherMonthDay" align="center">26</td><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td></tr><tr><td class="CalWeekendDay" align="center">1</td><td align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/02.html"><u>2</u></a></td><td align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/03.html"><u>3</u></a></td><td align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/04.html"><u>4</u></a></td><td align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/05.html"><u>5</u></a></td><td align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/06.html"><u>6</u></a></td><td class="CalWeekendDay" align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/07.html"><u>7</u></a></td></tr><tr><td class="CalWeekendDay" align="center">8</td><td align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/09.html"><u>9</u></a></td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td class="CalWeekendDay" align="center">14</td></tr><tr><td class="CalWeekendDay" align="center">15</td><td align="center">16</td><td align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/17.html"><u>17</u></a></td><td align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/18.html"><u>18</u></a></td><td align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/19.html"><u>19</u></a></td><td align="center">20</td><td class="CalWeekendDay" align="center">21</td></tr><tr><td class="CalWeekendDay" align="center"><a href="http://www.cnblogs.com/feng9exe/archive/2018/07/22.html"><u>22</u></a></td><td class="CalTodayDay" align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td class="CalWeekendDay" align="center">28</td></tr><tr><td class="CalWeekendDay" align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/feng9exe/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/feng9exe/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/feng9exe/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/feng9exe/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/feng9exe/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_recentposts" class="sidebar-block">
+<div class="catListEssay">
+<h3 class="catListTitle">最新随笔</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/feng9exe/p/9351955.html">1. android binder</a></li><li><a href="http://www.cnblogs.com/feng9exe/p/9351913.html">2. Android开发之漫漫长途 Ⅷ——Android Binder（也许是最容易理解的）</a></li><li><a href="http://www.cnblogs.com/feng9exe/p/9351906.html">3. 轻松理解 Android Binder，只需要读这一篇</a></li><li><a href="http://www.cnblogs.com/feng9exe/p/9351728.html">4. 关于进程间通信</a></li><li><a href="http://www.cnblogs.com/feng9exe/p/9351704.html">5. ipc （进程间通信</a></li><li><a href="http://www.cnblogs.com/feng9exe/p/9351693.html">6. 为什么需要进程间通信？？</a></li><li><a href="http://www.cnblogs.com/feng9exe/p/9336155.html">7. 重载、重写、覆盖</a></li><li><a href="http://www.cnblogs.com/feng9exe/p/9330939.html">8. conerstone代码回滚</a></li><li><a href="http://www.cnblogs.com/feng9exe/p/9327849.html">9. 重载、重写、符号冲突、扩展</a></li><li><a href="http://www.cnblogs.com/feng9exe/p/9324625.html">10. UICollectionView(一)基本概念</a></li>
+</ul>
+</div>
+</div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/feng9exe/tag/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>(22)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">系统架构</a>(20)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/android%E7%BB%84%E4%BB%B6/">android组件</a>(16)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/android%20studio/">android studio</a>(12)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/android%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86/">android事件处理</a>(9)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/android%E7%B3%BB%E7%BB%9F/">android系统</a>(8)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/android%20UI/">android UI</a>(7)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/androidUI/">androidUI</a>(7)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/android%E6%A6%82%E5%BF%B5/">android概念</a>(6)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/android%20looper/">android looper</a>(6)</li><li><a href="http://www.cnblogs.com/feng9exe/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/feng9exe/category/846282.html">android(115)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/feng9exe/category/1241747.html">androidStudio(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/feng9exe/category/1021599.html">app部署(15)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/feng9exe/category/951239.html">c++(28)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/feng9exe/category/986969.html">CAlayer与动画(17)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/feng9exe/category/986202.html">GCD(16)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/feng9exe/category/900147.html">github(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/feng9exe/category/902618.html">hook(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/feng9exe/category/918512.html">HTML(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/feng9exe/category/887973.html">iOS(152)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/feng9exe/category/1200243.html">iOS-UI(22)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/feng9exe/category/1004550.html">iOS逆向工程(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/feng9exe/category/846187.html">java(28)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/feng9exe/category/1241724.html">java framework(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/feng9exe/category/917849.html">Javascript(36)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="https://www.cnblogs.com/feng9exe/category/1131281.html">java服务器开发(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="https://www.cnblogs.com/feng9exe/category/1028835.html">java虚拟机(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="https://www.cnblogs.com/feng9exe/category/906196.html">oc(128)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="https://www.cnblogs.com/feng9exe/category/1180157.html">ReactiveCocoa(21)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="https://www.cnblogs.com/feng9exe/category/1212399.html">RxSwift(25)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="https://www.cnblogs.com/feng9exe/category/1232513.html">scala(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_21" href="https://www.cnblogs.com/feng9exe/category/847231.html">SHELL(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_22" href="https://www.cnblogs.com/feng9exe/category/1035677.html">swift(103)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_23" href="https://www.cnblogs.com/feng9exe/category/1198196.html">TCP/IP(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_24" href="https://www.cnblogs.com/feng9exe/category/1105271.html">UI及模式(29)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_25" href="https://www.cnblogs.com/feng9exe/category/1142711.html">UML(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_26" href="https://www.cnblogs.com/feng9exe/category/1243658.html">view.android</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_27" href="https://www.cnblogs.com/feng9exe/category/1184709.html">X计划(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_28" href="https://www.cnblogs.com/feng9exe/category/1256959.html">版本管理(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_29" href="https://www.cnblogs.com/feng9exe/category/1247162.html">比特币(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_30" href="https://www.cnblogs.com/feng9exe/category/1247161.html">比特币钱包(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_31" href="https://www.cnblogs.com/feng9exe/category/913569.html">编程基础(102)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_32" href="https://www.cnblogs.com/feng9exe/category/1129686.html">编程思想(70)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_33" href="https://www.cnblogs.com/feng9exe/category/852606.html">编程语言(111)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_34" href="https://www.cnblogs.com/feng9exe/category/1202764.html">编解码(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_35" href="https://www.cnblogs.com/feng9exe/category/946202.html">编译器(66)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_36" href="https://www.cnblogs.com/feng9exe/category/914178.html">操作系统(91)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_37" href="https://www.cnblogs.com/feng9exe/category/1165705.html">成长管理(31)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_38" href="https://www.cnblogs.com/feng9exe/category/1019380.html">待解决问题(28)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_39" href="https://www.cnblogs.com/feng9exe/category/891353.html">调试(36)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_40" href="https://www.cnblogs.com/feng9exe/category/1165959.html">读书笔记</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_41" href="https://www.cnblogs.com/feng9exe/category/1168903.html">独立思考(20)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_42" href="https://www.cnblogs.com/feng9exe/category/1236620.html">对象内存模型(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_43" href="https://www.cnblogs.com/feng9exe/category/865471.html">多线程(125)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_44" href="https://www.cnblogs.com/feng9exe/category/1168369.html">犯错总结(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_45" href="https://www.cnblogs.com/feng9exe/category/1231756.html">泛型(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_46" href="https://www.cnblogs.com/feng9exe/category/1076877.html">方法论(69)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_47" href="https://www.cnblogs.com/feng9exe/category/1042168.html">防御性编程(23)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_48" href="https://www.cnblogs.com/feng9exe/category/1131524.html">服务器开发(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_49" href="https://www.cnblogs.com/feng9exe/category/1170468.html">复杂性(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_50" href="https://www.cnblogs.com/feng9exe/category/1021115.html">工程配置(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_51" href="https://www.cnblogs.com/feng9exe/category/1214069.html">工具软件</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_52" href="https://www.cnblogs.com/feng9exe/category/1248869.html">构建工具</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_53" href="https://www.cnblogs.com/feng9exe/category/1170450.html">构造定律(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_54" href="https://www.cnblogs.com/feng9exe/category/1023480.html">管理学(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_55" href="https://www.cnblogs.com/feng9exe/category/1184491.html">函数式编程(87)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_56" href="https://www.cnblogs.com/feng9exe/category/1144092.html">基础科学</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_57" href="https://www.cnblogs.com/feng9exe/category/985903.html">计算机硬件(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_58" href="https://www.cnblogs.com/feng9exe/category/1162356.html">技术前沿(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_59" href="https://www.cnblogs.com/feng9exe/category/913559.html">脚本语言(17)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_60" href="https://www.cnblogs.com/feng9exe/category/1195459.html">结构化思维(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_61" href="https://www.cnblogs.com/feng9exe/category/913563.html">解释器(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_62" href="https://www.cnblogs.com/feng9exe/category/1199571.html">金融学(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_63" href="https://www.cnblogs.com/feng9exe/category/1259941.html">进程间通信(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_64" href="https://www.cnblogs.com/feng9exe/category/1017100.html">经典博主(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_65" href="https://www.cnblogs.com/feng9exe/category/1021116.html">经典网站(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_66" href="https://www.cnblogs.com/feng9exe/category/1014826.html">经济学(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_67" href="https://www.cnblogs.com/feng9exe/category/1131070.html">开发日志(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_68" href="https://www.cnblogs.com/feng9exe/category/1235670.html">类型系统(15)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_69" href="https://www.cnblogs.com/feng9exe/category/1148211.html">理论基础(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_70" href="https://www.cnblogs.com/feng9exe/category/1145987.html">链接器(14)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_71" href="https://www.cnblogs.com/feng9exe/category/1195414.html">浏览器&amp;Webkit(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_72" href="https://www.cnblogs.com/feng9exe/category/1115139.html">逻辑思维(35)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_73" href="https://www.cnblogs.com/feng9exe/category/1014589.html">逻辑学(49)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_74" href="https://www.cnblogs.com/feng9exe/category/953770.html">密码学(55)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_75" href="https://www.cnblogs.com/feng9exe/category/1031084.html">面向对象(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_76" href="https://www.cnblogs.com/feng9exe/category/1042306.html">内存管理(30)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_77" href="https://www.cnblogs.com/feng9exe/category/983334.html">能力模型(23)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_78" href="https://www.cnblogs.com/feng9exe/category/1190804.html">人物评价(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_79" href="https://www.cnblogs.com/feng9exe/category/1167560.html">认识论(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_80" href="https://www.cnblogs.com/feng9exe/category/1126441.html">软件安全(31)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_81" href="https://www.cnblogs.com/feng9exe/category/1087252.html">软件工程(25)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_82" href="https://www.cnblogs.com/feng9exe/category/894686.html">软件建模(112)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_83" href="https://www.cnblogs.com/feng9exe/category/852285.html">软件开发概念(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_84" href="https://www.cnblogs.com/feng9exe/category/891499.html">软件性能(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_85" href="https://www.cnblogs.com/feng9exe/category/1087410.html">软件质量(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_86" href="https://www.cnblogs.com/feng9exe/category/982707.html">设计模式(26)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_87" href="https://www.cnblogs.com/feng9exe/category/1077656.html">生活日常(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_88" href="https://www.cnblogs.com/feng9exe/category/1168366.html">实践论(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_89" href="https://www.cnblogs.com/feng9exe/category/1021049.html">数据处理(27)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_90" href="https://www.cnblogs.com/feng9exe/category/1202765.html">数据存储(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_91" href="https://www.cnblogs.com/feng9exe/category/983052.html">数据结构(34)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_92" href="https://www.cnblogs.com/feng9exe/category/1058749.html">数据库(59)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_93" href="https://www.cnblogs.com/feng9exe/category/1239025.html">数据模型映射(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_94" href="https://www.cnblogs.com/feng9exe/category/1162182.html">数据与操作(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_95" href="https://www.cnblogs.com/feng9exe/category/1142697.html">数学(15)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_96" href="https://www.cnblogs.com/feng9exe/category/1168147.html">思想之花(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_97" href="https://www.cnblogs.com/feng9exe/category/1142695.html">算法(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_98" href="https://www.cnblogs.com/feng9exe/category/895442.html">投资理财(62)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_99" href="https://www.cnblogs.com/feng9exe/category/996154.html">网络编程(68)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_100" href="https://www.cnblogs.com/feng9exe/category/953545.html">网络理论(130)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_101" href="https://www.cnblogs.com/feng9exe/category/1169071.html">问题管理(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_102" href="https://www.cnblogs.com/feng9exe/category/838871.html">系统架构(141)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_103" href="https://www.cnblogs.com/feng9exe/category/1162943.html">系统论(24)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_104" href="https://www.cnblogs.com/feng9exe/category/1188222.html">响应式编程(20)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_105" href="https://www.cnblogs.com/feng9exe/category/842263.html">项目管理(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_106" href="https://www.cnblogs.com/feng9exe/category/901064.html">心理学(57)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_107" href="https://www.cnblogs.com/feng9exe/category/1048374.html">虚拟存储器(13)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_108" href="https://www.cnblogs.com/feng9exe/category/1143100.html">虚拟文件系统(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_109" href="https://www.cnblogs.com/feng9exe/category/981703.html">学习理论(36)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_110" href="https://www.cnblogs.com/feng9exe/category/1161951.html">养生(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_111" href="https://www.cnblogs.com/feng9exe/category/983359.html">一点思考(101)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_112" href="https://www.cnblogs.com/feng9exe/category/1195410.html">移动端&amp;前端理论(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_113" href="https://www.cnblogs.com/feng9exe/category/852442.html">移动端通用(13)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_114" href="https://www.cnblogs.com/feng9exe/category/1168292.html">以人为师(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_115" href="https://www.cnblogs.com/feng9exe/category/1236624.html">运行时</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_116" href="https://www.cnblogs.com/feng9exe/category/1161945.html">杂集(26)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_117" href="https://www.cnblogs.com/feng9exe/category/992742.html">哲学(93)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_118" href="https://www.cnblogs.com/feng9exe/category/1047194.html">指针(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_119" href="https://www.cnblogs.com/feng9exe/category/1078002.html">自然科学与哲学(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_120" href="https://www.cnblogs.com/feng9exe/category/901056.html">自我管理(36)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_121" href="https://www.cnblogs.com/feng9exe/category/1014847.html">做人做事(69)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/feng9exe/archive/2018/07.html">2018年7月 (54)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/feng9exe/archive/2018/06.html">2018年6月 (122)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/feng9exe/archive/2018/05.html">2018年5月 (71)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/feng9exe/archive/2018/04.html">2018年4月 (135)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/feng9exe/archive/2018/03.html">2018年3月 (143)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/feng9exe/archive/2018/02.html">2018年2月 (144)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/feng9exe/archive/2018/01.html">2018年1月 (244)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/feng9exe/archive/2017/12.html">2017年12月 (167)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/feng9exe/archive/2017/11.html">2017年11月 (100)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/feng9exe/archive/2017/10.html">2017年10月 (49)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/feng9exe/archive/2017/09.html">2017年9月 (144)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/feng9exe/archive/2017/08.html">2017年8月 (141)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/feng9exe/archive/2017/07.html">2017年7月 (133)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/feng9exe/archive/2017/06.html">2017年6月 (115)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="https://www.cnblogs.com/feng9exe/archive/2017/05.html">2017年5月 (154)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="https://www.cnblogs.com/feng9exe/archive/2017/04.html">2017年4月 (142)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="https://www.cnblogs.com/feng9exe/archive/2017/03.html">2017年3月 (27)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="https://www.cnblogs.com/feng9exe/archive/2017/02.html">2017年2月 (55)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="https://www.cnblogs.com/feng9exe/archive/2017/01.html">2017年1月 (23)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_19" href="https://www.cnblogs.com/feng9exe/archive/2016/12.html">2016年12月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_20" href="https://www.cnblogs.com/feng9exe/archive/2016/11.html">2016年11月 (33)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_21" href="https://www.cnblogs.com/feng9exe/archive/2016/10.html">2016年10月 (62)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_22" href="https://www.cnblogs.com/feng9exe/archive/2016/09.html">2016年9月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_23" href="https://www.cnblogs.com/feng9exe/archive/2016/08.html">2016年8月 (30)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_24" href="https://www.cnblogs.com/feng9exe/archive/2016/07.html">2016年7月 (52)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_25" href="https://www.cnblogs.com/feng9exe/archive/2016/06.html">2016年6月 (79)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_scorerank" class="sidebar-block">
+<div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	187463
+	</li>
+	<li class="liRank">
+		排名 -	1443
+	</li>
+</ul>
+</div>
+
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/feng9exe/p/6782945.html#4022011">1. Re:编程思想、哲学、道与术</a></li>
+        <li class="recent_comment_body">不错<br>o(*￣︶￣*)o</li>
+        <li class="recent_comment_author">--China'FSP'ASV大宝</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/feng9exe/p/6814561.html#3947074">2. Re:一个TCP的问题，所谓TCP面向连接的虚电路到底是怎么实现的？</a></li>
+        <li class="recent_comment_body">虚电路并不像物理链路那样每个节点只有1到2条信道，而是每个结点都能有多条虚电路，一条不能用了，可以换别的。并且计算机网络按层次划分，尽管看起来都是用的同一控制拥塞，流量机制，但实现起来都不大相同。的确......</li>
+        <li class="recent_comment_author">--Conana</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/feng9exe/p/6814561.html#3937002">3. Re:一个TCP的问题，所谓TCP面向连接的虚电路到底是怎么实现的？</a></li>
+        <li class="recent_comment_body">GOT IT</li>
+        <li class="recent_comment_author">--Turnhead</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/feng9exe/p/7890934.html#3935142">4. Re:线程的3种实现方式--内核级线程, 用户级线程和混合型线程</a></li>
+        <li class="recent_comment_body">谢博主总结，我想问一下最后一张图是什么书上的呀？</li>
+        <li class="recent_comment_author">--F_F</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/feng9exe/p/6135945.html#3903345">5. Re:Hybrid APP混合开发的一些经验和总结</a></li>
+        <li class="recent_comment_body">怎么没有他山框架？</li>
+        <li class="recent_comment_author">--otherhill</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/feng9exe/p/6135945.html">1. Hybrid APP混合开发的一些经验和总结(2)</a></li><li><a href="https://www.cnblogs.com/feng9exe/p/6814561.html">2. 一个TCP的问题，所谓TCP面向连接的虚电路到底是怎么实现的？(2)</a></li><li><a href="https://www.cnblogs.com/feng9exe/p/6782945.html">3. 编程思想、哲学、道与术(1)</a></li><li><a href="https://www.cnblogs.com/feng9exe/p/7890934.html">4. 线程的3种实现方式--内核级线程, 用户级线程和混合型线程(1)</a></li><li><a href="https://www.cnblogs.com/feng9exe/p/5582827.html">5. mvc与三层结构终极区别(1)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/feng9exe/p/6126236.html">1. 新手理解HTML、CSS、javascript之间的关系(3)</a></li><li><a href="https://www.cnblogs.com/feng9exe/p/7016274.html">2. HTTP权威指南  目录(1)</a></li><li><a href="https://www.cnblogs.com/feng9exe/p/6994637.html">3. struct socket结构体详解(1)</a></li><li><a href="https://www.cnblogs.com/feng9exe/p/6956653.html">4. 决定人生的三种成本：机会成本，沉没成本，边际成本(1)</a></li><li><a href="https://www.cnblogs.com/feng9exe/p/6782945.html">5. 编程思想、哲学、道与术(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 zzfx
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>
